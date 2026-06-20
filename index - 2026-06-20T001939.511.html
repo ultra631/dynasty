@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>DYNASTY — Ligue CHEL · NHL 27</title>
+<meta name="description" content="DYNASTY — ligue compétitive de hockey vidéo (NHL 27, World of Chel, mode 4S). Classements, stats, calendrier et plus.">
+
+<!-- ===== PWA (installable sur le téléphone) ===== -->
+<meta name="theme-color" content="#0A0A0C">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="DYNASTY">
+
+<!-- ===== Polices ===== -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@600;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* =========================================================
+   DYNASTY — Feuille de style
+   Palette : Or royal (vedette) · Noir d'encre · Touche de rouge · Platine
+   ========================================================= */
+:root{
+  --noir:#0A0A0C;
+  --charbon:#14141A;
+  --charbon-2:#1C1C24;
+  --bordure:rgba(212,175,55,.18);
+  --or:#D4AF37;
+  --or-clair:#F0D27A;
+  --or-fonce:#A8821E;
+  --rouge:#9E1B32;
+  --rouge-clair:#C42B45;
+  --platine:#E8E4D8;
+  --texte:#D9D7CF;
+  --texte-doux:#9A988F;
+  --grad-or:linear-gradient(180deg,var(--or-clair),var(--or) 55%,var(--or-fonce));
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:
+    radial-gradient(900px 500px at 50% -8%, #1A160B 0%, transparent 60%),
+    var(--noir);
+  color:var(--texte);
+  font-family:'Inter',sans-serif;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+
+/* ===== Utilitaires ===== */
+.wrap{max-width:980px;margin:0 auto;padding:0 18px}
+.cinzel{font-family:'Cinzel',serif}
+.eyebrow{
+  font-family:'Cinzel',serif;font-weight:700;font-size:12px;
+  letter-spacing:.32em;text-transform:uppercase;color:var(--or);
+}
+.gold-text{
+  background:var(--grad-or);-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hr-gold{height:1px;background:linear-gradient(90deg,transparent,var(--bordure),transparent);border:0;margin:0}
+
+/* ===== En-tête ===== */
+header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(10,10,12,.86);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--bordure);
+}
+.bar{display:flex;align-items:center;gap:12px;padding:10px 18px;max-width:980px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:11px;min-width:0}
+.brand img{width:38px;height:38px;border-radius:8px}
+.brand .name{font-family:'Cinzel',serif;font-weight:900;font-size:20px;letter-spacing:.14em}
+.brand .name .gold-text{display:inline}
+.admin-btn{
+  margin-left:auto;flex-shrink:0;
+  background:transparent;border:1px solid var(--bordure);color:var(--or);
+  width:38px;height:38px;border-radius:8px;cursor:pointer;font-size:16px;
+  display:grid;place-items:center;transition:.2s;
+}
+.admin-btn:hover{background:rgba(212,175,55,.1)}
+body.is-admin .admin-btn{background:var(--grad-or);color:var(--noir);border-color:transparent}
+
+/* ===== Navigation (onglets défilables) ===== */
+nav.tabs{
+  display:flex;gap:6px;overflow-x:auto;padding:8px 18px;max-width:980px;margin:0 auto;
+  scrollbar-width:none;-ms-overflow-style:none;
+}
+nav.tabs::-webkit-scrollbar{display:none}
+.nav-link{
+  flex-shrink:0;padding:7px 14px;border-radius:99px;font-size:13px;font-weight:600;
+  color:var(--texte-doux);white-space:nowrap;border:1px solid transparent;transition:.18s;
+}
+.nav-link:hover{color:var(--platine)}
+.nav-link.current{
+  color:var(--noir);background:var(--grad-or);border-color:transparent;
+  box-shadow:0 4px 14px -6px rgba(212,175,55,.6);
+}
+.nav-sep{flex-shrink:0;width:1px;align-self:center;height:20px;background:var(--bordure);margin:0 4px}
+
+/* ===== Pages ===== */
+main{padding:26px 0 60px}
+.page{display:none;animation:fade .35s ease}
+.page.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.page-head{margin-bottom:22px}
+.page-head h2{font-family:'Cinzel',serif;font-weight:700;font-size:clamp(24px,6vw,34px);letter-spacing:.04em;color:var(--platine)}
+.page-head p{color:var(--texte-doux);font-size:14px;margin-top:4px}
+
+/* ===== Accueil (hero) ===== */
+.hero{text-align:center;padding:18px 0 8px}
+.hero img{width:min(280px,72vw);margin:0 auto 20px;filter:drop-shadow(0 18px 40px rgba(212,175,55,.18))}
+.hero h1{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(40px,13vw,86px);letter-spacing:.12em;line-height:1}
+.hero .tag{margin-top:14px;color:var(--texte-doux);font-size:15px;letter-spacing:.04em}
+.hero .badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+.pill{
+  font-family:'Cinzel',serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--or);border:1px solid var(--bordure);border-radius:99px;padding:6px 14px;
+}
+.cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+.btn{
+  font-weight:600;font-size:14px;padding:12px 22px;border-radius:11px;cursor:pointer;border:1px solid transparent;
+  transition:.2s;display:inline-flex;align-items:center;gap:8px;
+}
+.btn-or{background:var(--grad-or);color:var(--noir);box-shadow:0 8px 22px -10px rgba(212,175,55,.7)}
+.btn-or:hover{transform:translateY(-1px)}
+.btn-ghost{background:transparent;border-color:var(--bordure);color:var(--platine)}
+.btn-ghost:hover{background:rgba(232,228,216,.05)}
+
+/* Présentation accueil */
+.intro{margin-top:40px;background:linear-gradient(180deg,var(--charbon),#0e0e14);border:1px solid var(--bordure);border-radius:18px;padding:26px 22px}
+.intro p{color:var(--texte);font-size:15px}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:24px}
+.stat-box{background:#0e0e14;border:1px solid var(--bordure);border-radius:14px;padding:18px 12px;text-align:center}
+.stat-box .n{font-family:'Bebas Neue',sans-serif;font-size:42px;line-height:1;letter-spacing:.02em}
+.stat-box .l{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--texte-doux);margin-top:6px}
+
+/* ===== Cartes génériques ===== */
+.card{background:linear-gradient(180deg,var(--charbon),#0e0e14);border:1px solid var(--bordure);border-radius:16px;padding:20px;margin-bottom:14px}
+.card h3{font-family:'Cinzel',serif;font-weight:700;font-size:17px;color:var(--platine);margin-bottom:6px}
+.card .date{font-size:12px;color:var(--or);letter-spacing:.08em;margin-bottom:10px}
+.card p{white-space:pre-wrap;color:var(--texte);font-size:14.5px}
+
+/* ===== États vides / construction ===== */
+.empty{
+  text-align:center;padding:54px 20px;border:1px dashed var(--bordure);border-radius:18px;
+  background:#0d0d12;color:var(--texte-doux);
+}
+.empty .ico{font-size:40px;margin-bottom:12px}
+.empty b{color:var(--platine);font-family:'Cinzel',serif;font-weight:700;display:block;margin-bottom:6px;font-size:18px}
+
+/* ===== Formulaires admin ===== */
+.admin-only{display:none}
+body.is-admin .admin-only{display:block}
+.admin-panel{background:#0d0d12;border:1px solid var(--rouge);border-radius:14px;padding:18px;margin-bottom:18px}
+.admin-panel .lbl{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--rouge-clair);margin-bottom:12px;font-weight:700}
+input,textarea{
+  width:100%;background:#0a0a0e;border:1px solid var(--bordure);border-radius:10px;
+  color:var(--texte);font-family:inherit;font-size:14px;padding:11px 13px;margin-bottom:10px;
+}
+input:focus,textarea:focus{outline:none;border-color:var(--or)}
+textarea{resize:vertical;min-height:90px}
+.del-btn{
+  background:transparent;border:1px solid var(--rouge);color:var(--rouge-clair);
+  font-size:12px;padding:6px 12px;border-radius:8px;cursor:pointer;margin-top:12px;
+}
+.del-btn:hover{background:var(--rouge);color:#fff}
+
+/* ===== Réseaux / Inscriptions ===== */
+.link-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.link-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;padding:16px;border-radius:13px;
+  border:1px solid var(--bordure);background:#0e0e14;font-weight:600;font-size:14px;color:var(--platine);transition:.2s;
+}
+.link-btn:hover{border-color:var(--or);color:var(--or);transform:translateY(-1px)}
+
+/* ===== Modale admin ===== */
+.modal{position:fixed;inset:0;z-index:100;display:none;place-items:center;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);padding:20px}
+.modal.open{display:grid}
+.modal-box{background:var(--charbon);border:1px solid var(--or);border-radius:18px;padding:26px;max-width:340px;width:100%;text-align:center}
+.modal-box h3{font-family:'Cinzel',serif;color:var(--or);margin-bottom:6px}
+.modal-box p{font-size:13px;color:var(--texte-doux);margin-bottom:16px}
+.modal-box .err{color:var(--rouge-clair);font-size:13px;min-height:18px;margin-bottom:6px}
+
+/* ===== Bas de page ===== */
+footer{border-top:1px solid var(--bordure);padding:26px 0;text-align:center;color:var(--texte-doux);font-size:12px;letter-spacing:.05em}
+footer .gold-text{font-family:'Cinzel',serif;font-weight:700}
+
+@media (max-width:520px){
+  .stat-grid{grid-template-columns:repeat(3,1fr)}
+  .link-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================ EN-TÊTE ============================ -->
+<header>
+  <div class="bar">
+    <a class="brand" href="#accueil">
+      <img src="logo.png" alt="DYNASTY">
+      <span class="name"><span class="gold-text">DYNASTY</span></span>
+    </a>
+    <button class="admin-btn" onclick="ouvrirModale()" title="Mode admin">&#9819;</button>
+  </div>
+  <nav class="tabs" id="nav">
+    <!-- PORTAIL -->
+    <a class="nav-link" data-route="accueil" href="#accueil">Accueil</a>
+    <a class="nav-link" data-route="annonces" href="#annonces">Annonces</a>
+    <a class="nav-link" data-route="reglements" href="#reglements">Règlements</a>
+    <a class="nav-link" data-route="inscriptions" href="#inscriptions">Inscriptions</a>
+    <a class="nav-link" data-route="reseaux" href="#reseaux">Réseaux</a>
+    <span class="nav-sep"></span>
+    <!-- STATS -->
+    <a class="nav-link" data-route="classements" href="#classements">Classements</a>
+    <a class="nav-link" data-route="joueurs" href="#joueurs">Joueurs</a>
+    <a class="nav-link" data-route="gardiens" href="#gardiens">Gardiens</a>
+    <a class="nav-link" data-route="calendrier" href="#calendrier">Calendrier</a>
+    <a class="nav-link" data-route="resultats" href="#resultats">Résultats</a>
+    <a class="nav-link" data-route="equipes" href="#equipes">Équipes</a>
+  </nav>
+</header>
+
+<main>
+<div class="wrap">
+
+  <!-- ====================== ACCUEIL ====================== -->
+  <section class="page active" id="accueil">
+    <div class="hero">
+      <img src="logo.png" alt="Logo DYNASTY">
+      <h1 class="gold-text">DYNASTY</h1>
+      <div class="tag">Ligue compétitive de hockey vidéo · NHL 27 · World of Chel</div>
+      <div class="badges">
+        <span class="pill">Mode 4S</span>
+        <span class="pill">Français · Québec</span>
+        <span class="pill">Saison 1</span>
+      </div>
+      <div class="cta-row">
+        <a class="btn btn-or" href="#inscriptions">S'inscrire</a>
+        <a class="btn btn-ghost" href="#classements">Voir les stats</a>
+      </div>
+    </div>
+
+    <div class="intro">
+      <div class="eyebrow">La ligue</div>
+      <p style="margin-top:10px">DYNASTY, c'est une ligue compétitive de hockey vidéo sur NHL 27 en mode World of Chel (4S). Bâtie pour la communauté québécoise, on combine du vrai hockey d'équipe, des stats suivies en direct et une ambiance de tournoi à chaque match. Bienvenue dans la dynastie. 👑</p>
+      <div class="stat-grid">
+        <div class="stat-box"><div class="n gold-text">4S</div><div class="l">Mode</div></div>
+        <div class="stat-box"><div class="n gold-text">8-10</div><div class="l">Équipes</div></div>
+        <div class="stat-box"><div class="n gold-text">S1</div><div class="l">Saison</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== ANNONCES (Firebase, en direct) ====================== -->
+  <section class="page" id="annonces">
+    <div class="page-head">
+      <div class="eyebrow">Portail</div>
+      <h2>Annonces</h2>
+      <p>Les nouvelles officielles de la ligue.</p>
+    </div>
+
+    <!-- Panneau admin : ajouter une annonce -->
+    <div class="admin-panel admin-only">
+      <div class="lbl">Admin · Nouvelle annonce</div>
+      <input id="an-titre" placeholder="Titre de l'annonce">
+      <textarea id="an-texte" placeholder="Contenu…"></textarea>
+      <button class="btn btn-or" onclick="ajouterAnnonce()">Publier l'annonce</button>
+    </div>
+
+    <div id="annonces-list">
+      <div class="empty"><div class="ico">📜</div><b>Aucune annonce</b>Les annonces apparaîtront ici.</div>
+    </div>
+  </section>
+
+  <!-- ====================== RÈGLEMENTS (Firebase, éditable) ====================== -->
+  <section class="page" id="reglements">
+    <div class="page-head">
+      <div class="eyebrow">Portail</div>
+      <h2>Règlements</h2>
+      <p>Les règles à respecter dans la ligue.</p>
+    </div>
+
+    <div class="admin-panel admin-only">
+      <div class="lbl">Admin · Modifier les règlements</div>
+      <textarea id="reglements-input" style="min-height:200px" placeholder="Écris les règlements ici…"></textarea>
+      <button class="btn btn-or" onclick="sauverReglements()">Enregistrer</button>
+    </div>
+
+    <div class="card"><p id="reglements-view">Chargement…</p></div>
+  </section>
+
+  <!-- ====================== INSCRIPTIONS ====================== -->
+  <section class="page" id="inscriptions">
+    <div class="page-head">
+      <div class="eyebrow">Portail</div>
+      <h2>Inscriptions</h2>
+      <p>Rejoins la ligue DYNASTY.</p>
+    </div>
+    <div class="card">
+      <h3>Comment s'inscrire</h3>
+      <p>Remplis le formulaire ci-dessous pour t'inscrire ou inscrire ton équipe. (Tu pourras mettre le lien de ton formulaire Google ici.)</p>
+      <div class="cta-row" style="justify-content:flex-start;margin-top:18px">
+        <!-- ⚠️ Remplace le href="#" par ton lien de formulaire quand tu l'auras -->
+        <a class="btn btn-or" href="#" target="_blank" rel="noopener">Formulaire d'inscription</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== RÉSEAUX ====================== -->
+  <section class="page" id="reseaux">
+    <div class="page-head">
+      <div class="eyebrow">Portail</div>
+      <h2>Réseaux sociaux</h2>
+      <p>Suis la ligue partout.</p>
+    </div>
+    <!-- ⚠️ Remplace chaque href="#" par tes vrais liens -->
+    <div class="link-grid">
+      <a class="link-btn" href="#" target="_blank" rel="noopener">💬 Discord</a>
+      <a class="link-btn" href="#" target="_blank" rel="noopener">🎮 Twitch</a>
+      <a class="link-btn" href="#" target="_blank" rel="noopener">📘 Facebook</a>
+      <a class="link-btn" href="#" target="_blank" rel="noopener">▶️ YouTube</a>
+    </div>
+  </section>
+
+  <!-- ====================== STATS (échafaudage — étape suivante) ====================== -->
+  <section class="page" id="classements">
+    <div class="page-head"><div class="eyebrow">Stats</div><h2>Classements</h2><p>Le classement des équipes.</p></div>
+    <div class="empty"><div class="ico">🏆</div><b>Section en construction</b>On bâtit le tableau des classements à la prochaine étape.</div>
+  </section>
+  <section class="page" id="joueurs">
+    <div class="page-head"><div class="eyebrow">Stats</div><h2>Joueurs</h2><p>Les statistiques des joueurs.</p></div>
+    <div class="empty"><div class="ico">⛸️</div><b>Section en construction</b>On bâtit le tableau des joueurs à la prochaine étape.</div>
+  </section>
+  <section class="page" id="gardiens">
+    <div class="page-head"><div class="eyebrow">Stats</div><h2>Gardiens</h2><p>Les statistiques des gardiens.</p></div>
+    <div class="empty"><div class="ico">🥅</div><b>Section en construction</b>On bâtit le tableau des gardiens à la prochaine étape.</div>
+  </section>
+  <section class="page" id="calendrier">
+    <div class="page-head"><div class="eyebrow">Stats</div><h2>Calendrier</h2><p>L'horaire des matchs.</p></div>
+    <div class="empty"><div class="ico">📅</div><b>Section en construction</b>On bâtit le calendrier à la prochaine étape.</div>
+  </section>
+  <section class="page" id="resultats">
+    <div class="page-head"><div class="eyebrow">Stats</div><h2>Résultats</h2><p>Les résultats des matchs joués.</p></div>
+    <div class="empty"><div class="ico">📊</div><b>Section en construction</b>On bâtit les résultats à la prochaine étape.</div>
+  </section>
+  <section class="page" id="equipes">
+    <div class="page-head"><div class="eyebrow">Stats</div><h2>Équipes</h2><p>Les équipes et leurs joueurs.</p></div>
+    <div class="empty"><div class="ico">🛡️</div><b>Section en construction</b>On bâtit les équipes à la prochaine étape.</div>
+  </section>
+
+</div>
+</main>
+
+<footer>
+  <div class="gold-text">DYNASTY</div>
+  <div style="margin-top:6px">Ligue CHEL · NHL 27 · © 2026</div>
+</footer>
+
+<!-- ============================ MODALE ADMIN ============================ -->
+<div class="modal" id="modale">
+  <div class="modal-box">
+    <h3 class="cinzel" id="modale-titre">Mode admin</h3>
+    <p id="modale-sous">Entre le mot de passe pour gérer la ligue.</p>
+    <div class="err" id="modale-err"></div>
+    <input type="password" id="modale-pass" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')connexionAdmin()">
+    <div class="cta-row" style="margin-top:6px">
+      <button class="btn btn-or" id="modale-action" onclick="connexionAdmin()">Se connecter</button>
+      <button class="btn btn-ghost" onclick="fermerModale()">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================ FIREBASE (SDK compat) ============================ -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script>
+/* =========================================================
+   1) CONFIGURATION FIREBASE
+   ========================================================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyB2FMin3aA93x9OnEGfC0-UP3vkGFxee9c",
+  authDomain: "dynasty-chel.firebaseapp.com",
+  projectId: "dynasty-chel",
+  storageBucket: "dynasty-chel.firebasestorage.app",
+  messagingSenderId: "550460590216",
+  appId: "1:550460590216:web:1bb1626fb2e202364af73d"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+/* =========================================================
+   2) MODE ADMIN
+   ⚠️ Change le mot de passe ici pour le tien :
+   ========================================================= */
+const ADMIN_PASS = "dynasty2026";
+let estAdmin = false;
+
+function appliquerAdmin(){
+  document.body.classList.toggle('is-admin', estAdmin);
+  const btn = document.querySelector('.admin-btn');
+  btn.title = estAdmin ? "Admin actif — déconnexion" : "Mode admin";
+}
+function ouvrirModale(){
+  if(estAdmin){ // déjà connecté → déconnexion
+    estAdmin = false; sessionStorage.removeItem('dynasty_admin'); appliquerAdmin(); return;
+  }
+  document.getElementById('modale-err').textContent = '';
+  document.getElementById('modale-pass').value = '';
+  document.getElementById('modale').classList.add('open');
+  setTimeout(()=>document.getElementById('modale-pass').focus(), 100);
+}
+function fermerModale(){ document.getElementById('modale').classList.remove('open'); }
+function connexionAdmin(){
+  const val = document.getElementById('modale-pass').value;
+  if(val === ADMIN_PASS){
+    estAdmin = true; sessionStorage.setItem('dynasty_admin','1');
+    appliquerAdmin(); fermerModale();
+  } else {
+    document.getElementById('modale-err').textContent = "Mot de passe incorrect.";
+  }
+}
+
+/* =========================================================
+   3) ROUTEUR (navigation par onglets)
+   ========================================================= */
+const ROUTES = ['accueil','annonces','reglements','inscriptions','reseaux',
+                'classements','joueurs','gardiens','calendrier','resultats','equipes'];
+function afficherRoute(){
+  let h = location.hash.replace('#','') || 'accueil';
+  if(!ROUTES.includes(h)) h = 'accueil';
+  document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === h));
+  document.querySelectorAll('.nav-link').forEach(a => a.classList.toggle('current', a.dataset.route === h));
+  // recentre l'onglet actif dans la barre
+  const actif = document.querySelector('.nav-link.current');
+  if(actif) actif.scrollIntoView({inline:'center', block:'nearest', behavior:'smooth'});
+  window.scrollTo({top:0});
+}
+window.addEventListener('hashchange', afficherRoute);
+
+/* =========================================================
+   4) ANNONCES (lecture/écriture en direct)
+   ========================================================= */
+function formaterDate(ts){
+  if(!ts || !ts.toDate) return '';
+  return ts.toDate().toLocaleDateString('fr-CA', {day:'numeric', month:'long', year:'numeric'});
+}
+function initAnnonces(){
+  db.collection('annonces').orderBy('ts','desc').onSnapshot(snap => {
+    const liste = document.getElementById('annonces-list');
+    if(snap.empty){
+      liste.innerHTML = '<div class="empty"><div class="ico">📜</div><b>Aucune annonce</b>Les annonces apparaîtront ici.</div>';
+      return;
+    }
+    liste.innerHTML = '';
+    snap.forEach(doc => {
+      const a = doc.data();
+      const div = document.createElement('div');
+      div.className = 'card';
+      div.innerHTML =
+        '<h3></h3><div class="date"></div><p></p>' +
+        '<button class="del-btn admin-only" onclick="supprimerAnnonce(\'' + doc.id + '\')">Supprimer</button>';
+      div.querySelector('h3').textContent = a.titre || '(sans titre)';
+      div.querySelector('.date').textContent = formaterDate(a.ts);
+      div.querySelector('p').textContent = a.texte || '';
+      liste.appendChild(div);
+    });
+  }, err => {
+    document.getElementById('annonces-list').innerHTML =
+      '<div class="empty"><div class="ico">⚠️</div><b>Erreur de connexion</b>'+err.message+'</div>';
+  });
+}
+function ajouterAnnonce(){
+  const titre = document.getElementById('an-titre').value.trim();
+  const texte = document.getElementById('an-texte').value.trim();
+  if(!titre && !texte){ alert("Écris au moins un titre ou un texte."); return; }
+  db.collection('annonces').add({
+    titre, texte, ts: firebase.firestore.FieldValue.serverTimestamp()
+  }).then(()=>{
+    document.getElementById('an-titre').value = '';
+    document.getElementById('an-texte').value = '';
+  }).catch(e => alert("Erreur : " + e.message));
+}
+function supprimerAnnonce(id){
+  if(confirm("Supprimer cette annonce ?")){
+    db.collection('annonces').doc(id).delete().catch(e => alert("Erreur : " + e.message));
+  }
+}
+
+/* =========================================================
+   5) RÈGLEMENTS (un seul document éditable)
+   ========================================================= */
+function initReglements(){
+  db.collection('contenu').doc('reglements').onSnapshot(doc => {
+    const txt = doc.exists ? (doc.data().texte || '') : '';
+    document.getElementById('reglements-view').textContent = txt || "Aucun règlement pour le moment.";
+    const champ = document.getElementById('reglements-input');
+    if(champ && document.activeElement !== champ) champ.value = txt;
+  });
+}
+function sauverReglements(){
+  const txt = document.getElementById('reglements-input').value;
+  db.collection('contenu').doc('reglements').set({texte: txt})
+    .then(()=> alert("Règlements enregistrés ✅"))
+    .catch(e => alert("Erreur : " + e.message));
+}
+
+/* =========================================================
+   6) DÉMARRAGE
+   ========================================================= */
+function demarrer(){
+  if(sessionStorage.getItem('dynasty_admin') === '1'){ estAdmin = true; }
+  appliquerAdmin();
+  afficherRoute();
+  initAnnonces();
+  initReglements();
+}
+demarrer();
+
+/* Service worker (PWA) — ignoré si pas disponible */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=> navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
+</script>
+</body>
+</html>
