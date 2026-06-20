@@ -212,7 +212,7 @@ body::after{
     radial-gradient(50% 50% at 50% 100%, rgba(158,27,50,.08), transparent 70%);
 }
 /* Le contenu passe au-dessus des effets */
-header,main,footer,.modal{position:relative;z-index:2}
+header,main,footer{position:relative;z-index:2}
 header{z-index:50}
 
 /* ---- Héro spectaculaire ---- */
@@ -349,6 +349,30 @@ header{z-index:50}
   .feature-grid{grid-template-columns:1fr}
   .discord-band{flex-direction:column;text-align:center;align-items:stretch}
 }
+
+/* ===== Équipes ===== */
+.teams-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.team-card{
+  background:linear-gradient(180deg,var(--charbon),#0d0d14);border:1px solid var(--bordure);
+  border-top:3px solid var(--or);border-radius:16px;padding:20px 16px;
+  display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;
+  transition:transform .25s ease, box-shadow .25s ease;
+}
+.team-card:hover{transform:translateY(-3px);box-shadow:0 18px 40px -24px rgba(212,175,55,.5)}
+.team-logo{width:66px;height:66px;border-radius:50%;object-fit:cover;border:2px solid var(--bordure);background:#0a0a0e}
+.team-initials{width:66px;height:66px;border-radius:50%;display:grid;place-items:center;
+  font-family:'Cinzel',serif;font-weight:700;font-size:24px;color:#0A0A0C;
+  box-shadow:0 6px 16px -6px rgba(0,0,0,.6)}
+.team-card h3{font-family:'Cinzel',serif;font-weight:700;font-size:16px;color:var(--platine)}
+.team-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.team-actions .del-btn{margin-top:0}
+.btn-mini{background:transparent;border:1px solid var(--bordure);color:var(--platine);
+  font-size:12px;padding:6px 12px;border-radius:8px;cursor:pointer;transition:.2s}
+.btn-mini:hover{border-color:var(--or);color:var(--or)}
+
+/* Étiquettes de formulaire dans les modales */
+.champ-lbl{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--texte-doux);margin:4px 0 6px;font-weight:600}
 </style>
 </head>
 <body>
@@ -545,8 +569,16 @@ header{z-index:50}
     <div class="empty"><div class="ico">📊</div><b>Section en construction</b>On bâtit les résultats à la prochaine étape.</div>
   </section>
   <section class="page" id="equipes">
-    <div class="page-head"><div class="eyebrow">Stats</div><h2>Équipes</h2><p>Les équipes et leurs joueurs.</p></div>
-    <div class="empty"><div class="ico">🛡️</div><b>Section en construction</b>On bâtit les équipes à la prochaine étape.</div>
+    <div class="page-head"><div class="eyebrow">Stats</div><h2>Équipes</h2><p>Les équipes de la ligue DYNASTY.</p></div>
+
+    <!-- Bouton admin : ajouter une équipe -->
+    <div class="admin-only" style="margin-bottom:18px">
+      <button class="btn btn-or" onclick="ouvrirEquipe()">+ Ajouter une équipe</button>
+    </div>
+
+    <div id="equipes-grid" class="teams-grid">
+      <div class="empty"><div class="ico">🛡️</div><b>Aucune équipe</b>Les équipes apparaîtront ici.</div>
+    </div>
   </section>
 
 </div>
@@ -567,6 +599,23 @@ header{z-index:50}
     <div class="cta-row" style="margin-top:6px">
       <button class="btn btn-or" id="modale-action" onclick="connexionAdmin()">Se connecter</button>
       <button class="btn btn-ghost" onclick="fermerModale()">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================ MODALE ÉQUIPE (ajout / modification) ============================ -->
+<div class="modal" id="modale-equipe">
+  <div class="modal-box" style="max-width:380px;text-align:left">
+    <h3 class="cinzel" id="eq-modal-titre" style="text-align:center">Nouvelle équipe</h3>
+    <label class="champ-lbl">Nom de l'équipe</label>
+    <input id="eq-nom" placeholder="Ex. Les Rois de Montréal">
+    <label class="champ-lbl">Couleur de l'équipe</label>
+    <input id="eq-couleur" type="color" value="#D4AF37" style="height:46px;padding:4px;cursor:pointer">
+    <label class="champ-lbl">Logo — lien d'image (optionnel)</label>
+    <input id="eq-logo" placeholder="https://...  (vide = initiales)">
+    <div class="cta-row" style="margin-top:12px">
+      <button class="btn btn-or" onclick="sauverEquipe()">Enregistrer</button>
+      <button class="btn btn-ghost" onclick="fermerEquipe()">Annuler</button>
     </div>
   </div>
 </div>
@@ -707,6 +756,99 @@ function sauverReglements(){
 }
 
 /* =========================================================
+   7) ÉQUIPES  (gérées par ID UNIQUE — jamais par nom)
+   ========================================================= */
+let equipeEnEdition = null;  // null = ajout ; sinon = ID du document à modifier
+
+function initEquipes(){
+  // Lecture en temps réel : se synchronise entre tous les admins connectés
+  db.collection('equipes').orderBy('nom').onSnapshot(snap => {
+    const grille = document.getElementById('equipes-grid');
+    if(snap.empty){
+      grille.innerHTML = '<div class="empty"><div class="ico">🛡️</div><b>Aucune équipe</b>Les équipes apparaîtront ici.</div>';
+      return;
+    }
+    grille.innerHTML = '';
+    snap.forEach(doc => {
+      const e = doc.data();
+      const id = doc.id;                          // ← L'IDENTIFIANT UNIQUE
+      const couleur = e.couleur || '#D4AF37';
+      const carte = document.createElement('div');
+      carte.className = 'team-card';
+      carte.style.borderTopColor = couleur;
+
+      // Visuel : logo si fourni, sinon initiales sur fond coloré
+      let visuel;
+      if(e.logo){
+        visuel = '<img class="team-logo" src="' + e.logo + '" alt="" onerror="this.style.display=\'none\'">';
+      } else {
+        const ini = (e.nom || '?').trim().split(/\s+/).map(m => m[0]).slice(0,2).join('').toUpperCase();
+        visuel = '<div class="team-initials" style="background:' + couleur + '">' + ini + '</div>';
+      }
+
+      carte.innerHTML =
+        visuel +
+        '<h3></h3>' +
+        '<div class="team-actions admin-only">' +
+          '<button class="btn-mini" onclick="ouvrirEquipe(\'' + id + '\')">Modifier</button>' +
+          '<button class="del-btn" onclick="supprimerEquipe(\'' + id + '\')">Supprimer</button>' +
+        '</div>';
+      carte.querySelector('h3').textContent = e.nom || '(sans nom)';
+      grille.appendChild(carte);
+    });
+  }, err => {
+    document.getElementById('equipes-grid').innerHTML =
+      '<div class="empty"><div class="ico">⚠️</div><b>Erreur de connexion</b>' + err.message + '</div>';
+  });
+}
+
+// Ouvre la modale : sans ID = ajout ; avec ID = modification (on pré-remplit)
+function ouvrirEquipe(id){
+  equipeEnEdition = id || null;
+  document.getElementById('eq-modal-titre').textContent = id ? "Modifier l'équipe" : "Nouvelle équipe";
+  if(id){
+    db.collection('equipes').doc(id).get().then(doc => {
+      const e = doc.data() || {};
+      document.getElementById('eq-nom').value = e.nom || '';
+      document.getElementById('eq-couleur').value = e.couleur || '#D4AF37';
+      document.getElementById('eq-logo').value = e.logo || '';
+    });
+  } else {
+    document.getElementById('eq-nom').value = '';
+    document.getElementById('eq-couleur').value = '#D4AF37';
+    document.getElementById('eq-logo').value = '';
+  }
+  document.getElementById('modale-equipe').classList.add('open');
+}
+function fermerEquipe(){ document.getElementById('modale-equipe').classList.remove('open'); }
+
+function sauverEquipe(){
+  const nom = document.getElementById('eq-nom').value.trim();
+  const couleur = document.getElementById('eq-couleur').value;
+  const logo = document.getElementById('eq-logo').value.trim();
+  if(!nom){ alert("Donne un nom à l'équipe."); return; }
+  const donnees = { nom, couleur, logo };
+
+  let action;
+  if(equipeEnEdition){
+    // MODIFICATION : on retrouve l'équipe par son ID (jamais par son nom).
+    // .update() ne touche que ces champs → deux admins sur deux équipes différentes ne s'écrasent pas.
+    action = db.collection('equipes').doc(equipeEnEdition).update(donnees);
+  } else {
+    // AJOUT : Firebase génère un ID unique automatiquement.
+    donnees.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+    action = db.collection('equipes').add(donnees);
+  }
+  action.then(() => fermerEquipe()).catch(e => alert("Erreur : " + e.message));
+}
+
+function supprimerEquipe(id){
+  if(confirm("Supprimer cette équipe ?")){
+    db.collection('equipes').doc(id).delete().catch(e => alert("Erreur : " + e.message));
+  }
+}
+
+/* =========================================================
    6) DÉMARRAGE
    ========================================================= */
 function demarrer(){
@@ -715,6 +857,7 @@ function demarrer(){
   afficherRoute();
   initAnnonces();
   initReglements();
+  initEquipes();
 }
 demarrer();
 
