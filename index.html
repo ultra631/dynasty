@@ -500,6 +500,26 @@ th.cl-eq{display:table-cell}
 .jr-table .jr-actions{display:flex;gap:6px;justify-content:flex-end}
 .jr-table .jr-actions .del-btn{margin-top:0}
 .jr-table .btn-mini{padding:5px 10px}
+
+/* ===== Feuille de match (box score) ===== */
+.box-score{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+.box-col{border:1px solid var(--bordure);border-radius:12px;background:#0a0a0e;overflow:hidden}
+.box-head{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;
+  background:linear-gradient(180deg,#16121f,#0e0c15);border-bottom:1px solid var(--bordure)}
+.box-head span{font-family:'Cinzel',serif;font-size:13px;color:var(--platine);font-weight:700}
+.box-head b{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--or);line-height:1}
+.box-cols-lbl{display:grid;grid-template-columns:1fr 44px 44px;gap:6px;padding:6px 12px 0;
+  font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--texte-doux)}
+.box-cols-lbl span{text-align:center}
+.box-cols-lbl .bx-jlbl{text-align:left}
+.box-list{max-height:230px;overflow-y:auto;padding:6px 12px 12px}
+.bx-row{display:grid;grid-template-columns:1fr 44px 44px;gap:6px;align-items:center;padding:4px 0}
+.bx-chk{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--texte);cursor:pointer;min-width:0}
+.bx-chk span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bx-chk input{width:auto;margin:0;accent-color:var(--or);flex-shrink:0}
+.bx-b,.bx-a{width:44px;margin:0;padding:6px 4px;text-align:center;font-size:13px}
+.box-note{font-size:11.5px;color:var(--texte-doux);margin-top:10px;text-align:center;font-style:italic}
+@media (max-width:560px){ .box-score{grid-template-columns:1fr} }
 </style>
 </head>
 <body>
@@ -813,12 +833,6 @@ th.cl-eq{display:table-cell}
       <option value="DD">DD</option>
       <option value="G">G</option>
     </select>
-    <label class="champ-lbl" data-i18n="joueur.stats">Statistiques</label>
-    <div class="gd-grid" style="grid-template-columns:repeat(3,1fr)">
-      <div><label class="champ-lbl" data-i18n="cl.pj">PJ</label><input id="jo-pj" type="number" min="0" placeholder="0"></div>
-      <div><label class="champ-lbl" data-i18n="jo.b">B</label><input id="jo-b" type="number" min="0" placeholder="0"></div>
-      <div><label class="champ-lbl" data-i18n="jo.a">A</label><input id="jo-a" type="number" min="0" placeholder="0"></div>
-    </div>
     <div class="cta-row" style="margin-top:12px">
       <button class="btn btn-or" onclick="sauverJoueur()" data-i18n="btn.enregistrer">Enregistrer</button>
       <button class="btn btn-ghost" onclick="fermerJoueur()" data-i18n="commun.annuler">Annuler</button>
@@ -847,15 +861,28 @@ th.cl-eq{display:table-cell}
   </div>
 </div>
 
-<!-- ============================ MODALE RÉSULTAT DE MATCH ============================ -->
+<!-- ============================ MODALE RÉSULTAT DE MATCH (feuille de match) ============================ -->
 <div class="modal" id="modale-match">
-  <div class="modal-box" style="max-width:400px;text-align:left">
-    <h3 class="cinzel" id="m-modal-titre" style="text-align:center" data-i18n="match.modal.nouveau">Nouveau résultat</h3>
-    <label class="champ-lbl" data-i18n="match.dom">Équipe à domicile</label>
-    <div class="m-row"><select id="m-dom"></select><input id="m-butsdom" type="number" min="0" class="m-score" placeholder="0"></div>
-    <label class="champ-lbl" data-i18n="match.ext">Équipe visiteur</label>
-    <div class="m-row"><select id="m-ext"></select><input id="m-butsext" type="number" min="0" class="m-score" placeholder="0"></div>
+  <div class="modal-box" style="max-width:620px;text-align:left">
+    <h3 class="cinzel" id="m-modal-titre" style="text-align:center" data-i18n="match.modal.nouveau">Feuille de match</h3>
+    <div class="ech-cols">
+      <div><label class="champ-lbl" data-i18n="match.dom">Équipe à domicile</label><select id="m-dom" onchange="majBox()"></select></div>
+      <div><label class="champ-lbl" data-i18n="match.ext">Équipe visiteur</label><select id="m-ext" onchange="majBox()"></select></div>
+    </div>
     <label class="chk2"><input type="checkbox" id="m-pro"><span data-i18n="match.pro">Prolongation / fusillade</span></label>
+    <div class="box-score">
+      <div class="box-col">
+        <div class="box-head"><span id="box-dom-nom"></span><b id="box-dom-total">0</b></div>
+        <div class="box-cols-lbl"><span class="bx-jlbl" data-i18n="box.joue">Joué</span><span data-i18n="jo.b">B</span><span data-i18n="jo.a">A</span></div>
+        <div id="box-dom-list" class="box-list"></div>
+      </div>
+      <div class="box-col">
+        <div class="box-head"><span id="box-ext-nom"></span><b id="box-ext-total">0</b></div>
+        <div class="box-cols-lbl"><span class="bx-jlbl" data-i18n="box.joue">Joué</span><span data-i18n="jo.b">B</span><span data-i18n="jo.a">A</span></div>
+        <div id="box-ext-list" class="box-list"></div>
+      </div>
+    </div>
+    <div class="box-note" data-i18n="box.note">Le score se calcule à partir des buts. Coche les joueurs qui ont joué.</div>
     <div class="cta-row" style="margin-top:12px">
       <button class="btn btn-or" onclick="sauverMatch()" data-i18n="btn.enregistrer">Enregistrer</button>
       <button class="btn btn-ghost" onclick="fermerMatch()" data-i18n="commun.annuler">Annuler</button>
@@ -878,25 +905,6 @@ th.cl-eq{display:table-cell}
     <div class="cta-row" style="margin-top:12px">
       <button class="btn btn-or" onclick="sauverCal()" data-i18n="btn.enregistrer">Enregistrer</button>
       <button class="btn btn-ghost" onclick="fermerCal()" data-i18n="commun.annuler">Annuler</button>
-    </div>
-  </div>
-</div>
-
-<!-- ============================ MODALE STATS GARDIEN ============================ -->
-<div class="modal" id="modale-gardien">
-  <div class="modal-box" style="max-width:380px;text-align:left">
-    <h3 class="cinzel" id="gd-modal-titre" style="text-align:center" data-i18n="gardien.modal.titre">Stats du gardien</h3>
-    <div class="gd-nom" id="gd-nom"></div>
-    <div class="gd-grid">
-      <div><label class="champ-lbl" data-i18n="gd.pj">PJ</label><input id="gd-pj" type="number" min="0" placeholder="0"></div>
-      <div><label class="champ-lbl" data-i18n="gd.v">V</label><input id="gd-v" type="number" min="0" placeholder="0"></div>
-      <div><label class="champ-lbl" data-i18n="gd.d">D</label><input id="gd-d" type="number" min="0" placeholder="0"></div>
-      <div><label class="champ-lbl" data-i18n="gd.bl">BL</label><input id="gd-bl" type="number" min="0" placeholder="0"></div>
-      <div><label class="champ-lbl" data-i18n="gd.bc">BC</label><input id="gd-bc" type="number" min="0" placeholder="0"></div>
-    </div>
-    <div class="cta-row" style="margin-top:12px">
-      <button class="btn btn-or" onclick="sauverGardien()" data-i18n="btn.enregistrer">Enregistrer</button>
-      <button class="btn btn-ghost" onclick="fermerGardien()" data-i18n="commun.annuler">Annuler</button>
     </div>
   </div>
 </div>
@@ -998,13 +1006,14 @@ const DICT = {
     'classements.vide.t':'Aucune équipe','classements.vide.s':'Ajoute des équipes pour voir le classement.',
     'cl.equipe':'Équipe','cl.pj':'PJ','cl.v':'V','cl.d':'D','cl.dp':'DP','cl.bp':'BP','cl.bc':'BC','cl.diff':'+/-','cl.pts':'PTS','cl.proAbbr':'PROL',
     'resultats.ajouter':'+ Ajouter un résultat','resultats.vide.t':'Aucun résultat','resultats.vide.s':'Les résultats apparaîtront ici.',
-    'match.modal.nouveau':'Nouveau résultat','match.modal.modifier':'Modifier le résultat',
+    'match.modal.nouveau':'Feuille de match','match.modal.modifier':'Modifier le match',
     'match.dom':'Équipe à domicile','match.ext':'Équipe visiteur','match.pro':'Prolongation / fusillade',
     'match.memeEquipe':'Choisis deux équipes différentes.','match.besoinScore':'Entre les deux scores.',
     'match.egalite':'Un match a toujours un gagnant (utilise la prolongation).','match.confirmSuppr':'Supprimer ce résultat ?',
     'calendrier.ajouter':'+ Ajouter au calendrier','calendrier.vide.t':'Aucun match prévu','calendrier.vide.s':'Les matchs à venir apparaîtront ici.',
     'calendrier.date':'Date','calendrier.heure':'Heure (optionnel)','calendrier.modal.nouveau':'Nouveau match','calendrier.modal.modifier':'Modifier le match',
-    'calendrier.besoinDate':'Choisis une date.','calendrier.confirmSuppr':'Supprimer ce match du calendrier ?','calendrier.vs':'vs',
+    'calendrier.besoinDate':'Choisis une date.','calendrier.confirmSuppr':'Supprimer ce match du calendrier ?','calendrier.vs':'vs','calendrier.jouer':'Jouer',
+    'box.joue':'Joué','box.note':'Le score se calcule à partir des buts. Coche les joueurs qui ont joué.',
     'gardiens.vide.t':'Aucun gardien','gardiens.vide.s':'Ajoute des joueurs en position G dans Joueurs.',
     'gd.pj':'PJ','gd.v':'V','gd.d':'D','gd.bl':'BL','gd.bc':'BC','gd.moy':'MOY','gardien.modal.titre':'Stats du gardien',
     'jo.pos':'POS','jo.joueur':'Joueur','jo.b':'B','jo.a':'A','joueur.stats':'Statistiques'
@@ -1081,13 +1090,14 @@ const DICT = {
     'classements.vide.t':'No teams yet','classements.vide.s':'Add teams to see the standings.',
     'cl.equipe':'Team','cl.pj':'GP','cl.v':'W','cl.d':'L','cl.dp':'OTL','cl.bp':'GF','cl.bc':'GA','cl.diff':'+/-','cl.pts':'PTS','cl.proAbbr':'OT',
     'resultats.ajouter':'+ Add a result','resultats.vide.t':'No results yet','resultats.vide.s':'Results will appear here.',
-    'match.modal.nouveau':'New result','match.modal.modifier':'Edit result',
+    'match.modal.nouveau':'Game sheet','match.modal.modifier':'Edit game',
     'match.dom':'Home team','match.ext':'Away team','match.pro':'Overtime / shootout',
     'match.memeEquipe':'Pick two different teams.','match.besoinScore':'Enter both scores.',
     'match.egalite':'A match always has a winner (use overtime).','match.confirmSuppr':'Delete this result?',
     'calendrier.ajouter':'+ Add to schedule','calendrier.vide.t':'No matches scheduled','calendrier.vide.s':'Upcoming matches will appear here.',
     'calendrier.date':'Date','calendrier.heure':'Time (optional)','calendrier.modal.nouveau':'New match','calendrier.modal.modifier':'Edit match',
-    'calendrier.besoinDate':'Pick a date.','calendrier.confirmSuppr':'Remove this match from the schedule?','calendrier.vs':'vs',
+    'calendrier.besoinDate':'Pick a date.','calendrier.confirmSuppr':'Remove this match from the schedule?','calendrier.vs':'vs','calendrier.jouer':'Play',
+    'box.joue':'Played','box.note':'The score is calculated from goals. Check the players who played.',
     'gardiens.vide.t':'No goalies yet','gardiens.vide.s':'Add players in the G position under Players.',
     'gd.pj':'GP','gd.v':'W','gd.d':'L','gd.bl':'SO','gd.bc':'GA','gd.moy':'GAA','gardien.modal.titre':'Goalie stats',
     'jo.pos':'POS','jo.joueur':'Player','jo.b':'G','jo.a':'A','joueur.stats':'Statistics'
@@ -1432,11 +1442,10 @@ function rendreJoueurs(){
   snapEquipes.forEach(docE => {
     const e = docE.data(); const eid = docE.id;
     const couleur = e.couleur || '#D4AF37';
-    let joueurs = parEquipe[eid] || [];
+    let joueurs = (parEquipe[eid] || []).map(j => Object.assign({}, j, statsJoueur(j.id)));
     const peut = peutEditerEquipe(eid);
-    // Tri par points (B+A) décroissant, puis par nom
-    joueurs = joueurs.slice().sort((a,b) =>
-      ((+b.sB||0)+(+b.sA||0)) - ((+a.sB||0)+(+a.sA||0)) || (a.nom||'').localeCompare(b.nom||''));
+    // Tri par points décroissant, puis par nom
+    joueurs.sort((a,b) => (b.pts - a.pts) || (a.nom||'').localeCompare(b.nom||''));
     html += '<div class="joueurs-equipe"><div class="je-head"><span class="je-dot" style="background:' + couleur + '"></span>'
           + '<h3>' + escapeHtml(e.nom || '') + '</h3><span class="je-count">' + joueurs.length + '</span></div>';
     if(joueurs.length === 0){
@@ -1447,10 +1456,9 @@ function rendreJoueurs(){
             + '<th>' + t('cl.pj') + '</th><th>' + t('jo.b') + '</th><th>' + t('jo.a') + '</th><th>' + t('cl.pts') + '</th>'
             + (peut ? '<th></th>' : '') + '</tr></thead><tbody>';
       joueurs.forEach(j => {
-        const pj = +j.sPj||0, bb = +j.sB||0, aa = +j.sA||0, pts = bb + aa;
         html += '<tr><td class="jr-pos2">' + escapeHtml(j.position || '') + '</td>'
               + '<td class="cl-eq">' + escapeHtml(j.nom || '') + '</td>'
-              + '<td>' + pj + '</td><td>' + bb + '</td><td>' + aa + '</td><td class="cl-pts">' + pts + '</td>'
+              + '<td>' + j.pj + '</td><td>' + j.b + '</td><td>' + j.a + '</td><td class="cl-pts">' + j.pts + '</td>'
               + (peut ? ('<td><span class="jr-actions"><button class="btn-mini" onclick="ouvrirJoueur(\'' + j.id + '\')">' + t('btn.modifier') + '</button>'
                   + '<button class="del-btn" onclick="supprimerJoueur(\'' + j.id + '\')">' + t('btn.supprimer') + '</button></span></td>') : '')
               + '</tr>';
@@ -1490,17 +1498,11 @@ function ouvrirJoueur(id){
       document.getElementById('jo-nom').value = j.nom || '';
       document.getElementById('jo-equipe').value = j.equipeId || '';
       document.getElementById('jo-position').value = j.position || 'C';
-      document.getElementById('jo-pj').value = (j.sPj != null ? j.sPj : '');
-      document.getElementById('jo-b').value = (j.sB != null ? j.sB : '');
-      document.getElementById('jo-a').value = (j.sA != null ? j.sA : '');
       verrouillerEquipeSiDG();
     });
   } else {
     document.getElementById('jo-nom').value = '';
     document.getElementById('jo-position').value = 'C';
-    document.getElementById('jo-pj').value = '';
-    document.getElementById('jo-b').value = '';
-    document.getElementById('jo-a').value = '';
     if(dgTeamId) document.getElementById('jo-equipe').value = dgTeamId;
     verrouillerEquipeSiDG();
   }
@@ -1516,12 +1518,7 @@ function sauverJoueur(){
   if(!equipeId){ alert(t('joueur.besoinEquipe')); return; }
   // Sécurité : un DG ne peut créer/déplacer un joueur que dans SON équipe
   if(dgTeamId && !estAdmin && equipeId !== dgTeamId){ alert(t('dg.refus')); return; }
-  const donnees = {
-    nom, equipeId, position,
-    sPj: parseInt(document.getElementById('jo-pj').value,10)||0,
-    sB:  parseInt(document.getElementById('jo-b').value,10)||0,
-    sA:  parseInt(document.getElementById('jo-a').value,10)||0
-  };
+  const donnees = { nom, equipeId, position };
   let action;
   if(joueurEnEdition){
     action = db.collection('joueurs').doc(joueurEnEdition).update(donnees);  // par ID, jamais par nom
@@ -1735,7 +1732,10 @@ let matchEnEdition = null;
 
 function initMatchs(){
   db.collection('matchs').orderBy('createdAt','desc').onSnapshot(snap => {
-    snapMatchs = snap; rendreResultats(); rendreClassements();
+    snapMatchs = snap;
+    rendreResultats(); rendreClassements();
+    if(typeof rendreJoueurs === 'function') rendreJoueurs();   // stats joueurs = somme des matchs
+    if(typeof rendreGardiens === 'function') rendreGardiens();  // stats gardiens = somme des matchs
   }, err => {
     const c = document.getElementById('resultats-list');
     if(c) c.innerHTML = videHTML('⚠️', t('err.connexion'), err.message);
@@ -1813,52 +1813,129 @@ function rendreClassements(){
     + '<th>' + t('cl.diff') + '</th><th>' + t('cl.pts') + '</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
 }
 
-/* ----- Entrée / modification d'un résultat (admin) ----- */
+/* ----- Helpers d'agrégation : les stats sont CALCULÉES à partir des matchs ----- */
+function statsJoueur(pid){
+  let pj=0, b=0, a=0;
+  if(snapMatchs){ snapMatchs.forEach(d => { const m=d.data(); const l=(m.lignes||[]).find(x=>x.pid===pid); if(l){ pj++; b+=(+l.b||0); a+=(+l.a||0); } }); }
+  return { pj, b, a, pts: b+a };
+}
+function statsGardien(pid){
+  let pj=0, v=0, dd=0, dp=0, bc=0, bl=0;
+  if(snapMatchs){ snapMatchs.forEach(d => { const m=d.data(); const l=(m.lignes||[]).find(x=>x.pid===pid); if(!l) return;
+    pj++;
+    const estDom = (m.domId === l.eqId);
+    const contre = estDom ? (+m.butsExt||0) : (+m.butsDom||0);
+    const pour   = estDom ? (+m.butsDom||0) : (+m.butsExt||0);
+    bc += contre; if(contre === 0) bl++;
+    if(pour > contre) v++; else { if(m.prolongation) dp++; else dd++; }
+  }); }
+  return { pj, v, dd, dp, bc, bl, moy: pj>0 ? (bc/pj).toFixed(2) : '—' };
+}
+
+/* ----- Feuille de match (effectif + buts/passes) ----- */
+let calLieAuMatch = null;   // si on entre le résultat d'un match du calendrier, son ID (à effacer après)
 function remplirSelectMatch(){
   ['m-dom','m-ext'].forEach(id => {
     const sel = document.getElementById(id); sel.innerHTML = '';
-    if(snapEquipes){ snapEquipes.forEach(d => { const o = document.createElement('option'); o.value = d.id; o.textContent = d.data().nom || ''; sel.appendChild(o); }); }
+    if(snapEquipes){ snapEquipes.forEach(d => { const o=document.createElement('option'); o.value=d.id; o.textContent=d.data().nom||''; sel.appendChild(o); }); }
   });
 }
-function ouvrirMatch(id){
+function boxListe(equipeId, lignes){
+  if(!snapJoueurs || !equipeId) return '<div class="je-vide">' + t('echanges.aucunDispo') + '</div>';
+  let html = '';
+  snapJoueurs.forEach(d => {
+    const j = d.data();
+    if(j.equipeId !== equipeId) return;
+    const l = (lignes || []).find(x => x.pid === d.id);
+    const coche = l ? 'checked' : '';
+    const bv = l ? (l.b||0) : '';
+    const av = l ? (l.a||0) : '';
+    html += '<div class="bx-row">'
+      + '<label class="bx-chk"><input type="checkbox" class="bx-joue" data-pid="' + d.id + '" ' + coche + ' onchange="majTotaux()"><span>' + escapeHtml(j.position||'') + ' · ' + escapeHtml(j.nom||'') + '</span></label>'
+      + '<input type="number" min="0" class="bx-b" data-pid="' + d.id + '" value="' + bv + '" placeholder="0" oninput="majTotaux()">'
+      + '<input type="number" min="0" class="bx-a" data-pid="' + d.id + '" value="' + av + '" placeholder="0">'
+      + '</div>';
+  });
+  return html || '<div class="je-vide">' + t('echanges.aucunDispo') + '</div>';
+}
+function majBox(lignes){
+  const domId = document.getElementById('m-dom').value;
+  const extId = document.getElementById('m-ext').value;
+  document.getElementById('box-dom-nom').textContent = (trouverEquipeParId(domId)||{}).nom || '';
+  document.getElementById('box-ext-nom').textContent = (trouverEquipeParId(extId)||{}).nom || '';
+  document.getElementById('box-dom-list').innerHTML = boxListe(domId, lignes);
+  document.getElementById('box-ext-list').innerHTML = boxListe(extId, lignes);
+  majTotaux();
+}
+function totalCote(listeId){
+  let total = 0;
+  document.querySelectorAll('#' + listeId + ' .bx-row').forEach(row => {
+    if(row.querySelector('.bx-joue').checked) total += (parseInt(row.querySelector('.bx-b').value,10) || 0);
+  });
+  return total;
+}
+function majTotaux(){
+  document.getElementById('box-dom-total').textContent = totalCote('box-dom-list');
+  document.getElementById('box-ext-total').textContent = totalCote('box-ext-list');
+}
+function ouvrirMatch(id, prefill){
   matchEnEdition = id || null;
+  calLieAuMatch = (prefill && prefill.calId) || null;
   remplirSelectMatch();
   document.getElementById('m-modal-titre').textContent = id ? t('match.modal.modifier') : t('match.modal.nouveau');
+  document.getElementById('m-pro').checked = false;
   if(id){
     db.collection('matchs').doc(id).get().then(doc => {
       const m = doc.data() || {};
       document.getElementById('m-dom').value = m.domId || '';
       document.getElementById('m-ext').value = m.extId || '';
-      document.getElementById('m-butsdom').value = (m.butsDom != null ? m.butsDom : '');
-      document.getElementById('m-butsext').value = (m.butsExt != null ? m.butsExt : '');
       document.getElementById('m-pro').checked = !!m.prolongation;
+      majBox(m.lignes || []);
     });
   } else {
-    document.getElementById('m-butsdom').value = '';
-    document.getElementById('m-butsext').value = '';
-    document.getElementById('m-pro').checked = false;
+    if(prefill && prefill.domId) document.getElementById('m-dom').value = prefill.domId;
+    if(prefill && prefill.extId) document.getElementById('m-ext').value = prefill.extId;
+    majBox([]);
   }
   document.getElementById('modale-match').classList.add('open');
 }
-function fermerMatch(){ document.getElementById('modale-match').classList.remove('open'); }
+function fermerMatch(){ document.getElementById('modale-match').classList.remove('open'); calLieAuMatch = null; }
+function collecterLignes(listeId, equipeId){
+  const arr = [];
+  document.querySelectorAll('#' + listeId + ' .bx-row').forEach(row => {
+    if(!row.querySelector('.bx-joue').checked) return;
+    arr.push({
+      pid: row.querySelector('.bx-joue').getAttribute('data-pid'),
+      eqId: equipeId,
+      b: parseInt(row.querySelector('.bx-b').value,10) || 0,
+      a: parseInt(row.querySelector('.bx-a').value,10) || 0
+    });
+  });
+  return arr;
+}
 function sauverMatch(){
   const domId = document.getElementById('m-dom').value;
   const extId = document.getElementById('m-ext').value;
-  const butsDom = parseInt(document.getElementById('m-butsdom').value, 10);
-  const butsExt = parseInt(document.getElementById('m-butsext').value, 10);
   const prolongation = document.getElementById('m-pro').checked;
   if(!domId || !extId || domId === extId){ alert(t('match.memeEquipe')); return; }
-  if(isNaN(butsDom) || isNaN(butsExt)){ alert(t('match.besoinScore')); return; }
+  const lignesDom = collecterLignes('box-dom-list', domId);
+  const lignesExt = collecterLignes('box-ext-list', extId);
+  const butsDom = lignesDom.reduce((s,l) => s + (+l.b||0), 0);
+  const butsExt = lignesExt.reduce((s,l) => s + (+l.b||0), 0);
   if(butsDom === butsExt){ alert(t('match.egalite')); return; }
   const donnees = {
-    domId, domNom: (trouverEquipeParId(domId) || {}).nom || '',
-    extId, extNom: (trouverEquipeParId(extId) || {}).nom || '',
-    butsDom, butsExt, prolongation
+    domId, domNom: (trouverEquipeParId(domId)||{}).nom || '',
+    extId, extNom: (trouverEquipeParId(extId)||{}).nom || '',
+    butsDom, butsExt, prolongation,
+    lignes: lignesDom.concat(lignesExt)
   };
   let action;
   if(matchEnEdition){ action = db.collection('matchs').doc(matchEnEdition).update(donnees); }
   else { donnees.createdAt = firebase.firestore.FieldValue.serverTimestamp(); action = db.collection('matchs').add(donnees); }
-  action.then(() => fermerMatch()).catch(e => alert(t('commun.erreur') + e.message));
+  action.then(() => {
+    if(calLieAuMatch){ db.collection('calendrier').doc(calLieAuMatch).delete().catch(()=>{}); calLieAuMatch = null; }
+    fermerMatch();
+  }).catch(e => alert(t('commun.erreur') + e.message));
 }
 function supprimerMatch(id){
   if(confirm(t('match.confirmSuppr'))){
@@ -1895,12 +1972,20 @@ function rendreCalendrier(){
       + '<div class="cal-date">' + escapeHtml(formaterDateCal(m.date)) + (m.heure ? '<span>' + escapeHtml(m.heure) + '</span>' : '') + '</div>'
       + '<div class="cal-match"><b>' + escapeHtml(m.domNom || '') + '</b> <em>' + t('calendrier.vs') + '</em> <b>' + escapeHtml(m.extNom || '') + '</b></div>';
     if(estAdmin){
-      html += '<div class="cal-actions"><button class="btn-mini" onclick="ouvrirCal(\'' + m.id + '\')">' + t('btn.modifier') + '</button>'
+      html += '<div class="cal-actions">'
+            + '<button class="btn-mini ok" onclick="jouerMatch(\'' + m.id + '\')">' + t('calendrier.jouer') + '</button>'
+            + '<button class="btn-mini" onclick="ouvrirCal(\'' + m.id + '\')">' + t('btn.modifier') + '</button>'
             + '<button class="del-btn" onclick="supprimerCal(\'' + m.id + '\')">' + t('btn.supprimer') + '</button></div>';
     }
     html += '</div>';
   });
   cont.innerHTML = html;
+}
+// Depuis le calendrier : ouvre la feuille de match pré-remplie ; efface l'entrée du calendrier une fois enregistrée
+function jouerMatch(calId){
+  let m = null; if(snapCal) snapCal.forEach(d => { if(d.id === calId) m = Object.assign({id:d.id}, d.data()); });
+  if(!m) return;
+  ouvrirMatch(null, { calId: m.id, domId: m.domId, extId: m.extId });
 }
 function remplirSelectCal(){
   ['cal-dom','cal-ext'].forEach(id => {
@@ -1947,7 +2032,6 @@ function supprimerCal(id){
    12) GARDIENS (joueurs en position G ; stats éditables par admin ou DG)
    Moyenne (MOY) = buts contre / parties jouées
    ========================================================= */
-let gardienEnEdition = null;
 function rendreGardiens(){
   const cont = document.getElementById('gardiens-list');
   if(!cont) return;
@@ -1961,43 +2045,16 @@ function rendreGardiens(){
   snapEquipes.forEach(docE => {
     const e = docE.data(); const eid = docE.id; const gs = parEquipe[eid] || [];
     if(gs.length === 0) return;
-    const couleur = e.couleur || '#D4AF37'; const peut = peutEditerEquipe(eid);
+    const couleur = e.couleur || '#D4AF37';
     html += '<div class="joueurs-equipe"><div class="je-head"><span class="je-dot" style="background:' + couleur + '"></span><h3>' + escapeHtml(e.nom || '') + '</h3></div>';
-    html += '<div class="gd-wrap"><table class="gd-table"><thead><tr><th class="cl-eq">' + t('cl.equipe') + '</th><th>' + t('gd.pj') + '</th><th>' + t('gd.v') + '</th><th>' + t('gd.d') + '</th><th>' + t('gd.bl') + '</th><th>' + t('gd.moy') + '</th>' + (peut ? '<th></th>' : '') + '</tr></thead><tbody>';
+    html += '<div class="gd-wrap"><table class="gd-table"><thead><tr><th class="cl-eq">' + t('cl.equipe') + '</th><th>' + t('gd.pj') + '</th><th>' + t('gd.v') + '</th><th>' + t('gd.d') + '</th><th>' + t('cl.dp') + '</th><th>' + t('gd.bl') + '</th><th>' + t('gd.moy') + '</th></tr></thead><tbody>';
     gs.forEach(g => {
-      const pj = +g.gPj||0, v = +g.gV||0, dd = +g.gD||0, bl = +g.gBl||0, bc = +g.gBc||0;
-      const moy = pj > 0 ? (bc/pj).toFixed(2) : '—';
-      html += '<tr><td class="cl-eq">' + escapeHtml(g.nom || '') + '</td><td>' + pj + '</td><td>' + v + '</td><td>' + dd + '</td><td>' + bl + '</td><td class="cl-pts">' + moy + '</td>'
-        + (peut ? ('<td><button class="btn-mini" onclick="ouvrirGardien(\'' + g.id + '\')">' + t('btn.modifier') + '</button></td>') : '') + '</tr>';
+      const s = statsGardien(g.id);
+      html += '<tr><td class="cl-eq">' + escapeHtml(g.nom || '') + '</td><td>' + s.pj + '</td><td>' + s.v + '</td><td>' + s.dd + '</td><td>' + s.dp + '</td><td>' + s.bl + '</td><td class="cl-pts">' + s.moy + '</td></tr>';
     });
     html += '</tbody></table></div></div>';
   });
   cont.innerHTML = html;
-}
-function ouvrirGardien(id){
-  gardienEnEdition = id;
-  db.collection('joueurs').doc(id).get().then(doc => {
-    const g = doc.data() || {};
-    document.getElementById('gd-nom').textContent = g.nom || '';
-    document.getElementById('gd-pj').value = (g.gPj != null ? g.gPj : '');
-    document.getElementById('gd-v').value = (g.gV != null ? g.gV : '');
-    document.getElementById('gd-d').value = (g.gD != null ? g.gD : '');
-    document.getElementById('gd-bl').value = (g.gBl != null ? g.gBl : '');
-    document.getElementById('gd-bc').value = (g.gBc != null ? g.gBc : '');
-  });
-  document.getElementById('modale-gardien').classList.add('open');
-}
-function fermerGardien(){ document.getElementById('modale-gardien').classList.remove('open'); }
-function sauverGardien(){
-  if(!gardienEnEdition) return;
-  const maj = {
-    gPj: parseInt(document.getElementById('gd-pj').value,10)||0,
-    gV:  parseInt(document.getElementById('gd-v').value,10)||0,
-    gD:  parseInt(document.getElementById('gd-d').value,10)||0,
-    gBl: parseInt(document.getElementById('gd-bl').value,10)||0,
-    gBc: parseInt(document.getElementById('gd-bc').value,10)||0
-  };
-  db.collection('joueurs').doc(gardienEnEdition).update(maj).then(() => fermerGardien()).catch(e => alert(t('commun.erreur') + e.message));
 }
 
 /* Redessine les listes dynamiques (au changement de langue / rôle) */
