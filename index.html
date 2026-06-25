@@ -520,6 +520,26 @@ th.cl-eq{display:table-cell}
 .bx-b,.bx-a{width:44px;margin:0;padding:6px 4px;text-align:center;font-size:13px}
 .box-note{font-size:11.5px;color:var(--texte-doux);margin-top:10px;text-align:center;font-style:italic}
 @media (max-width:560px){ .box-score{grid-template-columns:1fr} }
+
+/* ===== Inscriptions ===== */
+.insc-form{margin-top:16px}
+.insc-form input,.insc-form select{width:100%;background:#0a0a0e;border:1px solid var(--bordure);border-radius:10px;
+  color:var(--texte);font-family:inherit;font-size:14px;padding:11px 13px;margin-bottom:10px}
+.insc-form input:focus,.insc-form select:focus{outline:none;border-color:var(--or)}
+.insc-merci{background:rgba(126,224,160,.1);border:1px solid rgba(126,224,160,.4);color:#7ee0a0;
+  border-radius:10px;padding:11px 14px;font-size:13.5px;margin-top:4px}
+.insc-card{background:linear-gradient(180deg,var(--charbon),#0d0d14);border:1px solid var(--bordure);
+  border-left:3px solid var(--or);border-radius:12px;padding:14px 16px;margin-bottom:10px}
+.insc-card.traite{opacity:.55;border-left-color:rgba(126,224,160,.5)}
+.ic-head{display:flex;align-items:center;gap:10px}
+.ic-head b{color:var(--platine);font-family:'Cinzel',serif;font-size:15px}
+.ic-statut{margin-left:auto;font-size:10.5px;font-weight:600;padding:3px 10px;border-radius:99px;border:1px solid var(--bordure)}
+.ic-statut.s-new{color:var(--or);border-color:rgba(212,175,55,.4)}
+.ic-statut.s-ok{color:#7ee0a0;border-color:rgba(126,224,160,.4)}
+.ic-meta{color:var(--texte);font-size:13.5px;margin-top:7px}
+.ic-date{color:var(--texte-doux);font-size:12px;margin-top:3px}
+.ic-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.ic-actions .del-btn{margin-top:0}
 </style>
 </head>
 <body>
@@ -672,11 +692,40 @@ th.cl-eq{display:table-cell}
     </div>
     <div class="card">
       <h3 data-i18n="inscriptions.commenttitre">Comment s'inscrire</h3>
-      <p data-i18n="inscriptions.commenttexte">Remplis le formulaire ci-dessous pour t'inscrire ou inscrire ton équipe. (Tu pourras mettre le lien de ton formulaire Google ici.)</p>
-      <div class="cta-row" style="justify-content:flex-start;margin-top:18px">
-        <!-- ⚠️ Remplace le href="#" par ton lien de formulaire quand tu l'auras -->
-        <a class="btn btn-or" href="#" target="_blank" rel="noopener" data-i18n="inscriptions.bouton">Formulaire d'inscription</a>
+      <p data-i18n="inscriptions.commenttexte">Remplis le formulaire pour t'inscrire comme joueur (free agent). Un admin va te contacter sur Discord.</p>
+      <div class="insc-form">
+        <label class="champ-lbl" data-i18n="insc.nom">Nom / Gamertag</label>
+        <input id="insc-nom" placeholder="Ton gamertag en jeu" data-i18n-ph="insc.nom.ph">
+        <div class="ech-cols">
+          <div><label class="champ-lbl" data-i18n="insc.plateforme">Plateforme</label>
+            <select id="insc-plateforme">
+              <option value="PS5">PS5</option>
+              <option value="Xbox Series">Xbox Series</option>
+              <option value="PC">PC</option>
+            </select></div>
+          <div><label class="champ-lbl" data-i18n="insc.position">Position</label>
+            <select id="insc-position">
+              <option value="C">C</option>
+              <option value="AG">AG</option>
+              <option value="AD">AD</option>
+              <option value="DG">DG</option>
+              <option value="DD">DD</option>
+              <option value="G">G</option>
+            </select></div>
+        </div>
+        <label class="champ-lbl" data-i18n="insc.discord">Discord</label>
+        <input id="insc-discord" placeholder="ton_pseudo" data-i18n-ph="insc.discord.ph">
+        <div id="insc-merci" class="insc-merci" style="display:none" data-i18n="insc.merci">Merci! Ton inscription est envoyée. Un admin va te contacter.</div>
+        <div class="cta-row" style="justify-content:flex-start;margin-top:14px">
+          <button class="btn btn-or" onclick="envoyerInscription()" data-i18n="insc.envoyer">M'inscrire</button>
+        </div>
       </div>
+    </div>
+
+    <!-- Admin : inscriptions reçues -->
+    <div class="admin-only" style="margin-top:22px">
+      <div class="eyebrow" style="margin-bottom:12px" data-i18n="insc.admin.titre">Inscriptions reçues</div>
+      <div id="inscriptions-list"></div>
     </div>
   </section>
 
@@ -958,8 +1007,12 @@ const DICT = {
     'reglements.admlbl':'Admin · Modifier les règlements','reglements.ph':'Écris les règlements ici…','reglements.vide':'Aucun règlement pour le moment.',
     'reglements.enregistres':'Règlements enregistrés ✅',
     'inscriptions.titre':'Inscriptions','inscriptions.sous':'Rejoins la ligue DYNASTY.',
-    'inscriptions.commenttitre':"Comment s'inscrire",'inscriptions.commenttexte':"Remplis le formulaire ci-dessous pour t'inscrire ou inscrire ton équipe. (Tu pourras mettre le lien de ton formulaire Google ici.)",
+    'inscriptions.commenttitre':"Comment s'inscrire",'inscriptions.commenttexte':"Remplis le formulaire pour t'inscrire comme joueur (free agent). Un admin va te contacter sur Discord.",
     'inscriptions.bouton':"Formulaire d'inscription",
+    'insc.nom':'Nom / Gamertag','insc.nom.ph':'Ton gamertag en jeu','insc.plateforme':'Plateforme','insc.position':'Position','insc.discord':'Discord','insc.discord.ph':'ton_pseudo',
+    'insc.envoyer':"M'inscrire",'insc.merci':'Merci! Ton inscription est envoyée. Un admin va te contacter.','insc.besoinNom':'Mets au moins ton nom / gamertag.',
+    'insc.admin.titre':'Inscriptions reçues','insc.vide':'Aucune inscription pour le moment.','insc.nouveau':'Nouveau','insc.traite':'Traité',
+    'insc.marquerTraite':'Marquer traité','insc.marquerNouveau':'Remettre nouveau','insc.confirmSuppr':'Supprimer cette inscription ?',
     'reseaux.titre':'Réseaux sociaux','reseaux.sous':'Suis la ligue partout.',
     'classements.titre':'Classements','classements.sous':'Le classement, calculé automatiquement.','classements.construction':'On bâtit le tableau des classements à la prochaine étape.',
     'joueurs.titre':'Joueurs','joueurs.sous':'Les joueurs, par équipe.','joueurs.construction':'On bâtit le tableau des joueurs à la prochaine étape.',
@@ -1042,8 +1095,12 @@ const DICT = {
     'reglements.admlbl':'Admin · Edit the rules','reglements.ph':'Write the rules here…','reglements.vide':'No rules yet.',
     'reglements.enregistres':'Rules saved ✅',
     'inscriptions.titre':'Sign-up','inscriptions.sous':'Join the DYNASTY league.',
-    'inscriptions.commenttitre':'How to sign up','inscriptions.commenttexte':"Fill out the form below to sign up yourself or your team. (You'll be able to put your Google Form link here.)",
+    'inscriptions.commenttitre':'How to sign up','inscriptions.commenttexte':'Fill out the form to sign up as a player (free agent). An admin will reach out on Discord.',
     'inscriptions.bouton':'Sign-up form',
+    'insc.nom':'Name / Gamertag','insc.nom.ph':'Your in-game gamertag','insc.plateforme':'Platform','insc.position':'Position','insc.discord':'Discord','insc.discord.ph':'your_handle',
+    'insc.envoyer':'Sign me up','insc.merci':'Thanks! Your registration is in. An admin will reach out.','insc.besoinNom':'Enter at least your name / gamertag.',
+    'insc.admin.titre':'Registrations received','insc.vide':'No registrations yet.','insc.nouveau':'New','insc.traite':'Processed',
+    'insc.marquerTraite':'Mark processed','insc.marquerNouveau':'Mark as new','insc.confirmSuppr':'Delete this registration?',
     'reseaux.titre':'Social media','reseaux.sous':'Follow the league everywhere.',
     'classements.titre':'Standings','classements.sous':'Standings, calculated automatically.','classements.construction':"We're building the standings table in the next step.",
     'joueurs.titre':'Players','joueurs.sous':'Players, by team.','joueurs.construction':"We're building the players table in the next step.",
@@ -2057,8 +2114,67 @@ function rendreGardiens(){
   cont.innerHTML = html;
 }
 
+/* =========================================================
+   13) INSCRIPTIONS (formulaire joueur → Firebase ; liste côté admin)
+   ========================================================= */
+let snapInsc = null;
+function initInscriptions(){
+  db.collection('inscriptions').orderBy('createdAt','desc').onSnapshot(snap => {
+    snapInsc = snap; rendreInscriptions();
+  }, err => {
+    const c = document.getElementById('inscriptions-list');
+    if(c) c.innerHTML = videHTML('⚠️', t('err.connexion'), err.message);
+  });
+}
+function envoyerInscription(){
+  const nom = document.getElementById('insc-nom').value.trim();
+  const plateforme = document.getElementById('insc-plateforme').value;
+  const position = document.getElementById('insc-position').value;
+  const discord = document.getElementById('insc-discord').value.trim();
+  if(!nom){ alert(t('insc.besoinNom')); return; }
+  db.collection('inscriptions').add({
+    nom, plateforme, position, discord, statut:'nouveau',
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  }).then(() => {
+    document.getElementById('insc-nom').value = '';
+    document.getElementById('insc-discord').value = '';
+    const m = document.getElementById('insc-merci');
+    if(m){ m.style.display = 'block'; setTimeout(() => { m.style.display = 'none'; }, 6000); }
+  }).catch(e => alert(t('commun.erreur') + e.message));
+}
+function rendreInscriptions(){
+  const cont = document.getElementById('inscriptions-list');
+  if(!cont) return;
+  if(!snapInsc || snapInsc.empty){ cont.innerHTML = '<div class="je-vide">' + t('insc.vide') + '</div>'; return; }
+  let html = '';
+  snapInsc.forEach(d => {
+    const i = Object.assign({id:d.id}, d.data());
+    const traite = (i.statut === 'traite');
+    html += '<div class="insc-card' + (traite ? ' traite' : '') + '">'
+      + '<div class="ic-head"><b>' + escapeHtml(i.nom || '') + '</b>'
+        + '<span class="ic-statut ' + (traite ? 's-ok' : 's-new') + '">' + t(traite ? 'insc.traite' : 'insc.nouveau') + '</span></div>'
+      + '<div class="ic-meta">' + escapeHtml(i.position || '') + ' · ' + escapeHtml(i.plateforme || '')
+        + (i.discord ? (' · 💬 ' + escapeHtml(i.discord)) : '') + '</div>'
+      + '<div class="ic-date">' + formaterDate(i.createdAt) + '</div>'
+      + '<div class="ic-actions">'
+        + '<button class="btn-mini' + (traite ? '' : ' ok') + '" onclick="basculerInscription(\'' + i.id + '\',' + (traite ? 'false' : 'true') + ')">' + t(traite ? 'insc.marquerNouveau' : 'insc.marquerTraite') + '</button>'
+        + '<button class="del-btn" onclick="supprimerInscription(\'' + i.id + '\')">' + t('btn.supprimer') + '</button>'
+      + '</div></div>';
+  });
+  cont.innerHTML = html;
+}
+function basculerInscription(id, versTraite){
+  db.collection('inscriptions').doc(id).update({ statut: versTraite ? 'traite' : 'nouveau' })
+    .catch(e => alert(t('commun.erreur') + e.message));
+}
+function supprimerInscription(id){
+  if(confirm(t('insc.confirmSuppr'))){
+    db.collection('inscriptions').doc(id).delete().catch(e => alert(t('commun.erreur') + e.message));
+  }
+}
+
 /* Redessine les listes dynamiques (au changement de langue / rôle) */
-function rafraichirDynamique(){ rendreAnnonces(); rendreReglements(); rendreEquipes(); rendreJoueurs(); rendreTrades(); rendreResultats(); rendreClassements(); rendreCalendrier(); rendreGardiens(); }
+function rafraichirDynamique(){ rendreAnnonces(); rendreReglements(); rendreEquipes(); rendreJoueurs(); rendreTrades(); rendreResultats(); rendreClassements(); rendreCalendrier(); rendreGardiens(); rendreInscriptions(); }
 
 /* =========================================================
    6) DÉMARRAGE
@@ -2077,6 +2193,7 @@ function demarrer(){
   initTrades();
   initMatchs();
   initCalendrier();
+  initInscriptions();
 }
 demarrer();
 
