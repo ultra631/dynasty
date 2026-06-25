@@ -540,6 +540,37 @@ th.cl-eq{display:table-cell}
 .ic-date{color:var(--texte-doux);font-size:12px;margin-top:3px}
 .ic-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
 .ic-actions .del-btn{margin-top:0}
+
+/* ===== Polish pro : icônes, tableaux, typo ===== */
+.ic-svg{display:block}
+.empty .ico{line-height:0;margin-bottom:14px;font-size:0}
+.empty .ico .ic-svg{width:30px;height:30px;margin:0 auto;color:var(--or);opacity:.92}
+.feature .f-ico{font-size:0;margin-bottom:12px;display:flex;justify-content:center}
+.feature .f-ico .ic-svg{width:30px;height:30px;color:var(--or)}
+
+/* Chiffres alignés façon tableau de bord */
+.cl-table,.gd-table,.jr-table,.mr-score,.je-count,.box-head b,.cl-pts,.cl-rang,.stat-box .n,.cal-date{font-variant-numeric:tabular-nums}
+
+/* Survol des lignes de tableau */
+.cl-table tbody tr,.gd-table tbody tr{transition:background .15s ease}
+.cl-table tbody tr:hover,.gd-table tbody tr:hover{background:rgba(212,175,55,.06)}
+
+/* Podium du classement : 1er or, 2e argent, 3e bronze */
+.cl-table tbody tr:nth-child(-n+3) td:first-child{box-shadow:inset 3px 0 0 currentColor}
+.cl-table tbody tr:nth-child(1) td:first-child,.cl-table tbody tr:nth-child(1) .cl-rang{color:#F0D27A}
+.cl-table tbody tr:nth-child(2) td:first-child,.cl-table tbody tr:nth-child(2) .cl-rang{color:#cfd2d6}
+.cl-table tbody tr:nth-child(3) td:first-child,.cl-table tbody tr:nth-child(3) .cl-rang{color:#c8a06a}
+
+/* En-têtes de section : accent doré sous le titre */
+.page-head::after{content:'';display:block;width:44px;height:2px;margin-top:14px;
+  background:var(--grad-or);border-radius:2px;opacity:.9}
+.page-head .eyebrow{margin-bottom:9px}
+
+/* Pied de page raffiné */
+.foot-mark{font-family:'Cinzel',serif;font-weight:900;font-size:20px;letter-spacing:.22em}
+.foot-tag{color:var(--texte-doux);font-size:12.5px;margin-top:9px}
+.foot-line{color:var(--texte-doux);opacity:.55;font-size:11px;letter-spacing:.09em;margin-top:11px;text-transform:uppercase}
+.foot-crown{color:var(--or);opacity:.5;font-size:14px;margin-bottom:10px}
 </style>
 </head>
 <body>
@@ -618,17 +649,17 @@ th.cl-eq{display:table-cell}
     <div class="crown-div reveal"><span>&#9819;</span></div>
     <div class="feature-grid">
       <div class="feature reveal">
-        <div class="f-ico">📊</div>
+        <div class="f-ico" data-ico="bars"></div>
         <h3 data-i18n="feat1.titre">Stats en direct</h3>
         <p data-i18n="feat1.desc">Classements, joueurs et gardiens mis à jour après chaque match, en temps réel.</p>
       </div>
       <div class="feature reveal">
-        <div class="f-ico">🏒</div>
+        <div class="f-ico" data-ico="sticks"></div>
         <h3 data-i18n="feat2.titre">100% compétitif</h3>
         <p data-i18n="feat2.desc">Format 4S, du vrai hockey d'équipe où chaque but compte pour le titre.</p>
       </div>
       <div class="feature reveal">
-        <div class="f-ico">⚜️</div>
+        <div class="f-ico" data-ico="users"></div>
         <h3 data-i18n="feat3.titre">Communauté</h3>
         <p data-i18n="feat3.desc">Une gang de passionnés, en français et en anglais, dans une ambiance de tournoi à chaque soirée.</p>
       </div>
@@ -662,7 +693,7 @@ th.cl-eq{display:table-cell}
     </div>
 
     <div id="annonces-list">
-      <div class="empty"><div class="ico">📜</div><b data-i18n="annonces.vide.t">Aucune annonce</b><span data-i18n="annonces.vide.s">Les annonces apparaîtront ici.</span></div>
+      <div class="empty"><div class="ico" data-ico="doc"></div><b data-i18n="annonces.vide.t">Aucune annonce</b><span data-i18n="annonces.vide.s">Les annonces apparaîtront ici.</span></div>
     </div>
   </section>
 
@@ -701,15 +732,12 @@ th.cl-eq{display:table-cell}
             <select id="insc-plateforme">
               <option value="PS5">PS5</option>
               <option value="Xbox Series">Xbox Series</option>
-              <option value="PC">PC</option>
             </select></div>
           <div><label class="champ-lbl" data-i18n="insc.position">Position</label>
             <select id="insc-position">
               <option value="C">C</option>
-              <option value="AG">AG</option>
-              <option value="AD">AD</option>
-              <option value="DG">DG</option>
-              <option value="DD">DD</option>
+              <option value="A">A</option>
+              <option value="D">D</option>
               <option value="G">G</option>
             </select></div>
         </div>
@@ -749,7 +777,7 @@ th.cl-eq{display:table-cell}
   <section class="page" id="classements">
     <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="classements.titre">Classements</h2><p data-i18n="classements.sous">Le classement, calculé automatiquement.</p></div>
     <div id="classements-list">
-      <div class="empty"><div class="ico">🏆</div><b data-i18n="classements.vide.t">Aucune équipe</b><span data-i18n="classements.vide.s">Ajoute des équipes pour voir le classement.</span></div>
+      <div class="empty"><div class="ico" data-ico="trophy"></div><b data-i18n="classements.vide.t">Aucune équipe</b><span data-i18n="classements.vide.s">Ajoute des équipes pour voir le classement.</span></div>
     </div>
   </section>
   <section class="page" id="joueurs">
@@ -767,13 +795,13 @@ th.cl-eq{display:table-cell}
     </div>
 
     <div id="joueurs-list">
-      <div class="empty"><div class="ico">⛸️</div><b data-i18n="joueurs.vide.t">Aucun joueur</b><span data-i18n="joueurs.vide.s">Les joueurs apparaîtront ici.</span></div>
+      <div class="empty"><div class="ico" data-ico="users"></div><b data-i18n="joueurs.vide.t">Aucun joueur</b><span data-i18n="joueurs.vide.s">Les joueurs apparaîtront ici.</span></div>
     </div>
   </section>
   <section class="page" id="gardiens">
     <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="gardiens.titre">Gardiens</h2><p data-i18n="gardiens.sous">Les stats des gardiens (position G).</p></div>
     <div id="gardiens-list">
-      <div class="empty"><div class="ico">🥅</div><b data-i18n="gardiens.vide.t">Aucun gardien</b><span data-i18n="gardiens.vide.s">Ajoute des joueurs en position G dans Joueurs.</span></div>
+      <div class="empty"><div class="ico" data-ico="net"></div><b data-i18n="gardiens.vide.t">Aucun gardien</b><span data-i18n="gardiens.vide.s">Ajoute des joueurs en position G dans Joueurs.</span></div>
     </div>
   </section>
   <section class="page" id="calendrier">
@@ -784,7 +812,7 @@ th.cl-eq{display:table-cell}
     </div>
 
     <div id="calendrier-list">
-      <div class="empty"><div class="ico">📅</div><b data-i18n="calendrier.vide.t">Aucun match prévu</b><span data-i18n="calendrier.vide.s">Les matchs à venir apparaîtront ici.</span></div>
+      <div class="empty"><div class="ico" data-ico="calendar"></div><b data-i18n="calendrier.vide.t">Aucun match prévu</b><span data-i18n="calendrier.vide.s">Les matchs à venir apparaîtront ici.</span></div>
     </div>
   </section>
   <section class="page" id="resultats">
@@ -795,7 +823,7 @@ th.cl-eq{display:table-cell}
     </div>
 
     <div id="resultats-list">
-      <div class="empty"><div class="ico">📊</div><b data-i18n="resultats.vide.t">Aucun résultat</b><span data-i18n="resultats.vide.s">Les résultats apparaîtront ici.</span></div>
+      <div class="empty"><div class="ico" data-ico="bars"></div><b data-i18n="resultats.vide.t">Aucun résultat</b><span data-i18n="resultats.vide.s">Les résultats apparaîtront ici.</span></div>
     </div>
   </section>
   <section class="page" id="equipes">
@@ -807,7 +835,7 @@ th.cl-eq{display:table-cell}
     </div>
 
     <div id="equipes-grid" class="teams-grid">
-      <div class="empty"><div class="ico">🛡️</div><b data-i18n="equipes.vide.t">Aucune équipe</b><span data-i18n="equipes.vide.s">Les équipes apparaîtront ici.</span></div>
+      <div class="empty"><div class="ico" data-ico="shield"></div><b data-i18n="equipes.vide.t">Aucune équipe</b><span data-i18n="equipes.vide.s">Les équipes apparaîtront ici.</span></div>
     </div>
   </section>
 
@@ -820,7 +848,7 @@ th.cl-eq{display:table-cell}
     </div>
 
     <div id="echanges-list">
-      <div class="empty"><div class="ico">🔄</div><b data-i18n="echanges.vide.t">Aucun échange</b><span data-i18n="echanges.vide.s">Les échanges apparaîtront ici.</span></div>
+      <div class="empty"><div class="ico" data-ico="swap"></div><b data-i18n="echanges.vide.t">Aucun échange</b><span data-i18n="echanges.vide.s">Les échanges apparaîtront ici.</span></div>
     </div>
   </section>
 
@@ -828,8 +856,10 @@ th.cl-eq{display:table-cell}
 </main>
 
 <footer>
-  <div class="gold-text">DYNASTY</div>
-  <div style="margin-top:6px" data-i18n="footer.ligne">Ligue CHEL · NHL 27 · © 2026</div>
+  <div class="foot-crown">&#9819;</div>
+  <div class="foot-mark gold-text">DYNASTY</div>
+  <div class="foot-tag" data-i18n="footer.tag">Hockey compétitif · NHL 27 · World of Chel</div>
+  <div class="foot-line" data-i18n="footer.ligne">Ligue CHEL · NHL 27 · © 2026</div>
 </footer>
 
 <!-- ============================ MODALE ADMIN ============================ -->
@@ -876,10 +906,8 @@ th.cl-eq{display:table-cell}
     <label class="champ-lbl" data-i18n="joueur.position">Position</label>
     <select id="jo-position">
       <option value="C">C</option>
-      <option value="AG">AG</option>
-      <option value="AD">AD</option>
-      <option value="DG">DG</option>
-      <option value="DD">DD</option>
+      <option value="A">A</option>
+      <option value="D">D</option>
       <option value="G">G</option>
     </select>
     <div class="cta-row" style="margin-top:12px">
@@ -1022,7 +1050,7 @@ const DICT = {
     'commun.construction':'Section en construction',
     'equipes.titre':'Équipes','equipes.sous':'Les équipes de la ligue DYNASTY.','equipes.ajouter':'+ Ajouter une équipe',
     'equipes.vide.t':'Aucune équipe','equipes.vide.s':'Les équipes apparaîtront ici.',
-    'footer.ligne':'Ligue CHEL · NHL 27 · © 2026',
+    'footer.ligne':'Ligue CHEL · NHL 27 · © 2026','footer.tag':'Hockey compétitif · NHL 27 · World of Chel',
     'admin.titre':'Mode admin','admin.sous':'Entre le mot de passe admin ou ton code DG.','admin.ph':'Mot de passe / code DG',
     'admin.connexion':'Se connecter','admin.incorrect':'Mot de passe incorrect.',
     'commun.fermer':'Fermer','commun.annuler':'Annuler','btn.enregistrer':'Enregistrer','commun.chargement':'Chargement…',
@@ -1110,7 +1138,7 @@ const DICT = {
     'commun.construction':'Section under construction',
     'equipes.titre':'Teams','equipes.sous':'The teams of the DYNASTY league.','equipes.ajouter':'+ Add a team',
     'equipes.vide.t':'No teams yet','equipes.vide.s':'Teams will appear here.',
-    'footer.ligne':'CHEL League · NHL 27 · © 2026',
+    'footer.ligne':'CHEL League · NHL 27 · © 2026','footer.tag':'Competitive hockey · NHL 27 · World of Chel',
     'admin.titre':'Admin mode','admin.sous':'Enter the admin password or your GM code.','admin.ph':'Password / GM code',
     'admin.connexion':'Log in','admin.incorrect':'Incorrect password.',
     'commun.fermer':'Close','commun.annuler':'Cancel','btn.enregistrer':'Save','commun.chargement':'Loading…',
@@ -1184,6 +1212,29 @@ function basculerLangue(){
   localStorage.setItem('dynasty_langue', langue);
   appliquerLangue();
   if(typeof rafraichirDynamique === 'function') rafraichirDynamique();  // redessine listes/équipes
+}
+
+/* =========================================================
+   0b) ICÔNES (SVG fines — remplacent les emojis pour un look pro)
+   ========================================================= */
+const ICO = {
+  trophy:'<path d="M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4v2a3 3 0 0 0 3 3M17 5h3v2a3 3 0 0 1-3 3M12 13v3M9 20h6M10 20a2 2 0 0 1 4 0"/>',
+  bars:'<path d="M5 20v-6M12 20V5M19 20v-9"/>',
+  calendar:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M8 3v4M16 3v4"/>',
+  swap:'<path d="M16 4l3 3-3 3M19 7H8M8 20l-3-3 3-3M5 17h11"/>',
+  shield:'<path d="M12 3l7 3v5c0 4.2-2.8 7.4-7 9-4.2-1.6-7-4.8-7-9V6l7-3Z"/>',
+  net:'<path d="M4 6h16v9a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V6Z"/><path d="M9 6v12M15 6v12M4 10h16M4 14h16"/>',
+  doc:'<path d="M6 3h8l5 5v13H6V3Z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',
+  warning:'<path d="M12 4 3 19h18L12 4Z"/><path d="M12 10v4M12 17h.01"/>',
+  sticks:'<path d="M5 19 15 5M9 19 19 5"/><circle cx="5.5" cy="19" r="1.3"/>',
+  users:'<circle cx="9" cy="9" r="3"/><path d="M3.5 20c0-3 2.7-5 5.5-5s5.5 2 5.5 5"/><path d="M16 6.2a3 3 0 0 1 0 5.6M20.5 20c0-2-1.2-3.6-3.5-4.4"/>'
+};
+function ico(name){
+  return '<svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICO[name] || '') + '</svg>';
+}
+// Remplit les icônes statiques marquées data-ico
+function appliquerIcones(){
+  document.querySelectorAll('[data-ico]').forEach(el => { el.innerHTML = ico(el.getAttribute('data-ico')); });
 }
 
 /* =========================================================
@@ -1301,13 +1352,13 @@ function initAnnonces(){
   db.collection('annonces').orderBy('ts','desc').onSnapshot(snap => {
     snapAnnonces = snap; rendreAnnonces();
   }, err => {
-    document.getElementById('annonces-list').innerHTML = videHTML('⚠️', t('err.connexion'), err.message);
+    document.getElementById('annonces-list').innerHTML = videHTML(ico('warning'), t('err.connexion'), err.message);
   });
 }
 function rendreAnnonces(){
   if(!snapAnnonces) return;
   const liste = document.getElementById('annonces-list');
-  if(snapAnnonces.empty){ liste.innerHTML = videHTML('📜', t('annonces.vide.t'), t('annonces.vide.s')); return; }
+  if(snapAnnonces.empty){ liste.innerHTML = videHTML(ico('doc'), t('annonces.vide.t'), t('annonces.vide.s')); return; }
   liste.innerHTML = '';
   snapAnnonces.forEach(doc => {
     const a = doc.data();
@@ -1375,13 +1426,13 @@ function initEquipes(){
     if(typeof appliquerRoles === 'function') appliquerRoles();  // rafraîchit bannière DG + droits joueurs
     if(typeof rendreClassements === 'function') rendreClassements();  // le classement dépend des équipes
   }, err => {
-    document.getElementById('equipes-grid').innerHTML = videHTML('⚠️', t('err.connexion'), err.message);
+    document.getElementById('equipes-grid').innerHTML = videHTML(ico('warning'), t('err.connexion'), err.message);
   });
 }
 function rendreEquipes(){
   if(!snapEquipes) return;
   const grille = document.getElementById('equipes-grid');
-  if(snapEquipes.empty){ grille.innerHTML = videHTML('🛡️', t('equipes.vide.t'), t('equipes.vide.s')); return; }
+  if(snapEquipes.empty){ grille.innerHTML = videHTML(ico('shield'), t('equipes.vide.t'), t('equipes.vide.s')); return; }
   grille.innerHTML = '';
   snapEquipes.forEach(doc => {
     const e = doc.data();
@@ -1477,7 +1528,7 @@ function initJoueurs(){
     if(typeof rendreGardiens === 'function') rendreGardiens();
   }, err => {
     const c = document.getElementById('joueurs-list');
-    if(c) c.innerHTML = videHTML('⚠️', t('err.connexion'), err.message);
+    if(c) c.innerHTML = videHTML(ico('warning'), t('err.connexion'), err.message);
   });
 }
 
@@ -1485,7 +1536,7 @@ function rendreJoueurs(){
   const cont = document.getElementById('joueurs-list');
   if(!cont) return;
   if(!snapEquipes || snapEquipes.empty){
-    cont.innerHTML = videHTML('🛡️', t('joueurs.pasdequipe.t'), t('joueurs.pasdequipe.s'));
+    cont.innerHTML = videHTML(ico('shield'), t('joueurs.pasdequipe.t'), t('joueurs.pasdequipe.s'));
     return;
   }
   const parEquipe = {};
@@ -1605,7 +1656,7 @@ function initTrades(){
     snapTrades = snap; rendreTrades();
   }, err => {
     const c = document.getElementById('echanges-list');
-    if(c) c.innerHTML = videHTML('⚠️', t('err.connexion'), err.message);
+    if(c) c.innerHTML = videHTML(ico('warning'), t('err.connexion'), err.message);
   });
 }
 
@@ -1654,7 +1705,7 @@ function rendreTrades(){
   const cont = document.getElementById('echanges-list');
   if(!cont) return;
   if(!snapTrades || snapTrades.empty){
-    cont.innerHTML = videHTML('🔄', t('echanges.vide.t'), t('echanges.vide.s')); return;
+    cont.innerHTML = videHTML(ico('swap'), t('echanges.vide.t'), t('echanges.vide.s')); return;
   }
   const enAttente = [], histo = [];
   snapTrades.forEach(d => {
@@ -1664,7 +1715,7 @@ function rendreTrades(){
     else { if(estAdmin || estConcerne(tr)) enAttente.push(tr); }          // propose / accepte_dg
   });
   if(!enAttente.length && !histo.length){
-    cont.innerHTML = videHTML('🔄', t('echanges.vide.t'), t('echanges.vide.s')); return;
+    cont.innerHTML = videHTML(ico('swap'), t('echanges.vide.t'), t('echanges.vide.s')); return;
   }
   let html = '';
   if(enAttente.length){ html += '<div class="ech-section">' + t('echanges.enattente') + '</div>'; enAttente.forEach(tr => html += carteTrade(tr)); }
@@ -1795,7 +1846,7 @@ function initMatchs(){
     if(typeof rendreGardiens === 'function') rendreGardiens();  // stats gardiens = somme des matchs
   }, err => {
     const c = document.getElementById('resultats-list');
-    if(c) c.innerHTML = videHTML('⚠️', t('err.connexion'), err.message);
+    if(c) c.innerHTML = videHTML(ico('warning'), t('err.connexion'), err.message);
   });
 }
 
@@ -1804,7 +1855,7 @@ function rendreResultats(){
   const cont = document.getElementById('resultats-list');
   if(!cont) return;
   if(!snapMatchs || snapMatchs.empty){
-    cont.innerHTML = videHTML('📊', t('resultats.vide.t'), t('resultats.vide.s')); return;
+    cont.innerHTML = videHTML(ico('bars'), t('resultats.vide.t'), t('resultats.vide.s')); return;
   }
   let html = '';
   snapMatchs.forEach(d => {
@@ -1830,7 +1881,7 @@ function rendreClassements(){
   const cont = document.getElementById('classements-list');
   if(!cont) return;
   if(!snapEquipes || snapEquipes.empty){
-    cont.innerHTML = videHTML('🏆', t('classements.vide.t'), t('classements.vide.s')); return;
+    cont.innerHTML = videHTML(ico('trophy'), t('classements.vide.t'), t('classements.vide.s')); return;
   }
   // Initialise une fiche par équipe (même celles à 0 match)
   const st = {};
@@ -2009,7 +2060,7 @@ function initCalendrier(){
     snapCal = snap; rendreCalendrier();
   }, err => {
     const c = document.getElementById('calendrier-list');
-    if(c) c.innerHTML = videHTML('⚠️', t('err.connexion'), err.message);
+    if(c) c.innerHTML = videHTML(ico('warning'), t('err.connexion'), err.message);
   });
 }
 function formaterDateCal(s){
@@ -2021,7 +2072,7 @@ function formaterDateCal(s){
 function rendreCalendrier(){
   const cont = document.getElementById('calendrier-list');
   if(!cont) return;
-  if(!snapCal || snapCal.empty){ cont.innerHTML = videHTML('📅', t('calendrier.vide.t'), t('calendrier.vide.s')); return; }
+  if(!snapCal || snapCal.empty){ cont.innerHTML = videHTML(ico('calendar'), t('calendrier.vide.t'), t('calendrier.vide.s')); return; }
   let html = '';
   snapCal.forEach(d => {
     const m = Object.assign({id:d.id}, d.data());
@@ -2092,12 +2143,12 @@ function supprimerCal(id){
 function rendreGardiens(){
   const cont = document.getElementById('gardiens-list');
   if(!cont) return;
-  if(!snapEquipes || snapEquipes.empty){ cont.innerHTML = videHTML('🥅', t('gardiens.vide.t'), t('gardiens.vide.s')); return; }
+  if(!snapEquipes || snapEquipes.empty){ cont.innerHTML = videHTML(ico('net'), t('gardiens.vide.t'), t('gardiens.vide.s')); return; }
   const parEquipe = {}; let total = 0;
   if(snapJoueurs){
     snapJoueurs.forEach(d => { const j = d.data(); if((j.position || '') === 'G'){ (parEquipe[j.equipeId] = parEquipe[j.equipeId] || []).push(Object.assign({id:d.id}, j)); total++; } });
   }
-  if(total === 0){ cont.innerHTML = videHTML('🥅', t('gardiens.vide.t'), t('gardiens.vide.s')); return; }
+  if(total === 0){ cont.innerHTML = videHTML(ico('net'), t('gardiens.vide.t'), t('gardiens.vide.s')); return; }
   let html = '';
   snapEquipes.forEach(docE => {
     const e = docE.data(); const eid = docE.id; const gs = parEquipe[eid] || [];
@@ -2123,7 +2174,7 @@ function initInscriptions(){
     snapInsc = snap; rendreInscriptions();
   }, err => {
     const c = document.getElementById('inscriptions-list');
-    if(c) c.innerHTML = videHTML('⚠️', t('err.connexion'), err.message);
+    if(c) c.innerHTML = videHTML(ico('warning'), t('err.connexion'), err.message);
   });
 }
 function envoyerInscription(){
@@ -2184,6 +2235,7 @@ function demarrer(){
   const dgSauve = sessionStorage.getItem('dynasty_dg');
   if(dgSauve){ dgTeamId = dgSauve; }
   appliquerLangue();
+  appliquerIcones();
   appliquerRoles();
   afficherRoute();
   initAnnonces();
