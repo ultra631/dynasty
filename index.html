@@ -407,6 +407,34 @@ body.is-admin .peut-editer, body.is-dg .peut-editer{display:block}
 .jr-actions{display:flex;gap:6px}
 .jr-actions .del-btn{margin-top:0}
 .je-vide{padding:14px 16px;color:var(--texte-doux);font-size:13px}
+
+/* ===== Échanges / Trades ===== */
+.ech-section{font-family:'Cinzel',serif;font-weight:700;font-size:13px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--or);margin:8px 0 12px}
+.trade-card{background:linear-gradient(180deg,var(--charbon),#0d0d14);border:1px solid var(--bordure);
+  border-radius:14px;padding:16px;margin-bottom:12px}
+.tc-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:var(--platine);
+  font-family:'Cinzel',serif;font-size:14px;margin-bottom:12px}
+.tc-statut{margin-left:auto;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;
+  padding:3px 10px;border-radius:99px;border:1px solid var(--bordure);color:var(--texte-doux)}
+.tc-statut.s-approuve{color:#7ee0a0;border-color:rgba(126,224,160,.4)}
+.tc-statut.s-refuse,.tc-statut.s-contre{color:var(--rouge-clair);border-color:rgba(196,43,69,.4)}
+.tc-statut.s-accepte_dg{color:var(--or);border-color:var(--bordure)}
+.tc-body{display:grid;grid-template-columns:1fr 1fr;gap:14px;font-size:13.5px;color:var(--texte)}
+.tc-lbl{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--texte-doux);margin-bottom:4px}
+.tc-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;align-items:center}
+.tc-actions .del-btn{margin-top:0}
+.btn-mini.ok{border-color:rgba(126,224,160,.5);color:#7ee0a0}
+.btn-mini.ok:hover{background:rgba(126,224,160,.12)}
+.ech-note{font-size:12.5px;color:var(--or)}
+.ech-cols{display:flex;gap:10px}
+.ech-cols>div{flex:1;min-width:0}
+.chk-list{max-height:150px;overflow-y:auto;border:1px solid var(--bordure);border-radius:10px;
+  padding:8px;margin-bottom:10px;background:#0a0a0e}
+.chk{display:flex;align-items:center;gap:8px;padding:6px;border-radius:6px;cursor:pointer;font-size:13.5px;color:var(--texte)}
+.chk:hover{background:rgba(212,175,55,.08)}
+.chk input{width:auto;margin:0;accent-color:var(--or)}
+@media (max-width:520px){ .tc-body{grid-template-columns:1fr} }
 </style>
 </head>
 <body>
@@ -441,6 +469,7 @@ body.is-admin .peut-editer, body.is-dg .peut-editer{display:block}
     <a class="nav-link" data-route="calendrier" href="#calendrier" data-i18n="nav.calendrier">Calendrier</a>
     <a class="nav-link" data-route="resultats" href="#resultats" data-i18n="nav.resultats">Résultats</a>
     <a class="nav-link" data-route="equipes" href="#equipes" data-i18n="nav.equipes">Équipes</a>
+    <a class="nav-link" data-route="echanges" href="#echanges" data-i18n="nav.echanges">Échanges</a>
   </nav>
 </header>
 
@@ -630,6 +659,19 @@ body.is-admin .peut-editer, body.is-dg .peut-editer{display:block}
     </div>
   </section>
 
+  <!-- ====================== ÉCHANGES (trades entre DG, approuvés par l'admin) ====================== -->
+  <section class="page" id="echanges">
+    <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="echanges.titre">Échanges</h2><p data-i18n="echanges.sous">Les échanges entre équipes.</p></div>
+
+    <div class="peut-editer" style="margin-bottom:16px">
+      <button class="btn btn-or" onclick="ouvrirEchange()" data-i18n="echanges.proposer">+ Proposer un échange</button>
+    </div>
+
+    <div id="echanges-list">
+      <div class="empty"><div class="ico">🔄</div><b data-i18n="echanges.vide.t">Aucun échange</b><span data-i18n="echanges.vide.s">Les échanges apparaîtront ici.</span></div>
+    </div>
+  </section>
+
 </div>
 </main>
 
@@ -691,6 +733,27 @@ body.is-admin .peut-editer, body.is-dg .peut-editer{display:block}
     <div class="cta-row" style="margin-top:12px">
       <button class="btn btn-or" onclick="sauverJoueur()" data-i18n="btn.enregistrer">Enregistrer</button>
       <button class="btn btn-ghost" onclick="fermerJoueur()" data-i18n="commun.annuler">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================ MODALE ÉCHANGE (proposer / contre-offre) ============================ -->
+<div class="modal" id="modale-echange">
+  <div class="modal-box" style="max-width:460px;text-align:left">
+    <h3 class="cinzel" id="ech-modal-titre" style="text-align:center" data-i18n="echanges.modal.titre">Proposer un échange</h3>
+    <div class="ech-cols">
+      <div><label class="champ-lbl" data-i18n="echanges.de">De (ton équipe)</label>
+        <select id="ech-de" onchange="majListesEch()"></select></div>
+      <div><label class="champ-lbl" data-i18n="echanges.vers">Vers</label>
+        <select id="ech-vers" onchange="majListesEch()"></select></div>
+    </div>
+    <label class="champ-lbl" data-i18n="echanges.joueursOfferts">Joueurs offerts</label>
+    <div id="ech-offre-list" class="chk-list"></div>
+    <label class="champ-lbl" data-i18n="echanges.joueursDemandes">Joueurs demandés</label>
+    <div id="ech-demande-list" class="chk-list"></div>
+    <div class="cta-row" style="margin-top:12px">
+      <button class="btn btn-or" onclick="envoyerEchange()" data-i18n="echanges.envoyer">Envoyer la proposition</button>
+      <button class="btn btn-ghost" onclick="fermerEchange()" data-i18n="commun.annuler">Annuler</button>
     </div>
   </div>
 </div>
@@ -773,7 +836,22 @@ const DICT = {
     'joueur.modal.nouveau':'Nouveau joueur','joueur.modal.modifier':'Modifier le joueur',
     'joueur.besoinNom':'Donne un nom au joueur.','joueur.besoinEquipe':'Choisis une équipe.','joueur.confirmSuppr':'Retirer ce joueur ?',
     'eq.codeDG':'Code DG (optionnel)','eq.codeDG.ph':"Mot de passe du DG de l'équipe",
-    'dg.actif':'Mode DG','dg.quitter':'Quitter','dg.refus':'Tu peux gérer seulement ton équipe.'
+    'dg.actif':'Mode DG','dg.quitter':'Quitter','dg.refus':'Tu peux gérer seulement ton équipe.',
+    'nav.echanges':'Échanges',
+    'echanges.titre':'Échanges','echanges.sous':'Les échanges entre équipes.',
+    'echanges.proposer':'+ Proposer un échange','echanges.vide.t':'Aucun échange','echanges.vide.s':'Les échanges apparaîtront ici.',
+    'echanges.enattente':'En attente','echanges.historique':'Transactions complétées',
+    'echanges.offre':'Offre','echanges.demande':'Demande',
+    'echanges.de':'De (ton équipe)','echanges.vers':'Vers',
+    'echanges.joueursOfferts':'Joueurs offerts','echanges.joueursDemandes':'Joueurs demandés',
+    'echanges.envoyer':'Envoyer la proposition','echanges.modal.titre':'Proposer un échange','echanges.modal.contre':'Faire une contre-offre',
+    'echanges.retirer':'Retirer','echanges.attenteAdmin':"En attente de l'approbation de l'admin.",
+    'echanges.aucunDispo':'Aucun joueur disponible.',
+    'echanges.besoinJoueurs':'Choisis au moins un joueur de chaque côté.','echanges.memeEquipe':'Choisis deux équipes différentes.',
+    'echanges.confirmRefus':'Refuser cet échange ?','echanges.confirmAnnul':'Retirer cette proposition ?',
+    'echanges.confirmApprouve':"Approuver — les joueurs vont changer d'équipe. Continuer ?",
+    'btn.accepter':'Accepter','btn.refuser':'Refuser','btn.contre':'Contre-offre','btn.approuver':'Approuver',
+    'statut.propose':'Proposé','statut.accepte_dg':'Accepté — attente admin','statut.approuve':'Approuvé ✅','statut.refuse':'Refusé','statut.contre':'Contre-offre faite'
   },
   en: {
     'nav.accueil':'Home','nav.annonces':'News','nav.reglements':'Rules',
@@ -828,7 +906,22 @@ const DICT = {
     'joueur.modal.nouveau':'New player','joueur.modal.modifier':'Edit player',
     'joueur.besoinNom':'Give the player a name.','joueur.besoinEquipe':'Choose a team.','joueur.confirmSuppr':'Remove this player?',
     'eq.codeDG':'GM code (optional)','eq.codeDG.ph':'Team GM password',
-    'dg.actif':'GM mode','dg.quitter':'Exit','dg.refus':'You can only manage your own team.'
+    'dg.actif':'GM mode','dg.quitter':'Exit','dg.refus':'You can only manage your own team.',
+    'nav.echanges':'Trades',
+    'echanges.titre':'Trades','echanges.sous':'Trades between teams.',
+    'echanges.proposer':'+ Propose a trade','echanges.vide.t':'No trades yet','echanges.vide.s':'Trades will appear here.',
+    'echanges.enattente':'Pending','echanges.historique':'Completed trades',
+    'echanges.offre':'Offers','echanges.demande':'Wants',
+    'echanges.de':'From (your team)','echanges.vers':'To',
+    'echanges.joueursOfferts':'Players offered','echanges.joueursDemandes':'Players requested',
+    'echanges.envoyer':'Send proposal','echanges.modal.titre':'Propose a trade','echanges.modal.contre':'Make a counter-offer',
+    'echanges.retirer':'Withdraw','echanges.attenteAdmin':'Awaiting admin approval.',
+    'echanges.aucunDispo':'No players available.',
+    'echanges.besoinJoueurs':'Pick at least one player on each side.','echanges.memeEquipe':'Pick two different teams.',
+    'echanges.confirmRefus':'Decline this trade?','echanges.confirmAnnul':'Withdraw this proposal?',
+    'echanges.confirmApprouve':'Approve — players will switch teams. Continue?',
+    'btn.accepter':'Accept','btn.refuser':'Decline','btn.contre':'Counter','btn.approuver':'Approve',
+    'statut.propose':'Proposed','statut.accepte_dg':'Accepted — awaiting admin','statut.approuve':'Approved ✅','statut.refuse':'Declined','statut.contre':'Countered'
   }
 };
 let langue = localStorage.getItem('dynasty_langue') || 'fr';
@@ -899,6 +992,7 @@ function appliquerRoles(){
   const btn = document.querySelector('.admin-btn');
   if(btn) btn.title = (estAdmin || dgTeamId) ? "Connecté — déconnexion" : "Connexion (admin / DG)";
   if(typeof rendreJoueurs === 'function') rendreJoueurs();   // (re)affiche les boutons selon le rôle
+  if(typeof rendreTrades === 'function') rendreTrades();
 }
 
 function deconnexion(){
@@ -939,7 +1033,7 @@ function connexionAdmin(){
    3) ROUTEUR (navigation par onglets)
    ========================================================= */
 const ROUTES = ['accueil','annonces','reglements','inscriptions','reseaux',
-                'classements','joueurs','gardiens','calendrier','resultats','equipes'];
+                'classements','joueurs','gardiens','calendrier','resultats','equipes','echanges'];
 function afficherRoute(){
   let h = location.hash.replace('#','') || 'accueil';
   if(!ROUTES.includes(h)) h = 'accueil';
@@ -1259,8 +1353,196 @@ function supprimerJoueur(id){
   }
 }
 
-/* Redessine les listes dynamiques (au changement de langue) */
-function rafraichirDynamique(){ rendreAnnonces(); rendreReglements(); rendreEquipes(); rendreJoueurs(); }
+/* =========================================================
+   9) ÉCHANGES / TRADES
+   Flux : un DG propose → l'autre DG accepte/refuse/contre-offre → l'admin approuve → swap auto.
+   Statuts : propose · accepte_dg · approuve · refuse · contre
+   ========================================================= */
+let snapTrades = null;
+let contreDeId = null;   // si on fait une contre-offre, ID de l'échange d'origine à fermer
+
+function initTrades(){
+  db.collection('trades').orderBy('createdAt','desc').onSnapshot(snap => {
+    snapTrades = snap; rendreTrades();
+  }, err => {
+    const c = document.getElementById('echanges-list');
+    if(c) c.innerHTML = videHTML('⚠️', t('err.connexion'), err.message);
+  });
+}
+
+function estConcerne(tr){ return !!dgTeamId && (tr.deId === dgTeamId || tr.versId === dgTeamId); }
+
+function listeNoms(arr){
+  return (arr || []).map(p => escapeHtml(p.position || '') + ' ' + escapeHtml(p.nom || '')).join(', ') || '—';
+}
+function badgeStatut(s){
+  const map = {propose:'statut.propose', accepte_dg:'statut.accepte_dg', approuve:'statut.approuve', refuse:'statut.refuse', contre:'statut.contre'};
+  return t(map[s] || 'statut.propose');
+}
+function carteTrade(tr){
+  let actions = '';
+  const suisRecepteur = dgTeamId && tr.versId === dgTeamId;
+  const suisProposeur = dgTeamId && tr.deId === dgTeamId;
+  if(tr.statut === 'propose'){
+    if(suisRecepteur){
+      actions = '<button class="btn-mini ok" onclick="accepterEchange(\'' + tr.id + '\')">' + t('btn.accepter') + '</button>'
+              + '<button class="del-btn" onclick="refuserEchange(\'' + tr.id + '\')">' + t('btn.refuser') + '</button>'
+              + '<button class="btn-mini" onclick="contreEchange(\'' + tr.id + '\')">' + t('btn.contre') + '</button>';
+    } else if(suisProposeur){
+      actions = '<button class="del-btn" onclick="annulerEchange(\'' + tr.id + '\')">' + t('echanges.retirer') + '</button>';
+    } else if(estAdmin){
+      actions = '<button class="del-btn" onclick="refuserEchange(\'' + tr.id + '\')">' + t('btn.refuser') + '</button>';
+    }
+  } else if(tr.statut === 'accepte_dg'){
+    if(estAdmin){
+      actions = '<button class="btn-mini ok" onclick="approuverEchange(\'' + tr.id + '\')">' + t('btn.approuver') + '</button>'
+              + '<button class="del-btn" onclick="refuserEchange(\'' + tr.id + '\')">' + t('btn.refuser') + '</button>';
+    } else {
+      actions = '<span class="ech-note">' + t('echanges.attenteAdmin') + '</span>';
+    }
+  }
+  return '<div class="trade-card">'
+    + '<div class="tc-head"><b>' + escapeHtml(tr.deNom || '') + '</b> ⇄ <b>' + escapeHtml(tr.versNom || '') + '</b>'
+      + '<span class="tc-statut s-' + tr.statut + '">' + badgeStatut(tr.statut) + '</span></div>'
+    + '<div class="tc-body">'
+      + '<div><span class="tc-lbl">' + t('echanges.offre') + '</span>' + listeNoms(tr.joueursDe) + '</div>'
+      + '<div><span class="tc-lbl">' + t('echanges.demande') + '</span>' + listeNoms(tr.joueursVers) + '</div>'
+    + '</div>'
+    + (actions ? ('<div class="tc-actions">' + actions + '</div>') : '')
+    + '</div>';
+}
+function rendreTrades(){
+  const cont = document.getElementById('echanges-list');
+  if(!cont) return;
+  if(!snapTrades || snapTrades.empty){
+    cont.innerHTML = videHTML('🔄', t('echanges.vide.t'), t('echanges.vide.s')); return;
+  }
+  const enAttente = [], histo = [];
+  snapTrades.forEach(d => {
+    const tr = Object.assign({id:d.id}, d.data());
+    if(tr.statut === 'approuve'){ histo.push(tr); }                       // visible par tout le monde
+    else if(tr.statut === 'refuse' || tr.statut === 'contre'){ if(estAdmin || estConcerne(tr)) histo.push(tr); }
+    else { if(estAdmin || estConcerne(tr)) enAttente.push(tr); }          // propose / accepte_dg
+  });
+  if(!enAttente.length && !histo.length){
+    cont.innerHTML = videHTML('🔄', t('echanges.vide.t'), t('echanges.vide.s')); return;
+  }
+  let html = '';
+  if(enAttente.length){ html += '<div class="ech-section">' + t('echanges.enattente') + '</div>'; enAttente.forEach(tr => html += carteTrade(tr)); }
+  if(histo.length){ html += '<div class="ech-section">' + t('echanges.historique') + '</div>'; histo.forEach(tr => html += carteTrade(tr)); }
+  cont.innerHTML = html;
+}
+
+/* ----- Construire / envoyer une proposition ----- */
+function remplirSelectEch(selId){
+  const sel = document.getElementById(selId);
+  sel.innerHTML = '';
+  if(snapEquipes){ snapEquipes.forEach(d => { const o = document.createElement('option'); o.value = d.id; o.textContent = d.data().nom || ''; sel.appendChild(o); }); }
+}
+function listePourEquipe(equipeId){
+  if(!snapJoueurs || !equipeId) return '<div class="je-vide">' + t('echanges.aucunDispo') + '</div>';
+  let items = '';
+  snapJoueurs.forEach(d => {
+    const j = d.data();
+    if(j.equipeId === equipeId){
+      items += '<label class="chk"><input type="checkbox" value="' + d.id + '"><span>' + escapeHtml(j.position || '') + ' · ' + escapeHtml(j.nom || '') + '</span></label>';
+    }
+  });
+  return items || '<div class="je-vide">' + t('echanges.aucunDispo') + '</div>';
+}
+function majListesEch(){
+  document.getElementById('ech-offre-list').innerHTML = listePourEquipe(document.getElementById('ech-de').value);
+  document.getElementById('ech-demande-list').innerHTML = listePourEquipe(document.getElementById('ech-vers').value);
+}
+function precocher(listeId, ids){
+  (ids || []).forEach(id => { const cb = document.querySelector('#' + listeId + ' input[value="' + id + '"]'); if(cb) cb.checked = true; });
+}
+function ouvrirEchange(opts){
+  opts = opts || {};
+  contreDeId = opts.contreId || null;
+  remplirSelectEch('ech-de'); remplirSelectEch('ech-vers');
+  let deId = opts.deId || (dgTeamId || '');
+  document.getElementById('ech-de').value = deId;
+  document.getElementById('ech-de').disabled = (!estAdmin && !!dgTeamId);   // DG verrouillé sur son équipe
+  document.getElementById('ech-vers').value = opts.versId || '';
+  document.getElementById('ech-modal-titre').textContent = contreDeId ? t('echanges.modal.contre') : t('echanges.modal.titre');
+  majListesEch();
+  if(opts.preOffre) precocher('ech-offre-list', opts.preOffre);
+  if(opts.preDemande) precocher('ech-demande-list', opts.preDemande);
+  document.getElementById('modale-echange').classList.add('open');
+}
+function fermerEchange(){ document.getElementById('modale-echange').classList.remove('open'); }
+
+function trouverJoueurData(id){ let r = null; if(snapJoueurs) snapJoueurs.forEach(d => { if(d.id === id) r = d.data(); }); return r; }
+function collecter(listeId){
+  const arr = [];
+  document.querySelectorAll('#' + listeId + ' input:checked').forEach(cb => {
+    const j = trouverJoueurData(cb.value);
+    if(j) arr.push({ id: cb.value, nom: j.nom || '', position: j.position || '' });
+  });
+  return arr;
+}
+function envoyerEchange(){
+  const deId = document.getElementById('ech-de').value;
+  const versId = document.getElementById('ech-vers').value;
+  if(!deId || !versId || deId === versId){ alert(t('echanges.memeEquipe')); return; }
+  if(dgTeamId && !estAdmin && deId !== dgTeamId){ alert(t('dg.refus')); return; }
+  const joueursDe = collecter('ech-offre-list');
+  const joueursVers = collecter('ech-demande-list');
+  if(joueursDe.length === 0 || joueursVers.length === 0){ alert(t('echanges.besoinJoueurs')); return; }
+  const trade = {
+    deId, deNom: (trouverEquipeParId(deId) || {}).nom || '',
+    versId, versNom: (trouverEquipeParId(versId) || {}).nom || '',
+    joueursDe, joueursVers, statut: 'propose',
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+  db.collection('trades').add(trade).then(() => {
+    if(contreDeId){ db.collection('trades').doc(contreDeId).update({statut:'contre'}).catch(()=>{}); contreDeId = null; }
+    fermerEchange();
+  }).catch(e => alert(t('commun.erreur') + e.message));
+}
+
+/* ----- Réponses ----- */
+function accepterEchange(id){
+  db.collection('trades').doc(id).update({statut:'accepte_dg'}).catch(e => alert(t('commun.erreur') + e.message));
+}
+function refuserEchange(id){
+  if(confirm(t('echanges.confirmRefus'))){
+    db.collection('trades').doc(id).update({statut:'refuse'}).catch(e => alert(t('commun.erreur') + e.message));
+  }
+}
+function annulerEchange(id){
+  if(confirm(t('echanges.confirmAnnul'))){
+    db.collection('trades').doc(id).delete().catch(e => alert(t('commun.erreur') + e.message));
+  }
+}
+function contreEchange(id){
+  let tr = null; if(snapTrades) snapTrades.forEach(d => { if(d.id === id) tr = Object.assign({id:d.id}, d.data()); });
+  if(!tr) return;
+  // Contre-offre = on inverse les rôles, pré-rempli
+  ouvrirEchange({
+    contreId: tr.id, deId: tr.versId, versId: tr.deId,
+    preOffre: (tr.joueursVers || []).map(p => p.id),
+    preDemande: (tr.joueursDe || []).map(p => p.id)
+  });
+}
+
+/* ----- Approbation admin : échange automatique des joueurs ----- */
+function approuverEchange(id){
+  if(!estAdmin) return;
+  if(!confirm(t('echanges.confirmApprouve'))) return;
+  db.collection('trades').doc(id).get().then(doc => {
+    const tr = doc.data(); if(!tr) return;
+    const batch = db.batch();   // écriture atomique : tout passe, ou rien
+    (tr.joueursDe || []).forEach(p => { batch.update(db.collection('joueurs').doc(p.id), {equipeId: tr.versId}); });
+    (tr.joueursVers || []).forEach(p => { batch.update(db.collection('joueurs').doc(p.id), {equipeId: tr.deId}); });
+    batch.update(db.collection('trades').doc(id), {statut:'approuve'});
+    return batch.commit();
+  }).catch(e => alert(t('commun.erreur') + e.message));
+}
+
+/* Redessine les listes dynamiques (au changement de langue / rôle) */
+function rafraichirDynamique(){ rendreAnnonces(); rendreReglements(); rendreEquipes(); rendreJoueurs(); rendreTrades(); }
 
 /* =========================================================
    6) DÉMARRAGE
@@ -1276,6 +1558,7 @@ function demarrer(){
   initReglements();
   initEquipes();
   initJoueurs();
+  initTrades();
 }
 demarrer();
 
