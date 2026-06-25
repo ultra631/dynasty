@@ -80,13 +80,20 @@ header{
 .brand .name{font-family:'Cinzel',serif;font-weight:900;font-size:20px;letter-spacing:.14em}
 .brand .name .gold-text{display:inline}
 .admin-btn{
-  margin-left:auto;flex-shrink:0;
+  flex-shrink:0;
   background:transparent;border:1px solid var(--bordure);color:var(--or);
   width:38px;height:38px;border-radius:8px;cursor:pointer;font-size:16px;
   display:grid;place-items:center;transition:.2s;
 }
 .admin-btn:hover{background:rgba(212,175,55,.1)}
 body.is-admin .admin-btn{background:var(--grad-or);color:var(--noir);border-color:transparent}
+.lang-btn{
+  margin-left:auto;flex-shrink:0;
+  background:transparent;border:1px solid var(--bordure);color:var(--or);
+  height:38px;min-width:46px;padding:0 12px;border-radius:8px;cursor:pointer;
+  font-family:'Cinzel',serif;font-weight:700;font-size:13px;letter-spacing:.06em;transition:.2s;
+}
+.lang-btn:hover{background:rgba(212,175,55,.1)}
 
 /* ===== Navigation (onglets défilables) ===== */
 nav.tabs{
@@ -389,23 +396,24 @@ header{z-index:50}
       <img src="logo.png" alt="DYNASTY">
       <span class="name"><span class="gold-text">DYNASTY</span></span>
     </a>
+    <button class="lang-btn" id="lang-btn" onclick="basculerLangue()" title="Language / Langue">EN</button>
     <button class="admin-btn" onclick="ouvrirModale()" title="Mode admin">&#9819;</button>
   </div>
   <nav class="tabs" id="nav">
     <!-- PORTAIL -->
-    <a class="nav-link" data-route="accueil" href="#accueil">Accueil</a>
-    <a class="nav-link" data-route="annonces" href="#annonces">Annonces</a>
-    <a class="nav-link" data-route="reglements" href="#reglements">Règlements</a>
-    <a class="nav-link" data-route="inscriptions" href="#inscriptions">Inscriptions</a>
-    <a class="nav-link" data-route="reseaux" href="#reseaux">Réseaux</a>
+    <a class="nav-link" data-route="accueil" href="#accueil" data-i18n="nav.accueil">Accueil</a>
+    <a class="nav-link" data-route="annonces" href="#annonces" data-i18n="nav.annonces">Annonces</a>
+    <a class="nav-link" data-route="reglements" href="#reglements" data-i18n="nav.reglements">Règlements</a>
+    <a class="nav-link" data-route="inscriptions" href="#inscriptions" data-i18n="nav.inscriptions">Inscriptions</a>
+    <a class="nav-link" data-route="reseaux" href="#reseaux" data-i18n="nav.reseaux">Réseaux</a>
     <span class="nav-sep"></span>
     <!-- STATS -->
-    <a class="nav-link" data-route="classements" href="#classements">Classements</a>
-    <a class="nav-link" data-route="joueurs" href="#joueurs">Joueurs</a>
-    <a class="nav-link" data-route="gardiens" href="#gardiens">Gardiens</a>
-    <a class="nav-link" data-route="calendrier" href="#calendrier">Calendrier</a>
-    <a class="nav-link" data-route="resultats" href="#resultats">Résultats</a>
-    <a class="nav-link" data-route="equipes" href="#equipes">Équipes</a>
+    <a class="nav-link" data-route="classements" href="#classements" data-i18n="nav.classements">Classements</a>
+    <a class="nav-link" data-route="joueurs" href="#joueurs" data-i18n="nav.joueurs">Joueurs</a>
+    <a class="nav-link" data-route="gardiens" href="#gardiens" data-i18n="nav.gardiens">Gardiens</a>
+    <a class="nav-link" data-route="calendrier" href="#calendrier" data-i18n="nav.calendrier">Calendrier</a>
+    <a class="nav-link" data-route="resultats" href="#resultats" data-i18n="nav.resultats">Résultats</a>
+    <a class="nav-link" data-route="equipes" href="#equipes" data-i18n="nav.equipes">Équipes</a>
   </nav>
 </header>
 
@@ -421,27 +429,27 @@ header{z-index:50}
         <span class="logo-shine" aria-hidden="true"></span>
       </div>
       <h1 class="hero-title">DYNASTY</h1>
-      <div class="tag">Ligue compétitive de hockey vidéo · NHL 27 · World of Chel</div>
+      <div class="tag" data-i18n="hero.tag">Ligue compétitive de hockey vidéo · NHL 27 · World of Chel</div>
       <div class="badges">
-        <span class="pill">Mode 4S</span>
-        <span class="pill">Français · Québec</span>
-        <span class="pill">Saison 1</span>
+        <span class="pill" data-i18n="badge.mode">Mode 4S</span>
+        <span class="pill" data-i18n="badge.lang">Bilingue FR / EN</span>
+        <span class="pill" data-i18n="badge.saison">Saison 1</span>
       </div>
       <div class="cta-row">
-        <a class="btn btn-or" href="#inscriptions">S'inscrire</a>
-        <a class="btn btn-ghost" href="#classements">Voir les stats</a>
+        <a class="btn btn-or" href="#inscriptions" data-i18n="btn.inscrire">S'inscrire</a>
+        <a class="btn btn-ghost" href="#classements" data-i18n="btn.voirstats">Voir les stats</a>
       </div>
     </div>
 
     <div class="crown-div reveal"><span>&#9819;</span></div>
 
     <div class="intro reveal">
-      <div class="eyebrow">La ligue</div>
-      <p style="margin-top:10px">DYNASTY, c'est une ligue compétitive de hockey vidéo sur NHL 27 en mode World of Chel (4S). Bâtie pour la communauté québécoise, on combine du vrai hockey d'équipe, des stats suivies en direct et une ambiance de tournoi à chaque match. Bienvenue dans la dynastie. 👑</p>
+      <div class="eyebrow" data-i18n="intro.eyebrow">La ligue</div>
+      <p style="margin-top:10px" data-i18n="intro.text">DYNASTY, c'est une ligue compétitive de hockey vidéo sur NHL 27 en mode World of Chel (4S). Bâtie pour la communauté francophone et anglophone, on combine du vrai hockey d'équipe, des stats suivies en direct et une ambiance de tournoi à chaque match. Bienvenue dans la dynastie. 👑</p>
       <div class="stat-grid">
-        <div class="stat-box reveal"><div class="n gold-text">4S</div><div class="l">Mode</div></div>
-        <div class="stat-box reveal"><div class="n gold-text">8-10</div><div class="l">Équipes</div></div>
-        <div class="stat-box reveal"><div class="n gold-text">S1</div><div class="l">Saison</div></div>
+        <div class="stat-box reveal"><div class="n gold-text">4S</div><div class="l" data-i18n="stat.mode">Mode</div></div>
+        <div class="stat-box reveal"><div class="n gold-text">8-10</div><div class="l" data-i18n="stat.equipes">Équipes</div></div>
+        <div class="stat-box reveal"><div class="n gold-text">S1</div><div class="l" data-i18n="stat.saison">Saison</div></div>
       </div>
     </div>
 
@@ -450,83 +458,83 @@ header{z-index:50}
     <div class="feature-grid">
       <div class="feature reveal">
         <div class="f-ico">📊</div>
-        <h3>Stats en direct</h3>
-        <p>Classements, joueurs et gardiens mis à jour après chaque match, en temps réel.</p>
+        <h3 data-i18n="feat1.titre">Stats en direct</h3>
+        <p data-i18n="feat1.desc">Classements, joueurs et gardiens mis à jour après chaque match, en temps réel.</p>
       </div>
       <div class="feature reveal">
         <div class="f-ico">🏒</div>
-        <h3>100% compétitif</h3>
-        <p>Format 4S, du vrai hockey d'équipe où chaque but compte pour le titre.</p>
+        <h3 data-i18n="feat2.titre">100% compétitif</h3>
+        <p data-i18n="feat2.desc">Format 4S, du vrai hockey d'équipe où chaque but compte pour le titre.</p>
       </div>
       <div class="feature reveal">
         <div class="f-ico">⚜️</div>
-        <h3>Communauté QC</h3>
-        <p>Une gang de passionnés, en français, dans une ambiance de tournoi à chaque soirée.</p>
+        <h3 data-i18n="feat3.titre">Communauté</h3>
+        <p data-i18n="feat3.desc">Une gang de passionnés, en français et en anglais, dans une ambiance de tournoi à chaque soirée.</p>
       </div>
     </div>
 
     <!-- Bande Discord -->
     <div class="discord-band reveal">
       <div>
-        <div class="eyebrow">Rejoins la dynastie</div>
-        <h3>Toute l'action passe sur Discord</h3>
-        <p>Horaire, matchs, annonces et discussions — c'est là que ça se passe.</p>
+        <div class="eyebrow" data-i18n="discord.eyebrow">Rejoins la dynastie</div>
+        <h3 data-i18n="discord.titre">Toute l'action passe sur Discord</h3>
+        <p data-i18n="discord.desc">Horaire, matchs, annonces et discussions — c'est là que ça se passe.</p>
       </div>
-      <a class="btn btn-or" href="#reseaux">Rejoindre le Discord</a>
+      <a class="btn btn-or" href="#reseaux" data-i18n="discord.btn">Rejoindre le Discord</a>
     </div>
   </section>
 
   <!-- ====================== ANNONCES (Firebase, en direct) ====================== -->
   <section class="page" id="annonces">
     <div class="page-head">
-      <div class="eyebrow">Portail</div>
-      <h2>Annonces</h2>
-      <p>Les nouvelles officielles de la ligue.</p>
+      <div class="eyebrow" data-i18n="eyebrow.portail">Portail</div>
+      <h2 data-i18n="annonces.titre">Annonces</h2>
+      <p data-i18n="annonces.sous">Les nouvelles officielles de la ligue.</p>
     </div>
 
     <!-- Panneau admin : ajouter une annonce -->
     <div class="admin-panel admin-only">
-      <div class="lbl">Admin · Nouvelle annonce</div>
-      <input id="an-titre" placeholder="Titre de l'annonce">
-      <textarea id="an-texte" placeholder="Contenu…"></textarea>
-      <button class="btn btn-or" onclick="ajouterAnnonce()">Publier l'annonce</button>
+      <div class="lbl" data-i18n="annonces.admlbl">Admin · Nouvelle annonce</div>
+      <input id="an-titre" placeholder="Titre de l'annonce" data-i18n-ph="annonces.ph.titre">
+      <textarea id="an-texte" placeholder="Contenu…" data-i18n-ph="annonces.ph.texte"></textarea>
+      <button class="btn btn-or" onclick="ajouterAnnonce()" data-i18n="annonces.publier">Publier l'annonce</button>
     </div>
 
     <div id="annonces-list">
-      <div class="empty"><div class="ico">📜</div><b>Aucune annonce</b>Les annonces apparaîtront ici.</div>
+      <div class="empty"><div class="ico">📜</div><b data-i18n="annonces.vide.t">Aucune annonce</b><span data-i18n="annonces.vide.s">Les annonces apparaîtront ici.</span></div>
     </div>
   </section>
 
   <!-- ====================== RÈGLEMENTS (Firebase, éditable) ====================== -->
   <section class="page" id="reglements">
     <div class="page-head">
-      <div class="eyebrow">Portail</div>
-      <h2>Règlements</h2>
-      <p>Les règles à respecter dans la ligue.</p>
+      <div class="eyebrow" data-i18n="eyebrow.portail">Portail</div>
+      <h2 data-i18n="reglements.titre">Règlements</h2>
+      <p data-i18n="reglements.sous">Les règles à respecter dans la ligue.</p>
     </div>
 
     <div class="admin-panel admin-only">
-      <div class="lbl">Admin · Modifier les règlements</div>
-      <textarea id="reglements-input" style="min-height:200px" placeholder="Écris les règlements ici…"></textarea>
-      <button class="btn btn-or" onclick="sauverReglements()">Enregistrer</button>
+      <div class="lbl" data-i18n="reglements.admlbl">Admin · Modifier les règlements</div>
+      <textarea id="reglements-input" style="min-height:200px" placeholder="Écris les règlements ici…" data-i18n-ph="reglements.ph"></textarea>
+      <button class="btn btn-or" onclick="sauverReglements()" data-i18n="btn.enregistrer">Enregistrer</button>
     </div>
 
-    <div class="card"><p id="reglements-view">Chargement…</p></div>
+    <div class="card"><p id="reglements-view" data-i18n="commun.chargement">Chargement…</p></div>
   </section>
 
   <!-- ====================== INSCRIPTIONS ====================== -->
   <section class="page" id="inscriptions">
     <div class="page-head">
-      <div class="eyebrow">Portail</div>
-      <h2>Inscriptions</h2>
-      <p>Rejoins la ligue DYNASTY.</p>
+      <div class="eyebrow" data-i18n="eyebrow.portail">Portail</div>
+      <h2 data-i18n="inscriptions.titre">Inscriptions</h2>
+      <p data-i18n="inscriptions.sous">Rejoins la ligue DYNASTY.</p>
     </div>
     <div class="card">
-      <h3>Comment s'inscrire</h3>
-      <p>Remplis le formulaire ci-dessous pour t'inscrire ou inscrire ton équipe. (Tu pourras mettre le lien de ton formulaire Google ici.)</p>
+      <h3 data-i18n="inscriptions.commenttitre">Comment s'inscrire</h3>
+      <p data-i18n="inscriptions.commenttexte">Remplis le formulaire ci-dessous pour t'inscrire ou inscrire ton équipe. (Tu pourras mettre le lien de ton formulaire Google ici.)</p>
       <div class="cta-row" style="justify-content:flex-start;margin-top:18px">
         <!-- ⚠️ Remplace le href="#" par ton lien de formulaire quand tu l'auras -->
-        <a class="btn btn-or" href="#" target="_blank" rel="noopener">Formulaire d'inscription</a>
+        <a class="btn btn-or" href="#" target="_blank" rel="noopener" data-i18n="inscriptions.bouton">Formulaire d'inscription</a>
       </div>
     </div>
   </section>
@@ -534,9 +542,9 @@ header{z-index:50}
   <!-- ====================== RÉSEAUX ====================== -->
   <section class="page" id="reseaux">
     <div class="page-head">
-      <div class="eyebrow">Portail</div>
-      <h2>Réseaux sociaux</h2>
-      <p>Suis la ligue partout.</p>
+      <div class="eyebrow" data-i18n="eyebrow.portail">Portail</div>
+      <h2 data-i18n="reseaux.titre">Réseaux sociaux</h2>
+      <p data-i18n="reseaux.sous">Suis la ligue partout.</p>
     </div>
     <!-- ⚠️ Remplace chaque href="#" par tes vrais liens -->
     <div class="link-grid">
@@ -549,35 +557,35 @@ header{z-index:50}
 
   <!-- ====================== STATS (échafaudage — étape suivante) ====================== -->
   <section class="page" id="classements">
-    <div class="page-head"><div class="eyebrow">Stats</div><h2>Classements</h2><p>Le classement des équipes.</p></div>
-    <div class="empty"><div class="ico">🏆</div><b>Section en construction</b>On bâtit le tableau des classements à la prochaine étape.</div>
+    <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="classements.titre">Classements</h2><p data-i18n="classements.sous">Le classement des équipes.</p></div>
+    <div class="empty"><div class="ico">🏆</div><b data-i18n="commun.construction">Section en construction</b><span data-i18n="classements.construction">On bâtit le tableau des classements à la prochaine étape.</span></div>
   </section>
   <section class="page" id="joueurs">
-    <div class="page-head"><div class="eyebrow">Stats</div><h2>Joueurs</h2><p>Les statistiques des joueurs.</p></div>
-    <div class="empty"><div class="ico">⛸️</div><b>Section en construction</b>On bâtit le tableau des joueurs à la prochaine étape.</div>
+    <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="joueurs.titre">Joueurs</h2><p data-i18n="joueurs.sous">Les statistiques des joueurs.</p></div>
+    <div class="empty"><div class="ico">⛸️</div><b data-i18n="commun.construction">Section en construction</b><span data-i18n="joueurs.construction">On bâtit le tableau des joueurs à la prochaine étape.</span></div>
   </section>
   <section class="page" id="gardiens">
-    <div class="page-head"><div class="eyebrow">Stats</div><h2>Gardiens</h2><p>Les statistiques des gardiens.</p></div>
-    <div class="empty"><div class="ico">🥅</div><b>Section en construction</b>On bâtit le tableau des gardiens à la prochaine étape.</div>
+    <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="gardiens.titre">Gardiens</h2><p data-i18n="gardiens.sous">Les statistiques des gardiens.</p></div>
+    <div class="empty"><div class="ico">🥅</div><b data-i18n="commun.construction">Section en construction</b><span data-i18n="gardiens.construction">On bâtit le tableau des gardiens à la prochaine étape.</span></div>
   </section>
   <section class="page" id="calendrier">
-    <div class="page-head"><div class="eyebrow">Stats</div><h2>Calendrier</h2><p>L'horaire des matchs.</p></div>
-    <div class="empty"><div class="ico">📅</div><b>Section en construction</b>On bâtit le calendrier à la prochaine étape.</div>
+    <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="calendrier.titre">Calendrier</h2><p data-i18n="calendrier.sous">L'horaire des matchs.</p></div>
+    <div class="empty"><div class="ico">📅</div><b data-i18n="commun.construction">Section en construction</b><span data-i18n="calendrier.construction">On bâtit le calendrier à la prochaine étape.</span></div>
   </section>
   <section class="page" id="resultats">
-    <div class="page-head"><div class="eyebrow">Stats</div><h2>Résultats</h2><p>Les résultats des matchs joués.</p></div>
-    <div class="empty"><div class="ico">📊</div><b>Section en construction</b>On bâtit les résultats à la prochaine étape.</div>
+    <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="resultats.titre">Résultats</h2><p data-i18n="resultats.sous">Les résultats des matchs joués.</p></div>
+    <div class="empty"><div class="ico">📊</div><b data-i18n="commun.construction">Section en construction</b><span data-i18n="resultats.construction">On bâtit les résultats à la prochaine étape.</span></div>
   </section>
   <section class="page" id="equipes">
-    <div class="page-head"><div class="eyebrow">Stats</div><h2>Équipes</h2><p>Les équipes de la ligue DYNASTY.</p></div>
+    <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="equipes.titre">Équipes</h2><p data-i18n="equipes.sous">Les équipes de la ligue DYNASTY.</p></div>
 
     <!-- Bouton admin : ajouter une équipe -->
     <div class="admin-only" style="margin-bottom:18px">
-      <button class="btn btn-or" onclick="ouvrirEquipe()">+ Ajouter une équipe</button>
+      <button class="btn btn-or" onclick="ouvrirEquipe()" data-i18n="equipes.ajouter">+ Ajouter une équipe</button>
     </div>
 
     <div id="equipes-grid" class="teams-grid">
-      <div class="empty"><div class="ico">🛡️</div><b>Aucune équipe</b>Les équipes apparaîtront ici.</div>
+      <div class="empty"><div class="ico">🛡️</div><b data-i18n="equipes.vide.t">Aucune équipe</b><span data-i18n="equipes.vide.s">Les équipes apparaîtront ici.</span></div>
     </div>
   </section>
 
@@ -586,19 +594,19 @@ header{z-index:50}
 
 <footer>
   <div class="gold-text">DYNASTY</div>
-  <div style="margin-top:6px">Ligue CHEL · NHL 27 · © 2026</div>
+  <div style="margin-top:6px" data-i18n="footer.ligne">Ligue CHEL · NHL 27 · © 2026</div>
 </footer>
 
 <!-- ============================ MODALE ADMIN ============================ -->
 <div class="modal" id="modale">
   <div class="modal-box">
-    <h3 class="cinzel" id="modale-titre">Mode admin</h3>
-    <p id="modale-sous">Entre le mot de passe pour gérer la ligue.</p>
+    <h3 class="cinzel" id="modale-titre" data-i18n="admin.titre">Mode admin</h3>
+    <p id="modale-sous" data-i18n="admin.sous">Entre le mot de passe pour gérer la ligue.</p>
     <div class="err" id="modale-err"></div>
-    <input type="password" id="modale-pass" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')connexionAdmin()">
+    <input type="password" id="modale-pass" placeholder="Mot de passe" data-i18n-ph="admin.ph" onkeydown="if(event.key==='Enter')connexionAdmin()">
     <div class="cta-row" style="margin-top:6px">
-      <button class="btn btn-or" id="modale-action" onclick="connexionAdmin()">Se connecter</button>
-      <button class="btn btn-ghost" onclick="fermerModale()">Fermer</button>
+      <button class="btn btn-or" id="modale-action" onclick="connexionAdmin()" data-i18n="admin.connexion">Se connecter</button>
+      <button class="btn btn-ghost" onclick="fermerModale()" data-i18n="commun.fermer">Fermer</button>
     </div>
   </div>
 </div>
@@ -607,15 +615,15 @@ header{z-index:50}
 <div class="modal" id="modale-equipe">
   <div class="modal-box" style="max-width:380px;text-align:left">
     <h3 class="cinzel" id="eq-modal-titre" style="text-align:center">Nouvelle équipe</h3>
-    <label class="champ-lbl">Nom de l'équipe</label>
-    <input id="eq-nom" placeholder="Ex. Les Rois de Montréal">
-    <label class="champ-lbl">Couleur de l'équipe</label>
+    <label class="champ-lbl" data-i18n="eq.nom">Nom de l'équipe</label>
+    <input id="eq-nom" placeholder="Ex. Les Rois de Montréal" data-i18n-ph="eq.nom.ph">
+    <label class="champ-lbl" data-i18n="eq.couleur">Couleur de l'équipe</label>
     <input id="eq-couleur" type="color" value="#D4AF37" style="height:46px;padding:4px;cursor:pointer">
-    <label class="champ-lbl">Logo — lien d'image (optionnel)</label>
-    <input id="eq-logo" placeholder="https://...  (vide = initiales)">
+    <label class="champ-lbl" data-i18n="eq.logo">Logo — lien d'image (optionnel)</label>
+    <input id="eq-logo" placeholder="https://...  (vide = initiales)" data-i18n-ph="eq.logo.ph">
     <div class="cta-row" style="margin-top:12px">
-      <button class="btn btn-or" onclick="sauverEquipe()">Enregistrer</button>
-      <button class="btn btn-ghost" onclick="fermerEquipe()">Annuler</button>
+      <button class="btn btn-or" onclick="sauverEquipe()" data-i18n="btn.enregistrer">Enregistrer</button>
+      <button class="btn btn-ghost" onclick="fermerEquipe()" data-i18n="commun.annuler">Annuler</button>
     </div>
   </div>
 </div>
@@ -638,6 +646,133 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+
+/* =========================================================
+   0) TRADUCTION (Français / English)
+   - Le texte de l'interface bascule FR↔EN.
+   - Le contenu entré dans Firebase (annonces, équipes...) reste tel quel.
+   ========================================================= */
+const DICT = {
+  fr: {
+    'nav.accueil':'Accueil','nav.annonces':'Annonces','nav.reglements':'Règlements',
+    'nav.inscriptions':'Inscriptions','nav.reseaux':'Réseaux','nav.classements':'Classements',
+    'nav.joueurs':'Joueurs','nav.gardiens':'Gardiens','nav.calendrier':'Calendrier',
+    'nav.resultats':'Résultats','nav.equipes':'Équipes',
+    'hero.tag':'Ligue compétitive de hockey vidéo · NHL 27 · World of Chel',
+    'badge.mode':'Mode 4S','badge.lang':'Bilingue FR / EN','badge.saison':'Saison 1',
+    'btn.inscrire':"S'inscrire",'btn.voirstats':'Voir les stats',
+    'intro.eyebrow':'La ligue',
+    'intro.text':"DYNASTY, c'est une ligue compétitive de hockey vidéo sur NHL 27 en mode World of Chel (4S). Bâtie pour la communauté francophone et anglophone, on combine du vrai hockey d'équipe, des stats suivies en direct et une ambiance de tournoi à chaque match. Bienvenue dans la dynastie. 👑",
+    'stat.mode':'Mode','stat.equipes':'Équipes','stat.saison':'Saison',
+    'feat1.titre':'Stats en direct','feat1.desc':'Classements, joueurs et gardiens mis à jour après chaque match, en temps réel.',
+    'feat2.titre':'100% compétitif','feat2.desc':"Format 4S, du vrai hockey d'équipe où chaque but compte pour le titre.",
+    'feat3.titre':'Communauté','feat3.desc':'Une gang de passionnés, en français et en anglais, dans une ambiance de tournoi à chaque soirée.',
+    'discord.eyebrow':'Rejoins la dynastie','discord.titre':"Toute l'action passe sur Discord",
+    'discord.desc':'Horaire, matchs, annonces et discussions — c\'est là que ça se passe.','discord.btn':'Rejoindre le Discord',
+    'eyebrow.portail':'Portail','eyebrow.stats':'Stats',
+    'annonces.titre':'Annonces','annonces.sous':'Les nouvelles officielles de la ligue.',
+    'annonces.admlbl':'Admin · Nouvelle annonce','annonces.ph.titre':"Titre de l'annonce",'annonces.ph.texte':'Contenu…',
+    'annonces.publier':"Publier l'annonce",'annonces.vide.t':'Aucune annonce','annonces.vide.s':'Les annonces apparaîtront ici.',
+    'reglements.titre':'Règlements','reglements.sous':'Les règles à respecter dans la ligue.',
+    'reglements.admlbl':'Admin · Modifier les règlements','reglements.ph':'Écris les règlements ici…','reglements.vide':'Aucun règlement pour le moment.',
+    'reglements.enregistres':'Règlements enregistrés ✅',
+    'inscriptions.titre':'Inscriptions','inscriptions.sous':'Rejoins la ligue DYNASTY.',
+    'inscriptions.commenttitre':"Comment s'inscrire",'inscriptions.commenttexte':"Remplis le formulaire ci-dessous pour t'inscrire ou inscrire ton équipe. (Tu pourras mettre le lien de ton formulaire Google ici.)",
+    'inscriptions.bouton':"Formulaire d'inscription",
+    'reseaux.titre':'Réseaux sociaux','reseaux.sous':'Suis la ligue partout.',
+    'classements.titre':'Classements','classements.sous':'Le classement des équipes.','classements.construction':'On bâtit le tableau des classements à la prochaine étape.',
+    'joueurs.titre':'Joueurs','joueurs.sous':'Les statistiques des joueurs.','joueurs.construction':'On bâtit le tableau des joueurs à la prochaine étape.',
+    'gardiens.titre':'Gardiens','gardiens.sous':'Les statistiques des gardiens.','gardiens.construction':'On bâtit le tableau des gardiens à la prochaine étape.',
+    'calendrier.titre':'Calendrier','calendrier.sous':"L'horaire des matchs.",'calendrier.construction':'On bâtit le calendrier à la prochaine étape.',
+    'resultats.titre':'Résultats','resultats.sous':'Les résultats des matchs joués.','resultats.construction':'On bâtit les résultats à la prochaine étape.',
+    'commun.construction':'Section en construction',
+    'equipes.titre':'Équipes','equipes.sous':'Les équipes de la ligue DYNASTY.','equipes.ajouter':'+ Ajouter une équipe',
+    'equipes.vide.t':'Aucune équipe','equipes.vide.s':'Les équipes apparaîtront ici.',
+    'footer.ligne':'Ligue CHEL · NHL 27 · © 2026',
+    'admin.titre':'Mode admin','admin.sous':'Entre le mot de passe pour gérer la ligue.','admin.ph':'Mot de passe',
+    'admin.connexion':'Se connecter','admin.incorrect':'Mot de passe incorrect.',
+    'commun.fermer':'Fermer','commun.annuler':'Annuler','btn.enregistrer':'Enregistrer','commun.chargement':'Chargement…',
+    'eq.nom':"Nom de l'équipe",'eq.nom.ph':'Ex. Les Rois de Montréal','eq.couleur':"Couleur de l'équipe",
+    'eq.logo':'Logo — lien d\'image (optionnel)','eq.logo.ph':'https://...  (vide = initiales)',
+    'eq.modal.nouvelle':'Nouvelle équipe','eq.modal.modifier':"Modifier l'équipe",
+    'err.connexion':'Erreur de connexion','commun.erreur':'Erreur : ',
+    'btn.supprimer':'Supprimer','btn.modifier':'Modifier','an.sansTitre':'(sans titre)','eq.sansNom':'(sans nom)',
+    'an.besoin':'Écris au moins un titre ou un texte.','an.confirmSuppr':'Supprimer cette annonce ?',
+    'eq.besoinNom':"Donne un nom à l'équipe.",'eq.confirmSuppr':'Supprimer cette équipe ?'
+  },
+  en: {
+    'nav.accueil':'Home','nav.annonces':'News','nav.reglements':'Rules',
+    'nav.inscriptions':'Sign-up','nav.reseaux':'Socials','nav.classements':'Standings',
+    'nav.joueurs':'Players','nav.gardiens':'Goalies','nav.calendrier':'Schedule',
+    'nav.resultats':'Results','nav.equipes':'Teams',
+    'hero.tag':'Competitive video hockey league · NHL 27 · World of Chel',
+    'badge.mode':'4s Mode','badge.lang':'Bilingual FR / EN','badge.saison':'Season 1',
+    'btn.inscrire':'Sign up','btn.voirstats':'View stats',
+    'intro.eyebrow':'The league',
+    'intro.text':'DYNASTY is a competitive video hockey league on NHL 27 in World of Chel (4S). Built for the French and English community, we mix real team hockey, live-tracked stats and a tournament vibe every match. Welcome to the dynasty. 👑',
+    'stat.mode':'Mode','stat.equipes':'Teams','stat.saison':'Season',
+    'feat1.titre':'Live stats','feat1.desc':'Standings, players and goalies updated after every match, in real time.',
+    'feat2.titre':'100% competitive','feat2.desc':'4s format, real team hockey where every goal counts toward the title.',
+    'feat3.titre':'Community','feat3.desc':'A crew of passionate players, in French and English, with a tournament vibe every night.',
+    'discord.eyebrow':'Join the dynasty','discord.titre':'All the action is on Discord',
+    'discord.desc':"Schedule, matches, news and chat — that's where it happens.",'discord.btn':'Join the Discord',
+    'eyebrow.portail':'Portal','eyebrow.stats':'Stats',
+    'annonces.titre':'News','annonces.sous':'Official league news.',
+    'annonces.admlbl':'Admin · New post','annonces.ph.titre':'Post title','annonces.ph.texte':'Content…',
+    'annonces.publier':'Publish','annonces.vide.t':'No news yet','annonces.vide.s':'News will appear here.',
+    'reglements.titre':'Rules','reglements.sous':'The rules to follow in the league.',
+    'reglements.admlbl':'Admin · Edit the rules','reglements.ph':'Write the rules here…','reglements.vide':'No rules yet.',
+    'reglements.enregistres':'Rules saved ✅',
+    'inscriptions.titre':'Sign-up','inscriptions.sous':'Join the DYNASTY league.',
+    'inscriptions.commenttitre':'How to sign up','inscriptions.commenttexte':"Fill out the form below to sign up yourself or your team. (You'll be able to put your Google Form link here.)",
+    'inscriptions.bouton':'Sign-up form',
+    'reseaux.titre':'Social media','reseaux.sous':'Follow the league everywhere.',
+    'classements.titre':'Standings','classements.sous':'The team standings.','classements.construction':"We're building the standings table in the next step.",
+    'joueurs.titre':'Players','joueurs.sous':'Player statistics.','joueurs.construction':"We're building the players table in the next step.",
+    'gardiens.titre':'Goalies','gardiens.sous':'Goalie statistics.','gardiens.construction':"We're building the goalies table in the next step.",
+    'calendrier.titre':'Schedule','calendrier.sous':'The match schedule.','calendrier.construction':"We're building the schedule in the next step.",
+    'resultats.titre':'Results','resultats.sous':'Results of played matches.','resultats.construction':"We're building the results in the next step.",
+    'commun.construction':'Section under construction',
+    'equipes.titre':'Teams','equipes.sous':'The teams of the DYNASTY league.','equipes.ajouter':'+ Add a team',
+    'equipes.vide.t':'No teams yet','equipes.vide.s':'Teams will appear here.',
+    'footer.ligne':'CHEL League · NHL 27 · © 2026',
+    'admin.titre':'Admin mode','admin.sous':'Enter the password to manage the league.','admin.ph':'Password',
+    'admin.connexion':'Log in','admin.incorrect':'Incorrect password.',
+    'commun.fermer':'Close','commun.annuler':'Cancel','btn.enregistrer':'Save','commun.chargement':'Loading…',
+    'eq.nom':'Team name','eq.nom.ph':'e.g. Montreal Kings','eq.couleur':'Team color',
+    'eq.logo':'Logo — image link (optional)','eq.logo.ph':'https://...  (empty = initials)',
+    'eq.modal.nouvelle':'New team','eq.modal.modifier':'Edit team',
+    'err.connexion':'Connection error','commun.erreur':'Error: ',
+    'btn.supprimer':'Delete','btn.modifier':'Edit','an.sansTitre':'(no title)','eq.sansNom':'(no name)',
+    'an.besoin':'Write at least a title or some text.','an.confirmSuppr':'Delete this post?',
+    'eq.besoinNom':'Give the team a name.','eq.confirmSuppr':'Delete this team?'
+  }
+};
+let langue = localStorage.getItem('dynasty_langue') || 'fr';
+
+// Récupère une traduction (retombe sur le français si une clé manque)
+function t(cle){ return (DICT[langue] && DICT[langue][cle]) || DICT.fr[cle] || cle; }
+
+// Applique la langue à tous les textes marqués data-i18n / data-i18n-ph
+function appliquerLangue(){
+  document.documentElement.lang = langue;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const v = t(el.getAttribute('data-i18n')); if(v) el.textContent = v;
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const v = t(el.getAttribute('data-i18n-ph')); if(v) el.setAttribute('placeholder', v);
+  });
+  const b = document.getElementById('lang-btn');
+  if(b) b.textContent = (langue === 'fr') ? 'EN' : 'FR';   // affiche la langue vers laquelle on bascule
+}
+
+// Bouton FR/EN
+function basculerLangue(){
+  langue = (langue === 'fr') ? 'en' : 'fr';
+  localStorage.setItem('dynasty_langue', langue);
+  appliquerLangue();
+  if(typeof rafraichirDynamique === 'function') rafraichirDynamique();  // redessine listes/équipes
+}
 
 /* =========================================================
    2) MODE ADMIN
@@ -667,7 +802,7 @@ function connexionAdmin(){
     estAdmin = true; sessionStorage.setItem('dynasty_admin','1');
     appliquerAdmin(); fermerModale();
   } else {
-    document.getElementById('modale-err').textContent = "Mot de passe incorrect.";
+    document.getElementById('modale-err').textContent = t('admin.incorrect');
   }
 }
 
@@ -691,121 +826,132 @@ window.addEventListener('hashchange', afficherRoute);
 /* =========================================================
    4) ANNONCES (lecture/écriture en direct)
    ========================================================= */
+let snapAnnonces = null;  // dernier instantané (pour redessiner au changement de langue)
 function formaterDate(ts){
   if(!ts || !ts.toDate) return '';
-  return ts.toDate().toLocaleDateString('fr-CA', {day:'numeric', month:'long', year:'numeric'});
+  return ts.toDate().toLocaleDateString(langue === 'en' ? 'en-CA' : 'fr-CA', {day:'numeric', month:'long', year:'numeric'});
+}
+// Petit gabarit d'état vide réutilisable
+function videHTML(ico, titre, sous){
+  return '<div class="empty"><div class="ico">' + ico + '</div><b>' + titre + '</b><span>' + sous + '</span></div>';
 }
 function initAnnonces(){
   db.collection('annonces').orderBy('ts','desc').onSnapshot(snap => {
-    const liste = document.getElementById('annonces-list');
-    if(snap.empty){
-      liste.innerHTML = '<div class="empty"><div class="ico">📜</div><b>Aucune annonce</b>Les annonces apparaîtront ici.</div>';
-      return;
-    }
-    liste.innerHTML = '';
-    snap.forEach(doc => {
-      const a = doc.data();
-      const div = document.createElement('div');
-      div.className = 'card';
-      div.innerHTML =
-        '<h3></h3><div class="date"></div><p></p>' +
-        '<button class="del-btn admin-only" onclick="supprimerAnnonce(\'' + doc.id + '\')">Supprimer</button>';
-      div.querySelector('h3').textContent = a.titre || '(sans titre)';
-      div.querySelector('.date').textContent = formaterDate(a.ts);
-      div.querySelector('p').textContent = a.texte || '';
-      liste.appendChild(div);
-    });
+    snapAnnonces = snap; rendreAnnonces();
   }, err => {
-    document.getElementById('annonces-list').innerHTML =
-      '<div class="empty"><div class="ico">⚠️</div><b>Erreur de connexion</b>'+err.message+'</div>';
+    document.getElementById('annonces-list').innerHTML = videHTML('⚠️', t('err.connexion'), err.message);
+  });
+}
+function rendreAnnonces(){
+  if(!snapAnnonces) return;
+  const liste = document.getElementById('annonces-list');
+  if(snapAnnonces.empty){ liste.innerHTML = videHTML('📜', t('annonces.vide.t'), t('annonces.vide.s')); return; }
+  liste.innerHTML = '';
+  snapAnnonces.forEach(doc => {
+    const a = doc.data();
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.innerHTML =
+      '<h3></h3><div class="date"></div><p></p>' +
+      '<button class="del-btn admin-only" onclick="supprimerAnnonce(\'' + doc.id + '\')">' + t('btn.supprimer') + '</button>';
+    div.querySelector('h3').textContent = a.titre || t('an.sansTitre');
+    div.querySelector('.date').textContent = formaterDate(a.ts);
+    div.querySelector('p').textContent = a.texte || '';
+    liste.appendChild(div);
   });
 }
 function ajouterAnnonce(){
   const titre = document.getElementById('an-titre').value.trim();
   const texte = document.getElementById('an-texte').value.trim();
-  if(!titre && !texte){ alert("Écris au moins un titre ou un texte."); return; }
+  if(!titre && !texte){ alert(t('an.besoin')); return; }
   db.collection('annonces').add({
     titre, texte, ts: firebase.firestore.FieldValue.serverTimestamp()
   }).then(()=>{
     document.getElementById('an-titre').value = '';
     document.getElementById('an-texte').value = '';
-  }).catch(e => alert("Erreur : " + e.message));
+  }).catch(e => alert(t('commun.erreur') + e.message));
 }
 function supprimerAnnonce(id){
-  if(confirm("Supprimer cette annonce ?")){
-    db.collection('annonces').doc(id).delete().catch(e => alert("Erreur : " + e.message));
+  if(confirm(t('an.confirmSuppr'))){
+    db.collection('annonces').doc(id).delete().catch(e => alert(t('commun.erreur') + e.message));
   }
 }
 
 /* =========================================================
    5) RÈGLEMENTS (un seul document éditable)
    ========================================================= */
+let texteReglements = '';
 function initReglements(){
   db.collection('contenu').doc('reglements').onSnapshot(doc => {
-    const txt = doc.exists ? (doc.data().texte || '') : '';
-    document.getElementById('reglements-view').textContent = txt || "Aucun règlement pour le moment.";
+    texteReglements = doc.exists ? (doc.data().texte || '') : '';
+    rendreReglements();
     const champ = document.getElementById('reglements-input');
-    if(champ && document.activeElement !== champ) champ.value = txt;
+    if(champ && document.activeElement !== champ) champ.value = texteReglements;
   });
+}
+function rendreReglements(){
+  const vue = document.getElementById('reglements-view');
+  if(vue) vue.textContent = texteReglements || t('reglements.vide');
 }
 function sauverReglements(){
   const txt = document.getElementById('reglements-input').value;
   db.collection('contenu').doc('reglements').set({texte: txt})
-    .then(()=> alert("Règlements enregistrés ✅"))
-    .catch(e => alert("Erreur : " + e.message));
+    .then(()=> alert(t('reglements.enregistres')))
+    .catch(e => alert(t('commun.erreur') + e.message));
 }
 
 /* =========================================================
    7) ÉQUIPES  (gérées par ID UNIQUE — jamais par nom)
    ========================================================= */
 let equipeEnEdition = null;  // null = ajout ; sinon = ID du document à modifier
+let snapEquipes = null;
 
 function initEquipes(){
   // Lecture en temps réel : se synchronise entre tous les admins connectés
   db.collection('equipes').orderBy('nom').onSnapshot(snap => {
-    const grille = document.getElementById('equipes-grid');
-    if(snap.empty){
-      grille.innerHTML = '<div class="empty"><div class="ico">🛡️</div><b>Aucune équipe</b>Les équipes apparaîtront ici.</div>';
-      return;
-    }
-    grille.innerHTML = '';
-    snap.forEach(doc => {
-      const e = doc.data();
-      const id = doc.id;                          // ← L'IDENTIFIANT UNIQUE
-      const couleur = e.couleur || '#D4AF37';
-      const carte = document.createElement('div');
-      carte.className = 'team-card';
-      carte.style.borderTopColor = couleur;
-
-      // Visuel : logo si fourni, sinon initiales sur fond coloré
-      let visuel;
-      if(e.logo){
-        visuel = '<img class="team-logo" src="' + e.logo + '" alt="" onerror="this.style.display=\'none\'">';
-      } else {
-        const ini = (e.nom || '?').trim().split(/\s+/).map(m => m[0]).slice(0,2).join('').toUpperCase();
-        visuel = '<div class="team-initials" style="background:' + couleur + '">' + ini + '</div>';
-      }
-
-      carte.innerHTML =
-        visuel +
-        '<h3></h3>' +
-        '<div class="team-actions admin-only">' +
-          '<button class="btn-mini" onclick="ouvrirEquipe(\'' + id + '\')">Modifier</button>' +
-          '<button class="del-btn" onclick="supprimerEquipe(\'' + id + '\')">Supprimer</button>' +
-        '</div>';
-      carte.querySelector('h3').textContent = e.nom || '(sans nom)';
-      grille.appendChild(carte);
-    });
+    snapEquipes = snap; rendreEquipes();
   }, err => {
-    document.getElementById('equipes-grid').innerHTML =
-      '<div class="empty"><div class="ico">⚠️</div><b>Erreur de connexion</b>' + err.message + '</div>';
+    document.getElementById('equipes-grid').innerHTML = videHTML('⚠️', t('err.connexion'), err.message);
+  });
+}
+function rendreEquipes(){
+  if(!snapEquipes) return;
+  const grille = document.getElementById('equipes-grid');
+  if(snapEquipes.empty){ grille.innerHTML = videHTML('🛡️', t('equipes.vide.t'), t('equipes.vide.s')); return; }
+  grille.innerHTML = '';
+  snapEquipes.forEach(doc => {
+    const e = doc.data();
+    const id = doc.id;                          // ← L'IDENTIFIANT UNIQUE
+    const couleur = e.couleur || '#D4AF37';
+    const carte = document.createElement('div');
+    carte.className = 'team-card';
+    carte.style.borderTopColor = couleur;
+
+    // Visuel : logo si fourni, sinon initiales sur fond coloré
+    let visuel;
+    if(e.logo){
+      visuel = '<img class="team-logo" src="' + e.logo + '" alt="" onerror="this.style.display=\'none\'">';
+    } else {
+      const ini = (e.nom || '?').trim().split(/\s+/).map(m => m[0]).slice(0,2).join('').toUpperCase();
+      visuel = '<div class="team-initials" style="background:' + couleur + '">' + ini + '</div>';
+    }
+
+    carte.innerHTML =
+      visuel +
+      '<h3></h3>' +
+      '<div class="team-actions admin-only">' +
+        '<button class="btn-mini" onclick="ouvrirEquipe(\'' + id + '\')">' + t('btn.modifier') + '</button>' +
+        '<button class="del-btn" onclick="supprimerEquipe(\'' + id + '\')">' + t('btn.supprimer') + '</button>' +
+      '</div>';
+    carte.querySelector('h3').textContent = e.nom || t('eq.sansNom');
+    grille.appendChild(carte);
   });
 }
 
 // Ouvre la modale : sans ID = ajout ; avec ID = modification (on pré-remplit)
 function ouvrirEquipe(id){
   equipeEnEdition = id || null;
-  document.getElementById('eq-modal-titre').textContent = id ? "Modifier l'équipe" : "Nouvelle équipe";
+  document.getElementById('eq-modal-titre').textContent = id ? t('eq.modal.modifier') : t('eq.modal.nouvelle');
   if(id){
     db.collection('equipes').doc(id).get().then(doc => {
       const e = doc.data() || {};
@@ -826,33 +972,36 @@ function sauverEquipe(){
   const nom = document.getElementById('eq-nom').value.trim();
   const couleur = document.getElementById('eq-couleur').value;
   const logo = document.getElementById('eq-logo').value.trim();
-  if(!nom){ alert("Donne un nom à l'équipe."); return; }
+  if(!nom){ alert(t('eq.besoinNom')); return; }
   const donnees = { nom, couleur, logo };
 
   let action;
   if(equipeEnEdition){
     // MODIFICATION : on retrouve l'équipe par son ID (jamais par son nom).
-    // .update() ne touche que ces champs → deux admins sur deux équipes différentes ne s'écrasent pas.
     action = db.collection('equipes').doc(equipeEnEdition).update(donnees);
   } else {
     // AJOUT : Firebase génère un ID unique automatiquement.
     donnees.createdAt = firebase.firestore.FieldValue.serverTimestamp();
     action = db.collection('equipes').add(donnees);
   }
-  action.then(() => fermerEquipe()).catch(e => alert("Erreur : " + e.message));
+  action.then(() => fermerEquipe()).catch(e => alert(t('commun.erreur') + e.message));
 }
 
 function supprimerEquipe(id){
-  if(confirm("Supprimer cette équipe ?")){
-    db.collection('equipes').doc(id).delete().catch(e => alert("Erreur : " + e.message));
+  if(confirm(t('eq.confirmSuppr'))){
+    db.collection('equipes').doc(id).delete().catch(e => alert(t('commun.erreur') + e.message));
   }
 }
+
+/* Redessine les listes dynamiques (utilisé au changement de langue) */
+function rafraichirDynamique(){ rendreAnnonces(); rendreReglements(); rendreEquipes(); }
 
 /* =========================================================
    6) DÉMARRAGE
    ========================================================= */
 function demarrer(){
   if(sessionStorage.getItem('dynasty_admin') === '1'){ estAdmin = true; }
+  appliquerLangue();
   appliquerAdmin();
   afficherRoute();
   initAnnonces();
