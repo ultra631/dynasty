@@ -571,6 +571,17 @@ th.cl-eq{display:table-cell}
 .foot-tag{color:var(--texte-doux);font-size:12.5px;margin-top:9px}
 .foot-line{color:var(--texte-doux);opacity:.55;font-size:11px;letter-spacing:.09em;margin-top:11px;text-transform:uppercase}
 .foot-crown{color:var(--or);opacity:.5;font-size:14px;margin-bottom:10px}
+
+/* ===== Positions multiples (cases C/A/D/G) ===== */
+.pos-group{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.pos-chip{flex:1;min-width:54px;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--bordure);border-radius:10px;padding:10px 6px;cursor:pointer;
+  font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:.06em;color:var(--texte-doux);
+  user-select:none;transition:.15s}
+.pos-chip:hover{border-color:var(--or);color:var(--platine)}
+.pos-chip input{display:none}
+.pos-chip.on{background:var(--grad-or);color:var(--noir);border-color:transparent;
+  box-shadow:0 4px 14px -6px rgba(212,175,55,.6)}
 </style>
 </head>
 <body>
@@ -727,19 +738,17 @@ th.cl-eq{display:table-cell}
       <div class="insc-form">
         <label class="champ-lbl" data-i18n="insc.nom">Nom / Gamertag</label>
         <input id="insc-nom" placeholder="Ton gamertag en jeu" data-i18n-ph="insc.nom.ph">
-        <div class="ech-cols">
-          <div><label class="champ-lbl" data-i18n="insc.plateforme">Plateforme</label>
-            <select id="insc-plateforme">
-              <option value="PS5">PS5</option>
-              <option value="Xbox Series">Xbox Series</option>
-            </select></div>
-          <div><label class="champ-lbl" data-i18n="insc.position">Position</label>
-            <select id="insc-position">
-              <option value="C">C</option>
-              <option value="A">A</option>
-              <option value="D">D</option>
-              <option value="G">G</option>
-            </select></div>
+        <label class="champ-lbl" data-i18n="insc.plateforme">Plateforme</label>
+        <select id="insc-plateforme">
+          <option value="PS5">PS5</option>
+          <option value="Xbox Series">Xbox Series</option>
+        </select>
+        <label class="champ-lbl" data-i18n="insc.position">Positions</label>
+        <div id="insc-positions" class="pos-group">
+          <label class="pos-chip"><input type="checkbox" value="C" onchange="togglePos(this)"><span>C</span></label>
+          <label class="pos-chip"><input type="checkbox" value="A" onchange="togglePos(this)"><span>A</span></label>
+          <label class="pos-chip"><input type="checkbox" value="D" onchange="togglePos(this)"><span>D</span></label>
+          <label class="pos-chip"><input type="checkbox" value="G" onchange="togglePos(this)"><span>G</span></label>
         </div>
         <label class="champ-lbl" data-i18n="insc.discord">Discord</label>
         <input id="insc-discord" placeholder="ton_pseudo" data-i18n-ph="insc.discord.ph">
@@ -903,13 +912,13 @@ th.cl-eq{display:table-cell}
     <input id="jo-nom" placeholder="Ex. Kain97" data-i18n-ph="joueur.nom.ph">
     <label class="champ-lbl" data-i18n="joueur.equipe">Équipe</label>
     <select id="jo-equipe"></select>
-    <label class="champ-lbl" data-i18n="joueur.position">Position</label>
-    <select id="jo-position">
-      <option value="C">C</option>
-      <option value="A">A</option>
-      <option value="D">D</option>
-      <option value="G">G</option>
-    </select>
+    <label class="champ-lbl" data-i18n="joueur.position">Positions</label>
+    <div id="jo-positions" class="pos-group">
+      <label class="pos-chip"><input type="checkbox" value="C" onchange="togglePos(this)"><span>C</span></label>
+      <label class="pos-chip"><input type="checkbox" value="A" onchange="togglePos(this)"><span>A</span></label>
+      <label class="pos-chip"><input type="checkbox" value="D" onchange="togglePos(this)"><span>D</span></label>
+      <label class="pos-chip"><input type="checkbox" value="G" onchange="togglePos(this)"><span>G</span></label>
+    </div>
     <div class="cta-row" style="margin-top:12px">
       <button class="btn btn-or" onclick="sauverJoueur()" data-i18n="btn.enregistrer">Enregistrer</button>
       <button class="btn btn-ghost" onclick="fermerJoueur()" data-i18n="commun.annuler">Annuler</button>
@@ -1037,7 +1046,7 @@ const DICT = {
     'inscriptions.titre':'Inscriptions','inscriptions.sous':'Rejoins la ligue DYNASTY.',
     'inscriptions.commenttitre':"Comment s'inscrire",'inscriptions.commenttexte':"Remplis le formulaire pour t'inscrire comme joueur (free agent). Un admin va te contacter sur Discord.",
     'inscriptions.bouton':"Formulaire d'inscription",
-    'insc.nom':'Nom / Gamertag','insc.nom.ph':'Ton gamertag en jeu','insc.plateforme':'Plateforme','insc.position':'Position','insc.discord':'Discord','insc.discord.ph':'ton_pseudo',
+    'insc.nom':'Nom / Gamertag','insc.nom.ph':'Ton gamertag en jeu','insc.plateforme':'Plateforme','insc.position':'Positions','insc.discord':'Discord','insc.discord.ph':'ton_pseudo',
     'insc.envoyer':"M'inscrire",'insc.merci':'Merci! Ton inscription est envoyée. Un admin va te contacter.','insc.besoinNom':'Mets au moins ton nom / gamertag.',
     'insc.admin.titre':'Inscriptions reçues','insc.vide':'Aucune inscription pour le moment.','insc.nouveau':'Nouveau','insc.traite':'Traité',
     'insc.marquerTraite':'Marquer traité','insc.marquerNouveau':'Remettre nouveau','insc.confirmSuppr':'Supprimer cette inscription ?',
@@ -1064,9 +1073,9 @@ const DICT = {
     'joueurs.ajouter':'+ Ajouter un joueur','joueurs.vide.t':'Aucun joueur','joueurs.vide.s':'Les joueurs apparaîtront ici.',
     'joueurs.pasdequipe.t':'Aucune équipe','joueurs.pasdequipe.s':"Crée d'abord des équipes pour ajouter des joueurs.",
     'joueurs.equipevide':'Aucun joueur dans cette équipe.',
-    'joueur.nom':'Nom / gamertag','joueur.nom.ph':'Ex. Kain97','joueur.equipe':'Équipe','joueur.position':'Position',
+    'joueur.nom':'Nom / gamertag','joueur.nom.ph':'Ex. Kain97','joueur.equipe':'Équipe','joueur.position':'Positions',
     'joueur.modal.nouveau':'Nouveau joueur','joueur.modal.modifier':'Modifier le joueur',
-    'joueur.besoinNom':'Donne un nom au joueur.','joueur.besoinEquipe':'Choisis une équipe.','joueur.confirmSuppr':'Retirer ce joueur ?',
+    'joueur.besoinNom':'Donne un nom au joueur.','joueur.besoinEquipe':'Choisis une équipe.','joueur.besoinPosition':'Choisis au moins une position.','joueur.confirmSuppr':'Retirer ce joueur ?',
     'eq.codeDG':'Code DG (optionnel)','eq.codeDG.ph':"Mot de passe du DG de l'équipe",
     'dg.actif':'Mode DG','dg.quitter':'Quitter','dg.refus':'Tu peux gérer seulement ton équipe.',
     'nav.echanges':'Échanges',
@@ -1125,7 +1134,7 @@ const DICT = {
     'inscriptions.titre':'Sign-up','inscriptions.sous':'Join the DYNASTY league.',
     'inscriptions.commenttitre':'How to sign up','inscriptions.commenttexte':'Fill out the form to sign up as a player (free agent). An admin will reach out on Discord.',
     'inscriptions.bouton':'Sign-up form',
-    'insc.nom':'Name / Gamertag','insc.nom.ph':'Your in-game gamertag','insc.plateforme':'Platform','insc.position':'Position','insc.discord':'Discord','insc.discord.ph':'your_handle',
+    'insc.nom':'Name / Gamertag','insc.nom.ph':'Your in-game gamertag','insc.plateforme':'Platform','insc.position':'Positions','insc.discord':'Discord','insc.discord.ph':'your_handle',
     'insc.envoyer':'Sign me up','insc.merci':'Thanks! Your registration is in. An admin will reach out.','insc.besoinNom':'Enter at least your name / gamertag.',
     'insc.admin.titre':'Registrations received','insc.vide':'No registrations yet.','insc.nouveau':'New','insc.traite':'Processed',
     'insc.marquerTraite':'Mark processed','insc.marquerNouveau':'Mark as new','insc.confirmSuppr':'Delete this registration?',
@@ -1152,9 +1161,9 @@ const DICT = {
     'joueurs.ajouter':'+ Add a player','joueurs.vide.t':'No players yet','joueurs.vide.s':'Players will appear here.',
     'joueurs.pasdequipe.t':'No teams yet','joueurs.pasdequipe.s':'Create teams first to add players.',
     'joueurs.equipevide':'No players on this team.',
-    'joueur.nom':'Name / gamertag','joueur.nom.ph':'e.g. Kain97','joueur.equipe':'Team','joueur.position':'Position',
+    'joueur.nom':'Name / gamertag','joueur.nom.ph':'e.g. Kain97','joueur.equipe':'Team','joueur.position':'Positions',
     'joueur.modal.nouveau':'New player','joueur.modal.modifier':'Edit player',
-    'joueur.besoinNom':'Give the player a name.','joueur.besoinEquipe':'Choose a team.','joueur.confirmSuppr':'Remove this player?',
+    'joueur.besoinNom':'Give the player a name.','joueur.besoinEquipe':'Choose a team.','joueur.besoinPosition':'Pick at least one position.','joueur.confirmSuppr':'Remove this player?',
     'eq.codeDG':'GM code (optional)','eq.codeDG.ph':'Team GM password',
     'dg.actif':'GM mode','dg.quitter':'Exit','dg.refus':'You can only manage your own team.',
     'nav.echanges':'Trades',
@@ -1235,6 +1244,22 @@ function ico(name){
 // Remplit les icônes statiques marquées data-ico
 function appliquerIcones(){
   document.querySelectorAll('[data-ico]').forEach(el => { el.innerHTML = ico(el.getAttribute('data-ico')); });
+}
+
+/* Positions multiples (1 à 4 : C/A/D/G) — cases à cocher */
+function togglePos(cb){ cb.parentNode.classList.toggle('on', cb.checked); }
+function collectPositions(containerId){
+  const arr = [];
+  document.querySelectorAll('#' + containerId + ' input:checked').forEach(cb => arr.push(cb.value));
+  return arr.join(', ');
+}
+function setPositions(containerId, str){
+  const set = (str || '').split(',').map(s => s.trim());
+  document.querySelectorAll('#' + containerId + ' .pos-chip').forEach(chip => {
+    const cb = chip.querySelector('input');
+    const on = set.indexOf(cb.value) !== -1;
+    cb.checked = on; chip.classList.toggle('on', on);
+  });
 }
 
 /* =========================================================
@@ -1605,12 +1630,12 @@ function ouvrirJoueur(id){
       const j = doc.data() || {};
       document.getElementById('jo-nom').value = j.nom || '';
       document.getElementById('jo-equipe').value = j.equipeId || '';
-      document.getElementById('jo-position').value = j.position || 'C';
+      setPositions('jo-positions', j.position || '');
       verrouillerEquipeSiDG();
     });
   } else {
     document.getElementById('jo-nom').value = '';
-    document.getElementById('jo-position').value = 'C';
+    setPositions('jo-positions', '');
     if(dgTeamId) document.getElementById('jo-equipe').value = dgTeamId;
     verrouillerEquipeSiDG();
   }
@@ -1621,9 +1646,10 @@ function fermerJoueur(){ document.getElementById('modale-joueur').classList.remo
 function sauverJoueur(){
   const nom = document.getElementById('jo-nom').value.trim();
   const equipeId = document.getElementById('jo-equipe').value;
-  const position = document.getElementById('jo-position').value;
+  const position = collectPositions('jo-positions');
   if(!nom){ alert(t('joueur.besoinNom')); return; }
   if(!equipeId){ alert(t('joueur.besoinEquipe')); return; }
+  if(!position){ alert(t('joueur.besoinPosition')); return; }
   // Sécurité : un DG ne peut créer/déplacer un joueur que dans SON équipe
   if(dgTeamId && !estAdmin && equipeId !== dgTeamId){ alert(t('dg.refus')); return; }
   const donnees = { nom, equipeId, position };
@@ -2146,7 +2172,7 @@ function rendreGardiens(){
   if(!snapEquipes || snapEquipes.empty){ cont.innerHTML = videHTML(ico('net'), t('gardiens.vide.t'), t('gardiens.vide.s')); return; }
   const parEquipe = {}; let total = 0;
   if(snapJoueurs){
-    snapJoueurs.forEach(d => { const j = d.data(); if((j.position || '') === 'G'){ (parEquipe[j.equipeId] = parEquipe[j.equipeId] || []).push(Object.assign({id:d.id}, j)); total++; } });
+    snapJoueurs.forEach(d => { const j = d.data(); if((j.position || '').indexOf('G') !== -1){ (parEquipe[j.equipeId] = parEquipe[j.equipeId] || []).push(Object.assign({id:d.id}, j)); total++; } });
   }
   if(total === 0){ cont.innerHTML = videHTML(ico('net'), t('gardiens.vide.t'), t('gardiens.vide.s')); return; }
   let html = '';
@@ -2180,7 +2206,7 @@ function initInscriptions(){
 function envoyerInscription(){
   const nom = document.getElementById('insc-nom').value.trim();
   const plateforme = document.getElementById('insc-plateforme').value;
-  const position = document.getElementById('insc-position').value;
+  const position = collectPositions('insc-positions');
   const discord = document.getElementById('insc-discord').value.trim();
   if(!nom){ alert(t('insc.besoinNom')); return; }
   db.collection('inscriptions').add({
