@@ -380,6 +380,33 @@ header{z-index:50}
 /* Étiquettes de formulaire dans les modales */
 .champ-lbl{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;
   color:var(--texte-doux);margin:4px 0 6px;font-weight:600}
+
+/* ===== Joueurs + mode DG ===== */
+select{width:100%;background:#0a0a0e;border:1px solid var(--bordure);border-radius:10px;
+  color:var(--texte);font-family:inherit;font-size:14px;padding:11px 13px;margin-bottom:10px}
+select:focus{outline:none;border-color:var(--or)}
+select:disabled{opacity:.55;cursor:not-allowed}
+.dg-banner{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  background:#101a2e;border:1px solid var(--bordure);border-left:3px solid var(--or);
+  border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:13.5px;color:var(--platine)}
+.dg-banner b{color:var(--or);font-weight:700}
+.peut-editer{display:none}
+body.is-admin .peut-editer, body.is-dg .peut-editer{display:block}
+.joueurs-equipe{margin-bottom:16px;background:linear-gradient(180deg,var(--charbon),#0d0d14);
+  border:1px solid var(--bordure);border-radius:16px;overflow:hidden}
+.je-head{display:flex;align-items:center;gap:10px;padding:13px 16px;border-bottom:1px solid var(--bordure)}
+.je-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;border:1px solid rgba(255,255,255,.2)}
+.je-head h3{font-family:'Cinzel',serif;font-weight:700;font-size:15px;color:var(--platine);flex:1}
+.je-count{font-family:'Bebas Neue',sans-serif;font-size:19px;color:var(--or)}
+.je-liste{display:flex;flex-direction:column}
+.joueur-row{display:flex;align-items:center;gap:12px;padding:11px 16px;border-bottom:1px solid rgba(255,255,255,.04)}
+.joueur-row:last-child{border-bottom:none}
+.jr-pos{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--or);min-width:36px;text-align:center;
+  border:1px solid var(--bordure);border-radius:6px;padding:3px 0;letter-spacing:.04em}
+.jr-nom{flex:1;color:var(--texte);font-weight:500;font-size:14.5px}
+.jr-actions{display:flex;gap:6px}
+.jr-actions .del-btn{margin-top:0}
+.je-vide{padding:14px 16px;color:var(--texte-doux);font-size:13px}
 </style>
 </head>
 <body>
@@ -561,8 +588,22 @@ header{z-index:50}
     <div class="empty"><div class="ico">🏆</div><b data-i18n="commun.construction">Section en construction</b><span data-i18n="classements.construction">On bâtit le tableau des classements à la prochaine étape.</span></div>
   </section>
   <section class="page" id="joueurs">
-    <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="joueurs.titre">Joueurs</h2><p data-i18n="joueurs.sous">Les statistiques des joueurs.</p></div>
-    <div class="empty"><div class="ico">⛸️</div><b data-i18n="commun.construction">Section en construction</b><span data-i18n="joueurs.construction">On bâtit le tableau des joueurs à la prochaine étape.</span></div>
+    <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="joueurs.titre">Joueurs</h2><p data-i18n="joueurs.sous">Les joueurs, par équipe.</p></div>
+
+    <!-- Bandeau affiché quand un DG est connecté -->
+    <div id="dg-banner" class="dg-banner" style="display:none">
+      <span>🎽 <b data-i18n="dg.actif">Mode DG</b> — <span id="dg-team-name"></span></span>
+      <button class="btn-mini" onclick="deconnexionDG()" data-i18n="dg.quitter">Quitter</button>
+    </div>
+
+    <!-- Bouton ajouter : admin (toute équipe) ou DG (son équipe) -->
+    <div class="peut-editer" style="margin-bottom:16px">
+      <button class="btn btn-or" onclick="ouvrirJoueur()" data-i18n="joueurs.ajouter">+ Ajouter un joueur</button>
+    </div>
+
+    <div id="joueurs-list">
+      <div class="empty"><div class="ico">⛸️</div><b data-i18n="joueurs.vide.t">Aucun joueur</b><span data-i18n="joueurs.vide.s">Les joueurs apparaîtront ici.</span></div>
+    </div>
   </section>
   <section class="page" id="gardiens">
     <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="gardiens.titre">Gardiens</h2><p data-i18n="gardiens.sous">Les statistiques des gardiens.</p></div>
@@ -621,9 +662,35 @@ header{z-index:50}
     <input id="eq-couleur" type="color" value="#D4AF37" style="height:46px;padding:4px;cursor:pointer">
     <label class="champ-lbl" data-i18n="eq.logo">Logo — lien d'image (optionnel)</label>
     <input id="eq-logo" placeholder="https://...  (vide = initiales)" data-i18n-ph="eq.logo.ph">
+    <label class="champ-lbl" data-i18n="eq.codeDG">Code DG (optionnel)</label>
+    <input id="eq-codedg" placeholder="Mot de passe du DG de l'équipe" data-i18n-ph="eq.codeDG.ph">
     <div class="cta-row" style="margin-top:12px">
       <button class="btn btn-or" onclick="sauverEquipe()" data-i18n="btn.enregistrer">Enregistrer</button>
       <button class="btn btn-ghost" onclick="fermerEquipe()" data-i18n="commun.annuler">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================ MODALE JOUEUR (ajout / modification) ============================ -->
+<div class="modal" id="modale-joueur">
+  <div class="modal-box" style="max-width:380px;text-align:left">
+    <h3 class="cinzel" id="jo-modal-titre" style="text-align:center" data-i18n="joueur.modal.nouveau">Nouveau joueur</h3>
+    <label class="champ-lbl" data-i18n="joueur.nom">Nom / gamertag</label>
+    <input id="jo-nom" placeholder="Ex. Kain97" data-i18n-ph="joueur.nom.ph">
+    <label class="champ-lbl" data-i18n="joueur.equipe">Équipe</label>
+    <select id="jo-equipe"></select>
+    <label class="champ-lbl" data-i18n="joueur.position">Position</label>
+    <select id="jo-position">
+      <option value="C">C</option>
+      <option value="AG">AG</option>
+      <option value="AD">AD</option>
+      <option value="DG">DG</option>
+      <option value="DD">DD</option>
+      <option value="G">G</option>
+    </select>
+    <div class="cta-row" style="margin-top:12px">
+      <button class="btn btn-or" onclick="sauverJoueur()" data-i18n="btn.enregistrer">Enregistrer</button>
+      <button class="btn btn-ghost" onclick="fermerJoueur()" data-i18n="commun.annuler">Annuler</button>
     </div>
   </div>
 </div>
@@ -681,7 +748,7 @@ const DICT = {
     'inscriptions.bouton':"Formulaire d'inscription",
     'reseaux.titre':'Réseaux sociaux','reseaux.sous':'Suis la ligue partout.',
     'classements.titre':'Classements','classements.sous':'Le classement des équipes.','classements.construction':'On bâtit le tableau des classements à la prochaine étape.',
-    'joueurs.titre':'Joueurs','joueurs.sous':'Les statistiques des joueurs.','joueurs.construction':'On bâtit le tableau des joueurs à la prochaine étape.',
+    'joueurs.titre':'Joueurs','joueurs.sous':'Les joueurs, par équipe.','joueurs.construction':'On bâtit le tableau des joueurs à la prochaine étape.',
     'gardiens.titre':'Gardiens','gardiens.sous':'Les statistiques des gardiens.','gardiens.construction':'On bâtit le tableau des gardiens à la prochaine étape.',
     'calendrier.titre':'Calendrier','calendrier.sous':"L'horaire des matchs.",'calendrier.construction':'On bâtit le calendrier à la prochaine étape.',
     'resultats.titre':'Résultats','resultats.sous':'Les résultats des matchs joués.','resultats.construction':'On bâtit les résultats à la prochaine étape.',
@@ -689,7 +756,7 @@ const DICT = {
     'equipes.titre':'Équipes','equipes.sous':'Les équipes de la ligue DYNASTY.','equipes.ajouter':'+ Ajouter une équipe',
     'equipes.vide.t':'Aucune équipe','equipes.vide.s':'Les équipes apparaîtront ici.',
     'footer.ligne':'Ligue CHEL · NHL 27 · © 2026',
-    'admin.titre':'Mode admin','admin.sous':'Entre le mot de passe pour gérer la ligue.','admin.ph':'Mot de passe',
+    'admin.titre':'Mode admin','admin.sous':'Entre le mot de passe admin ou ton code DG.','admin.ph':'Mot de passe / code DG',
     'admin.connexion':'Se connecter','admin.incorrect':'Mot de passe incorrect.',
     'commun.fermer':'Fermer','commun.annuler':'Annuler','btn.enregistrer':'Enregistrer','commun.chargement':'Chargement…',
     'eq.nom':"Nom de l'équipe",'eq.nom.ph':'Ex. Les Rois de Montréal','eq.couleur':"Couleur de l'équipe",
@@ -698,7 +765,15 @@ const DICT = {
     'err.connexion':'Erreur de connexion','commun.erreur':'Erreur : ',
     'btn.supprimer':'Supprimer','btn.modifier':'Modifier','an.sansTitre':'(sans titre)','eq.sansNom':'(sans nom)',
     'an.besoin':'Écris au moins un titre ou un texte.','an.confirmSuppr':'Supprimer cette annonce ?',
-    'eq.besoinNom':"Donne un nom à l'équipe.",'eq.confirmSuppr':'Supprimer cette équipe ?'
+    'eq.besoinNom':"Donne un nom à l'équipe.",'eq.confirmSuppr':'Supprimer cette équipe ?',
+    'joueurs.ajouter':'+ Ajouter un joueur','joueurs.vide.t':'Aucun joueur','joueurs.vide.s':'Les joueurs apparaîtront ici.',
+    'joueurs.pasdequipe.t':'Aucune équipe','joueurs.pasdequipe.s':"Crée d'abord des équipes pour ajouter des joueurs.",
+    'joueurs.equipevide':'Aucun joueur dans cette équipe.',
+    'joueur.nom':'Nom / gamertag','joueur.nom.ph':'Ex. Kain97','joueur.equipe':'Équipe','joueur.position':'Position',
+    'joueur.modal.nouveau':'Nouveau joueur','joueur.modal.modifier':'Modifier le joueur',
+    'joueur.besoinNom':'Donne un nom au joueur.','joueur.besoinEquipe':'Choisis une équipe.','joueur.confirmSuppr':'Retirer ce joueur ?',
+    'eq.codeDG':'Code DG (optionnel)','eq.codeDG.ph':"Mot de passe du DG de l'équipe",
+    'dg.actif':'Mode DG','dg.quitter':'Quitter','dg.refus':'Tu peux gérer seulement ton équipe.'
   },
   en: {
     'nav.accueil':'Home','nav.annonces':'News','nav.reglements':'Rules',
@@ -728,7 +803,7 @@ const DICT = {
     'inscriptions.bouton':'Sign-up form',
     'reseaux.titre':'Social media','reseaux.sous':'Follow the league everywhere.',
     'classements.titre':'Standings','classements.sous':'The team standings.','classements.construction':"We're building the standings table in the next step.",
-    'joueurs.titre':'Players','joueurs.sous':'Player statistics.','joueurs.construction':"We're building the players table in the next step.",
+    'joueurs.titre':'Players','joueurs.sous':'Players, by team.','joueurs.construction':"We're building the players table in the next step.",
     'gardiens.titre':'Goalies','gardiens.sous':'Goalie statistics.','gardiens.construction':"We're building the goalies table in the next step.",
     'calendrier.titre':'Schedule','calendrier.sous':'The match schedule.','calendrier.construction':"We're building the schedule in the next step.",
     'resultats.titre':'Results','resultats.sous':'Results of played matches.','resultats.construction':"We're building the results in the next step.",
@@ -736,7 +811,7 @@ const DICT = {
     'equipes.titre':'Teams','equipes.sous':'The teams of the DYNASTY league.','equipes.ajouter':'+ Add a team',
     'equipes.vide.t':'No teams yet','equipes.vide.s':'Teams will appear here.',
     'footer.ligne':'CHEL League · NHL 27 · © 2026',
-    'admin.titre':'Admin mode','admin.sous':'Enter the password to manage the league.','admin.ph':'Password',
+    'admin.titre':'Admin mode','admin.sous':'Enter the admin password or your GM code.','admin.ph':'Password / GM code',
     'admin.connexion':'Log in','admin.incorrect':'Incorrect password.',
     'commun.fermer':'Close','commun.annuler':'Cancel','btn.enregistrer':'Save','commun.chargement':'Loading…',
     'eq.nom':'Team name','eq.nom.ph':'e.g. Montreal Kings','eq.couleur':'Team color',
@@ -745,7 +820,15 @@ const DICT = {
     'err.connexion':'Connection error','commun.erreur':'Error: ',
     'btn.supprimer':'Delete','btn.modifier':'Edit','an.sansTitre':'(no title)','eq.sansNom':'(no name)',
     'an.besoin':'Write at least a title or some text.','an.confirmSuppr':'Delete this post?',
-    'eq.besoinNom':'Give the team a name.','eq.confirmSuppr':'Delete this team?'
+    'eq.besoinNom':'Give the team a name.','eq.confirmSuppr':'Delete this team?',
+    'joueurs.ajouter':'+ Add a player','joueurs.vide.t':'No players yet','joueurs.vide.s':'Players will appear here.',
+    'joueurs.pasdequipe.t':'No teams yet','joueurs.pasdequipe.s':'Create teams first to add players.',
+    'joueurs.equipevide':'No players on this team.',
+    'joueur.nom':'Name / gamertag','joueur.nom.ph':'e.g. Kain97','joueur.equipe':'Team','joueur.position':'Position',
+    'joueur.modal.nouveau':'New player','joueur.modal.modifier':'Edit player',
+    'joueur.besoinNom':'Give the player a name.','joueur.besoinEquipe':'Choose a team.','joueur.confirmSuppr':'Remove this player?',
+    'eq.codeDG':'GM code (optional)','eq.codeDG.ph':'Team GM password',
+    'dg.actif':'GM mode','dg.quitter':'Exit','dg.refus':'You can only manage your own team.'
   }
 };
 let langue = localStorage.getItem('dynasty_langue') || 'fr';
@@ -775,35 +858,81 @@ function basculerLangue(){
 }
 
 /* =========================================================
-   2) MODE ADMIN
-   ⚠️ Change le mot de passe ici pour le tien :
+   2) RÔLES : ADMIN (toi) + DG (par équipe)
+   ⚠️ Change le mot de passe admin ici pour le tien :
    ========================================================= */
 const ADMIN_PASS = "dynasty2026";
 let estAdmin = false;
+let dgTeamId = null;   // ID de l'équipe que le DG connecté dirige (null si pas DG)
 
-function appliquerAdmin(){
-  document.body.classList.toggle('is-admin', estAdmin);
-  const btn = document.querySelector('.admin-btn');
-  btn.title = estAdmin ? "Admin actif — déconnexion" : "Mode admin";
+// Cherche une équipe dont le code DG correspond à ce qui est entré
+function trouverEquipeParCodeDG(code){
+  if(!snapEquipes || !code) return null;
+  let trouve = null;
+  snapEquipes.forEach(doc => {
+    const e = doc.data();
+    if(e.codedg && e.codedg === code) trouve = { id: doc.id, nom: e.nom };
+  });
+  return trouve;
 }
-function ouvrirModale(){
-  if(estAdmin){ // déjà connecté → déconnexion
-    estAdmin = false; sessionStorage.removeItem('dynasty_admin'); appliquerAdmin(); return;
+function trouverEquipeParId(id){
+  if(!snapEquipes) return null;
+  let r = null;
+  snapEquipes.forEach(d => { if(d.id === id) r = Object.assign({id:d.id}, d.data()); });
+  return r;
+}
+// Un DG peut éditer SEULEMENT son équipe ; l'admin peut tout éditer
+function peutEditerEquipe(equipeId){ return estAdmin || (!!dgTeamId && dgTeamId === equipeId); }
+
+// Applique l'affichage selon le rôle connecté
+function appliquerRoles(){
+  document.body.classList.toggle('is-admin', estAdmin);
+  document.body.classList.toggle('is-dg', !!dgTeamId);
+  const banner = document.getElementById('dg-banner');
+  if(banner){
+    if(dgTeamId){
+      const eq = trouverEquipeParId(dgTeamId);
+      document.getElementById('dg-team-name').textContent = eq ? (eq.nom || '') : '';
+      banner.style.display = 'flex';
+    } else { banner.style.display = 'none'; }
   }
+  const btn = document.querySelector('.admin-btn');
+  if(btn) btn.title = (estAdmin || dgTeamId) ? "Connecté — déconnexion" : "Connexion (admin / DG)";
+  if(typeof rendreJoueurs === 'function') rendreJoueurs();   // (re)affiche les boutons selon le rôle
+}
+
+function deconnexion(){
+  estAdmin = false; dgTeamId = null;
+  sessionStorage.removeItem('dynasty_admin'); sessionStorage.removeItem('dynasty_dg');
+  appliquerRoles();
+}
+function deconnexionDG(){ deconnexion(); }
+
+function ouvrirModale(){
+  if(estAdmin || dgTeamId){ deconnexion(); return; }   // déjà connecté → déconnexion
   document.getElementById('modale-err').textContent = '';
   document.getElementById('modale-pass').value = '';
   document.getElementById('modale').classList.add('open');
   setTimeout(()=>document.getElementById('modale-pass').focus(), 100);
 }
 function fermerModale(){ document.getElementById('modale').classList.remove('open'); }
+
 function connexionAdmin(){
   const val = document.getElementById('modale-pass').value;
+  // 1) Mot de passe admin ?
   if(val === ADMIN_PASS){
-    estAdmin = true; sessionStorage.setItem('dynasty_admin','1');
-    appliquerAdmin(); fermerModale();
-  } else {
-    document.getElementById('modale-err').textContent = t('admin.incorrect');
+    estAdmin = true; dgTeamId = null;
+    sessionStorage.setItem('dynasty_admin','1'); sessionStorage.removeItem('dynasty_dg');
+    appliquerRoles(); fermerModale(); return;
   }
+  // 2) Sinon, code DG d'une équipe ?
+  const equipe = trouverEquipeParCodeDG(val);
+  if(equipe){
+    dgTeamId = equipe.id; estAdmin = false;
+    sessionStorage.setItem('dynasty_dg', equipe.id); sessionStorage.removeItem('dynasty_admin');
+    appliquerRoles(); fermerModale(); return;
+  }
+  document.getElementById('modale-err').textContent = t('admin.incorrect');
 }
 
 /* =========================================================
@@ -910,6 +1039,7 @@ function initEquipes(){
   // Lecture en temps réel : se synchronise entre tous les admins connectés
   db.collection('equipes').orderBy('nom').onSnapshot(snap => {
     snapEquipes = snap; rendreEquipes();
+    if(typeof appliquerRoles === 'function') appliquerRoles();  // rafraîchit bannière DG + droits joueurs
   }, err => {
     document.getElementById('equipes-grid').innerHTML = videHTML('⚠️', t('err.connexion'), err.message);
   });
@@ -958,11 +1088,13 @@ function ouvrirEquipe(id){
       document.getElementById('eq-nom').value = e.nom || '';
       document.getElementById('eq-couleur').value = e.couleur || '#D4AF37';
       document.getElementById('eq-logo').value = e.logo || '';
+      document.getElementById('eq-codedg').value = e.codedg || '';
     });
   } else {
     document.getElementById('eq-nom').value = '';
     document.getElementById('eq-couleur').value = '#D4AF37';
     document.getElementById('eq-logo').value = '';
+    document.getElementById('eq-codedg').value = '';
   }
   document.getElementById('modale-equipe').classList.add('open');
 }
@@ -972,8 +1104,9 @@ function sauverEquipe(){
   const nom = document.getElementById('eq-nom').value.trim();
   const couleur = document.getElementById('eq-couleur').value;
   const logo = document.getElementById('eq-logo').value.trim();
+  const codedg = document.getElementById('eq-codedg').value.trim();
   if(!nom){ alert(t('eq.besoinNom')); return; }
-  const donnees = { nom, couleur, logo };
+  const donnees = { nom, couleur, logo, codedg };
 
   let action;
   if(equipeEnEdition){
@@ -993,20 +1126,156 @@ function supprimerEquipe(id){
   }
 }
 
-/* Redessine les listes dynamiques (utilisé au changement de langue) */
-function rafraichirDynamique(){ rendreAnnonces(); rendreReglements(); rendreEquipes(); }
+/* =========================================================
+   8) JOUEURS  (rattachés à une équipe par ID ; éditables par admin ou par le DG de l'équipe)
+   ========================================================= */
+let snapJoueurs = null;
+let joueurEnEdition = null;
+
+// Protège contre les caractères spéciaux dans les noms entrés par les utilisateurs
+function escapeHtml(s){
+  return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function initJoueurs(){
+  db.collection('joueurs').orderBy('nom').onSnapshot(snap => {
+    snapJoueurs = snap; rendreJoueurs();
+  }, err => {
+    const c = document.getElementById('joueurs-list');
+    if(c) c.innerHTML = videHTML('⚠️', t('err.connexion'), err.message);
+  });
+}
+
+function rendreJoueurs(){
+  const cont = document.getElementById('joueurs-list');
+  if(!cont) return;
+  if(!snapEquipes || snapEquipes.empty){
+    cont.innerHTML = videHTML('🛡️', t('joueurs.pasdequipe.t'), t('joueurs.pasdequipe.s'));
+    return;
+  }
+  // Regroupe les joueurs par équipe
+  const parEquipe = {};
+  if(snapJoueurs){
+    snapJoueurs.forEach(d => {
+      const j = d.data();
+      (parEquipe[j.equipeId] = parEquipe[j.equipeId] || []).push(Object.assign({id:d.id}, j));
+    });
+  }
+  let html = '';
+  snapEquipes.forEach(docE => {
+    const e = docE.data(); const eid = docE.id;
+    const couleur = e.couleur || '#D4AF37';
+    const joueurs = parEquipe[eid] || [];
+    const peut = peutEditerEquipe(eid);
+    html += '<div class="joueurs-equipe">';
+    html += '<div class="je-head"><span class="je-dot" style="background:' + couleur + '"></span>'
+          + '<h3>' + escapeHtml(e.nom || '') + '</h3>'
+          + '<span class="je-count">' + joueurs.length + '</span></div>';
+    if(joueurs.length === 0){
+      html += '<div class="je-vide">' + t('joueurs.equipevide') + '</div>';
+    } else {
+      html += '<div class="je-liste">';
+      joueurs.forEach(j => {
+        html += '<div class="joueur-row">'
+              + '<span class="jr-pos">' + escapeHtml(j.position || '') + '</span>'
+              + '<span class="jr-nom">' + escapeHtml(j.nom || '') + '</span>';
+        if(peut){
+          html += '<span class="jr-actions">'
+                + '<button class="btn-mini" onclick="ouvrirJoueur(\'' + j.id + '\')">' + t('btn.modifier') + '</button>'
+                + '<button class="del-btn" onclick="supprimerJoueur(\'' + j.id + '\')">' + t('btn.supprimer') + '</button>'
+                + '</span>';
+        }
+        html += '</div>';
+      });
+      html += '</div>';
+    }
+    html += '</div>';
+  });
+  cont.innerHTML = html;
+}
+
+// Remplit le menu déroulant des équipes ; verrouille sur son équipe si DG
+function remplirSelectEquipes(){
+  const sel = document.getElementById('jo-equipe');
+  sel.innerHTML = '';
+  if(snapEquipes){
+    snapEquipes.forEach(d => {
+      const o = document.createElement('option');
+      o.value = d.id; o.textContent = d.data().nom || '';
+      sel.appendChild(o);
+    });
+  }
+}
+function verrouillerEquipeSiDG(){
+  const sel = document.getElementById('jo-equipe');
+  if(dgTeamId && !estAdmin){ sel.value = dgTeamId; sel.disabled = true; }
+  else { sel.disabled = false; }
+}
+
+function ouvrirJoueur(id){
+  joueurEnEdition = id || null;
+  remplirSelectEquipes();
+  document.getElementById('jo-modal-titre').textContent = id ? t('joueur.modal.modifier') : t('joueur.modal.nouveau');
+  if(id){
+    db.collection('joueurs').doc(id).get().then(doc => {
+      const j = doc.data() || {};
+      document.getElementById('jo-nom').value = j.nom || '';
+      document.getElementById('jo-equipe').value = j.equipeId || '';
+      document.getElementById('jo-position').value = j.position || 'C';
+      verrouillerEquipeSiDG();
+    });
+  } else {
+    document.getElementById('jo-nom').value = '';
+    document.getElementById('jo-position').value = 'C';
+    if(dgTeamId) document.getElementById('jo-equipe').value = dgTeamId;
+    verrouillerEquipeSiDG();
+  }
+  document.getElementById('modale-joueur').classList.add('open');
+}
+function fermerJoueur(){ document.getElementById('modale-joueur').classList.remove('open'); }
+
+function sauverJoueur(){
+  const nom = document.getElementById('jo-nom').value.trim();
+  const equipeId = document.getElementById('jo-equipe').value;
+  const position = document.getElementById('jo-position').value;
+  if(!nom){ alert(t('joueur.besoinNom')); return; }
+  if(!equipeId){ alert(t('joueur.besoinEquipe')); return; }
+  // Sécurité : un DG ne peut créer/déplacer un joueur que dans SON équipe
+  if(dgTeamId && !estAdmin && equipeId !== dgTeamId){ alert(t('dg.refus')); return; }
+  const donnees = { nom, equipeId, position };
+  let action;
+  if(joueurEnEdition){
+    action = db.collection('joueurs').doc(joueurEnEdition).update(donnees);  // par ID, jamais par nom
+  } else {
+    donnees.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+    action = db.collection('joueurs').add(donnees);
+  }
+  action.then(() => fermerJoueur()).catch(e => alert(t('commun.erreur') + e.message));
+}
+
+function supprimerJoueur(id){
+  if(confirm(t('joueur.confirmSuppr'))){
+    db.collection('joueurs').doc(id).delete().catch(e => alert(t('commun.erreur') + e.message));
+  }
+}
+
+/* Redessine les listes dynamiques (au changement de langue) */
+function rafraichirDynamique(){ rendreAnnonces(); rendreReglements(); rendreEquipes(); rendreJoueurs(); }
 
 /* =========================================================
    6) DÉMARRAGE
    ========================================================= */
 function demarrer(){
   if(sessionStorage.getItem('dynasty_admin') === '1'){ estAdmin = true; }
+  const dgSauve = sessionStorage.getItem('dynasty_dg');
+  if(dgSauve){ dgTeamId = dgSauve; }
   appliquerLangue();
-  appliquerAdmin();
+  appliquerRoles();
   afficherRoute();
   initAnnonces();
   initReglements();
   initEquipes();
+  initJoueurs();
 }
 demarrer();
 
