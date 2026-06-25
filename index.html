@@ -494,6 +494,12 @@ th.cl-eq{display:table-cell}
 .gd-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
 .gd-grid input{margin-bottom:0;text-align:center;padding:10px 6px}
 @media (max-width:460px){ .gd-grid{grid-template-columns:repeat(3,1fr)} }
+
+/* ===== Table joueurs (stats) ===== */
+.jr-table .jr-pos2{font-family:'Bebas Neue',sans-serif;color:var(--or);font-size:15px;letter-spacing:.04em}
+.jr-table .jr-actions{display:flex;gap:6px;justify-content:flex-end}
+.jr-table .jr-actions .del-btn{margin-top:0}
+.jr-table .btn-mini{padding:5px 10px}
 </style>
 </head>
 <body>
@@ -807,6 +813,12 @@ th.cl-eq{display:table-cell}
       <option value="DD">DD</option>
       <option value="G">G</option>
     </select>
+    <label class="champ-lbl" data-i18n="joueur.stats">Statistiques</label>
+    <div class="gd-grid" style="grid-template-columns:repeat(3,1fr)">
+      <div><label class="champ-lbl" data-i18n="cl.pj">PJ</label><input id="jo-pj" type="number" min="0" placeholder="0"></div>
+      <div><label class="champ-lbl" data-i18n="jo.b">B</label><input id="jo-b" type="number" min="0" placeholder="0"></div>
+      <div><label class="champ-lbl" data-i18n="jo.a">A</label><input id="jo-a" type="number" min="0" placeholder="0"></div>
+    </div>
     <div class="cta-row" style="margin-top:12px">
       <button class="btn btn-or" onclick="sauverJoueur()" data-i18n="btn.enregistrer">Enregistrer</button>
       <button class="btn btn-ghost" onclick="fermerJoueur()" data-i18n="commun.annuler">Annuler</button>
@@ -994,7 +1006,8 @@ const DICT = {
     'calendrier.date':'Date','calendrier.heure':'Heure (optionnel)','calendrier.modal.nouveau':'Nouveau match','calendrier.modal.modifier':'Modifier le match',
     'calendrier.besoinDate':'Choisis une date.','calendrier.confirmSuppr':'Supprimer ce match du calendrier ?','calendrier.vs':'vs',
     'gardiens.vide.t':'Aucun gardien','gardiens.vide.s':'Ajoute des joueurs en position G dans Joueurs.',
-    'gd.pj':'PJ','gd.v':'V','gd.d':'D','gd.bl':'BL','gd.bc':'BC','gd.moy':'MOY','gardien.modal.titre':'Stats du gardien'
+    'gd.pj':'PJ','gd.v':'V','gd.d':'D','gd.bl':'BL','gd.bc':'BC','gd.moy':'MOY','gardien.modal.titre':'Stats du gardien',
+    'jo.pos':'POS','jo.joueur':'Joueur','jo.b':'B','jo.a':'A','joueur.stats':'Statistiques'
   },
   en: {
     'nav.accueil':'Home','nav.annonces':'News','nav.reglements':'Rules',
@@ -1076,7 +1089,8 @@ const DICT = {
     'calendrier.date':'Date','calendrier.heure':'Time (optional)','calendrier.modal.nouveau':'New match','calendrier.modal.modifier':'Edit match',
     'calendrier.besoinDate':'Pick a date.','calendrier.confirmSuppr':'Remove this match from the schedule?','calendrier.vs':'vs',
     'gardiens.vide.t':'No goalies yet','gardiens.vide.s':'Add players in the G position under Players.',
-    'gd.pj':'GP','gd.v':'W','gd.d':'L','gd.bl':'SO','gd.bc':'GA','gd.moy':'GAA','gardien.modal.titre':'Goalie stats'
+    'gd.pj':'GP','gd.v':'W','gd.d':'L','gd.bl':'SO','gd.bc':'GA','gd.moy':'GAA','gardien.modal.titre':'Goalie stats',
+    'jo.pos':'POS','jo.joueur':'Player','jo.b':'G','jo.a':'A','joueur.stats':'Statistics'
   }
 };
 let langue = localStorage.getItem('dynasty_langue') || 'fr';
@@ -1407,7 +1421,6 @@ function rendreJoueurs(){
     cont.innerHTML = videHTML('🛡️', t('joueurs.pasdequipe.t'), t('joueurs.pasdequipe.s'));
     return;
   }
-  // Regroupe les joueurs par équipe
   const parEquipe = {};
   if(snapJoueurs){
     snapJoueurs.forEach(d => {
@@ -1419,29 +1432,30 @@ function rendreJoueurs(){
   snapEquipes.forEach(docE => {
     const e = docE.data(); const eid = docE.id;
     const couleur = e.couleur || '#D4AF37';
-    const joueurs = parEquipe[eid] || [];
+    let joueurs = parEquipe[eid] || [];
     const peut = peutEditerEquipe(eid);
-    html += '<div class="joueurs-equipe">';
-    html += '<div class="je-head"><span class="je-dot" style="background:' + couleur + '"></span>'
-          + '<h3>' + escapeHtml(e.nom || '') + '</h3>'
-          + '<span class="je-count">' + joueurs.length + '</span></div>';
+    // Tri par points (B+A) décroissant, puis par nom
+    joueurs = joueurs.slice().sort((a,b) =>
+      ((+b.sB||0)+(+b.sA||0)) - ((+a.sB||0)+(+a.sA||0)) || (a.nom||'').localeCompare(b.nom||''));
+    html += '<div class="joueurs-equipe"><div class="je-head"><span class="je-dot" style="background:' + couleur + '"></span>'
+          + '<h3>' + escapeHtml(e.nom || '') + '</h3><span class="je-count">' + joueurs.length + '</span></div>';
     if(joueurs.length === 0){
       html += '<div class="je-vide">' + t('joueurs.equipevide') + '</div>';
     } else {
-      html += '<div class="je-liste">';
+      html += '<div class="gd-wrap"><table class="gd-table jr-table"><thead><tr>'
+            + '<th>' + t('jo.pos') + '</th><th class="cl-eq">' + t('jo.joueur') + '</th>'
+            + '<th>' + t('cl.pj') + '</th><th>' + t('jo.b') + '</th><th>' + t('jo.a') + '</th><th>' + t('cl.pts') + '</th>'
+            + (peut ? '<th></th>' : '') + '</tr></thead><tbody>';
       joueurs.forEach(j => {
-        html += '<div class="joueur-row">'
-              + '<span class="jr-pos">' + escapeHtml(j.position || '') + '</span>'
-              + '<span class="jr-nom">' + escapeHtml(j.nom || '') + '</span>';
-        if(peut){
-          html += '<span class="jr-actions">'
-                + '<button class="btn-mini" onclick="ouvrirJoueur(\'' + j.id + '\')">' + t('btn.modifier') + '</button>'
-                + '<button class="del-btn" onclick="supprimerJoueur(\'' + j.id + '\')">' + t('btn.supprimer') + '</button>'
-                + '</span>';
-        }
-        html += '</div>';
+        const pj = +j.sPj||0, bb = +j.sB||0, aa = +j.sA||0, pts = bb + aa;
+        html += '<tr><td class="jr-pos2">' + escapeHtml(j.position || '') + '</td>'
+              + '<td class="cl-eq">' + escapeHtml(j.nom || '') + '</td>'
+              + '<td>' + pj + '</td><td>' + bb + '</td><td>' + aa + '</td><td class="cl-pts">' + pts + '</td>'
+              + (peut ? ('<td><span class="jr-actions"><button class="btn-mini" onclick="ouvrirJoueur(\'' + j.id + '\')">' + t('btn.modifier') + '</button>'
+                  + '<button class="del-btn" onclick="supprimerJoueur(\'' + j.id + '\')">' + t('btn.supprimer') + '</button></span></td>') : '')
+              + '</tr>';
       });
-      html += '</div>';
+      html += '</tbody></table></div>';
     }
     html += '</div>';
   });
@@ -1476,11 +1490,17 @@ function ouvrirJoueur(id){
       document.getElementById('jo-nom').value = j.nom || '';
       document.getElementById('jo-equipe').value = j.equipeId || '';
       document.getElementById('jo-position').value = j.position || 'C';
+      document.getElementById('jo-pj').value = (j.sPj != null ? j.sPj : '');
+      document.getElementById('jo-b').value = (j.sB != null ? j.sB : '');
+      document.getElementById('jo-a').value = (j.sA != null ? j.sA : '');
       verrouillerEquipeSiDG();
     });
   } else {
     document.getElementById('jo-nom').value = '';
     document.getElementById('jo-position').value = 'C';
+    document.getElementById('jo-pj').value = '';
+    document.getElementById('jo-b').value = '';
+    document.getElementById('jo-a').value = '';
     if(dgTeamId) document.getElementById('jo-equipe').value = dgTeamId;
     verrouillerEquipeSiDG();
   }
@@ -1496,7 +1516,12 @@ function sauverJoueur(){
   if(!equipeId){ alert(t('joueur.besoinEquipe')); return; }
   // Sécurité : un DG ne peut créer/déplacer un joueur que dans SON équipe
   if(dgTeamId && !estAdmin && equipeId !== dgTeamId){ alert(t('dg.refus')); return; }
-  const donnees = { nom, equipeId, position };
+  const donnees = {
+    nom, equipeId, position,
+    sPj: parseInt(document.getElementById('jo-pj').value,10)||0,
+    sB:  parseInt(document.getElementById('jo-b').value,10)||0,
+    sA:  parseInt(document.getElementById('jo-a').value,10)||0
+  };
   let action;
   if(joueurEnEdition){
     action = db.collection('joueurs').doc(joueurEnEdition).update(donnees);  // par ID, jamais par nom
