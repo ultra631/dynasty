@@ -468,6 +468,32 @@ th.cl-eq{display:table-cell}
 .m-score{width:64px;margin-bottom:0;text-align:center}
 .chk2{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--texte);cursor:pointer;margin:4px 0 4px}
 .chk2 input{width:auto;margin:0;accent-color:var(--or)}
+
+/* ===== Calendrier ===== */
+.cal-row{display:flex;align-items:center;gap:14px;background:linear-gradient(180deg,var(--charbon),#0d0d14);
+  border:1px solid var(--bordure);border-left:3px solid var(--or);border-radius:12px;padding:13px 16px;margin-bottom:10px;flex-wrap:wrap}
+.cal-date{font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--or);letter-spacing:.04em;
+  min-width:110px;display:flex;flex-direction:column;line-height:1.1;text-transform:capitalize}
+.cal-date span{font-family:'Inter',sans-serif;font-size:11px;color:var(--texte-doux);letter-spacing:0;margin-top:2px}
+.cal-match{flex:1;font-family:'Cinzel',serif;font-size:14px;color:var(--platine);min-width:140px}
+.cal-match em{font-style:normal;color:var(--texte-doux);font-family:'Inter',sans-serif;font-size:12px;margin:0 4px}
+.cal-actions{display:flex;gap:6px}
+.cal-actions .del-btn{margin-top:0}
+
+/* ===== Gardiens (tableau) ===== */
+.gd-wrap{overflow-x:auto}
+.gd-table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:420px}
+.gd-table th,.gd-table td{padding:10px 10px;text-align:center;white-space:nowrap}
+.gd-table thead th{font-family:'Inter',sans-serif;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--texte-doux);border-bottom:1px solid var(--bordure);font-weight:600}
+.gd-table tbody tr{border-bottom:1px solid rgba(255,255,255,.04)}
+.gd-table tbody tr:last-child{border-bottom:none}
+.gd-table .cl-eq{text-align:left;color:var(--platine);font-weight:600}
+.gd-table .btn-mini{padding:5px 10px}
+.gd-nom{font-family:'Cinzel',serif;font-size:16px;color:var(--or);text-align:center;margin-bottom:12px}
+.gd-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.gd-grid input{margin-bottom:0;text-align:center;padding:10px 6px}
+@media (max-width:460px){ .gd-grid{grid-template-columns:repeat(3,1fr)} }
 </style>
 </head>
 <body>
@@ -670,12 +696,21 @@ th.cl-eq{display:table-cell}
     </div>
   </section>
   <section class="page" id="gardiens">
-    <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="gardiens.titre">Gardiens</h2><p data-i18n="gardiens.sous">Les statistiques des gardiens.</p></div>
-    <div class="empty"><div class="ico">🥅</div><b data-i18n="commun.construction">Section en construction</b><span data-i18n="gardiens.construction">On bâtit le tableau des gardiens à la prochaine étape.</span></div>
+    <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="gardiens.titre">Gardiens</h2><p data-i18n="gardiens.sous">Les stats des gardiens (position G).</p></div>
+    <div id="gardiens-list">
+      <div class="empty"><div class="ico">🥅</div><b data-i18n="gardiens.vide.t">Aucun gardien</b><span data-i18n="gardiens.vide.s">Ajoute des joueurs en position G dans Joueurs.</span></div>
+    </div>
   </section>
   <section class="page" id="calendrier">
-    <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="calendrier.titre">Calendrier</h2><p data-i18n="calendrier.sous">L'horaire des matchs.</p></div>
-    <div class="empty"><div class="ico">📅</div><b data-i18n="commun.construction">Section en construction</b><span data-i18n="calendrier.construction">On bâtit le calendrier à la prochaine étape.</span></div>
+    <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="calendrier.titre">Calendrier</h2><p data-i18n="calendrier.sous">L'horaire des matchs à venir.</p></div>
+
+    <div class="admin-only" style="margin-bottom:16px">
+      <button class="btn btn-or" onclick="ouvrirCal()" data-i18n="calendrier.ajouter">+ Ajouter au calendrier</button>
+    </div>
+
+    <div id="calendrier-list">
+      <div class="empty"><div class="ico">📅</div><b data-i18n="calendrier.vide.t">Aucun match prévu</b><span data-i18n="calendrier.vide.s">Les matchs à venir apparaîtront ici.</span></div>
+    </div>
   </section>
   <section class="page" id="resultats">
     <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="resultats.titre">Résultats</h2><p data-i18n="resultats.sous">Les résultats des matchs.</p></div>
@@ -816,6 +851,44 @@ th.cl-eq{display:table-cell}
   </div>
 </div>
 
+<!-- ============================ MODALE CALENDRIER ============================ -->
+<div class="modal" id="modale-cal">
+  <div class="modal-box" style="max-width:400px;text-align:left">
+    <h3 class="cinzel" id="cal-modal-titre" style="text-align:center" data-i18n="calendrier.modal.nouveau">Nouveau match</h3>
+    <div class="ech-cols">
+      <div><label class="champ-lbl" data-i18n="calendrier.date">Date</label><input id="cal-date" type="date"></div>
+      <div><label class="champ-lbl" data-i18n="calendrier.heure">Heure (optionnel)</label><input id="cal-heure" type="time"></div>
+    </div>
+    <label class="champ-lbl" data-i18n="match.dom">Équipe à domicile</label>
+    <select id="cal-dom"></select>
+    <label class="champ-lbl" data-i18n="match.ext">Équipe visiteur</label>
+    <select id="cal-ext"></select>
+    <div class="cta-row" style="margin-top:12px">
+      <button class="btn btn-or" onclick="sauverCal()" data-i18n="btn.enregistrer">Enregistrer</button>
+      <button class="btn btn-ghost" onclick="fermerCal()" data-i18n="commun.annuler">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================ MODALE STATS GARDIEN ============================ -->
+<div class="modal" id="modale-gardien">
+  <div class="modal-box" style="max-width:380px;text-align:left">
+    <h3 class="cinzel" id="gd-modal-titre" style="text-align:center" data-i18n="gardien.modal.titre">Stats du gardien</h3>
+    <div class="gd-nom" id="gd-nom"></div>
+    <div class="gd-grid">
+      <div><label class="champ-lbl" data-i18n="gd.pj">PJ</label><input id="gd-pj" type="number" min="0" placeholder="0"></div>
+      <div><label class="champ-lbl" data-i18n="gd.v">V</label><input id="gd-v" type="number" min="0" placeholder="0"></div>
+      <div><label class="champ-lbl" data-i18n="gd.d">D</label><input id="gd-d" type="number" min="0" placeholder="0"></div>
+      <div><label class="champ-lbl" data-i18n="gd.bl">BL</label><input id="gd-bl" type="number" min="0" placeholder="0"></div>
+      <div><label class="champ-lbl" data-i18n="gd.bc">BC</label><input id="gd-bc" type="number" min="0" placeholder="0"></div>
+    </div>
+    <div class="cta-row" style="margin-top:12px">
+      <button class="btn btn-or" onclick="sauverGardien()" data-i18n="btn.enregistrer">Enregistrer</button>
+      <button class="btn btn-ghost" onclick="fermerGardien()" data-i18n="commun.annuler">Annuler</button>
+    </div>
+  </div>
+</div>
+
 <!-- ============================ FIREBASE (SDK compat) ============================ -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -870,8 +943,8 @@ const DICT = {
     'reseaux.titre':'Réseaux sociaux','reseaux.sous':'Suis la ligue partout.',
     'classements.titre':'Classements','classements.sous':'Le classement, calculé automatiquement.','classements.construction':'On bâtit le tableau des classements à la prochaine étape.',
     'joueurs.titre':'Joueurs','joueurs.sous':'Les joueurs, par équipe.','joueurs.construction':'On bâtit le tableau des joueurs à la prochaine étape.',
-    'gardiens.titre':'Gardiens','gardiens.sous':'Les statistiques des gardiens.','gardiens.construction':'On bâtit le tableau des gardiens à la prochaine étape.',
-    'calendrier.titre':'Calendrier','calendrier.sous':"L'horaire des matchs.",'calendrier.construction':'On bâtit le calendrier à la prochaine étape.',
+    'gardiens.titre':'Gardiens','gardiens.sous':'Les stats des gardiens (position G).','gardiens.construction':'On bâtit le tableau des gardiens à la prochaine étape.',
+    'calendrier.titre':'Calendrier','calendrier.sous':"L'horaire des matchs à venir.",'calendrier.construction':'On bâtit le calendrier à la prochaine étape.',
     'resultats.titre':'Résultats','resultats.sous':'Les résultats des matchs.','resultats.construction':'On bâtit les résultats à la prochaine étape.',
     'commun.construction':'Section en construction',
     'equipes.titre':'Équipes','equipes.sous':'Les équipes de la ligue DYNASTY.','equipes.ajouter':'+ Ajouter une équipe',
@@ -916,7 +989,12 @@ const DICT = {
     'match.modal.nouveau':'Nouveau résultat','match.modal.modifier':'Modifier le résultat',
     'match.dom':'Équipe à domicile','match.ext':'Équipe visiteur','match.pro':'Prolongation / fusillade',
     'match.memeEquipe':'Choisis deux équipes différentes.','match.besoinScore':'Entre les deux scores.',
-    'match.egalite':'Un match a toujours un gagnant (utilise la prolongation).','match.confirmSuppr':'Supprimer ce résultat ?'
+    'match.egalite':'Un match a toujours un gagnant (utilise la prolongation).','match.confirmSuppr':'Supprimer ce résultat ?',
+    'calendrier.ajouter':'+ Ajouter au calendrier','calendrier.vide.t':'Aucun match prévu','calendrier.vide.s':'Les matchs à venir apparaîtront ici.',
+    'calendrier.date':'Date','calendrier.heure':'Heure (optionnel)','calendrier.modal.nouveau':'Nouveau match','calendrier.modal.modifier':'Modifier le match',
+    'calendrier.besoinDate':'Choisis une date.','calendrier.confirmSuppr':'Supprimer ce match du calendrier ?','calendrier.vs':'vs',
+    'gardiens.vide.t':'Aucun gardien','gardiens.vide.s':'Ajoute des joueurs en position G dans Joueurs.',
+    'gd.pj':'PJ','gd.v':'V','gd.d':'D','gd.bl':'BL','gd.bc':'BC','gd.moy':'MOY','gardien.modal.titre':'Stats du gardien'
   },
   en: {
     'nav.accueil':'Home','nav.annonces':'News','nav.reglements':'Rules',
@@ -947,8 +1025,8 @@ const DICT = {
     'reseaux.titre':'Social media','reseaux.sous':'Follow the league everywhere.',
     'classements.titre':'Standings','classements.sous':'Standings, calculated automatically.','classements.construction':"We're building the standings table in the next step.",
     'joueurs.titre':'Players','joueurs.sous':'Players, by team.','joueurs.construction':"We're building the players table in the next step.",
-    'gardiens.titre':'Goalies','gardiens.sous':'Goalie statistics.','gardiens.construction':"We're building the goalies table in the next step.",
-    'calendrier.titre':'Schedule','calendrier.sous':'The match schedule.','calendrier.construction':"We're building the schedule in the next step.",
+    'gardiens.titre':'Goalies','gardiens.sous':'Goalie stats (G position).','gardiens.construction':"We're building the goalies table in the next step.",
+    'calendrier.titre':'Schedule','calendrier.sous':'Upcoming match schedule.','calendrier.construction':"We're building the schedule in the next step.",
     'resultats.titre':'Results','resultats.sous':'Match results.','resultats.construction':"We're building the results in the next step.",
     'commun.construction':'Section under construction',
     'equipes.titre':'Teams','equipes.sous':'The teams of the DYNASTY league.','equipes.ajouter':'+ Add a team',
@@ -993,7 +1071,12 @@ const DICT = {
     'match.modal.nouveau':'New result','match.modal.modifier':'Edit result',
     'match.dom':'Home team','match.ext':'Away team','match.pro':'Overtime / shootout',
     'match.memeEquipe':'Pick two different teams.','match.besoinScore':'Enter both scores.',
-    'match.egalite':'A match always has a winner (use overtime).','match.confirmSuppr':'Delete this result?'
+    'match.egalite':'A match always has a winner (use overtime).','match.confirmSuppr':'Delete this result?',
+    'calendrier.ajouter':'+ Add to schedule','calendrier.vide.t':'No matches scheduled','calendrier.vide.s':'Upcoming matches will appear here.',
+    'calendrier.date':'Date','calendrier.heure':'Time (optional)','calendrier.modal.nouveau':'New match','calendrier.modal.modifier':'Edit match',
+    'calendrier.besoinDate':'Pick a date.','calendrier.confirmSuppr':'Remove this match from the schedule?','calendrier.vs':'vs',
+    'gardiens.vide.t':'No goalies yet','gardiens.vide.s':'Add players in the G position under Players.',
+    'gd.pj':'GP','gd.v':'W','gd.d':'L','gd.bl':'SO','gd.bc':'GA','gd.moy':'GAA','gardien.modal.titre':'Goalie stats'
   }
 };
 let langue = localStorage.getItem('dynasty_langue') || 'fr';
@@ -1066,6 +1149,8 @@ function appliquerRoles(){
   if(typeof rendreJoueurs === 'function') rendreJoueurs();   // (re)affiche les boutons selon le rôle
   if(typeof rendreTrades === 'function') rendreTrades();
   if(typeof rendreResultats === 'function') rendreResultats();
+  if(typeof rendreCalendrier === 'function') rendreCalendrier();
+  if(typeof rendreGardiens === 'function') rendreGardiens();
 }
 
 function deconnexion(){
@@ -1308,6 +1393,7 @@ function escapeHtml(s){
 function initJoueurs(){
   db.collection('joueurs').orderBy('nom').onSnapshot(snap => {
     snapJoueurs = snap; rendreJoueurs();
+    if(typeof rendreGardiens === 'function') rendreGardiens();
   }, err => {
     const c = document.getElementById('joueurs-list');
     if(c) c.innerHTML = videHTML('⚠️', t('err.connexion'), err.message);
@@ -1755,8 +1841,142 @@ function supprimerMatch(id){
   }
 }
 
+/* =========================================================
+   11) CALENDRIER (matchs à venir)
+   ========================================================= */
+let snapCal = null, calEnEdition = null;
+function initCalendrier(){
+  db.collection('calendrier').orderBy('date','asc').onSnapshot(snap => {
+    snapCal = snap; rendreCalendrier();
+  }, err => {
+    const c = document.getElementById('calendrier-list');
+    if(c) c.innerHTML = videHTML('⚠️', t('err.connexion'), err.message);
+  });
+}
+function formaterDateCal(s){
+  if(!s) return '';
+  const d = new Date(s + 'T00:00:00');
+  if(isNaN(d.getTime())) return s;
+  return d.toLocaleDateString(langue === 'en' ? 'en-CA' : 'fr-CA', {weekday:'short', day:'numeric', month:'short'});
+}
+function rendreCalendrier(){
+  const cont = document.getElementById('calendrier-list');
+  if(!cont) return;
+  if(!snapCal || snapCal.empty){ cont.innerHTML = videHTML('📅', t('calendrier.vide.t'), t('calendrier.vide.s')); return; }
+  let html = '';
+  snapCal.forEach(d => {
+    const m = Object.assign({id:d.id}, d.data());
+    html += '<div class="cal-row">'
+      + '<div class="cal-date">' + escapeHtml(formaterDateCal(m.date)) + (m.heure ? '<span>' + escapeHtml(m.heure) + '</span>' : '') + '</div>'
+      + '<div class="cal-match"><b>' + escapeHtml(m.domNom || '') + '</b> <em>' + t('calendrier.vs') + '</em> <b>' + escapeHtml(m.extNom || '') + '</b></div>';
+    if(estAdmin){
+      html += '<div class="cal-actions"><button class="btn-mini" onclick="ouvrirCal(\'' + m.id + '\')">' + t('btn.modifier') + '</button>'
+            + '<button class="del-btn" onclick="supprimerCal(\'' + m.id + '\')">' + t('btn.supprimer') + '</button></div>';
+    }
+    html += '</div>';
+  });
+  cont.innerHTML = html;
+}
+function remplirSelectCal(){
+  ['cal-dom','cal-ext'].forEach(id => {
+    const sel = document.getElementById(id); sel.innerHTML = '';
+    if(snapEquipes){ snapEquipes.forEach(d => { const o = document.createElement('option'); o.value = d.id; o.textContent = d.data().nom || ''; sel.appendChild(o); }); }
+  });
+}
+function ouvrirCal(id){
+  calEnEdition = id || null; remplirSelectCal();
+  document.getElementById('cal-modal-titre').textContent = id ? t('calendrier.modal.modifier') : t('calendrier.modal.nouveau');
+  if(id){
+    db.collection('calendrier').doc(id).get().then(doc => {
+      const m = doc.data() || {};
+      document.getElementById('cal-date').value = m.date || '';
+      document.getElementById('cal-heure').value = m.heure || '';
+      document.getElementById('cal-dom').value = m.domId || '';
+      document.getElementById('cal-ext').value = m.extId || '';
+    });
+  } else {
+    document.getElementById('cal-date').value = ''; document.getElementById('cal-heure').value = '';
+  }
+  document.getElementById('modale-cal').classList.add('open');
+}
+function fermerCal(){ document.getElementById('modale-cal').classList.remove('open'); }
+function sauverCal(){
+  const date = document.getElementById('cal-date').value;
+  const heure = document.getElementById('cal-heure').value;
+  const domId = document.getElementById('cal-dom').value, extId = document.getElementById('cal-ext').value;
+  if(!date){ alert(t('calendrier.besoinDate')); return; }
+  if(!domId || !extId || domId === extId){ alert(t('match.memeEquipe')); return; }
+  const donnees = { date, heure, domId, domNom:(trouverEquipeParId(domId)||{}).nom||'', extId, extNom:(trouverEquipeParId(extId)||{}).nom||'' };
+  let action;
+  if(calEnEdition){ action = db.collection('calendrier').doc(calEnEdition).update(donnees); }
+  else { donnees.createdAt = firebase.firestore.FieldValue.serverTimestamp(); action = db.collection('calendrier').add(donnees); }
+  action.then(() => fermerCal()).catch(e => alert(t('commun.erreur') + e.message));
+}
+function supprimerCal(id){
+  if(confirm(t('calendrier.confirmSuppr'))){
+    db.collection('calendrier').doc(id).delete().catch(e => alert(t('commun.erreur') + e.message));
+  }
+}
+
+/* =========================================================
+   12) GARDIENS (joueurs en position G ; stats éditables par admin ou DG)
+   Moyenne (MOY) = buts contre / parties jouées
+   ========================================================= */
+let gardienEnEdition = null;
+function rendreGardiens(){
+  const cont = document.getElementById('gardiens-list');
+  if(!cont) return;
+  if(!snapEquipes || snapEquipes.empty){ cont.innerHTML = videHTML('🥅', t('gardiens.vide.t'), t('gardiens.vide.s')); return; }
+  const parEquipe = {}; let total = 0;
+  if(snapJoueurs){
+    snapJoueurs.forEach(d => { const j = d.data(); if((j.position || '') === 'G'){ (parEquipe[j.equipeId] = parEquipe[j.equipeId] || []).push(Object.assign({id:d.id}, j)); total++; } });
+  }
+  if(total === 0){ cont.innerHTML = videHTML('🥅', t('gardiens.vide.t'), t('gardiens.vide.s')); return; }
+  let html = '';
+  snapEquipes.forEach(docE => {
+    const e = docE.data(); const eid = docE.id; const gs = parEquipe[eid] || [];
+    if(gs.length === 0) return;
+    const couleur = e.couleur || '#D4AF37'; const peut = peutEditerEquipe(eid);
+    html += '<div class="joueurs-equipe"><div class="je-head"><span class="je-dot" style="background:' + couleur + '"></span><h3>' + escapeHtml(e.nom || '') + '</h3></div>';
+    html += '<div class="gd-wrap"><table class="gd-table"><thead><tr><th class="cl-eq">' + t('cl.equipe') + '</th><th>' + t('gd.pj') + '</th><th>' + t('gd.v') + '</th><th>' + t('gd.d') + '</th><th>' + t('gd.bl') + '</th><th>' + t('gd.moy') + '</th>' + (peut ? '<th></th>' : '') + '</tr></thead><tbody>';
+    gs.forEach(g => {
+      const pj = +g.gPj||0, v = +g.gV||0, dd = +g.gD||0, bl = +g.gBl||0, bc = +g.gBc||0;
+      const moy = pj > 0 ? (bc/pj).toFixed(2) : '—';
+      html += '<tr><td class="cl-eq">' + escapeHtml(g.nom || '') + '</td><td>' + pj + '</td><td>' + v + '</td><td>' + dd + '</td><td>' + bl + '</td><td class="cl-pts">' + moy + '</td>'
+        + (peut ? ('<td><button class="btn-mini" onclick="ouvrirGardien(\'' + g.id + '\')">' + t('btn.modifier') + '</button></td>') : '') + '</tr>';
+    });
+    html += '</tbody></table></div></div>';
+  });
+  cont.innerHTML = html;
+}
+function ouvrirGardien(id){
+  gardienEnEdition = id;
+  db.collection('joueurs').doc(id).get().then(doc => {
+    const g = doc.data() || {};
+    document.getElementById('gd-nom').textContent = g.nom || '';
+    document.getElementById('gd-pj').value = (g.gPj != null ? g.gPj : '');
+    document.getElementById('gd-v').value = (g.gV != null ? g.gV : '');
+    document.getElementById('gd-d').value = (g.gD != null ? g.gD : '');
+    document.getElementById('gd-bl').value = (g.gBl != null ? g.gBl : '');
+    document.getElementById('gd-bc').value = (g.gBc != null ? g.gBc : '');
+  });
+  document.getElementById('modale-gardien').classList.add('open');
+}
+function fermerGardien(){ document.getElementById('modale-gardien').classList.remove('open'); }
+function sauverGardien(){
+  if(!gardienEnEdition) return;
+  const maj = {
+    gPj: parseInt(document.getElementById('gd-pj').value,10)||0,
+    gV:  parseInt(document.getElementById('gd-v').value,10)||0,
+    gD:  parseInt(document.getElementById('gd-d').value,10)||0,
+    gBl: parseInt(document.getElementById('gd-bl').value,10)||0,
+    gBc: parseInt(document.getElementById('gd-bc').value,10)||0
+  };
+  db.collection('joueurs').doc(gardienEnEdition).update(maj).then(() => fermerGardien()).catch(e => alert(t('commun.erreur') + e.message));
+}
+
 /* Redessine les listes dynamiques (au changement de langue / rôle) */
-function rafraichirDynamique(){ rendreAnnonces(); rendreReglements(); rendreEquipes(); rendreJoueurs(); rendreTrades(); rendreResultats(); rendreClassements(); }
+function rafraichirDynamique(){ rendreAnnonces(); rendreReglements(); rendreEquipes(); rendreJoueurs(); rendreTrades(); rendreResultats(); rendreClassements(); rendreCalendrier(); rendreGardiens(); }
 
 /* =========================================================
    6) DÉMARRAGE
@@ -1774,6 +1994,7 @@ function demarrer(){
   initJoueurs();
   initTrades();
   initMatchs();
+  initCalendrier();
 }
 demarrer();
 
