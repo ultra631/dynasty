@@ -435,6 +435,39 @@ body.is-admin .peut-editer, body.is-dg .peut-editer{display:block}
 .chk:hover{background:rgba(212,175,55,.08)}
 .chk input{width:auto;margin:0;accent-color:var(--or)}
 @media (max-width:520px){ .tc-body{grid-template-columns:1fr} }
+
+/* ===== Classement (tableau) ===== */
+.cl-wrap{overflow-x:auto;border:1px solid var(--bordure);border-radius:14px;background:linear-gradient(180deg,var(--charbon),#0d0d14)}
+.cl-table{width:100%;border-collapse:collapse;min-width:540px;font-size:13.5px}
+.cl-table th,.cl-table td{padding:11px 10px;text-align:center;white-space:nowrap}
+.cl-table thead th{font-family:'Inter',sans-serif;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--texte-doux);border-bottom:1px solid var(--bordure);font-weight:600}
+.cl-table tbody tr{border-bottom:1px solid rgba(255,255,255,.04)}
+.cl-table tbody tr:last-child{border-bottom:none}
+.cl-table tbody tr:nth-child(odd){background:rgba(255,255,255,.015)}
+.cl-rang{font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--or);width:36px}
+.cl-eq{text-align:left;color:var(--platine);font-weight:600;display:flex;align-items:center;gap:8px}
+th.cl-eq{display:table-cell}
+.cl-pts{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--or);font-weight:400}
+
+/* ===== Résultats (matchs) ===== */
+.match-row{display:flex;align-items:center;gap:10px;background:linear-gradient(180deg,var(--charbon),#0d0d14);
+  border:1px solid var(--bordure);border-radius:12px;padding:12px 14px;margin-bottom:10px;flex-wrap:wrap}
+.mr-equipe{flex:1;min-width:80px;font-family:'Cinzel',serif;font-size:14px;color:var(--texte-doux);text-align:right}
+.mr-equipe.ext{text-align:left}
+.mr-equipe.gagnant{color:var(--platine)}
+.mr-score{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--platine);letter-spacing:.04em;
+  display:flex;align-items:center;gap:6px;white-space:nowrap}
+.mr-score span{color:var(--texte-doux)}
+.mr-score em{font-family:'Inter',sans-serif;font-style:normal;font-size:10px;color:var(--or);
+  border:1px solid var(--bordure);border-radius:5px;padding:1px 5px;margin-left:4px}
+.mr-actions{display:flex;gap:6px;width:100%;justify-content:flex-end;margin-top:4px}
+.mr-actions .del-btn{margin-top:0}
+.m-row{display:flex;gap:8px;margin-bottom:10px}
+.m-row select{flex:1;margin-bottom:0}
+.m-score{width:64px;margin-bottom:0;text-align:center}
+.chk2{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--texte);cursor:pointer;margin:4px 0 4px}
+.chk2 input{width:auto;margin:0;accent-color:var(--or)}
 </style>
 </head>
 <body>
@@ -613,8 +646,10 @@ body.is-admin .peut-editer, body.is-dg .peut-editer{display:block}
 
   <!-- ====================== STATS (échafaudage — étape suivante) ====================== -->
   <section class="page" id="classements">
-    <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="classements.titre">Classements</h2><p data-i18n="classements.sous">Le classement des équipes.</p></div>
-    <div class="empty"><div class="ico">🏆</div><b data-i18n="commun.construction">Section en construction</b><span data-i18n="classements.construction">On bâtit le tableau des classements à la prochaine étape.</span></div>
+    <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="classements.titre">Classements</h2><p data-i18n="classements.sous">Le classement, calculé automatiquement.</p></div>
+    <div id="classements-list">
+      <div class="empty"><div class="ico">🏆</div><b data-i18n="classements.vide.t">Aucune équipe</b><span data-i18n="classements.vide.s">Ajoute des équipes pour voir le classement.</span></div>
+    </div>
   </section>
   <section class="page" id="joueurs">
     <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="joueurs.titre">Joueurs</h2><p data-i18n="joueurs.sous">Les joueurs, par équipe.</p></div>
@@ -643,8 +678,15 @@ body.is-admin .peut-editer, body.is-dg .peut-editer{display:block}
     <div class="empty"><div class="ico">📅</div><b data-i18n="commun.construction">Section en construction</b><span data-i18n="calendrier.construction">On bâtit le calendrier à la prochaine étape.</span></div>
   </section>
   <section class="page" id="resultats">
-    <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="resultats.titre">Résultats</h2><p data-i18n="resultats.sous">Les résultats des matchs joués.</p></div>
-    <div class="empty"><div class="ico">📊</div><b data-i18n="commun.construction">Section en construction</b><span data-i18n="resultats.construction">On bâtit les résultats à la prochaine étape.</span></div>
+    <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="resultats.titre">Résultats</h2><p data-i18n="resultats.sous">Les résultats des matchs.</p></div>
+
+    <div class="admin-only" style="margin-bottom:16px">
+      <button class="btn btn-or" onclick="ouvrirMatch()" data-i18n="resultats.ajouter">+ Ajouter un résultat</button>
+    </div>
+
+    <div id="resultats-list">
+      <div class="empty"><div class="ico">📊</div><b data-i18n="resultats.vide.t">Aucun résultat</b><span data-i18n="resultats.vide.s">Les résultats apparaîtront ici.</span></div>
+    </div>
   </section>
   <section class="page" id="equipes">
     <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="equipes.titre">Équipes</h2><p data-i18n="equipes.sous">Les équipes de la ligue DYNASTY.</p></div>
@@ -758,6 +800,22 @@ body.is-admin .peut-editer, body.is-dg .peut-editer{display:block}
   </div>
 </div>
 
+<!-- ============================ MODALE RÉSULTAT DE MATCH ============================ -->
+<div class="modal" id="modale-match">
+  <div class="modal-box" style="max-width:400px;text-align:left">
+    <h3 class="cinzel" id="m-modal-titre" style="text-align:center" data-i18n="match.modal.nouveau">Nouveau résultat</h3>
+    <label class="champ-lbl" data-i18n="match.dom">Équipe à domicile</label>
+    <div class="m-row"><select id="m-dom"></select><input id="m-butsdom" type="number" min="0" class="m-score" placeholder="0"></div>
+    <label class="champ-lbl" data-i18n="match.ext">Équipe visiteur</label>
+    <div class="m-row"><select id="m-ext"></select><input id="m-butsext" type="number" min="0" class="m-score" placeholder="0"></div>
+    <label class="chk2"><input type="checkbox" id="m-pro"><span data-i18n="match.pro">Prolongation / fusillade</span></label>
+    <div class="cta-row" style="margin-top:12px">
+      <button class="btn btn-or" onclick="sauverMatch()" data-i18n="btn.enregistrer">Enregistrer</button>
+      <button class="btn btn-ghost" onclick="fermerMatch()" data-i18n="commun.annuler">Annuler</button>
+    </div>
+  </div>
+</div>
+
 <!-- ============================ FIREBASE (SDK compat) ============================ -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -810,11 +868,11 @@ const DICT = {
     'inscriptions.commenttitre':"Comment s'inscrire",'inscriptions.commenttexte':"Remplis le formulaire ci-dessous pour t'inscrire ou inscrire ton équipe. (Tu pourras mettre le lien de ton formulaire Google ici.)",
     'inscriptions.bouton':"Formulaire d'inscription",
     'reseaux.titre':'Réseaux sociaux','reseaux.sous':'Suis la ligue partout.',
-    'classements.titre':'Classements','classements.sous':'Le classement des équipes.','classements.construction':'On bâtit le tableau des classements à la prochaine étape.',
+    'classements.titre':'Classements','classements.sous':'Le classement, calculé automatiquement.','classements.construction':'On bâtit le tableau des classements à la prochaine étape.',
     'joueurs.titre':'Joueurs','joueurs.sous':'Les joueurs, par équipe.','joueurs.construction':'On bâtit le tableau des joueurs à la prochaine étape.',
     'gardiens.titre':'Gardiens','gardiens.sous':'Les statistiques des gardiens.','gardiens.construction':'On bâtit le tableau des gardiens à la prochaine étape.',
     'calendrier.titre':'Calendrier','calendrier.sous':"L'horaire des matchs.",'calendrier.construction':'On bâtit le calendrier à la prochaine étape.',
-    'resultats.titre':'Résultats','resultats.sous':'Les résultats des matchs joués.','resultats.construction':'On bâtit les résultats à la prochaine étape.',
+    'resultats.titre':'Résultats','resultats.sous':'Les résultats des matchs.','resultats.construction':'On bâtit les résultats à la prochaine étape.',
     'commun.construction':'Section en construction',
     'equipes.titre':'Équipes','equipes.sous':'Les équipes de la ligue DYNASTY.','equipes.ajouter':'+ Ajouter une équipe',
     'equipes.vide.t':'Aucune équipe','equipes.vide.s':'Les équipes apparaîtront ici.',
@@ -851,7 +909,14 @@ const DICT = {
     'echanges.confirmRefus':'Refuser cet échange ?','echanges.confirmAnnul':'Retirer cette proposition ?',
     'echanges.confirmApprouve':"Approuver — les joueurs vont changer d'équipe. Continuer ?",
     'btn.accepter':'Accepter','btn.refuser':'Refuser','btn.contre':'Contre-offre','btn.approuver':'Approuver',
-    'statut.propose':'Proposé','statut.accepte_dg':'Accepté — attente admin','statut.approuve':'Approuvé ✅','statut.refuse':'Refusé','statut.contre':'Contre-offre faite'
+    'statut.propose':'Proposé','statut.accepte_dg':'Accepté — attente admin','statut.approuve':'Approuvé ✅','statut.refuse':'Refusé','statut.contre':'Contre-offre faite',
+    'classements.vide.t':'Aucune équipe','classements.vide.s':'Ajoute des équipes pour voir le classement.',
+    'cl.equipe':'Équipe','cl.pj':'PJ','cl.v':'V','cl.d':'D','cl.dp':'DP','cl.bp':'BP','cl.bc':'BC','cl.diff':'+/-','cl.pts':'PTS','cl.proAbbr':'PROL',
+    'resultats.ajouter':'+ Ajouter un résultat','resultats.vide.t':'Aucun résultat','resultats.vide.s':'Les résultats apparaîtront ici.',
+    'match.modal.nouveau':'Nouveau résultat','match.modal.modifier':'Modifier le résultat',
+    'match.dom':'Équipe à domicile','match.ext':'Équipe visiteur','match.pro':'Prolongation / fusillade',
+    'match.memeEquipe':'Choisis deux équipes différentes.','match.besoinScore':'Entre les deux scores.',
+    'match.egalite':'Un match a toujours un gagnant (utilise la prolongation).','match.confirmSuppr':'Supprimer ce résultat ?'
   },
   en: {
     'nav.accueil':'Home','nav.annonces':'News','nav.reglements':'Rules',
@@ -880,11 +945,11 @@ const DICT = {
     'inscriptions.commenttitre':'How to sign up','inscriptions.commenttexte':"Fill out the form below to sign up yourself or your team. (You'll be able to put your Google Form link here.)",
     'inscriptions.bouton':'Sign-up form',
     'reseaux.titre':'Social media','reseaux.sous':'Follow the league everywhere.',
-    'classements.titre':'Standings','classements.sous':'The team standings.','classements.construction':"We're building the standings table in the next step.",
+    'classements.titre':'Standings','classements.sous':'Standings, calculated automatically.','classements.construction':"We're building the standings table in the next step.",
     'joueurs.titre':'Players','joueurs.sous':'Players, by team.','joueurs.construction':"We're building the players table in the next step.",
     'gardiens.titre':'Goalies','gardiens.sous':'Goalie statistics.','gardiens.construction':"We're building the goalies table in the next step.",
     'calendrier.titre':'Schedule','calendrier.sous':'The match schedule.','calendrier.construction':"We're building the schedule in the next step.",
-    'resultats.titre':'Results','resultats.sous':'Results of played matches.','resultats.construction':"We're building the results in the next step.",
+    'resultats.titre':'Results','resultats.sous':'Match results.','resultats.construction':"We're building the results in the next step.",
     'commun.construction':'Section under construction',
     'equipes.titre':'Teams','equipes.sous':'The teams of the DYNASTY league.','equipes.ajouter':'+ Add a team',
     'equipes.vide.t':'No teams yet','equipes.vide.s':'Teams will appear here.',
@@ -921,7 +986,14 @@ const DICT = {
     'echanges.confirmRefus':'Decline this trade?','echanges.confirmAnnul':'Withdraw this proposal?',
     'echanges.confirmApprouve':'Approve — players will switch teams. Continue?',
     'btn.accepter':'Accept','btn.refuser':'Decline','btn.contre':'Counter','btn.approuver':'Approve',
-    'statut.propose':'Proposed','statut.accepte_dg':'Accepted — awaiting admin','statut.approuve':'Approved ✅','statut.refuse':'Declined','statut.contre':'Countered'
+    'statut.propose':'Proposed','statut.accepte_dg':'Accepted — awaiting admin','statut.approuve':'Approved ✅','statut.refuse':'Declined','statut.contre':'Countered',
+    'classements.vide.t':'No teams yet','classements.vide.s':'Add teams to see the standings.',
+    'cl.equipe':'Team','cl.pj':'GP','cl.v':'W','cl.d':'L','cl.dp':'OTL','cl.bp':'GF','cl.bc':'GA','cl.diff':'+/-','cl.pts':'PTS','cl.proAbbr':'OT',
+    'resultats.ajouter':'+ Add a result','resultats.vide.t':'No results yet','resultats.vide.s':'Results will appear here.',
+    'match.modal.nouveau':'New result','match.modal.modifier':'Edit result',
+    'match.dom':'Home team','match.ext':'Away team','match.pro':'Overtime / shootout',
+    'match.memeEquipe':'Pick two different teams.','match.besoinScore':'Enter both scores.',
+    'match.egalite':'A match always has a winner (use overtime).','match.confirmSuppr':'Delete this result?'
   }
 };
 let langue = localStorage.getItem('dynasty_langue') || 'fr';
@@ -993,6 +1065,7 @@ function appliquerRoles(){
   if(btn) btn.title = (estAdmin || dgTeamId) ? "Connecté — déconnexion" : "Connexion (admin / DG)";
   if(typeof rendreJoueurs === 'function') rendreJoueurs();   // (re)affiche les boutons selon le rôle
   if(typeof rendreTrades === 'function') rendreTrades();
+  if(typeof rendreResultats === 'function') rendreResultats();
 }
 
 function deconnexion(){
@@ -1134,6 +1207,7 @@ function initEquipes(){
   db.collection('equipes').orderBy('nom').onSnapshot(snap => {
     snapEquipes = snap; rendreEquipes();
     if(typeof appliquerRoles === 'function') appliquerRoles();  // rafraîchit bannière DG + droits joueurs
+    if(typeof rendreClassements === 'function') rendreClassements();  // le classement dépend des équipes
   }, err => {
     document.getElementById('equipes-grid').innerHTML = videHTML('⚠️', t('err.connexion'), err.message);
   });
@@ -1541,8 +1615,148 @@ function approuverEchange(id){
   }).catch(e => alert(t('commun.erreur') + e.message));
 }
 
+/* =========================================================
+   10) RÉSULTATS + CLASSEMENT AUTOMATIQUE
+   Système de points : Victoire = 2, Défaite en prolongation = 1, Défaite = 0
+   ========================================================= */
+let snapMatchs = null;
+let matchEnEdition = null;
+
+function initMatchs(){
+  db.collection('matchs').orderBy('createdAt','desc').onSnapshot(snap => {
+    snapMatchs = snap; rendreResultats(); rendreClassements();
+  }, err => {
+    const c = document.getElementById('resultats-list');
+    if(c) c.innerHTML = videHTML('⚠️', t('err.connexion'), err.message);
+  });
+}
+
+/* ----- Liste des résultats ----- */
+function rendreResultats(){
+  const cont = document.getElementById('resultats-list');
+  if(!cont) return;
+  if(!snapMatchs || snapMatchs.empty){
+    cont.innerHTML = videHTML('📊', t('resultats.vide.t'), t('resultats.vide.s')); return;
+  }
+  let html = '';
+  snapMatchs.forEach(d => {
+    const m = Object.assign({id:d.id}, d.data());
+    const bd = +m.butsDom, be = +m.butsExt;
+    const domGagne = bd > be;
+    html += '<div class="match-row">'
+      + '<div class="mr-equipe' + (domGagne ? ' gagnant' : '') + '">' + escapeHtml(m.domNom || '') + '</div>'
+      + '<div class="mr-score">' + bd + ' <span>-</span> ' + be + (m.prolongation ? ' <em>' + t('cl.proAbbr') + '</em>' : '') + '</div>'
+      + '<div class="mr-equipe ext' + (!domGagne ? ' gagnant' : '') + '">' + escapeHtml(m.extNom || '') + '</div>';
+    if(estAdmin){
+      html += '<div class="mr-actions">'
+        + '<button class="btn-mini" onclick="ouvrirMatch(\'' + m.id + '\')">' + t('btn.modifier') + '</button>'
+        + '<button class="del-btn" onclick="supprimerMatch(\'' + m.id + '\')">' + t('btn.supprimer') + '</button></div>';
+    }
+    html += '</div>';
+  });
+  cont.innerHTML = html;
+}
+
+/* ----- Classement calculé à partir des résultats ----- */
+function rendreClassements(){
+  const cont = document.getElementById('classements-list');
+  if(!cont) return;
+  if(!snapEquipes || snapEquipes.empty){
+    cont.innerHTML = videHTML('🏆', t('classements.vide.t'), t('classements.vide.s')); return;
+  }
+  // Initialise une fiche par équipe (même celles à 0 match)
+  const st = {};
+  snapEquipes.forEach(d => {
+    const e = d.data();
+    st[d.id] = { id:d.id, nom:e.nom || '', couleur:e.couleur || '#D4AF37', pj:0, v:0, dd:0, dp:0, bp:0, bc:0 };
+  });
+  // Parcourt les matchs
+  if(snapMatchs){
+    snapMatchs.forEach(d => {
+      const m = d.data();
+      const A = st[m.domId], B = st[m.extId];
+      if(!A || !B) return;                 // une équipe a été supprimée
+      const bd = +m.butsDom, be = +m.butsExt;
+      if(isNaN(bd) || isNaN(be) || bd === be) return;
+      A.pj++; B.pj++; A.bp += bd; A.bc += be; B.bp += be; B.bc += bd;
+      if(bd > be){ A.v++; if(m.prolongation) B.dp++; else B.dd++; }
+      else { B.v++; if(m.prolongation) A.dp++; else A.dd++; }
+    });
+  }
+  // Calcule points + différentiel, puis trie
+  const lignes = Object.keys(st).map(k => { const s = st[k]; s.pts = s.v*2 + s.dp; s.diff = s.bp - s.bc; return s; });
+  lignes.sort((a,b) => b.pts - a.pts || b.diff - a.diff || b.bp - a.bp || a.nom.localeCompare(b.nom));
+
+  let rows = '';
+  lignes.forEach((s, i) => {
+    rows += '<tr>'
+      + '<td class="cl-rang">' + (i+1) + '</td>'
+      + '<td class="cl-eq"><span class="je-dot" style="background:' + s.couleur + '"></span>' + escapeHtml(s.nom) + '</td>'
+      + '<td>' + s.pj + '</td><td>' + s.v + '</td><td>' + s.dd + '</td><td>' + s.dp + '</td>'
+      + '<td>' + s.bp + '</td><td>' + s.bc + '</td><td>' + (s.diff > 0 ? '+' : '') + s.diff + '</td>'
+      + '<td class="cl-pts">' + s.pts + '</td></tr>';
+  });
+  cont.innerHTML = '<div class="cl-wrap"><table class="cl-table"><thead><tr>'
+    + '<th>#</th><th class="cl-eq">' + t('cl.equipe') + '</th><th>' + t('cl.pj') + '</th><th>' + t('cl.v') + '</th>'
+    + '<th>' + t('cl.d') + '</th><th>' + t('cl.dp') + '</th><th>' + t('cl.bp') + '</th><th>' + t('cl.bc') + '</th>'
+    + '<th>' + t('cl.diff') + '</th><th>' + t('cl.pts') + '</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+}
+
+/* ----- Entrée / modification d'un résultat (admin) ----- */
+function remplirSelectMatch(){
+  ['m-dom','m-ext'].forEach(id => {
+    const sel = document.getElementById(id); sel.innerHTML = '';
+    if(snapEquipes){ snapEquipes.forEach(d => { const o = document.createElement('option'); o.value = d.id; o.textContent = d.data().nom || ''; sel.appendChild(o); }); }
+  });
+}
+function ouvrirMatch(id){
+  matchEnEdition = id || null;
+  remplirSelectMatch();
+  document.getElementById('m-modal-titre').textContent = id ? t('match.modal.modifier') : t('match.modal.nouveau');
+  if(id){
+    db.collection('matchs').doc(id).get().then(doc => {
+      const m = doc.data() || {};
+      document.getElementById('m-dom').value = m.domId || '';
+      document.getElementById('m-ext').value = m.extId || '';
+      document.getElementById('m-butsdom').value = (m.butsDom != null ? m.butsDom : '');
+      document.getElementById('m-butsext').value = (m.butsExt != null ? m.butsExt : '');
+      document.getElementById('m-pro').checked = !!m.prolongation;
+    });
+  } else {
+    document.getElementById('m-butsdom').value = '';
+    document.getElementById('m-butsext').value = '';
+    document.getElementById('m-pro').checked = false;
+  }
+  document.getElementById('modale-match').classList.add('open');
+}
+function fermerMatch(){ document.getElementById('modale-match').classList.remove('open'); }
+function sauverMatch(){
+  const domId = document.getElementById('m-dom').value;
+  const extId = document.getElementById('m-ext').value;
+  const butsDom = parseInt(document.getElementById('m-butsdom').value, 10);
+  const butsExt = parseInt(document.getElementById('m-butsext').value, 10);
+  const prolongation = document.getElementById('m-pro').checked;
+  if(!domId || !extId || domId === extId){ alert(t('match.memeEquipe')); return; }
+  if(isNaN(butsDom) || isNaN(butsExt)){ alert(t('match.besoinScore')); return; }
+  if(butsDom === butsExt){ alert(t('match.egalite')); return; }
+  const donnees = {
+    domId, domNom: (trouverEquipeParId(domId) || {}).nom || '',
+    extId, extNom: (trouverEquipeParId(extId) || {}).nom || '',
+    butsDom, butsExt, prolongation
+  };
+  let action;
+  if(matchEnEdition){ action = db.collection('matchs').doc(matchEnEdition).update(donnees); }
+  else { donnees.createdAt = firebase.firestore.FieldValue.serverTimestamp(); action = db.collection('matchs').add(donnees); }
+  action.then(() => fermerMatch()).catch(e => alert(t('commun.erreur') + e.message));
+}
+function supprimerMatch(id){
+  if(confirm(t('match.confirmSuppr'))){
+    db.collection('matchs').doc(id).delete().catch(e => alert(t('commun.erreur') + e.message));
+  }
+}
+
 /* Redessine les listes dynamiques (au changement de langue / rôle) */
-function rafraichirDynamique(){ rendreAnnonces(); rendreReglements(); rendreEquipes(); rendreJoueurs(); rendreTrades(); }
+function rafraichirDynamique(){ rendreAnnonces(); rendreReglements(); rendreEquipes(); rendreJoueurs(); rendreTrades(); rendreResultats(); rendreClassements(); }
 
 /* =========================================================
    6) DÉMARRAGE
@@ -1559,6 +1773,7 @@ function demarrer(){
   initEquipes();
   initJoueurs();
   initTrades();
+  initMatchs();
 }
 demarrer();
 
