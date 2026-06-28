@@ -705,6 +705,7 @@ th.cl-eq{display:table-cell}
       <input id="an-titre" placeholder="Titre de l'annonce" data-i18n-ph="annonces.ph.titre">
       <textarea id="an-texte" placeholder="Contenu…" data-i18n-ph="annonces.ph.texte"></textarea>
       <input id="an-image" placeholder="Lien d'image (optionnel)" data-i18n-ph="annonces.ph.image">
+      <label class="chk2"><input type="checkbox" id="an-ping"><span data-i18n="annonces.ping">Notifier @everyone sur Discord</span></label>
       <button class="btn btn-or" onclick="ajouterAnnonce()" data-i18n="annonces.publier">Publier l'annonce</button>
     </div>
 
@@ -1055,7 +1056,7 @@ const DICT = {
     'discord.desc':'Horaire, matchs, annonces et discussions — c\'est là que ça se passe.','discord.btn':'Rejoindre le Discord',
     'eyebrow.portail':'Portail','eyebrow.stats':'Stats',
     'annonces.titre':'Annonces','annonces.sous':'Les nouvelles officielles de la ligue.',
-    'annonces.admlbl':'Admin · Nouvelle annonce','annonces.ph.titre':"Titre de l'annonce",'annonces.ph.image':"Lien d'image (optionnel)",'annonces.ph.texte':'Contenu…',
+    'annonces.admlbl':'Admin · Nouvelle annonce','annonces.ph.titre':"Titre de l'annonce",'annonces.ph.image':"Lien d'image (optionnel)",'annonces.ping':'Notifier @everyone sur Discord','annonces.ph.texte':'Contenu…',
     'annonces.publier':"Publier l'annonce",'annonces.vide.t':'Aucune annonce','annonces.vide.s':'Les annonces apparaîtront ici.',
     'reglements.titre':'Règlements','reglements.sous':'Les règles à respecter dans la ligue.',
     'reglements.admlbl':'Admin · Modifier les règlements','reglements.ph':'Écris les règlements ici…','reglements.vide':'Aucun règlement pour le moment.',
@@ -1144,7 +1145,7 @@ const DICT = {
     'discord.desc':"Schedule, matches, news and chat — that's where it happens.",'discord.btn':'Join the Discord',
     'eyebrow.portail':'Portal','eyebrow.stats':'Stats',
     'annonces.titre':'News','annonces.sous':'Official league news.',
-    'annonces.admlbl':'Admin · New post','annonces.ph.titre':'Post title','annonces.ph.image':'Image link (optional)','annonces.ph.texte':'Content…',
+    'annonces.admlbl':'Admin · New post','annonces.ph.titre':'Post title','annonces.ph.image':'Image link (optional)','annonces.ping':'Notify @everyone on Discord','annonces.ph.texte':'Content…',
     'annonces.publier':'Publish','annonces.vide.t':'No news yet','annonces.vide.s':'News will appear here.',
     'reglements.titre':'Rules','reglements.sous':'The rules to follow in the league.',
     'reglements.admlbl':'Admin · Edit the rules','reglements.ph':'Write the rules here…','reglements.vide':'No rules yet.',
@@ -1427,14 +1428,16 @@ function ajouterAnnonce(){
   const titre = document.getElementById('an-titre').value.trim();
   const texte = document.getElementById('an-texte').value.trim();
   const image = document.getElementById('an-image').value.trim();
+  const ping  = document.getElementById('an-ping').checked;
   if(!titre && !texte){ alert(t('an.besoin')); return; }
   db.collection('annonces').add({
     titre, texte, image, ts: firebase.firestore.FieldValue.serverTimestamp()
   }).then(()=>{
-    posterSurDiscord(titre, texte, image);   // envoi auto sur Discord si configuré
+    posterSurDiscord(titre, texte, image, ping);   // envoi auto sur Discord si configuré
     document.getElementById('an-titre').value = '';
     document.getElementById('an-texte').value = '';
     document.getElementById('an-image').value = '';
+    document.getElementById('an-ping').checked = false;
   }).catch(e => alert(t('commun.erreur') + e.message));
 }
 function supprimerAnnonce(id){
@@ -1469,7 +1472,7 @@ function sauverWebhook(){
     .then(() => dcMessage(t('discord.enregistre'), true))
     .catch(e => alert(t('commun.erreur') + e.message));
 }
-function posterSurDiscord(titre, texte, image){
+function posterSurDiscord(titre, texte, image, ping){
   const url = (discordCfg.webhook || '').trim();
   if(!url || !discordCfg.actif) return Promise.resolve();
   const embed = {
@@ -1480,9 +1483,16 @@ function posterSurDiscord(titre, texte, image){
     timestamp: new Date().toISOString()
   };
   if(image) embed.image = { url: image };
+  const payload = {
+    username:'DYNASTY',
+    embeds:[embed],
+    // par défaut on ne ping personne ; seulement si "ping" est coché
+    content: ping ? '@everyone' : '',
+    allowed_mentions: { parse: ping ? ['everyone'] : [] }
+  };
   return fetch(url, {
     method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ username:'DYNASTY', embeds:[embed] })
+    body: JSON.stringify(payload)
   }).catch(() => {});   // ne bloque jamais la publication de l'annonce
 }
 function testerWebhook(){
