@@ -703,6 +703,18 @@ th.cl-eq{display:table-cell}
       <button class="btn btn-or" onclick="ajouterAnnonce()" data-i18n="annonces.publier">Publier l'annonce</button>
     </div>
 
+    <!-- Panneau admin : webhook Discord (annonces auto) -->
+    <div class="admin-panel admin-only" style="margin-top:14px">
+      <div class="lbl" data-i18n="discord.lbl">Admin · Webhook Discord (annonces auto)</div>
+      <input id="dc-webhook" placeholder="https://discord.com/api/webhooks/…" data-i18n-ph="discord.ph">
+      <label class="chk2"><input type="checkbox" id="dc-actif"><span data-i18n="discord.actif">Poster les annonces sur Discord automatiquement</span></label>
+      <div class="cta-row" style="justify-content:flex-start;gap:8px;margin-top:8px">
+        <button class="btn btn-or" onclick="sauverWebhook()" data-i18n="discord.save">Enregistrer</button>
+        <button class="btn btn-ghost" onclick="testerWebhook()" data-i18n="discord.test">Test</button>
+      </div>
+      <div id="dc-msg" class="insc-merci" style="display:none;margin-top:10px"></div>
+    </div>
+
     <div id="annonces-list">
       <div class="empty"><div class="ico" data-ico="doc"></div><b data-i18n="annonces.vide.t">Aucune annonce</b><span data-i18n="annonces.vide.s">Les annonces apparaîtront ici.</span></div>
     </div>
@@ -1069,6 +1081,7 @@ const DICT = {
     'err.connexion':'Erreur de connexion','commun.erreur':'Erreur : ',
     'btn.supprimer':'Supprimer','btn.modifier':'Modifier','an.sansTitre':'(sans titre)','eq.sansNom':'(sans nom)',
     'an.besoin':'Écris au moins un titre ou un texte.','an.confirmSuppr':'Supprimer cette annonce ?',
+    'discord.lbl':'Admin · Webhook Discord (annonces auto)','discord.ph':'https://discord.com/api/webhooks/…','discord.actif':'Poster les annonces sur Discord automatiquement','discord.save':'Enregistrer','discord.test':'Test','discord.enregistre':'✓ Webhook enregistré.','discord.besoinUrl':"Colle le lien du webhook d'abord.",'discord.testMsg':'🏒 Test DYNASTY — le webhook fonctionne!','discord.testOk':'✓ Message test envoyé sur Discord!','discord.testErr':'Échec. Vérifie le lien du webhook.',
     'eq.besoinNom':"Donne un nom à l'équipe.",'eq.confirmSuppr':'Supprimer cette équipe ?',
     'joueurs.ajouter':'+ Ajouter un joueur','joueurs.vide.t':'Aucun joueur','joueurs.vide.s':'Les joueurs apparaîtront ici.',
     'joueurs.pasdequipe.t':'Aucune équipe','joueurs.pasdequipe.s':"Crée d'abord des équipes pour ajouter des joueurs.",
@@ -1157,6 +1170,7 @@ const DICT = {
     'err.connexion':'Connection error','commun.erreur':'Error: ',
     'btn.supprimer':'Delete','btn.modifier':'Edit','an.sansTitre':'(no title)','eq.sansNom':'(no name)',
     'an.besoin':'Write at least a title or some text.','an.confirmSuppr':'Delete this post?',
+    'discord.lbl':'Admin · Discord webhook (auto announcements)','discord.ph':'https://discord.com/api/webhooks/…','discord.actif':'Auto-post announcements to Discord','discord.save':'Save','discord.test':'Test','discord.enregistre':'✓ Webhook saved.','discord.besoinUrl':'Paste the webhook link first.','discord.testMsg':'🏒 DYNASTY test — the webhook works!','discord.testOk':'✓ Test message sent to Discord!','discord.testErr':'Failed. Check the webhook link.',
     'eq.besoinNom':'Give the team a name.','eq.confirmSuppr':'Delete this team?',
     'joueurs.ajouter':'+ Add a player','joueurs.vide.t':'No players yet','joueurs.vide.s':'Players will appear here.',
     'joueurs.pasdequipe.t':'No teams yet','joueurs.pasdequipe.s':'Create teams first to add players.',
@@ -1405,6 +1419,7 @@ function ajouterAnnonce(){
   db.collection('annonces').add({
     titre, texte, ts: firebase.firestore.FieldValue.serverTimestamp()
   }).then(()=>{
+    posterSurDiscord(titre, texte);   // envoi auto sur Discord si configuré
     document.getElementById('an-titre').value = '';
     document.getElementById('an-texte').value = '';
   }).catch(e => alert(t('commun.erreur') + e.message));
@@ -1413,6 +1428,59 @@ function supprimerAnnonce(id){
   if(confirm(t('an.confirmSuppr'))){
     db.collection('annonces').doc(id).delete().catch(e => alert(t('commun.erreur') + e.message));
   }
+}
+
+/* ----- Webhook Discord : annonces du site → salon Discord ----- */
+let discordCfg = { webhook:'', actif:false };
+function initDiscordConfig(){
+  db.collection('config').doc('discord').onSnapshot(doc => {
+    const d = (doc && doc.exists) ? (doc.data() || {}) : {};
+    discordCfg = { webhook: d.webhook || '', actif: !!d.actif };
+    const w = document.getElementById('dc-webhook'); if(w) w.value = discordCfg.webhook;
+    const a = document.getElementById('dc-actif'); if(a) a.checked = discordCfg.actif;
+  }, () => {});
+}
+function dcMessage(txt, ok){
+  const m = document.getElementById('dc-msg'); if(!m) return;
+  m.textContent = txt;
+  m.style.borderColor = ok ? 'rgba(126,224,160,.4)' : 'rgba(214,77,77,.5)';
+  m.style.color = ok ? '#7ee0a0' : '#e58a8a';
+  m.style.background = ok ? 'rgba(126,224,160,.1)' : 'rgba(214,77,77,.08)';
+  m.style.display = 'block';
+  setTimeout(() => { m.style.display = 'none'; }, 5000);
+}
+function sauverWebhook(){
+  const webhook = document.getElementById('dc-webhook').value.trim();
+  const actif = document.getElementById('dc-actif').checked;
+  db.collection('config').doc('discord').set({ webhook, actif })
+    .then(() => dcMessage(t('discord.enregistre'), true))
+    .catch(e => alert(t('commun.erreur') + e.message));
+}
+function posterSurDiscord(titre, texte){
+  const url = (discordCfg.webhook || '').trim();
+  if(!url || !discordCfg.actif) return Promise.resolve();
+  return fetch(url, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      username:'DYNASTY',
+      embeds:[{
+        title: titre || t('an.sansTitre'),
+        description: texte || '',
+        color: 0xD4AF37,
+        footer:{ text:'Ligue DYNASTY' },
+        timestamp: new Date().toISOString()
+      }]
+    })
+  }).catch(() => {});   // ne bloque jamais la publication de l'annonce
+}
+function testerWebhook(){
+  const url = document.getElementById('dc-webhook').value.trim();
+  if(!url){ alert(t('discord.besoinUrl')); return; }
+  fetch(url, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ username:'DYNASTY', content: t('discord.testMsg') })
+  }).then(r => dcMessage(r.ok ? t('discord.testOk') : t('discord.testErr'), r.ok))
+    .catch(() => dcMessage(t('discord.testErr'), false));
 }
 
 /* =========================================================
@@ -2272,6 +2340,7 @@ function demarrer(){
   initMatchs();
   initCalendrier();
   initInscriptions();
+  initDiscordConfig();
 }
 demarrer();
 
