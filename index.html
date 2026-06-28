@@ -582,6 +582,10 @@ th.cl-eq{display:table-cell}
 .pos-chip input{display:none}
 .pos-chip.on{background:var(--grad-or);color:var(--noir);border-color:transparent;
   box-shadow:0 4px 14px -6px rgba(212,175,55,.6)}
+
+/* Image d'annonce */
+.an-img{display:block;width:100%;max-height:340px;object-fit:cover;border-radius:12px;
+  border:1px solid var(--bordure);margin:14px 0 4px}
 </style>
 </head>
 <body>
@@ -700,6 +704,7 @@ th.cl-eq{display:table-cell}
       <div class="lbl" data-i18n="annonces.admlbl">Admin · Nouvelle annonce</div>
       <input id="an-titre" placeholder="Titre de l'annonce" data-i18n-ph="annonces.ph.titre">
       <textarea id="an-texte" placeholder="Contenu…" data-i18n-ph="annonces.ph.texte"></textarea>
+      <input id="an-image" placeholder="Lien d'image (optionnel)" data-i18n-ph="annonces.ph.image">
       <button class="btn btn-or" onclick="ajouterAnnonce()" data-i18n="annonces.publier">Publier l'annonce</button>
     </div>
 
@@ -1050,7 +1055,7 @@ const DICT = {
     'discord.desc':'Horaire, matchs, annonces et discussions — c\'est là que ça se passe.','discord.btn':'Rejoindre le Discord',
     'eyebrow.portail':'Portail','eyebrow.stats':'Stats',
     'annonces.titre':'Annonces','annonces.sous':'Les nouvelles officielles de la ligue.',
-    'annonces.admlbl':'Admin · Nouvelle annonce','annonces.ph.titre':"Titre de l'annonce",'annonces.ph.texte':'Contenu…',
+    'annonces.admlbl':'Admin · Nouvelle annonce','annonces.ph.titre':"Titre de l'annonce",'annonces.ph.image':"Lien d'image (optionnel)",'annonces.ph.texte':'Contenu…',
     'annonces.publier':"Publier l'annonce",'annonces.vide.t':'Aucune annonce','annonces.vide.s':'Les annonces apparaîtront ici.',
     'reglements.titre':'Règlements','reglements.sous':'Les règles à respecter dans la ligue.',
     'reglements.admlbl':'Admin · Modifier les règlements','reglements.ph':'Écris les règlements ici…','reglements.vide':'Aucun règlement pour le moment.',
@@ -1139,7 +1144,7 @@ const DICT = {
     'discord.desc':"Schedule, matches, news and chat — that's where it happens.",'discord.btn':'Join the Discord',
     'eyebrow.portail':'Portal','eyebrow.stats':'Stats',
     'annonces.titre':'News','annonces.sous':'Official league news.',
-    'annonces.admlbl':'Admin · New post','annonces.ph.titre':'Post title','annonces.ph.texte':'Content…',
+    'annonces.admlbl':'Admin · New post','annonces.ph.titre':'Post title','annonces.ph.image':'Image link (optional)','annonces.ph.texte':'Content…',
     'annonces.publier':'Publish','annonces.vide.t':'No news yet','annonces.vide.s':'News will appear here.',
     'reglements.titre':'Rules','reglements.sous':'The rules to follow in the league.',
     'reglements.admlbl':'Admin · Edit the rules','reglements.ph':'Write the rules here…','reglements.vide':'No rules yet.',
@@ -1409,19 +1414,27 @@ function rendreAnnonces(){
     div.querySelector('h3').textContent = a.titre || t('an.sansTitre');
     div.querySelector('.date').textContent = formaterDate(a.ts);
     div.querySelector('p').textContent = a.texte || '';
+    if(a.image){
+      const img = document.createElement('img');
+      img.className = 'an-img'; img.src = a.image; img.alt = '';
+      img.onerror = function(){ this.style.display = 'none'; };
+      div.querySelector('p').after(img);
+    }
     liste.appendChild(div);
   });
 }
 function ajouterAnnonce(){
   const titre = document.getElementById('an-titre').value.trim();
   const texte = document.getElementById('an-texte').value.trim();
+  const image = document.getElementById('an-image').value.trim();
   if(!titre && !texte){ alert(t('an.besoin')); return; }
   db.collection('annonces').add({
-    titre, texte, ts: firebase.firestore.FieldValue.serverTimestamp()
+    titre, texte, image, ts: firebase.firestore.FieldValue.serverTimestamp()
   }).then(()=>{
-    posterSurDiscord(titre, texte);   // envoi auto sur Discord si configuré
+    posterSurDiscord(titre, texte, image);   // envoi auto sur Discord si configuré
     document.getElementById('an-titre').value = '';
     document.getElementById('an-texte').value = '';
+    document.getElementById('an-image').value = '';
   }).catch(e => alert(t('commun.erreur') + e.message));
 }
 function supprimerAnnonce(id){
@@ -1456,21 +1469,20 @@ function sauverWebhook(){
     .then(() => dcMessage(t('discord.enregistre'), true))
     .catch(e => alert(t('commun.erreur') + e.message));
 }
-function posterSurDiscord(titre, texte){
+function posterSurDiscord(titre, texte, image){
   const url = (discordCfg.webhook || '').trim();
   if(!url || !discordCfg.actif) return Promise.resolve();
+  const embed = {
+    title: titre || t('an.sansTitre'),
+    description: texte || '',
+    color: 0xD4AF37,
+    footer:{ text:'Ligue DYNASTY' },
+    timestamp: new Date().toISOString()
+  };
+  if(image) embed.image = { url: image };
   return fetch(url, {
     method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({
-      username:'DYNASTY',
-      embeds:[{
-        title: titre || t('an.sansTitre'),
-        description: texte || '',
-        color: 0xD4AF37,
-        footer:{ text:'Ligue DYNASTY' },
-        timestamp: new Date().toISOString()
-      }]
-    })
+    body: JSON.stringify({ username:'DYNASTY', embeds:[embed] })
   }).catch(() => {});   // ne bloque jamais la publication de l'annonce
 }
 function testerWebhook(){
