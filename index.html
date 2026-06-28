@@ -1139,7 +1139,7 @@ const DICT = {
     'btn.supprimer':'Supprimer','btn.modifier':'Modifier','an.sansTitre':'(sans titre)','eq.sansNom':'(sans nom)',
     'an.besoin':'Écris au moins un titre ou un texte.','an.confirmSuppr':'Supprimer cette annonce ?',
     'discord.lbl':'Admin · Webhook Discord (annonces auto)','discord.ph':'https://discord.com/api/webhooks/…','discord.actif':'Poster les annonces sur Discord automatiquement','discord.save':'Enregistrer','discord.test':'Test','discord.enregistre':'✓ Webhook enregistré.','discord.besoinUrl':"Colle le lien du webhook d'abord.",'discord.testMsg':'🏒 Test DYNASTY — le webhook fonctionne!','discord.testOk':'✓ Message test envoyé sur Discord!','discord.testErr':'Échec. Vérifie le lien du webhook.',
-    'transactions.titre':'Transactions','transactions.sous':'Signatures, échanges, libérations et rappels.','transactions.admlbl':'Admin · Nouvelle transaction','transactions.ph.texte':'Détails de la transaction…','transactions.ping':'Notifier @everyone sur Discord','transactions.publier':'Publier la transaction','transactions.dclbl':'Admin · Webhook Discord des transactions','transactions.dcactif':'Poster les transactions sur Discord automatiquement','transactions.vide.t':'Aucune transaction','transactions.vide.s':'Les mouvements de joueurs apparaîtront ici.','transactions.besoin':'Écris les détails de la transaction.','transactions.confirmSuppr':'Supprimer cette transaction ?','transactions.footer':'Transactions DYNASTY','transactions.testMsg':'🔁 Test transactions DYNASTY — le webhook fonctionne!','tx.type.signature':'Signature','tx.type.echange':'Échange','tx.type.liberation':'Libération','tx.type.rappel':'Rappel','tx.type.autre':'Autre',
+    'transactions.titre':'Transactions','transactions.sous':'Signatures, échanges, libérations et rappels.','transactions.admlbl':'Admin · Nouvelle transaction','transactions.ph.texte':'Détails (optionnel si image)…','transactions.ping':'Notifier @everyone sur Discord','transactions.publier':'Publier la transaction','transactions.dclbl':'Admin · Webhook Discord des transactions','transactions.dcactif':'Poster les transactions sur Discord automatiquement','transactions.vide.t':'Aucune transaction','transactions.vide.s':'Les mouvements de joueurs apparaîtront ici.','transactions.besoin':'Ajoute un détail ou une image.','transactions.confirmSuppr':'Supprimer cette transaction ?','transactions.footer':'Transactions DYNASTY','transactions.testMsg':'🔁 Test transactions DYNASTY — le webhook fonctionne!','tx.type.signature':'Signature','tx.type.echange':'Échange','tx.type.liberation':'Libération','tx.type.rappel':'Rappel','tx.type.autre':'Autre',
     'eq.besoinNom':"Donne un nom à l'équipe.",'eq.confirmSuppr':'Supprimer cette équipe ?',
     'joueurs.ajouter':'+ Ajouter un joueur','joueurs.vide.t':'Aucun joueur','joueurs.vide.s':'Les joueurs apparaîtront ici.',
     'joueurs.pasdequipe.t':'Aucune équipe','joueurs.pasdequipe.s':"Crée d'abord des équipes pour ajouter des joueurs.",
@@ -1229,7 +1229,7 @@ const DICT = {
     'btn.supprimer':'Delete','btn.modifier':'Edit','an.sansTitre':'(no title)','eq.sansNom':'(no name)',
     'an.besoin':'Write at least a title or some text.','an.confirmSuppr':'Delete this post?',
     'discord.lbl':'Admin · Discord webhook (auto announcements)','discord.ph':'https://discord.com/api/webhooks/…','discord.actif':'Auto-post announcements to Discord','discord.save':'Save','discord.test':'Test','discord.enregistre':'✓ Webhook saved.','discord.besoinUrl':'Paste the webhook link first.','discord.testMsg':'🏒 DYNASTY test — the webhook works!','discord.testOk':'✓ Test message sent to Discord!','discord.testErr':'Failed. Check the webhook link.',
-    'transactions.titre':'Transactions','transactions.sous':'Signings, trades, releases and call-ups.','transactions.admlbl':'Admin · New transaction','transactions.ph.texte':'Transaction details…','transactions.ping':'Notify @everyone on Discord','transactions.publier':'Post transaction','transactions.dclbl':'Admin · Transactions Discord webhook','transactions.dcactif':'Auto-post transactions to Discord','transactions.vide.t':'No transactions','transactions.vide.s':'Player moves will appear here.','transactions.besoin':'Write the transaction details.','transactions.confirmSuppr':'Delete this transaction?','transactions.footer':'DYNASTY Transactions','transactions.testMsg':'🔁 DYNASTY transactions test — the webhook works!','tx.type.signature':'Signing','tx.type.echange':'Trade','tx.type.liberation':'Release','tx.type.rappel':'Call-up','tx.type.autre':'Other',
+    'transactions.titre':'Transactions','transactions.sous':'Signings, trades, releases and call-ups.','transactions.admlbl':'Admin · New transaction','transactions.ph.texte':'Details (optional if image)…','transactions.ping':'Notify @everyone on Discord','transactions.publier':'Post transaction','transactions.dclbl':'Admin · Transactions Discord webhook','transactions.dcactif':'Auto-post transactions to Discord','transactions.vide.t':'No transactions','transactions.vide.s':'Player moves will appear here.','transactions.besoin':'Add details or an image.','transactions.confirmSuppr':'Delete this transaction?','transactions.footer':'DYNASTY Transactions','transactions.testMsg':'🔁 DYNASTY transactions test — the webhook works!','tx.type.signature':'Signing','tx.type.echange':'Trade','tx.type.liberation':'Release','tx.type.rappel':'Call-up','tx.type.autre':'Other',
     'eq.besoinNom':'Give the team a name.','eq.confirmSuppr':'Delete this team?',
     'joueurs.ajouter':'+ Add a player','joueurs.vide.t':'No players yet','joueurs.vide.s':'Players will appear here.',
     'joueurs.pasdequipe.t':'No teams yet','joueurs.pasdequipe.s':'Create teams first to add players.',
@@ -1537,7 +1537,6 @@ function posterSurDiscord(titre, texte, image, ping){
   };
   if(image) embed.image = { url: image };
   const payload = {
-    username:'DYNASTY',
     embeds:[embed],
     // par défaut on ne ping personne ; seulement si "ping" est coché
     content: ping ? '@everyone' : '',
@@ -1553,7 +1552,7 @@ function testerWebhook(){
   if(!url){ alert(t('discord.besoinUrl')); return; }
   fetch(url, {
     method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ username:'DYNASTY', content: t('discord.testMsg') })
+    body: JSON.stringify({ content: t('discord.testMsg') })
   }).then(r => dcMessage(r.ok ? t('discord.testOk') : t('discord.testErr'), r.ok))
     .catch(() => dcMessage(t('discord.testErr'), false));
 }
@@ -1580,16 +1579,17 @@ function rendreTransactions(){
     const div = document.createElement('div');
     div.className = 'card tx-card';
     div.innerHTML =
-      '<div class="tx-head"><span class="tx-badge"></span><span class="date"></span></div><p></p>' +
+      '<div class="tx-head"><span class="tx-badge"></span><span class="date"></span></div>' +
+      (x.texte ? '<p></p>' : '') +
       '<button class="del-btn admin-only" onclick="supprimerTransaction(\'' + doc.id + '\')">' + t('btn.supprimer') + '</button>';
     div.querySelector('.tx-badge').textContent = x.type || t('tx.type.autre');
     div.querySelector('.date').textContent = formaterDate(x.ts);
-    div.querySelector('p').textContent = x.texte || '';
+    if(x.texte) div.querySelector('p').textContent = x.texte;
     if(x.image){
       const img = document.createElement('img');
       img.className = 'an-img'; img.src = x.image; img.alt = '';
       img.onerror = function(){ this.style.display = 'none'; };
-      div.querySelector('p').after(img);
+      div.querySelector('.del-btn').before(img);
     }
     liste.appendChild(div);
   });
@@ -1599,7 +1599,7 @@ function ajouterTransaction(){
   const texte = document.getElementById('tx-texte').value.trim();
   const image = document.getElementById('tx-image').value.trim();
   const ping  = document.getElementById('tx-ping').checked;
-  if(!texte){ alert(t('transactions.besoin')); return; }
+  if(!texte && !image){ alert(t('transactions.besoin')); return; }   // détail OU image suffit
   db.collection('transactions').add({
     type, texte, image, ts: firebase.firestore.FieldValue.serverTimestamp()
   }).then(()=>{
@@ -1653,7 +1653,6 @@ function posterTransactionDiscord(type, texte, image, ping){
   };
   if(image) embed.image = { url: image };
   const payload = {
-    username:'DYNASTY',
     embeds:[embed],
     content: ping ? '@everyone' : '',
     allowed_mentions: { parse: ping ? ['everyone'] : [] }
@@ -1668,7 +1667,7 @@ function testerWebhookTx(){
   if(!url){ alert(t('discord.besoinUrl')); return; }
   fetch(url, {
     method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ username:'DYNASTY', content: t('transactions.testMsg') })
+    body: JSON.stringify({ content: t('transactions.testMsg') })
   }).then(r => txdcMessage(r.ok ? t('discord.testOk') : t('discord.testErr'), r.ok))
     .catch(() => txdcMessage(t('discord.testErr'), false));
 }
