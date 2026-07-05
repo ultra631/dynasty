@@ -608,6 +608,97 @@ th.cl-eq{display:table-cell}
 .imp-ok{background:rgba(126,224,160,.15);color:#7ee0a0;padding:1px 8px;border-radius:99px;font-weight:600}
 .imp-no{background:rgba(255,255,255,.06);color:var(--texte-doux);padding:1px 8px;border-radius:99px}
 .imp-warn{background:rgba(214,170,77,.15);color:#e5c074;padding:1px 8px;border-radius:99px}
+
+/* ---- Badges/logos d'équipe partout ---- */
+.eq-mini{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;
+  object-fit:cover;vertical-align:middle;flex:none;border:1px solid var(--bordure)}
+.eq-ini{color:#0A0A0C;font-weight:800;font-family:Inter,sans-serif;letter-spacing:.02em}
+.lien-eq{display:inline-flex;align-items:center;gap:8px;cursor:pointer;color:inherit;text-decoration:none}
+.lien-eq:hover span{color:var(--or)}
+.cliquable{cursor:pointer}
+.match-row.cliquable:hover{background:rgba(212,175,55,.05)}
+.mr-equipe{display:flex;align-items:center;gap:8px}
+.mr-equipe.ext{justify-content:flex-end}
+
+/* ---- Sous-titres + podium ---- */
+.sous-head{margin:26px 0 12px;display:flex;align-items:center;gap:10px}
+.sous-head h3{font-family:Cinzel,serif;font-size:17px;color:var(--platine);letter-spacing:.04em;margin:0}
+.sous-head::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(212,175,55,.4),transparent)}
+.rang-or .cl-rang{color:#F0D27A;font-weight:800}
+.rang-argent .cl-rang{color:#C8CBD3;font-weight:800}
+.rang-bronze .cl-rang{color:#CD9A62;font-weight:800}
+
+/* ---- Accueil vivant ---- */
+.live-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
+@media(max-width:860px){.live-grid{grid-template-columns:1fr}}
+.live-col{background:var(--charbon);border:1px solid var(--bordure);border-radius:14px;padding:16px}
+.live-head{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.live-head h3{font-family:Cinzel,serif;font-size:14px;letter-spacing:.06em;color:var(--platine);margin:0}
+.live-head [data-ico] svg{width:16px;height:16px;stroke:var(--or)}
+.live-row{display:flex;align-items:center;gap:8px;padding:8px 6px;border-radius:8px;font-size:12.5px;color:inherit;text-decoration:none}
+a.live-row{cursor:pointer}
+a.live-row:hover{background:rgba(212,175,55,.06)}
+.lr-eq{display:flex;align-items:center;gap:6px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lr-eq.ext{justify-content:flex-end}
+.lr-score{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--or);flex:none;letter-spacing:.05em}
+.lr-vs{font-size:10px;color:var(--texte-doux);flex:none}
+.lr-date{flex:none;font-size:10.5px;color:var(--texte-doux)}
+.lr-pts{flex:none;font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--or)}
+.lr-rang{flex:none;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:12px;background:rgba(255,255,255,.06)}
+.lr-rang.r1{background:var(--grad-or);color:var(--noir)}
+.lr-rang.r2{background:#C8CBD3;color:var(--noir)}
+.lr-rang.r3{background:#CD9A62;color:var(--noir)}
+
+/* ---- Profils (joueur + équipe) ---- */
+.pf-head{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.pf-avatar{width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.05);display:flex;
+  align-items:center;justify-content:center;flex:none;overflow:hidden}
+.pf-id h3{margin:0;font-size:20px}
+.pf-sub{display:flex;align-items:center;gap:10px;margin-top:4px;font-size:12.5px;color:var(--texte-doux)}
+.pf-positions{background:rgba(212,175,55,.12);color:var(--or);padding:1px 10px;border-radius:99px;font-size:11px;letter-spacing:.05em}
+.pf-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pf-carte{background:rgba(0,0,0,.25);border:1px solid var(--bordure);border-radius:10px;padding:10px 6px;text-align:center}
+.pf-carte .n{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--platine)}
+.pf-carte.accent .n{color:var(--or)}
+.pf-carte .l{font-size:10px;color:var(--texte-doux);letter-spacing:.08em;text-transform:uppercase;margin-top:2px}
+.pf-histo{display:flex;flex-direction:column;gap:4px;max-height:250px;overflow:auto}
+.pf-res{flex:none;width:26px;height:20px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;
+  font-size:10.5px;font-weight:800}
+.pf-v{background:rgba(126,224,160,.15);color:#7ee0a0}
+.pf-d{background:rgba(214,77,77,.15);color:#e58a8a}
+.pf-dp{background:rgba(214,170,77,.15);color:#e5c074}
+.pf-adv{flex:1;font-size:12.5px}
+.pf-adv em{font-style:normal;color:var(--texte-doux)}
+.pf-date{flex:none;font-size:10.5px;color:var(--texte-doux)}
+.ep-forme{display:flex;gap:8px;flex-wrap:wrap}
+.ep-pill{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:99px;font-size:12px;
+  font-weight:800;cursor:pointer;text-decoration:none}
+.ep-pill em{font-style:normal;font-weight:600;opacity:.85}
+
+/* ---- Fiche de match détaillée ---- */
+.dt-score{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;margin:14px 0}
+.dt-eq{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12.5px;max-width:150px;text-align:center}
+.dt-chiffres{font-family:'Bebas Neue',sans-serif;font-size:42px;color:var(--or);letter-spacing:.05em;display:flex;align-items:center;gap:8px}
+.dt-chiffres span{color:var(--texte-doux);font-size:28px}
+.dt-chiffres em{font-style:normal;font-size:14px;color:var(--texte-doux);align-self:flex-start;margin-top:6px}
+.dt-date{width:100%;text-align:center;font-size:11.5px;color:var(--texte-doux)}
+.dt-list{display:flex;flex-direction:column;gap:4px;max-height:260px;overflow:auto}
+.dt-row{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;font-size:12.5px;background:rgba(0,0,0,.15)}
+.dt-stat{margin-left:auto;flex:none;font-size:12px;color:var(--texte-doux)}
+.dt-stat b{color:var(--or)}
+.dt-g{color:#8fc7e8}
+
+/* ---- Palmarès ---- */
+.pal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.pal-carte{background:var(--charbon);border:1px solid var(--bordure);border-top:3px solid var(--or);
+  border-radius:14px;padding:20px;text-align:center;position:relative}
+.pal-ico{font-size:34px;margin-bottom:8px}
+.pal-carte h3{font-family:Cinzel,serif;font-size:15px;margin:0 0 6px;color:var(--platine)}
+.pal-gagnant{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:.05em;background:var(--grad-or);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.pal-carte p{font-size:12px;color:var(--texte-doux);margin:8px 0 0}
+.pal-carte .del-btn{margin-top:10px}
 </style>
 </head>
 <body>
@@ -644,6 +735,7 @@ th.cl-eq{display:table-cell}
     <a class="nav-link" data-route="resultats" href="#resultats" data-i18n="nav.resultats">Résultats</a>
     <a class="nav-link" data-route="equipes" href="#equipes" data-i18n="nav.equipes">Équipes</a>
     <a class="nav-link" data-route="echanges" href="#echanges" data-i18n="nav.echanges">Échanges</a>
+    <a class="nav-link" data-route="palmares" href="#palmares" data-i18n="nav.palmares">Palmarès</a>
   </nav>
 </header>
 
@@ -700,6 +792,23 @@ th.cl-eq{display:table-cell}
         <div class="f-ico" data-ico="users"></div>
         <h3 data-i18n="feat3.titre">Communauté</h3>
         <p data-i18n="feat3.desc">Une gang de passionnés, en français et en anglais, dans une ambiance de tournoi à chaque soirée.</p>
+      </div>
+    </div>
+
+    <!-- Le pouls de la ligue (résultats récents / à venir / meneurs) -->
+    <div class="crown-div reveal"><span>&#9819;</span></div>
+    <div class="live-grid reveal">
+      <div class="live-col">
+        <div class="live-head"><span data-ico="bars"></span><h3 data-i18n="live.derniers">Derniers résultats</h3></div>
+        <div id="live-resultats" class="live-body"><div class="je-vide" data-i18n="live.aucunResultat">Aucun match joué encore.</div></div>
+      </div>
+      <div class="live-col">
+        <div class="live-head"><span data-ico="calendar"></span><h3 data-i18n="live.prochains">Prochains matchs</h3></div>
+        <div id="live-calendrier" class="live-body"><div class="je-vide" data-i18n="live.aucunMatch">Aucun match prévu.</div></div>
+      </div>
+      <div class="live-col">
+        <div class="live-head"><span data-ico="trophy"></span><h3 data-i18n="live.meneurs">Meneurs</h3></div>
+        <div id="live-meneurs" class="live-body"><div class="je-vide" data-i18n="live.aucunMeneur">Les meneurs apparaîtront ici.</div></div>
       </div>
     </div>
 
@@ -870,6 +979,12 @@ th.cl-eq{display:table-cell}
     <div id="classements-list">
       <div class="empty"><div class="ico" data-ico="trophy"></div><b data-i18n="classements.vide.t">Aucune équipe</b><span data-i18n="classements.vide.s">Ajoute des équipes pour voir le classement.</span></div>
     </div>
+
+    <div class="sous-head"><h3 data-i18n="meneurs.pointeurs">Meilleurs pointeurs</h3></div>
+    <div id="meneurs-list"><div class="je-vide" data-i18n="live.aucunMeneur">Les meneurs apparaîtront ici.</div></div>
+
+    <div class="sous-head"><h3 data-i18n="meneurs.gardiens">Meilleurs gardiens</h3></div>
+    <div id="meneurs-gardiens"><div class="je-vide" data-i18n="live.aucunMeneur">Les meneurs apparaîtront ici.</div></div>
   </section>
   <section class="page" id="joueurs">
     <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="joueurs.titre">Joueurs</h2><p data-i18n="joueurs.sous">Les joueurs, par équipe.</p></div>
@@ -932,6 +1047,21 @@ th.cl-eq{display:table-cell}
   </section>
 
   <!-- ====================== ÉCHANGES (trades entre DG, approuvés par l'admin) ====================== -->
+  <section class="page" id="palmares">
+    <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="palmares.titre">Palmarès</h2><p data-i18n="palmares.sous">Les trophées et honneurs de la ligue.</p></div>
+
+    <div class="admin-panel admin-only" style="margin-bottom:16px">
+      <div class="lbl" data-i18n="palmares.admlbl">Admin · Remettre un trophée</div>
+      <input id="pal-titre" placeholder="Ex. Champion Saison 1" data-i18n-ph="palmares.ph.titre">
+      <input id="pal-gagnant" placeholder="Équipe ou joueur gagnant" data-i18n-ph="palmares.ph.gagnant">
+      <textarea id="pal-desc" placeholder="Description (optionnel)" data-i18n-ph="palmares.ph.desc"></textarea>
+      <button class="btn btn-or" onclick="ajouterTrophee()" data-i18n="palmares.remettre">Remettre le trophée</button>
+    </div>
+
+    <div id="palmares-list">
+      <div class="empty"><div class="ico" data-ico="trophy"></div><b data-i18n="palmares.vide.t">La chasse aux trophées est ouverte</b><span data-i18n="palmares.vide.s">Les honneurs seront remis à la fin de la saison. 👑</span></div>
+    </div>
+  </section>
   <section class="page" id="echanges">
     <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="echanges.titre">Échanges</h2><p data-i18n="echanges.sous">Les échanges entre équipes.</p></div>
 
@@ -1081,6 +1211,70 @@ th.cl-eq{display:table-cell}
     </div>
   </div>
 </div>
+
+<!-- ============================ MODALE PROFIL JOUEUR ============================ -->
+<div class="modal" id="modale-profil">
+  <div class="modal-box" style="max-width:540px;text-align:left">
+    <div class="pf-head">
+      <div class="pf-avatar" id="pf-avatar">?</div>
+      <div class="pf-id">
+        <h3 class="cinzel" id="pf-nom">—</h3>
+        <div class="pf-sub"><span id="pf-equipe" class="pf-eq"></span><span id="pf-pos" class="pf-positions"></span></div>
+      </div>
+    </div>
+    <div class="pf-stats" id="pf-stats"></div>
+    <div class="sous-head" style="margin-top:14px"><h3 data-i18n="profil.historique">Match par match</h3></div>
+    <div id="pf-historique" class="pf-histo"></div>
+    <div class="cta-row" style="margin-top:14px">
+      <button class="btn btn-ghost" onclick="fermerProfil()" data-i18n="commun.fermer">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================ MODALE PROFIL ÉQUIPE ============================ -->
+<div class="modal" id="modale-equipe-profil">
+  <div class="modal-box" style="max-width:560px;text-align:left">
+    <div class="pf-head">
+      <div class="pf-avatar" id="ep-logo">?</div>
+      <div class="pf-id">
+        <h3 class="cinzel" id="ep-nom">—</h3>
+        <div class="pf-sub"><span id="ep-fiche" class="pf-eq"></span></div>
+      </div>
+    </div>
+    <div class="pf-stats" id="ep-stats"></div>
+    <div class="sous-head" style="margin-top:14px"><h3 data-i18n="ep.derniers">5 derniers matchs</h3></div>
+    <div id="ep-forme" class="ep-forme"></div>
+    <div class="sous-head" style="margin-top:14px"><h3 data-i18n="ep.alignement">Alignement</h3></div>
+    <div id="ep-roster" class="pf-histo"></div>
+    <div class="cta-row" style="margin-top:14px">
+      <button class="btn btn-ghost" onclick="fermerProfilEquipe()" data-i18n="commun.fermer">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================ MODALE DÉTAIL DE MATCH ============================ -->
+<div class="modal" id="modale-detail">
+  <div class="modal-box" style="max-width:600px;text-align:left">
+    <h3 class="cinzel" style="text-align:center" data-i18n="detail.titre">Feuille de match</h3>
+    <div class="dt-score" id="dt-score"></div>
+    <div class="box-score">
+      <div class="box-col">
+        <div class="box-head"><span id="dt-dom-nom"></span></div>
+        <div id="dt-dom-list" class="dt-list"></div>
+      </div>
+      <div class="box-col">
+        <div class="box-head"><span id="dt-ext-nom"></span></div>
+        <div id="dt-ext-list" class="dt-list"></div>
+      </div>
+    </div>
+    <div class="cta-row" style="margin-top:14px">
+      <button class="btn btn-ghost" onclick="fermerDetail()" data-i18n="commun.fermer">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================ MODALE CALENDRIER ============================ -->
+<div class="modal" id="modale-cal">
   <div class="modal-box" style="max-width:400px;text-align:left">
     <h3 class="cinzel" id="cal-modal-titre" style="text-align:center" data-i18n="calendrier.modal.nouveau">Nouveau match</h3>
     <div class="ech-cols">
@@ -1175,6 +1369,13 @@ const DICT = {
     'discord.lbl':'Admin · Webhook Discord (annonces auto)','discord.ph':'https://discord.com/api/webhooks/…','discord.actif':'Poster les annonces sur Discord automatiquement','discord.save':'Enregistrer','discord.test':'Test','discord.enregistre':'✓ Webhook enregistré.','discord.besoinUrl':"Colle le lien du webhook d'abord.",'discord.testMsg':'🏒 Test DYNASTY — le webhook fonctionne!','discord.testOk':'✓ Message test envoyé sur Discord!','discord.testErr':'Échec. Vérifie le lien du webhook.',
     'transactions.titre':'Transactions','transactions.sous':'Signatures, échanges, libérations et rappels.','transactions.admlbl':'Admin · Nouvelle transaction','transactions.ph.texte':'Détails (optionnel si image)…','transactions.ping':'Notifier @everyone sur Discord','transactions.publier':'Publier la transaction','transactions.dclbl':'Admin · Webhook Discord des transactions','transactions.dcactif':'Poster les transactions sur Discord automatiquement','transactions.vide.t':'Aucune transaction','transactions.vide.s':'Les mouvements de joueurs apparaîtront ici.','transactions.besoin':'Ajoute un détail ou une image.','transactions.confirmSuppr':'Supprimer cette transaction ?','transactions.footer':'Transactions DYNASTY','transactions.testMsg':'🔁 Test transactions DYNASTY — le webhook fonctionne!','tx.type.signature':'Signature','tx.type.echange':'Échange','tx.type.liberation':'Libération','tx.type.rappel':'Rappel','tx.type.autre':'Autre',
     'eq.eaclub':'ID du club EA (pour l\'import auto)','eq.eaclub.ph':'Ex. 13494','joueur.eanom':'Gamertag EA (si différent du nom)','joueur.eanom.ph':'Ex. Dj_lavabo','import.btn':'📥 Importer depuis EA','import.titre':'📥 Importer depuis EA','import.intro':'Choisis une équipe (qui a un ID club EA) pour aller chercher ses 5 derniers matchs.','import.equipe':'Équipe à importer','import.chercher':'Chercher les matchs','import.confirmer':'Importer les matchs cochés','import.aucuneEquipe':'Aucune équipe n\'a d\'ID club EA. Ajoute-le dans la fiche de l\'équipe.','import.chargement':'Connexion à EA… (ça peut prendre 10-20 sec)','import.erreur':'Erreur de connexion à EA.','import.vide':'Aucun match trouvé pour ce club.','import.horsLigue':'adversaire hors-ligue','import.deja':'déjà importé','import.nul':'égalité (ignoré)','import.pret':'prêt','import.joueursManq':'{n} joueur(s) non reliés','import.trouve':'{n} matchs trouvés · {ok} prêts à importer','import.rienCoche':'Coche au moins un match.','import.enCours':'Import en cours…','import.fini':'{n}/{t} matchs importés! Les stats sont à jour.',
+    'nav.palmares':'Palmarès','commun.fermer':'Fermer',
+    'live.derniers':'Derniers résultats','live.prochains':'Prochains matchs','live.meneurs':'Meneurs','live.aucunResultat':'Aucun match joué encore.','live.aucunMatch':'Aucun match prévu.','live.aucunMeneur':'Les meneurs apparaîtront ici.',
+    'meneurs.pointeurs':'Meilleurs pointeurs','meneurs.gardiens':'Meilleurs gardiens','gd.arrpct':'Arr%',
+    'profil.historique':'Match par match','profil.aucunMatch':'Aucun match joué.',
+    'ep.derniers':'5 derniers matchs','ep.alignement':'Alignement',
+    'detail.titre':'Feuille de match','detail.aucunJoueur':'Aucune stat de joueur pour ce match.',
+    'palmares.titre':'Palmarès','palmares.sous':'Les trophées et honneurs de la ligue.','palmares.admlbl':'Admin · Remettre un trophée','palmares.ph.titre':'Ex. Champion Saison 1','palmares.ph.gagnant':'Équipe ou joueur gagnant','palmares.ph.desc':'Description (optionnel)','palmares.remettre':'Remettre le trophée','palmares.vide.t':'La chasse aux trophées est ouverte','palmares.vide.s':'Les honneurs seront remis à la fin de la saison. 👑','palmares.besoin':'Écris le titre et le gagnant.','palmares.confirmSuppr':'Retirer ce trophée ?',
     'eq.besoinNom':"Donne un nom à l'équipe.",'eq.confirmSuppr':'Supprimer cette équipe ?',
     'joueurs.ajouter':'+ Ajouter un joueur','joueurs.vide.t':'Aucun joueur','joueurs.vide.s':'Les joueurs apparaîtront ici.',
     'joueurs.pasdequipe.t':'Aucune équipe','joueurs.pasdequipe.s':"Crée d'abord des équipes pour ajouter des joueurs.",
@@ -1266,6 +1467,13 @@ const DICT = {
     'discord.lbl':'Admin · Discord webhook (auto announcements)','discord.ph':'https://discord.com/api/webhooks/…','discord.actif':'Auto-post announcements to Discord','discord.save':'Save','discord.test':'Test','discord.enregistre':'✓ Webhook saved.','discord.besoinUrl':'Paste the webhook link first.','discord.testMsg':'🏒 DYNASTY test — the webhook works!','discord.testOk':'✓ Test message sent to Discord!','discord.testErr':'Failed. Check the webhook link.',
     'transactions.titre':'Transactions','transactions.sous':'Signings, trades, releases and call-ups.','transactions.admlbl':'Admin · New transaction','transactions.ph.texte':'Details (optional if image)…','transactions.ping':'Notify @everyone on Discord','transactions.publier':'Post transaction','transactions.dclbl':'Admin · Transactions Discord webhook','transactions.dcactif':'Auto-post transactions to Discord','transactions.vide.t':'No transactions','transactions.vide.s':'Player moves will appear here.','transactions.besoin':'Add details or an image.','transactions.confirmSuppr':'Delete this transaction?','transactions.footer':'DYNASTY Transactions','transactions.testMsg':'🔁 DYNASTY transactions test — the webhook works!','tx.type.signature':'Signing','tx.type.echange':'Trade','tx.type.liberation':'Release','tx.type.rappel':'Call-up','tx.type.autre':'Other',
     'eq.eaclub':'EA club ID (for auto-import)','eq.eaclub.ph':'Ex. 13494','joueur.eanom':'EA gamertag (if different from name)','joueur.eanom.ph':'Ex. Dj_lavabo','import.btn':'📥 Import from EA','import.titre':'📥 Import from EA','import.intro':'Pick a team (with an EA club ID) to fetch its last 5 matches.','import.equipe':'Team to import','import.chercher':'Fetch matches','import.confirmer':'Import checked matches','import.aucuneEquipe':'No team has an EA club ID. Add it in the team form.','import.chargement':'Connecting to EA… (may take 10-20 sec)','import.erreur':'EA connection error.','import.vide':'No match found for this club.','import.horsLigue':'opponent outside league','import.deja':'already imported','import.nul':'tie (skipped)','import.pret':'ready','import.joueursManq':'{n} player(s) not linked','import.trouve':'{n} matches found · {ok} ready to import','import.rienCoche':'Check at least one match.','import.enCours':'Importing…','import.fini':'{n}/{t} matches imported! Stats are up to date.',
+    'nav.palmares':'Honours','commun.fermer':'Close',
+    'live.derniers':'Latest results','live.prochains':'Upcoming games','live.meneurs':'Leaders','live.aucunResultat':'No game played yet.','live.aucunMatch':'No game scheduled.','live.aucunMeneur':'Leaders will appear here.',
+    'meneurs.pointeurs':'Top scorers','meneurs.gardiens':'Top goalies','gd.arrpct':'SV%',
+    'profil.historique':'Game by game','profil.aucunMatch':'No game played.',
+    'ep.derniers':'Last 5 games','ep.alignement':'Roster',
+    'detail.titre':'Game sheet','detail.aucunJoueur':'No player stats for this game.',
+    'palmares.titre':'Honours','palmares.sous':'League trophies and honours.','palmares.admlbl':'Admin · Award a trophy','palmares.ph.titre':'Ex. Season 1 Champion','palmares.ph.gagnant':'Winning team or player','palmares.ph.desc':'Description (optional)','palmares.remettre':'Award trophy','palmares.vide.t':'The trophy hunt is on','palmares.vide.s':'Honours will be awarded at the end of the season. 👑','palmares.besoin':'Write the title and the winner.','palmares.confirmSuppr':'Remove this trophy?',
     'eq.besoinNom':'Give the team a name.','eq.confirmSuppr':'Delete this team?',
     'joueurs.ajouter':'+ Add a player','joueurs.vide.t':'No players yet','joueurs.vide.s':'Players will appear here.',
     'joueurs.pasdequipe.t':'No teams yet','joueurs.pasdequipe.s':'Create teams first to add players.',
@@ -1395,6 +1603,20 @@ function trouverEquipeParId(id){
   snapEquipes.forEach(d => { if(d.id === id) r = Object.assign({id:d.id}, d.data()); });
   return r;
 }
+
+/* Petit visuel d'équipe : logo si dispo, sinon pastille d'initiales colorée */
+function eqVisuel(e, taille){
+  taille = taille || 22;
+  if(!e) return '';
+  if(e.logo){
+    return '<img class="eq-mini" style="width:'+taille+'px;height:'+taille+'px" src="' + e.logo + '" alt="" onerror="this.style.display=\'none\'">';
+  }
+  return eqInitialesHTML(e, taille);
+}
+function eqInitialesHTML(e, taille){
+  const ini = ((e && e.nom) || '?').trim().split(/\s+/).map(function(m){return m[0];}).slice(0,2).join('').toUpperCase();
+  return '<span class="eq-mini eq-ini" style="width:'+taille+'px;height:'+taille+'px;background:' + ((e&&e.couleur)||'#D4AF37') + ';font-size:' + Math.round(taille*0.42) + 'px">' + ini + '</span>';
+}
 // Un DG peut éditer SEULEMENT son équipe ; l'admin peut tout éditer
 function peutEditerEquipe(equipeId){ return estAdmin || (!!dgTeamId && dgTeamId === equipeId); }
 
@@ -1456,7 +1678,7 @@ function connexionAdmin(){
 /* =========================================================
    3) ROUTEUR (navigation par onglets)
    ========================================================= */
-const ROUTES = ['accueil','annonces','transactions','reglements','inscriptions','reseaux',
+const ROUTES = ['accueil','annonces','transactions','reglements','inscriptions','reseaux','palmares',
                 'classements','joueurs','gardiens','calendrier','resultats','equipes','echanges'];
 function afficherRoute(){
   let h = location.hash.replace('#','') || 'accueil';
@@ -1757,8 +1979,9 @@ function rendreEquipes(){
     const id = doc.id;                          // ← L'IDENTIFIANT UNIQUE
     const couleur = e.couleur || '#D4AF37';
     const carte = document.createElement('div');
-    carte.className = 'team-card';
+    carte.className = 'team-card cliquable';
     carte.style.borderTopColor = couleur;
+    carte.onclick = function(){ ouvrirProfilEquipe(id); };
 
     // Visuel : logo si fourni, sinon initiales sur fond coloré
     let visuel;
@@ -1772,7 +1995,7 @@ function rendreEquipes(){
     carte.innerHTML =
       visuel +
       '<h3></h3>' +
-      '<div class="team-actions admin-only">' +
+      '<div class="team-actions admin-only" onclick="event.stopPropagation()">' +
         '<button class="btn-mini" onclick="ouvrirEquipe(\'' + id + '\')">' + t('btn.modifier') + '</button>' +
         '<button class="del-btn" onclick="supprimerEquipe(\'' + id + '\')">' + t('btn.supprimer') + '</button>' +
       '</div>';
@@ -1886,7 +2109,7 @@ function rendreJoueurs(){
             + (peut ? '<th></th>' : '') + '</tr></thead><tbody>';
       joueurs.forEach(j => {
         html += '<tr><td class="jr-pos2">' + escapeHtml(j.position || '') + '</td>'
-              + '<td class="cl-eq">' + escapeHtml(j.nom || '') + '</td>'
+              + '<td class="cl-eq"><a class="lien-eq" onclick="ouvrirProfilJoueur(\'' + j.id + '\')"><span>' + escapeHtml(j.nom || '') + '</span></a></td>'
               + '<td>' + j.pj + '</td><td>' + j.b + '</td><td>' + j.a + '</td><td class="cl-pts">' + j.pts + '</td>'
               + (peut ? ('<td><span class="jr-actions"><button class="btn-mini" onclick="ouvrirJoueur(\'' + j.id + '\')">' + t('btn.modifier') + '</button>'
                   + '<button class="del-btn" onclick="supprimerJoueur(\'' + j.id + '\')">' + t('btn.supprimer') + '</button></span></td>') : '')
@@ -1897,6 +2120,8 @@ function rendreJoueurs(){
     html += '</div>';
   });
   cont.innerHTML = html;
+  if(typeof rendreAccueilLive === 'function') rendreAccueilLive();
+  if(typeof rendreMeneurs === 'function') rendreMeneurs();
 }
 
 // Remplit le menu déroulant des équipes ; verrouille sur son équipe si DG
@@ -2187,18 +2412,21 @@ function rendreResultats(){
     const m = Object.assign({id:d.id}, d.data());
     const bd = +m.butsDom, be = +m.butsExt;
     const domGagne = bd > be;
-    html += '<div class="match-row">'
-      + '<div class="mr-equipe' + (domGagne ? ' gagnant' : '') + '">' + escapeHtml(m.domNom || '') + '</div>'
+    const eqD = trouverEquipeParId(m.domId) || {};
+    const eqE = trouverEquipeParId(m.extId) || {};
+    html += '<div class="match-row cliquable" onclick="ouvrirDetail(\'' + m.id + '\')">'
+      + '<div class="mr-equipe' + (domGagne ? ' gagnant' : '') + '">' + eqVisuel(eqD, 24) + '<span>' + escapeHtml(m.domNom || '') + '</span></div>'
       + '<div class="mr-score">' + bd + ' <span>-</span> ' + be + (m.prolongation ? ' <em>' + t('cl.proAbbr') + '</em>' : '') + '</div>'
-      + '<div class="mr-equipe ext' + (!domGagne ? ' gagnant' : '') + '">' + escapeHtml(m.extNom || '') + '</div>';
+      + '<div class="mr-equipe ext' + (!domGagne ? ' gagnant' : '') + '"><span>' + escapeHtml(m.extNom || '') + '</span>' + eqVisuel(eqE, 24) + '</div>';
     if(estAdmin){
-      html += '<div class="mr-actions">'
+      html += '<div class="mr-actions" onclick="event.stopPropagation()">'
         + '<button class="btn-mini" onclick="ouvrirMatch(\'' + m.id + '\')">' + t('btn.modifier') + '</button>'
         + '<button class="del-btn" onclick="supprimerMatch(\'' + m.id + '\')">' + t('btn.supprimer') + '</button></div>';
     }
     html += '</div>';
   });
   cont.innerHTML = html;
+  if(typeof rendreAccueilLive === 'function') rendreAccueilLive();
 }
 
 /* ----- Classement calculé à partir des résultats ----- */
@@ -2233,9 +2461,10 @@ function rendreClassements(){
 
   let rows = '';
   lignes.forEach((s, i) => {
+    const eq = trouverEquipeParId(s.id) || {};
     rows += '<tr>'
       + '<td class="cl-rang">' + (i+1) + '</td>'
-      + '<td class="cl-eq"><span class="je-dot" style="background:' + s.couleur + '"></span>' + escapeHtml(s.nom) + '</td>'
+      + '<td class="cl-eq"><a class="lien-eq" onclick="ouvrirProfilEquipe(\'' + s.id + '\')">' + eqVisuel(eq, 22) + '<span>' + escapeHtml(s.nom) + '</span></a></td>'
       + '<td>' + s.pj + '</td><td>' + s.v + '</td><td>' + s.dd + '</td><td>' + s.dp + '</td>'
       + '<td>' + s.bp + '</td><td>' + s.bc + '</td><td>' + (s.diff > 0 ? '+' : '') + s.diff + '</td>'
       + '<td class="cl-pts">' + s.pts + '</td></tr>';
@@ -2244,6 +2473,68 @@ function rendreClassements(){
     + '<th>#</th><th class="cl-eq">' + t('cl.equipe') + '</th><th>' + t('cl.pj') + '</th><th>' + t('cl.v') + '</th>'
     + '<th>' + t('cl.d') + '</th><th>' + t('cl.dp') + '</th><th>' + t('cl.bp') + '</th><th>' + t('cl.bc') + '</th>'
     + '<th>' + t('cl.diff') + '</th><th>' + t('cl.pts') + '</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+  rendreMeneurs();
+}
+
+/* ----- Meilleurs pointeurs + meilleurs gardiens (calculés des matchs) ----- */
+function listePointeurs(){
+  const arr = [];
+  if(snapJoueurs){
+    snapJoueurs.forEach(d => {
+      const j = d.data(); const s = statsJoueur(d.id);
+      if(s.pj > 0) arr.push(Object.assign({id:d.id, nom:j.nom||'', equipeId:j.equipeId, position:j.position||''}, s));
+    });
+  }
+  arr.sort((a,b) => b.pts - a.pts || b.b - a.b || (a.nom||'').localeCompare(b.nom||''));
+  return arr;
+}
+function listeGardiens(){
+  const arr = [];
+  if(snapJoueurs){
+    snapJoueurs.forEach(d => {
+      const j = d.data();
+      if((j.position||'').indexOf('G') === -1) return;
+      const s = statsGardien(d.id);
+      if(s.pj > 0) arr.push(Object.assign({id:d.id, nom:j.nom||'', equipeId:j.equipeId}, s));
+    });
+  }
+  arr.sort((a,b) => b.v - a.v || (parseFloat(a.moy)||99) - (parseFloat(b.moy)||99));
+  return arr;
+}
+function rendreMeneurs(){
+  const cont = document.getElementById('meneurs-list');
+  const contG = document.getElementById('meneurs-gardiens');
+  if(!cont || !contG) return;
+  const pts = listePointeurs().slice(0, 10);
+  if(pts.length === 0){ cont.innerHTML = '<div class="je-vide">' + t('live.aucunMeneur') + '</div>'; }
+  else {
+    let rows = '';
+    pts.forEach((p, i) => {
+      const eq = trouverEquipeParId(p.equipeId) || {};
+      rows += '<tr class="' + (i===0?'rang-or':i===1?'rang-argent':i===2?'rang-bronze':'') + '">'
+        + '<td class="cl-rang">' + (i+1) + '</td>'
+        + '<td class="cl-eq"><a class="lien-eq" onclick="ouvrirProfilJoueur(\'' + p.id + '\')">' + eqVisuel(eq, 20) + '<span>' + escapeHtml(p.nom) + '</span></a></td>'
+        + '<td>' + p.pj + '</td><td>' + p.b + '</td><td>' + p.a + '</td><td class="cl-pts">' + p.pts + '</td></tr>';
+    });
+    cont.innerHTML = '<div class="cl-wrap"><table class="cl-table"><thead><tr>'
+      + '<th>#</th><th class="cl-eq">' + t('jo.joueur') + '</th><th>' + t('cl.pj') + '</th><th>' + t('jo.b') + '</th><th>' + t('jo.a') + '</th><th>' + t('cl.pts') + '</th>'
+      + '</tr></thead><tbody>' + rows + '</tbody></table></div>';
+  }
+  const gs = listeGardiens().slice(0, 5);
+  if(gs.length === 0){ contG.innerHTML = '<div class="je-vide">' + t('live.aucunMeneur') + '</div>'; }
+  else {
+    let rows = '';
+    gs.forEach((g, i) => {
+      const eq = trouverEquipeParId(g.equipeId) || {};
+      rows += '<tr class="' + (i===0?'rang-or':i===1?'rang-argent':i===2?'rang-bronze':'') + '">'
+        + '<td class="cl-rang">' + (i+1) + '</td>'
+        + '<td class="cl-eq"><a class="lien-eq" onclick="ouvrirProfilJoueur(\'' + g.id + '\')">' + eqVisuel(eq, 20) + '<span>' + escapeHtml(g.nom) + '</span></a></td>'
+        + '<td>' + g.pj + '</td><td>' + g.v + '</td><td>' + g.bl + '</td><td>' + (g.arrPct || '—') + '</td><td class="cl-pts">' + g.moy + '</td></tr>';
+    });
+    contG.innerHTML = '<div class="cl-wrap"><table class="cl-table"><thead><tr>'
+      + '<th>#</th><th class="cl-eq">' + t('jo.joueur') + '</th><th>' + t('gd.pj') + '</th><th>' + t('gd.v') + '</th><th>' + t('gd.bl') + '</th><th>' + t('gd.arrpct') + '</th><th>' + t('gd.moy') + '</th>'
+      + '</tr></thead><tbody>' + rows + '</tbody></table></div>';
+  }
 }
 
 /* ----- Helpers d'agrégation : les stats sont CALCULÉES à partir des matchs ----- */
@@ -2253,7 +2544,7 @@ function statsJoueur(pid){
   return { pj, b, a, pts: b+a };
 }
 function statsGardien(pid){
-  let pj=0, v=0, dd=0, dp=0, bc=0, bl=0;
+  let pj=0, v=0, dd=0, dp=0, bc=0, bl=0, arr=0, tirs=0;
   if(snapMatchs){ snapMatchs.forEach(d => { const m=d.data(); const l=(m.lignes||[]).find(x=>x.pid===pid); if(!l) return;
     pj++;
     const estDom = (m.domId === l.eqId);
@@ -2261,8 +2552,10 @@ function statsGardien(pid){
     const pour   = estDom ? (+m.butsDom||0) : (+m.butsExt||0);
     bc += contre; if(contre === 0) bl++;
     if(pour > contre) v++; else { if(m.prolongation) dp++; else dd++; }
+    arr += (+l.arr||0); tirs += (+l.tirs||0);   // stats EA (arrêts / tirs reçus) si importées
   }); }
-  return { pj, v, dd, dp, bc, bl, moy: pj>0 ? (bc/pj).toFixed(2) : '—' };
+  return { pj, v, dd, dp, bc, bl, moy: pj>0 ? (bc/pj).toFixed(2) : '—',
+           arr, tirs, arrPct: tirs>0 ? ((arr/tirs)*100).toFixed(1)+'%' : null };
 }
 
 /* ----- Feuille de match (effectif + buts/passes) ----- */
@@ -2373,6 +2666,259 @@ function sauverMatch(){
 function supprimerMatch(id){
   if(confirm(t('match.confirmSuppr'))){
     db.collection('matchs').doc(id).delete().catch(e => alert(t('commun.erreur') + e.message));
+  }
+}
+
+/* =========================================================
+   10c) FICHE DE MATCH DÉTAILLÉE (lecture seule)
+   ========================================================= */
+function nomJoueurParId(pid){
+  let nom = null;
+  if(snapJoueurs){ snapJoueurs.forEach(d => { if(d.id === pid) nom = d.data().nom || ''; }); }
+  return nom;
+}
+function ouvrirDetail(id){
+  if(!snapMatchs) return;
+  let m = null;
+  snapMatchs.forEach(d => { if(d.id === id) m = d.data(); });
+  if(!m) return;
+  const eqD = trouverEquipeParId(m.domId) || {nom:m.domNom};
+  const eqE = trouverEquipeParId(m.extId) || {nom:m.extNom};
+  let dateStr = '';
+  if(m.eaTs){ dateStr = new Date(m.eaTs*1000).toLocaleDateString(langue==='en'?'en-CA':'fr-CA', {day:'numeric',month:'long',year:'numeric'}); }
+  else if(m.createdAt && m.createdAt.toDate){ dateStr = m.createdAt.toDate().toLocaleDateString(langue==='en'?'en-CA':'fr-CA', {day:'numeric',month:'long',year:'numeric'}); }
+  document.getElementById('dt-score').innerHTML =
+    '<div class="dt-eq">' + eqVisuel(eqD, 40) + '<span>' + escapeHtml(m.domNom||'') + '</span></div>'
+    + '<div class="dt-chiffres">' + (+m.butsDom) + '<span>-</span>' + (+m.butsExt) + (m.prolongation ? '<em>' + t('cl.proAbbr') + '</em>' : '') + '</div>'
+    + '<div class="dt-eq">' + eqVisuel(eqE, 40) + '<span>' + escapeHtml(m.extNom||'') + '</span></div>'
+    + (dateStr ? '<div class="dt-date">' + dateStr + '</div>' : '');
+  document.getElementById('dt-dom-nom').textContent = eqD.nom || '';
+  document.getElementById('dt-ext-nom').textContent = eqE.nom || '';
+  document.getElementById('dt-dom-list').innerHTML = detailCote(m, m.domId);
+  document.getElementById('dt-ext-list').innerHTML = detailCote(m, m.extId);
+  document.getElementById('modale-detail').classList.add('open');
+}
+function detailCote(m, eqId){
+  const ls = (m.lignes||[]).filter(l => l.eqId === eqId);
+  if(ls.length === 0) return '<div class="je-vide">' + t('detail.aucunJoueur') + '</div>';
+  // Tri : points du match décroissants, gardiens à la fin
+  ls.sort((a,b) => (((+b.b||0)+(+b.a||0)) - ((+a.b||0)+(+a.a||0))));
+  let html = '';
+  ls.forEach(l => {
+    const nom = nomJoueurParId(l.pid) || '?';
+    const estG = (l.tirs !== undefined && l.tirs !== null);
+    let statTxt;
+    if(estG && (+l.tirs>0 || +l.b===0 && +l.a===0)){
+      statTxt = '<span class="dt-g">🥅 ' + (+l.arr||0) + '/' + (+l.tirs||0) + '</span>';
+    } else {
+      statTxt = '<b>' + (+l.b||0) + 'B</b> · ' + (+l.a||0) + 'A';
+    }
+    html += '<div class="dt-row"><a class="lien-eq" onclick="fermerDetail();ouvrirProfilJoueur(\'' + l.pid + '\')">' + escapeHtml(nom) + '</a><span class="dt-stat">' + statTxt + '</span></div>';
+  });
+  return html;
+}
+function fermerDetail(){ document.getElementById('modale-detail').classList.remove('open'); }
+
+/* =========================================================
+   10d) PROFIL JOUEUR
+   ========================================================= */
+function ouvrirProfilJoueur(pid){
+  if(!snapJoueurs) return;
+  let j = null;
+  snapJoueurs.forEach(d => { if(d.id === pid) j = d.data(); });
+  if(!j) return;
+  const eq = trouverEquipeParId(j.equipeId) || {};
+  // En-tête
+  const av = document.getElementById('pf-avatar');
+  av.innerHTML = eqVisuel(eq, 54) || '?';
+  av.style.background = 'transparent';
+  document.getElementById('pf-nom').textContent = j.nom || '';
+  document.getElementById('pf-equipe').innerHTML = '<a class="lien-eq" onclick="fermerProfil();ouvrirProfilEquipe(\'' + (j.equipeId||'') + '\')">' + escapeHtml(eq.nom || '—') + '</a>';
+  document.getElementById('pf-pos').textContent = j.position || '';
+  // Stats de saison
+  const s = statsJoueur(pid);
+  let cartes = carteStat(t('cl.pj'), s.pj) + carteStat(t('jo.b'), s.b) + carteStat(t('jo.a'), s.a) + carteStat(t('cl.pts'), s.pts, true);
+  if((j.position||'').indexOf('G') !== -1){
+    const g = statsGardien(pid);
+    cartes += carteStat(t('gd.v'), g.v) + carteStat(t('gd.bl'), g.bl) + carteStat(t('gd.moy'), g.moy) + carteStat(t('gd.arrpct'), g.arrPct || '—');
+  }
+  document.getElementById('pf-stats').innerHTML = cartes;
+  // Historique match par match
+  const rows = [];
+  if(snapMatchs){
+    snapMatchs.forEach(d => {
+      const m = d.data(); const l = (m.lignes||[]).find(x => x.pid === pid);
+      if(!l) return;
+      const estDom = (m.domId === l.eqId);
+      const advNom = estDom ? (m.extNom||'') : (m.domNom||'');
+      const pour   = estDom ? (+m.butsDom||0) : (+m.butsExt||0);
+      const contre = estDom ? (+m.butsExt||0) : (+m.butsDom||0);
+      const res = pour > contre ? 'V' : (m.prolongation ? 'DP' : 'D');
+      let dateStr = '';
+      if(m.eaTs){ dateStr = new Date(m.eaTs*1000).toLocaleDateString(langue==='en'?'en-CA':'fr-CA', {day:'numeric',month:'short'}); }
+      else if(m.createdAt && m.createdAt.toDate){ dateStr = m.createdAt.toDate().toLocaleDateString(langue==='en'?'en-CA':'fr-CA', {day:'numeric',month:'short'}); }
+      const estG = (l.tirs !== undefined && l.tirs !== null && +l.tirs > 0);
+      const stat = estG ? ('🥅 ' + (+l.arr||0) + '/' + (+l.tirs||0)) : ('<b>' + (+l.b||0) + 'B</b> · ' + (+l.a||0) + 'A');
+      rows.push('<div class="dt-row"><span class="pf-res pf-' + res.toLowerCase() + '">' + res + '</span>'
+        + '<span class="pf-adv">' + (langue==='en'?'vs ':'c. ') + escapeHtml(advNom) + ' <em>' + pour + '-' + contre + '</em></span>'
+        + '<span class="pf-date">' + dateStr + '</span><span class="dt-stat">' + stat + '</span></div>');
+    });
+  }
+  document.getElementById('pf-historique').innerHTML = rows.length ? rows.join('') : '<div class="je-vide">' + t('profil.aucunMatch') + '</div>';
+  document.getElementById('modale-profil').classList.add('open');
+}
+function carteStat(lbl, val, accent){
+  return '<div class="pf-carte' + (accent ? ' accent' : '') + '"><div class="n">' + val + '</div><div class="l">' + lbl + '</div></div>';
+}
+function fermerProfil(){ document.getElementById('modale-profil').classList.remove('open'); }
+
+/* =========================================================
+   10e) PROFIL ÉQUIPE
+   ========================================================= */
+function ouvrirProfilEquipe(eqId){
+  const eq = trouverEquipeParId(eqId);
+  if(!eq) return;
+  document.getElementById('ep-logo').innerHTML = eqVisuel(eq, 54) || '?';
+  document.getElementById('ep-nom').textContent = eq.nom || '';
+  // Fiche V-D-DP + stats
+  let pj=0,v=0,dd=0,dp=0,bp=0,bc=0;
+  const forme = [];
+  if(snapMatchs){
+    snapMatchs.forEach(d => {
+      const m = d.data();
+      if(m.domId !== eqId && m.extId !== eqId) return;
+      const estDom = (m.domId === eqId);
+      const pour   = estDom ? (+m.butsDom||0) : (+m.butsExt||0);
+      const contre = estDom ? (+m.butsExt||0) : (+m.butsDom||0);
+      if(pour === contre) return;
+      pj++; bp += pour; bc += contre;
+      let res;
+      if(pour > contre){ v++; res='V'; } else { if(m.prolongation){ dp++; res='DP'; } else { dd++; res='D'; } }
+      const advNom = estDom ? (m.extNom||'') : (m.domNom||'');
+      forme.push({ id:d.id, res, pour, contre, advNom });
+    });
+  }
+  document.getElementById('ep-fiche').textContent = v + '-' + dd + '-' + dp + ' · ' + (v*2+dp) + ' ' + t('cl.pts').toLowerCase();
+  document.getElementById('ep-stats').innerHTML =
+    carteStat(t('cl.pj'), pj) + carteStat(t('cl.bp'), bp) + carteStat(t('cl.bc'), bc) + carteStat(t('cl.diff'), (bp-bc>0?'+':'')+(bp-bc), true);
+  // 5 derniers (snapMatchs est déjà trié du plus récent au plus vieux)
+  const cinq = forme.slice(0, 5);
+  document.getElementById('ep-forme').innerHTML = cinq.length
+    ? cinq.map(f => '<a class="ep-pill pf-' + f.res.toLowerCase() + '" onclick="fermerProfilEquipe();ouvrirDetail(\'' + f.id + '\')" title="' + escapeHtml(f.advNom) + '">' + f.res + ' <em>' + f.pour + '-' + f.contre + '</em></a>').join('')
+    : '<div class="je-vide">' + t('profil.aucunMatch') + '</div>';
+  // Alignement (trié par points)
+  const roster = [];
+  if(snapJoueurs){
+    snapJoueurs.forEach(d => {
+      const j = d.data();
+      if(j.equipeId !== eqId) return;
+      roster.push(Object.assign({id:d.id, nom:j.nom||'', position:j.position||''}, statsJoueur(d.id)));
+    });
+  }
+  roster.sort((a,b) => b.pts - a.pts || (a.nom||'').localeCompare(b.nom||''));
+  document.getElementById('ep-roster').innerHTML = roster.length
+    ? roster.map(r => '<div class="dt-row"><span class="jr-pos2">' + escapeHtml(r.position) + '</span>'
+        + '<a class="lien-eq" onclick="fermerProfilEquipe();ouvrirProfilJoueur(\'' + r.id + '\')">' + escapeHtml(r.nom) + '</a>'
+        + '<span class="dt-stat"><b>' + r.b + 'B</b> · ' + r.a + 'A · ' + r.pts + ' ' + t('cl.pts').toLowerCase() + '</span></div>').join('')
+    : '<div class="je-vide">' + t('joueurs.equipevide') + '</div>';
+  document.getElementById('modale-equipe-profil').classList.add('open');
+}
+function fermerProfilEquipe(){ document.getElementById('modale-equipe-profil').classList.remove('open'); }
+
+/* =========================================================
+   10f) ACCUEIL VIVANT (derniers résultats / prochains / meneurs)
+   ========================================================= */
+function rendreAccueilLive(){
+  const R = document.getElementById('live-resultats');
+  const C = document.getElementById('live-calendrier');
+  const M = document.getElementById('live-meneurs');
+  if(!R || !C || !M) return;
+  // Derniers résultats (3)
+  const derniers = [];
+  if(snapMatchs){ snapMatchs.forEach(d => { if(derniers.length < 3) derniers.push(Object.assign({id:d.id}, d.data())); }); }
+  R.innerHTML = derniers.length
+    ? derniers.map(m => {
+        const eqD = trouverEquipeParId(m.domId) || {};
+        const eqE = trouverEquipeParId(m.extId) || {};
+        return '<a class="live-row" onclick="ouvrirDetail(\'' + m.id + '\')">'
+          + '<span class="lr-eq">' + eqVisuel(eqD, 20) + escapeHtml((m.domNom||'')) + '</span>'
+          + '<b class="lr-score">' + (+m.butsDom) + '-' + (+m.butsExt) + '</b>'
+          + '<span class="lr-eq ext">' + escapeHtml((m.extNom||'')) + eqVisuel(eqE, 20) + '</span></a>';
+      }).join('')
+    : '<div class="je-vide">' + t('live.aucunResultat') + '</div>';
+  // Prochains matchs (3)
+  const prochains = [];
+  if(snapCal){ snapCal.forEach(d => { if(prochains.length < 3) prochains.push(d.data()); }); }
+  C.innerHTML = prochains.length
+    ? prochains.map(c => {
+        const eqD = trouverEquipeParId(c.domId) || {};
+        const eqE = trouverEquipeParId(c.extId) || {};
+        const dt = (c.date || '') + (c.heure ? ' · ' + c.heure : '');
+        return '<div class="live-row"><span class="lr-eq">' + eqVisuel(eqD, 20) + escapeHtml(c.domNom||'') + '</span>'
+          + '<span class="lr-vs">VS</span>'
+          + '<span class="lr-eq ext">' + escapeHtml(c.extNom||'') + eqVisuel(eqE, 20) + '</span>'
+          + '<span class="lr-date">' + escapeHtml(dt) + '</span></div>';
+      }).join('')
+    : '<div class="je-vide">' + t('live.aucunMatch') + '</div>';
+  // Meneurs (top 3)
+  const top = listePointeurs().slice(0, 3);
+  M.innerHTML = top.length
+    ? top.map((p, i) => {
+        const eq = trouverEquipeParId(p.equipeId) || {};
+        return '<a class="live-row" onclick="ouvrirProfilJoueur(\'' + p.id + '\')">'
+          + '<span class="lr-rang r' + (i+1) + '">' + (i+1) + '</span>'
+          + '<span class="lr-eq">' + eqVisuel(eq, 20) + escapeHtml(p.nom) + '</span>'
+          + '<b class="lr-pts">' + p.pts + ' ' + t('cl.pts').toLowerCase() + '</b></a>';
+      }).join('')
+    : '<div class="je-vide">' + t('live.aucunMeneur') + '</div>';
+}
+
+/* =========================================================
+   10g) PALMARÈS (trophées et honneurs)
+   ========================================================= */
+let snapPalmares = null;
+function initPalmares(){
+  db.collection('palmares').orderBy('ts','desc').onSnapshot(snap => {
+    snapPalmares = snap; rendrePalmares();
+  }, err => {
+    const c = document.getElementById('palmares-list');
+    if(c) c.innerHTML = videHTML(ico('warning'), t('err.connexion'), err.message);
+  });
+}
+function rendrePalmares(){
+  const cont = document.getElementById('palmares-list');
+  if(!cont || !snapPalmares) return;
+  if(snapPalmares.empty){ cont.innerHTML = videHTML(ico('trophy'), t('palmares.vide.t'), t('palmares.vide.s')); return; }
+  let html = '<div class="pal-grid">';
+  snapPalmares.forEach(d => {
+    const p = d.data();
+    html += '<div class="pal-carte">'
+      + '<div class="pal-ico">🏆</div>'
+      + '<h3>' + escapeHtml(p.titre||'') + '</h3>'
+      + '<div class="pal-gagnant">' + escapeHtml(p.gagnant||'') + '</div>'
+      + (p.desc ? '<p>' + escapeHtml(p.desc) + '</p>' : '')
+      + '<button class="del-btn admin-only" onclick="supprimerTrophee(\'' + d.id + '\')">' + t('btn.supprimer') + '</button>'
+      + '</div>';
+  });
+  html += '</div>';
+  cont.innerHTML = html;
+  appliquerRoles();
+}
+function ajouterTrophee(){
+  const titre = document.getElementById('pal-titre').value.trim();
+  const gagnant = document.getElementById('pal-gagnant').value.trim();
+  const desc = document.getElementById('pal-desc').value.trim();
+  if(!titre || !gagnant){ alert(t('palmares.besoin')); return; }
+  db.collection('palmares').add({ titre, gagnant, desc, ts: firebase.firestore.FieldValue.serverTimestamp() })
+    .then(() => {
+      document.getElementById('pal-titre').value = '';
+      document.getElementById('pal-gagnant').value = '';
+      document.getElementById('pal-desc').value = '';
+    }).catch(e => alert(t('commun.erreur') + e.message));
+}
+function supprimerTrophee(id){
+  if(confirm(t('palmares.confirmSuppr'))){
+    db.collection('palmares').doc(id).delete().catch(e => alert(t('commun.erreur') + e.message));
   }
 }
 
@@ -2501,7 +3047,14 @@ function analyserMatchsEA(matchs){
       Object.keys(joueurs).forEach(pkey => {
         const p = joueurs[pkey];
         const pid = joueurParGamertag(eq.id, p.playername);
-        if(pid){ lignes.push({ pid:pid, eqId:eq.id, b:+p.skgoals||0, a:+p.skassists||0 }); }
+        if(pid){
+          const ligne = { pid:pid, eqId:eq.id, b:+p.skgoals||0, a:+p.skassists||0 };
+          // Stats de gardien EA (arrêts / tirs reçus) quand dispo
+          if((p.position === 'goalie' || (+p.glshots||0) > 0)){
+            ligne.arr = +p.glsaves||0; ligne.tirs = +p.glshots||0;
+          }
+          lignes.push(ligne);
+        }
         else { manquants++; }
       });
     });
@@ -2558,6 +3111,7 @@ function confirmerImport(){
       prolongation: false,
       lignes: x.lignes,
       eaMatchId: x.eaMatchId,
+      eaTs: x.timestamp || null,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     };
     return db.collection('matchs').add(donnees).then(() => { faits++; });
@@ -2608,6 +3162,7 @@ function rendreCalendrier(){
     html += '</div>';
   });
   cont.innerHTML = html;
+  if(typeof rendreAccueilLive === 'function') rendreAccueilLive();
 }
 // Depuis le calendrier : ouvre la feuille de match pré-remplie ; efface l'entrée du calendrier une fois enregistrée
 function jouerMatch(calId){
@@ -2675,10 +3230,10 @@ function rendreGardiens(){
     if(gs.length === 0) return;
     const couleur = e.couleur || '#D4AF37';
     html += '<div class="joueurs-equipe"><div class="je-head"><span class="je-dot" style="background:' + couleur + '"></span><h3>' + escapeHtml(e.nom || '') + '</h3></div>';
-    html += '<div class="gd-wrap"><table class="gd-table"><thead><tr><th class="cl-eq">' + t('cl.equipe') + '</th><th>' + t('gd.pj') + '</th><th>' + t('gd.v') + '</th><th>' + t('gd.d') + '</th><th>' + t('cl.dp') + '</th><th>' + t('gd.bl') + '</th><th>' + t('gd.moy') + '</th></tr></thead><tbody>';
+    html += '<div class="gd-wrap"><table class="gd-table"><thead><tr><th class="cl-eq">' + t('cl.equipe') + '</th><th>' + t('gd.pj') + '</th><th>' + t('gd.v') + '</th><th>' + t('gd.d') + '</th><th>' + t('cl.dp') + '</th><th>' + t('gd.bl') + '</th><th>' + t('gd.arrpct') + '</th><th>' + t('gd.moy') + '</th></tr></thead><tbody>';
     gs.forEach(g => {
       const s = statsGardien(g.id);
-      html += '<tr><td class="cl-eq">' + escapeHtml(g.nom || '') + '</td><td>' + s.pj + '</td><td>' + s.v + '</td><td>' + s.dd + '</td><td>' + s.dp + '</td><td>' + s.bl + '</td><td class="cl-pts">' + s.moy + '</td></tr>';
+      html += '<tr><td class="cl-eq"><a class="lien-eq" onclick="ouvrirProfilJoueur(\'' + g.id + '\')"><span>' + escapeHtml(g.nom || '') + '</span></a></td><td>' + s.pj + '</td><td>' + s.v + '</td><td>' + s.dd + '</td><td>' + s.dp + '</td><td>' + s.bl + '</td><td>' + (s.arrPct || '—') + '</td><td class="cl-pts">' + s.moy + '</td></tr>';
     });
     html += '</tbody></table></div></div>';
   });
@@ -2745,7 +3300,7 @@ function supprimerInscription(id){
 }
 
 /* Redessine les listes dynamiques (au changement de langue / rôle) */
-function rafraichirDynamique(){ rendreAnnonces(); rendreTransactions(); rendreReglements(); rendreEquipes(); rendreJoueurs(); rendreTrades(); rendreResultats(); rendreClassements(); rendreCalendrier(); rendreGardiens(); rendreInscriptions(); }
+function rafraichirDynamique(){ rendreAnnonces(); rendreTransactions(); rendreReglements(); rendreEquipes(); rendreJoueurs(); rendreTrades(); rendreResultats(); rendreClassements(); rendreCalendrier(); rendreGardiens(); rendreInscriptions(); rendrePalmares(); rendreAccueilLive(); }
 
 /* =========================================================
    6) DÉMARRAGE
@@ -2769,6 +3324,7 @@ function demarrer(){
   initDiscordConfig();
   initTransactions();
   initDiscordTxConfig();
+  initPalmares();
 }
 demarrer();
 
