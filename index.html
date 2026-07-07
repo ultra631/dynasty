@@ -166,6 +166,7 @@ main{padding:26px 0 60px}
 /* ===== Formulaires admin ===== */
 .admin-only{display:none}
 body.is-admin .admin-only{display:block}
+body.is-admin .btn-rangee.admin-only{display:flex;gap:8px;flex-wrap:wrap}
 .admin-panel{background:#0d0d12;border:1px solid var(--rouge);border-radius:14px;padding:18px;margin-bottom:18px}
 .admin-panel .lbl{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--rouge-clair);margin-bottom:12px;font-weight:700}
 input,textarea{
@@ -1024,7 +1025,7 @@ a.live-row:hover{background:rgba(212,175,55,.06)}
   <section class="page" id="resultats">
     <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="resultats.titre">Résultats</h2><p data-i18n="resultats.sous">Les résultats des matchs.</p></div>
 
-    <div class="admin-only" style="margin-bottom:16px;display:flex;gap:8px;flex-wrap:wrap">
+    <div class="admin-only btn-rangee" style="margin-bottom:16px">
       <button class="btn btn-or" onclick="ouvrirMatch()" data-i18n="resultats.ajouter">+ Ajouter un résultat</button>
       <button class="btn btn-ghost" onclick="ouvrirImport()" data-i18n="import.btn">📥 Importer depuis EA</button>
     </div>
