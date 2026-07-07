@@ -1396,7 +1396,7 @@ const DICT = {
     'echanges.retirer':'Retirer','echanges.attenteAdmin':"En attente de l'approbation de l'admin.",
     'echanges.aucunDispo':'Aucun joueur disponible.',
     'echanges.besoinJoueurs':'Choisis au moins un joueur de chaque côté.','echanges.memeEquipe':'Choisis deux équipes différentes.',
-    'echanges.confirmRefus':'Refuser cet échange ?','echanges.confirmAnnul':'Retirer cette proposition ?',
+    'echanges.confirmRefus':'Refuser cet échange ?','echanges.confirmAnnul':'Retirer cette proposition ?','echanges.confirmSuppr':'Supprimer cet échange définitivement ?',
     'echanges.confirmApprouve':"Approuver — les joueurs vont changer d'équipe. Continuer ?",
     'btn.accepter':'Accepter','btn.refuser':'Refuser','btn.contre':'Contre-offre','btn.approuver':'Approuver',
     'statut.propose':'Proposé','statut.accepte_dg':'Accepté — attente admin','statut.approuve':'Approuvé ✅','statut.refuse':'Refusé','statut.contre':'Contre-offre faite',
@@ -1494,7 +1494,7 @@ const DICT = {
     'echanges.retirer':'Withdraw','echanges.attenteAdmin':'Awaiting admin approval.',
     'echanges.aucunDispo':'No players available.',
     'echanges.besoinJoueurs':'Pick at least one player on each side.','echanges.memeEquipe':'Pick two different teams.',
-    'echanges.confirmRefus':'Decline this trade?','echanges.confirmAnnul':'Withdraw this proposal?',
+    'echanges.confirmRefus':'Decline this trade?','echanges.confirmAnnul':'Withdraw this proposal?','echanges.confirmSuppr':'Delete this trade permanently?',
     'echanges.confirmApprouve':'Approve — players will switch teams. Continue?',
     'btn.accepter':'Accept','btn.refuser':'Decline','btn.contre':'Counter','btn.approuver':'Approve',
     'statut.propose':'Proposed','statut.accepte_dg':'Accepted — awaiting admin','statut.approuve':'Approved ✅','statut.refuse':'Declined','statut.contre':'Countered',
@@ -2241,6 +2241,10 @@ function carteTrade(tr){
       actions = '<span class="ech-note">' + t('echanges.attenteAdmin') + '</span>';
     }
   }
+  // L'admin peut supprimer n'importe quel échange (ménage de l'historique inclus)
+  if(estAdmin){
+    actions += '<button class="del-btn" onclick="supprimerEchange(\'' + tr.id + '\')">' + t('btn.supprimer') + '</button>';
+  }
   return '<div class="trade-card">'
     + '<div class="tc-head"><b>' + escapeHtml(tr.deNom || '') + '</b> ⇄ <b>' + escapeHtml(tr.versNom || '') + '</b>'
       + '<span class="tc-statut s-' + tr.statut + '">' + badgeStatut(tr.statut) + '</span></div>'
@@ -2353,6 +2357,13 @@ function refuserEchange(id){
 }
 function annulerEchange(id){
   if(confirm(t('echanges.confirmAnnul'))){
+    db.collection('trades').doc(id).delete().catch(e => alert(t('commun.erreur') + e.message));
+  }
+}
+// Suppression admin : efface l'échange pour de bon (peu importe son statut)
+function supprimerEchange(id){
+  if(!estAdmin) return;
+  if(confirm(t('echanges.confirmSuppr'))){
     db.collection('trades').doc(id).delete().catch(e => alert(t('commun.erreur') + e.message));
   }
 }
