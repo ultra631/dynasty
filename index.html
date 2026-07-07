@@ -77,7 +77,12 @@ header{
 .bar{display:flex;align-items:center;gap:12px;padding:10px 18px;max-width:980px;margin:0 auto}
 .brand{display:flex;align-items:center;gap:11px;min-width:0}
 .brand img{width:38px;height:38px;border-radius:8px}
-.brand .name{font-family:'Cinzel',serif;font-weight:900;font-size:20px;letter-spacing:.14em}
+.brand .name{font-family:'Cinzel',serif;font-weight:900;font-size:20px;letter-spacing:.14em;display:flex;flex-direction:column;line-height:1}
+.name-sous{font-family:Inter,sans-serif;font-weight:600;font-size:8.5px;letter-spacing:.42em;color:var(--texte-doux);margin-top:3px}
+.hero-sousmarque{font-family:'Cinzel',serif;font-weight:700;font-size:clamp(13px,2.6vw,19px);letter-spacing:.55em;text-indent:.55em;
+  color:var(--platine);opacity:.9;margin-top:6px;text-align:center;
+  background:var(--grad-or);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  animation:heroIn 1s .25s ease both}
 .brand .name .gold-text{display:inline}
 .admin-btn{
   flex-shrink:0;
@@ -700,6 +705,8 @@ a.live-row:hover{background:rgba(212,175,55,.06)}
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .pal-carte p{font-size:12px;color:var(--texte-doux);margin:8px 0 0}
 .pal-carte .del-btn{margin-top:10px}
+.btn-mini.ea{border-color:rgba(143,199,232,.4);color:#8fc7e8}
+.btn-mini.ea:hover{background:rgba(143,199,232,.1)}
 </style>
 </head>
 <body>
@@ -714,7 +721,7 @@ a.live-row:hover{background:rgba(212,175,55,.06)}
   <div class="bar">
     <a class="brand" href="#accueil">
       <img src="logo.png" alt="DYNASTY">
-      <span class="name"><span class="gold-text">DYNASTY</span></span>
+      <span class="name"><span class="gold-text">DYNASTY</span><small class="name-sous">HOCKEY LEAGUE</small></span>
     </a>
     <button class="lang-btn" id="lang-btn" onclick="basculerLangue()" title="Language / Langue">EN</button>
     <button class="admin-btn" onclick="ouvrirModale()" title="Mode admin">&#9819;</button>
@@ -752,6 +759,7 @@ a.live-row:hover{background:rgba(212,175,55,.06)}
         <span class="logo-shine" aria-hidden="true"></span>
       </div>
       <h1 class="hero-title">DYNASTY</h1>
+      <div class="hero-sousmarque">HOCKEY LEAGUE</div>
       <div class="tag" data-i18n="hero.tag">Ligue compétitive de hockey vidéo · NHL 27 · World of Chel</div>
       <div class="badges">
         <span class="pill" data-i18n="badge.mode">Mode 4S</span>
@@ -1274,6 +1282,20 @@ a.live-row:hover{background:rgba(212,175,55,.06)}
   </div>
 </div>
 
+<!-- ============================ MODALE PROFIL EA (inscription) ============================ -->
+<div class="modal" id="modale-ea">
+  <div class="modal-box" style="max-width:540px;text-align:left">
+    <h3 class="cinzel" style="text-align:center">🎮 <span data-i18n="ea.titre">Profil EA</span></h3>
+    <div class="pf-sub" style="justify-content:center;margin:6px 0 12px"><span id="ea-gamertag" class="pf-positions"></span><span id="ea-club" class="pf-eq"></span></div>
+    <div id="ea-statut" class="insc-merci" style="display:none;margin-bottom:12px"></div>
+    <div id="ea-contenu"></div>
+    <div class="cta-row" style="margin-top:14px">
+      <button class="btn btn-ghost" id="ea-btn-refresh" onclick="chercherProfilEA(true)" style="display:none" data-i18n="ea.rafraichir">🔄 Rafraîchir depuis EA</button>
+      <button class="btn btn-ghost" onclick="fermerProfilEA()" data-i18n="commun.fermer">Fermer</button>
+    </div>
+  </div>
+</div>
+
 <!-- ============================ MODALE CALENDRIER ============================ -->
 <div class="modal" id="modale-cal">
   <div class="modal-box" style="max-width:400px;text-align:left">
@@ -1377,6 +1399,7 @@ const DICT = {
     'ep.derniers':'5 derniers matchs','ep.alignement':'Alignement',
     'detail.titre':'Feuille de match','detail.aucunJoueur':'Aucune stat de joueur pour ce match.',
     'palmares.titre':'Palmarès','palmares.sous':'Les trophées et honneurs de la ligue.','palmares.admlbl':'Admin · Remettre un trophée','palmares.ph.titre':'Ex. Champion Saison 1','palmares.ph.gagnant':'Équipe ou joueur gagnant','palmares.ph.desc':'Description (optionnel)','palmares.remettre':'Remettre le trophée','palmares.vide.t':'La chasse aux trophées est ouverte','palmares.vide.s':'Les honneurs seront remis à la fin de la saison. 👑','palmares.besoin':'Écris le titre et le gagnant.','palmares.confirmSuppr':'Retirer ce trophée ?',
+    'ea.profil':'Profil EA','ea.titre':'Profil EA','ea.rafraichir':'🔄 Rafraîchir depuis EA','ea.chargement':'Connexion à EA… (10-20 sec)','ea.trouve':'Profil trouvé sur EA! (mis en mémoire)','ea.introuvable':'Aucun joueur trouvé avec ce gamertag sur EA.','ea.erreur':'Erreur de connexion à EA. Réessaie.','ea.sansNom':'Cette inscription n\'a pas de gamertag.','ea.fiche':'Fiche','ea.vpct':'% Vict.','ea.ptspg':'Pts/match','ea.tricks':'Tours du chapeau','ea.gardien':'Comme gardien','insc.creerJoueur':'Créer le joueur',
     'eq.besoinNom':"Donne un nom à l'équipe.",'eq.confirmSuppr':'Supprimer cette équipe ?',
     'joueurs.ajouter':'+ Ajouter un joueur','joueurs.vide.t':'🏒 Les alignements se construisent','joueurs.vide.s':'Les joueurs seront affichés ici dès la formation des équipes.',
     'joueurs.pasdequipe.t':'🏒 Les alignements se construisent','joueurs.pasdequipe.s':'Les joueurs seront affichés ici dès la formation des équipes.',
@@ -1475,6 +1498,7 @@ const DICT = {
     'ep.derniers':'Last 5 games','ep.alignement':'Roster',
     'detail.titre':'Game sheet','detail.aucunJoueur':'No player stats for this game.',
     'palmares.titre':'Honours','palmares.sous':'League trophies and honours.','palmares.admlbl':'Admin · Award a trophy','palmares.ph.titre':'Ex. Season 1 Champion','palmares.ph.gagnant':'Winning team or player','palmares.ph.desc':'Description (optional)','palmares.remettre':'Award trophy','palmares.vide.t':'The trophy hunt is on','palmares.vide.s':'Honours will be awarded at the end of the season. 👑','palmares.besoin':'Write the title and the winner.','palmares.confirmSuppr':'Remove this trophy?',
+    'ea.profil':'EA Profile','ea.titre':'EA Profile','ea.rafraichir':'🔄 Refresh from EA','ea.chargement':'Connecting to EA… (10-20 sec)','ea.trouve':'Profile found on EA! (cached)','ea.introuvable':'No player found with this gamertag on EA.','ea.erreur':'EA connection error. Try again.','ea.sansNom':'This registration has no gamertag.','ea.fiche':'Record','ea.vpct':'Win %','ea.ptspg':'Pts/game','ea.tricks':'Hat tricks','ea.gardien':'As goalie','insc.creerJoueur':'Create player',
     'eq.besoinNom':'Give the team a name.','eq.confirmSuppr':'Delete this team?',
     'joueurs.ajouter':'+ Add a player','joueurs.vide.t':'🏒 Rosters in the making','joueurs.vide.s':'Players will show up here as teams are formed.',
     'joueurs.pasdequipe.t':'🏒 Rosters in the making','joueurs.pasdequipe.s':'Players will show up here as teams are formed.',
@@ -3296,6 +3320,8 @@ function rendreInscriptions(){
       + '<div class="ic-date">' + formaterDate(i.createdAt) + '</div>'
       + '<div class="ic-actions">'
         + '<button class="btn-mini' + (traite ? '' : ' ok') + '" onclick="basculerInscription(\'' + i.id + '\',' + (traite ? 'false' : 'true') + ')">' + t(traite ? 'insc.marquerNouveau' : 'insc.marquerTraite') + '</button>'
+        + '<button class="btn-mini ok" onclick="creerJoueurDepuisInscription(\'' + i.id + '\')">➕ ' + t('insc.creerJoueur') + '</button>'
+        + '<button class="btn-mini ea" onclick="ouvrirProfilEA(\'' + i.id + '\')">🎮 ' + t('ea.profil') + (i.eaProfil ? ' ✓' : '') + '</button>'
         + '<button class="del-btn" onclick="supprimerInscription(\'' + i.id + '\')">' + t('btn.supprimer') + '</button>'
       + '</div></div>';
   });
@@ -3309,6 +3335,128 @@ function supprimerInscription(id){
   if(confirm(t('insc.confirmSuppr'))){
     db.collection('inscriptions').doc(id).delete().catch(e => alert(t('commun.erreur') + e.message));
   }
+}
+
+/* Crée un joueur à partir d'une inscription : nom + compte EA (gamertag)
+   déjà reliés — AUCUN appel à EA (gratuit). L'admin choisit juste l'équipe. */
+function creerJoueurDepuisInscription(inscId){
+  if(!snapInsc) return;
+  let insc = null;
+  snapInsc.forEach(d => { if(d.id === inscId) insc = Object.assign({id:d.id}, d.data()); });
+  if(!insc) return;
+  ouvrirJoueur();                                        // modale "nouveau joueur"
+  document.getElementById('jo-nom').value = insc.nom || '';
+  document.getElementById('jo-eanom').value = insc.nom || '';   // ← compte EA relié (gamertag)
+  setPositions('jo-positions', insc.position || '');
+}
+
+/* =========================================================
+   13b) PROFIL EA D'UNE INSCRIPTION (recherche par gamertag,
+        via le Worker + Scrapfly ; mis en cache dans Firestore)
+   ========================================================= */
+let eaInscEnCours = null;   // {id, nom}
+
+function ouvrirProfilEA(inscId){
+  if(!snapInsc) return;
+  let insc = null;
+  snapInsc.forEach(d => { if(d.id === inscId) insc = Object.assign({id:d.id}, d.data()); });
+  if(!insc) return;
+  eaInscEnCours = insc;
+  document.getElementById('ea-gamertag').textContent = insc.nom || '';
+  document.getElementById('ea-club').textContent = '';
+  document.getElementById('ea-contenu').innerHTML = '';
+  document.getElementById('ea-btn-refresh').style.display = 'none';
+  const st = document.getElementById('ea-statut'); st.style.display = 'none';
+  document.getElementById('modale-ea').classList.add('open');
+  if(insc.eaProfil){
+    afficherProfilEA(insc.eaProfil);                       // cache → gratuit
+    document.getElementById('ea-btn-refresh').style.display = 'inline-flex';
+  } else {
+    chercherProfilEA(false);                               // 1re fois → appel EA
+  }
+}
+function fermerProfilEA(){ document.getElementById('modale-ea').classList.remove('open'); }
+
+function eaStatut(txt, ok){
+  const m = document.getElementById('ea-statut');
+  m.textContent = txt;
+  m.style.borderColor = ok ? 'rgba(126,224,160,.4)' : 'rgba(214,77,77,.5)';
+  m.style.color = ok ? '#7ee0a0' : '#e58a8a';
+  m.style.background = ok ? 'rgba(126,224,160,.1)' : 'rgba(214,77,77,.08)';
+  m.style.display = 'block';
+}
+
+function chercherProfilEA(force){
+  if(!eaInscEnCours) return;
+  const gamertag = (eaInscEnCours.nom || '').trim();
+  if(!gamertag){ eaStatut(t('ea.sansNom'), false); return; }
+  eaStatut(t('ea.chargement'), true);
+  document.getElementById('ea-btn-refresh').style.display = 'none';
+
+  const url = EA_WORKER + '/?path=members/search&platform=' + EA_PLATFORM
+            + '&memberName=' + encodeURIComponent(gamertag);
+  fetch(url).then(r => r.json()).then(data => {
+    // EA renvoie {members:[...]} ; on prend la correspondance exacte sinon la 1re
+    const membres = (data && data.members) ? data.members : (Array.isArray(data) ? data : []);
+    if(!membres || membres.length === 0){ eaStatut(t('ea.introuvable'), false); return; }
+    let m = membres.find(x => (x.name||'').toLowerCase() === gamertag.toLowerCase()) || membres[0];
+    const profil = extraireProfilEA(m);
+    afficherProfilEA(profil);
+    eaStatut(t('ea.trouve'), true);
+    document.getElementById('ea-btn-refresh').style.display = 'inline-flex';
+    // Cache dans l'inscription (les prochaines consultations = gratuites)
+    db.collection('inscriptions').doc(eaInscEnCours.id).update({ eaProfil: profil, eaProfilTs: Date.now() }).catch(()=>{});
+  }).catch(() => eaStatut(t('ea.erreur'), false));
+}
+
+// Garde juste les champs utiles (évite de stocker le paquet complet)
+function extraireProfilEA(m){
+  return {
+    nomEA: m.name || '', plateforme: m.clientPlatform || '',
+    posFav: m.favoritePosition || '',
+    pj: +m.gamesplayed || +m.skgp || 0,
+    fiche: m.record || '',
+    vPct: m.skwinpct || m.winpct || '',
+    b: +m.skgoals || 0, a: +m.skassists || 0, pts: +m.skpoints || 0,
+    ptsPg: m.skpointspg || m.pointspg || '',
+    tricks: +m.skhattricks || 0, gwg: +m.skgwg || 0,
+    hits: +m.skhits || 0, passPct: m.skpasspct || '',
+    // gardien
+    gPj: +m.glgp || 0, gFiche: m.glrecord || '',
+    gArrPct: (m.glsavepct !== undefined && m.glsavepct !== null && m.glsavepct !== '') ? parseFloat(m.glsavepct).toFixed(1) : '',
+    gMoy: (m.glgaa !== undefined && m.glgaa !== null && m.glgaa !== '') ? parseFloat(m.glgaa).toFixed(2) : '', gBl: +m.glso || 0
+  };
+}
+
+function afficherProfilEA(p){
+  document.getElementById('ea-gamertag').textContent = p.nomEA || (eaInscEnCours && eaInscEnCours.nom) || '';
+  document.getElementById('ea-club').textContent = (p.plateforme ? p.plateforme.toUpperCase() : '') + (p.posFav ? ' · ' + traduirePosEA(p.posFav) : '');
+  let html = '<div class="pf-stats">'
+    + carteStat(t('cl.pj'), p.pj)
+    + carteStat(t('jo.b'), p.b)
+    + carteStat(t('jo.a'), p.a)
+    + carteStat(t('cl.pts'), p.pts, true)
+    + '</div>'
+    + '<div class="pf-stats" style="margin-top:8px">'
+    + carteStat(t('ea.fiche'), p.fiche || '—')
+    + carteStat(t('ea.vpct'), (p.vPct !== '' ? p.vPct + '%' : '—'))
+    + carteStat(t('ea.ptspg'), p.ptsPg || '—')
+    + carteStat(t('ea.tricks'), p.tricks)
+    + '</div>';
+  if(p.gPj > 0){
+    html += '<div class="sous-head"><h3>🥅 ' + t('ea.gardien') + '</h3></div>'
+      + '<div class="pf-stats">'
+      + carteStat(t('gd.pj'), p.gPj)
+      + carteStat(t('ea.fiche'), p.gFiche || '—')
+      + carteStat(t('gd.arrpct'), (p.gArrPct !== '' ? p.gArrPct + '%' : '—'))
+      + carteStat(t('gd.moy'), p.gMoy || '—')
+      + '</div>';
+  }
+  document.getElementById('ea-contenu').innerHTML = html;
+}
+function traduirePosEA(pos){
+  const map = { goalie:'G', defenseMen:'D', center:'C', leftWing:(langue==='en'?'LW':'AG'), rightWing:(langue==='en'?'RW':'AD'), forwards:(langue==='en'?'F':'Att') };
+  return map[pos] || pos;
 }
 
 /* Redessine les listes dynamiques (au changement de langue / rôle) */
