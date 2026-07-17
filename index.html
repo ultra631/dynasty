@@ -543,6 +543,10 @@ th.cl-eq{display:table-cell}
 .ic-statut.s-new{color:var(--or);border-color:rgba(212,175,55,.4)}
 .ic-statut.s-ok{color:#7ee0a0;border-color:rgba(126,224,160,.4)}
 .ic-meta{color:var(--texte);font-size:13.5px;margin-top:7px}
+.ic-dg{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;letter-spacing:.02em;
+  border-radius:99px;padding:4px 11px;margin-top:8px}
+.ic-dg.dg-oui{color:#f0d27a;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.4)}
+.ic-dg.dg-peut{color:var(--texte-doux);background:rgba(140,140,160,.1);border:1px solid var(--bordure)}
 .ic-date{color:var(--texte-doux);font-size:12px;margin-top:3px}
 .ic-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
 .ic-actions .del-btn{margin-top:0}
@@ -952,6 +956,12 @@ a.live-row:hover{background:rgba(212,175,55,.06)}
         </div>
         <label class="champ-lbl" data-i18n="insc.discord">Discord</label>
         <input id="insc-discord" placeholder="ton_pseudo" data-i18n-ph="insc.discord.ph">
+        <label class="champ-lbl" data-i18n="insc.dg">Veux-tu être directeur général (DG)?</label>
+        <select id="insc-dg">
+          <option value="non" data-i18n="insc.dg.non">Non, juste jouer</option>
+          <option value="oui" data-i18n="insc.dg.oui">Oui, j'aimerais gérer une équipe</option>
+          <option value="peut-etre" data-i18n="insc.dg.peutetre">Peut-être / ouvert à en discuter</option>
+        </select>
         <div id="insc-merci" class="insc-merci" style="display:none" data-i18n="insc.merci">Merci! Ton inscription est envoyée. Un admin va te contacter.</div>
         <div class="cta-row" style="justify-content:flex-start;margin-top:14px">
           <button class="btn btn-or" onclick="envoyerInscription()" data-i18n="insc.envoyer">M'inscrire</button>
@@ -1366,7 +1376,7 @@ const DICT = {
     'inscriptions.titre':'Inscriptions','inscriptions.sous':'Rejoins la ligue DYNASTY.',
     'inscriptions.commenttitre':"Comment s'inscrire",'inscriptions.commenttexte':"Remplis le formulaire pour t'inscrire comme joueur (free agent). Un admin va te contacter sur Discord.",
     'inscriptions.bouton':"Formulaire d'inscription",
-    'insc.nom':'Nom / Gamertag','insc.nom.ph':'Ton gamertag en jeu','insc.plateforme':'Plateforme','insc.position':'Positions','insc.discord':'Discord','insc.discord.ph':'ton_pseudo',
+    'insc.nom':'Nom / Gamertag','insc.nom.ph':'Ton gamertag en jeu','insc.plateforme':'Plateforme','insc.position':'Positions','insc.discord':'Discord','insc.discord.ph':'ton_pseudo','insc.dg':'Veux-tu être directeur général (DG)?','insc.dg.non':'Non, juste jouer','insc.dg.oui':'Oui, j\'aimerais gérer une équipe','insc.dg.peutetre':'Peut-être / ouvert à en discuter','insc.dgBadge':'Intéressé à être DG','insc.dgPeut':'DG — peut-être',
     'insc.envoyer':"M'inscrire",'insc.merci':'Merci! Ton inscription est envoyée. Un admin va te contacter.','insc.besoinNom':'Mets au moins ton nom / gamertag.',
     'insc.admin.titre':'Inscriptions reçues','insc.vide':'Aucune inscription pour le moment.','insc.nouveau':'Nouveau','insc.traite':'Traité',
     'insc.marquerTraite':'Marquer traité','insc.marquerNouveau':'Remettre nouveau','insc.confirmSuppr':'Supprimer cette inscription ?',
@@ -1465,7 +1475,7 @@ const DICT = {
     'inscriptions.titre':'Sign-up','inscriptions.sous':'Join the DYNASTY league.',
     'inscriptions.commenttitre':'How to sign up','inscriptions.commenttexte':'Fill out the form to sign up as a player (free agent). An admin will reach out on Discord.',
     'inscriptions.bouton':'Sign-up form',
-    'insc.nom':'Name / Gamertag','insc.nom.ph':'Your in-game gamertag','insc.plateforme':'Platform','insc.position':'Positions','insc.discord':'Discord','insc.discord.ph':'your_handle',
+    'insc.nom':'Name / Gamertag','insc.nom.ph':'Your in-game gamertag','insc.plateforme':'Platform','insc.position':'Positions','insc.discord':'Discord','insc.discord.ph':'your_handle','insc.dg':'Do you want to be a general manager (GM)?','insc.dg.non':'No, just play','insc.dg.oui':'Yes, I\'d like to manage a team','insc.dg.peutetre':'Maybe / open to it','insc.dgBadge':'Interested in being GM','insc.dgPeut':'GM — maybe',
     'insc.envoyer':'Sign me up','insc.merci':'Thanks! Your registration is in. An admin will reach out.','insc.besoinNom':'Enter at least your name / gamertag.',
     'insc.admin.titre':'Registrations received','insc.vide':'No registrations yet.','insc.nouveau':'New','insc.traite':'Processed',
     'insc.marquerTraite':'Mark processed','insc.marquerNouveau':'Mark as new','insc.confirmSuppr':'Delete this registration?',
@@ -3293,9 +3303,10 @@ function envoyerInscription(){
   const plateforme = document.getElementById('insc-plateforme').value;
   const position = collectPositions('insc-positions');
   const discord = document.getElementById('insc-discord').value.trim();
+  const dg = document.getElementById('insc-dg') ? document.getElementById('insc-dg').value : 'non';
   if(!nom){ alert(t('insc.besoinNom')); return; }
   db.collection('inscriptions').add({
-    nom, plateforme, position, discord, statut:'nouveau',
+    nom, plateforme, position, discord, dg, statut:'nouveau',
     createdAt: firebase.firestore.FieldValue.serverTimestamp()
   }).then(() => {
     document.getElementById('insc-nom').value = '';
@@ -3317,6 +3328,7 @@ function rendreInscriptions(){
         + '<span class="ic-statut ' + (traite ? 's-ok' : 's-new') + '">' + t(traite ? 'insc.traite' : 'insc.nouveau') + '</span></div>'
       + '<div class="ic-meta">' + escapeHtml(i.position || '') + ' · ' + escapeHtml(i.plateforme || '')
         + (i.discord ? (' · 💬 ' + escapeHtml(i.discord)) : '') + '</div>'
+      + (i.dg==='oui' ? '<div class="ic-dg dg-oui">👔 ' + t('insc.dgBadge') + '</div>' : (i.dg==='peut-etre' ? '<div class="ic-dg dg-peut">👔 ' + t('insc.dgPeut') + '</div>' : ''))
       + '<div class="ic-date">' + formaterDate(i.createdAt) + '</div>'
       + '<div class="ic-actions">'
         + '<button class="btn-mini' + (traite ? '' : ' ok') + '" onclick="basculerInscription(\'' + i.id + '\',' + (traite ? 'false' : 'true') + ')">' + t(traite ? 'insc.marquerNouveau' : 'insc.marquerTraite') + '</button>'
