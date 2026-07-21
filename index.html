@@ -76,7 +76,7 @@ header{
 }
 .bar{display:flex;align-items:center;gap:12px;padding:10px 18px;max-width:980px;margin:0 auto}
 .brand{display:flex;align-items:center;gap:11px;min-width:0}
-.brand img{width:38px;height:38px;border-radius:8px}
+.brand img{width:38px;height:38px;border-radius:8px;object-fit:contain}
 .brand .name{font-family:'Cinzel',serif;font-weight:900;font-size:20px;letter-spacing:.14em;display:flex;flex-direction:column;line-height:1}
 .name-sous{font-family:Inter,sans-serif;font-weight:600;font-size:8.5px;letter-spacing:.42em;color:var(--texte-doux);margin-top:3px}
 .hero-sousmarque{font-family:'Cinzel',serif;font-weight:700;font-size:clamp(13px,2.6vw,19px);letter-spacing:.55em;text-indent:.55em;
@@ -169,9 +169,9 @@ main{padding:26px 0 60px}
 .empty b{color:var(--platine);font-family:'Cinzel',serif;font-weight:700;display:block;margin-bottom:6px;font-size:18px}
 
 /* ===== Formulaires admin ===== */
-.admin-only{display:none}
-body.is-admin .admin-only{display:block}
-body.is-admin .btn-rangee.admin-only{display:flex;gap:8px;flex-wrap:wrap}
+.admin-only{display:none !important}
+body.is-admin .admin-only{display:block !important}
+body.is-admin .btn-rangee.admin-only,body.is-admin .team-actions.admin-only{display:flex !important;gap:8px;flex-wrap:wrap}
 .admin-panel{background:#0d0d12;border:1px solid var(--rouge);border-radius:14px;padding:18px;margin-bottom:18px}
 .admin-panel .lbl{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--rouge-clair);margin-bottom:12px;font-weight:700}
 input,textarea{
@@ -377,7 +377,8 @@ header{z-index:50}
   font-family:'Cinzel',serif;font-weight:700;font-size:24px;color:#0A0A0C;
   box-shadow:0 6px 16px -6px rgba(0,0,0,.6)}
 .team-card h3{font-family:'Cinzel',serif;font-weight:700;font-size:16px;color:var(--platine)}
-.team-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.team-actions{gap:8px;justify-content:center;flex-wrap:wrap}
+body.is-admin .team-actions.admin-only{display:flex}
 .team-actions .del-btn{margin-top:0}
 .btn-mini{background:transparent;border:1px solid var(--bordure);color:var(--platine);
   font-size:12px;padding:6px 12px;border-radius:8px;cursor:pointer;transition:.2s}
@@ -621,7 +622,9 @@ th.cl-eq{display:table-cell}
 
 /* ---- Badges/logos d'équipe partout ---- */
 .eq-mini{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;
-  object-fit:cover;vertical-align:middle;flex:none;border:1px solid var(--bordure)}
+  object-fit:cover;vertical-align:middle;flex:none;border:1px solid var(--bordure);overflow:hidden}
+img.eq-mini{display:inline-block;object-fit:cover;object-position:center}
+img.team-logo{object-fit:cover;object-position:center;overflow:hidden}
 .eq-ini{color:#0A0A0C;font-weight:800;font-family:Inter,sans-serif;letter-spacing:.02em}
 .lien-eq{display:inline-flex;align-items:center;gap:8px;cursor:pointer;color:inherit;text-decoration:none}
 .lien-eq:hover span{color:var(--or)}
@@ -1394,7 +1397,7 @@ const DICT = {
     'admin.connexion':'Se connecter','admin.incorrect':'Mot de passe incorrect.',
     'commun.fermer':'Fermer','commun.annuler':'Annuler','btn.enregistrer':'Enregistrer','commun.chargement':'Chargement…',
     'eq.nom':"Nom de l'équipe",'eq.nom.ph':'Ex. Les Rois de Montréal','eq.couleur':"Couleur de l'équipe",
-    'eq.logo':'Logo — lien d\'image (optionnel)','eq.logo.ph':'https://...  (vide = initiales)',
+    'err.adminSeul':'Action réservée aux administrateurs.','eq.logo':'Logo — lien d\'image (optionnel)','eq.logo.ph':'https://...  (vide = initiales)',
     'eq.modal.nouvelle':'Nouvelle équipe','eq.modal.modifier':"Modifier l'équipe",
     'err.connexion':'Erreur de connexion','commun.erreur':'Erreur : ',
     'btn.supprimer':'Supprimer','btn.modifier':'Modifier','an.sansTitre':'(sans titre)','eq.sansNom':'(sans nom)',
@@ -1493,7 +1496,7 @@ const DICT = {
     'admin.connexion':'Log in','admin.incorrect':'Incorrect password.',
     'commun.fermer':'Close','commun.annuler':'Cancel','btn.enregistrer':'Save','commun.chargement':'Loading…',
     'eq.nom':'Team name','eq.nom.ph':'e.g. Montreal Kings','eq.couleur':'Team color',
-    'eq.logo':'Logo — image link (optional)','eq.logo.ph':'https://...  (empty = initials)',
+    'err.adminSeul':'Admins only.','eq.logo':'Logo — image link (optional)','eq.logo.ph':'https://...  (empty = initials)',
     'eq.modal.nouvelle':'New team','eq.modal.modifier':'Edit team',
     'err.connexion':'Connection error','commun.erreur':'Error: ',
     'btn.supprimer':'Delete','btn.modifier':'Edit','an.sansTitre':'(no title)','eq.sansNom':'(no name)',
@@ -1771,6 +1774,7 @@ function rendreAnnonces(){
   });
 }
 function ajouterAnnonce(){
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }
   const titre = document.getElementById('an-titre').value.trim();
   const texte = document.getElementById('an-texte').value.trim();
   const image = document.getElementById('an-image').value.trim();
@@ -1787,6 +1791,7 @@ function ajouterAnnonce(){
   }).catch(e => alert(t('commun.erreur') + e.message));
 }
 function supprimerAnnonce(id){
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }
   if(confirm(t('an.confirmSuppr'))){
     db.collection('annonces').doc(id).delete().catch(e => alert(t('commun.erreur') + e.message));
   }
@@ -1812,6 +1817,7 @@ function dcMessage(txt, ok){
   setTimeout(() => { m.style.display = 'none'; }, 5000);
 }
 function sauverWebhook(){
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }
   const webhook = document.getElementById('dc-webhook').value.trim();
   const actif = document.getElementById('dc-actif').checked;
   db.collection('config').doc('discord').set({ webhook, actif })
@@ -1888,6 +1894,7 @@ function rendreTransactions(){
   });
 }
 function ajouterTransaction(){
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }
   const type  = document.getElementById('tx-type').value;
   const texte = document.getElementById('tx-texte').value.trim();
   const image = document.getElementById('tx-image').value.trim();
@@ -1903,6 +1910,7 @@ function ajouterTransaction(){
   }).catch(e => alert(t('commun.erreur') + e.message));
 }
 function supprimerTransaction(id){
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }
   if(confirm(t('transactions.confirmSuppr'))){
     db.collection('transactions').doc(id).delete().catch(e => alert(t('commun.erreur') + e.message));
   }
@@ -1928,6 +1936,7 @@ function txdcMessage(txt, ok){
   setTimeout(() => { m.style.display = 'none'; }, 5000);
 }
 function sauverWebhookTx(){
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }
   const webhook = document.getElementById('txdc-webhook').value.trim();
   const actif = document.getElementById('txdc-actif').checked;
   db.collection('config').doc('discord_tx').set({ webhook, actif })
@@ -1982,6 +1991,7 @@ function rendreReglements(){
   if(vue) vue.textContent = texteReglements || t('reglements.vide');
 }
 function sauverReglements(){
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }
   const txt = document.getElementById('reglements-input').value;
   db.collection('contenu').doc('reglements').set({texte: txt})
     .then(()=> alert(t('reglements.enregistres')))
@@ -2064,6 +2074,7 @@ function ouvrirEquipe(id){
 function fermerEquipe(){ document.getElementById('modale-equipe').classList.remove('open'); }
 
 function sauverEquipe(){
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }
   const nom = document.getElementById('eq-nom').value.trim();
   const couleur = document.getElementById('eq-couleur').value;
   const logo = document.getElementById('eq-logo').value.trim();
@@ -2085,6 +2096,7 @@ function sauverEquipe(){
 }
 
 function supprimerEquipe(id){
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }
   if(confirm(t('eq.confirmSuppr'))){
     db.collection('equipes').doc(id).delete().catch(e => alert(t('commun.erreur') + e.message));
   }
@@ -2202,6 +2214,7 @@ function ouvrirJoueur(id){
 function fermerJoueur(){ document.getElementById('modale-joueur').classList.remove('open'); }
 
 function sauverJoueur(){
+  if(!estAdmin && !dgTeamId){ alert(t('err.adminSeul')); return; }
   const nom = document.getElementById('jo-nom').value.trim();
   const equipeId = document.getElementById('jo-equipe').value;
   const position = collectPositions('jo-positions');
@@ -2223,6 +2236,13 @@ function sauverJoueur(){
 }
 
 function supprimerJoueur(id){
+  if(!estAdmin && !dgTeamId){ alert(t('err.adminSeul')); return; }
+  if(!estAdmin){
+    // Un DG ne peut supprimer qu'un joueur de SON équipe
+    let eqJ = null;
+    if(snapJoueurs) snapJoueurs.forEach(d => { if(d.id === id) eqJ = d.data().equipeId || ''; });
+    if(eqJ !== dgTeamId){ alert(t('dg.refus')); return; }
+  }
   if(confirm(t('joueur.confirmSuppr'))){
     db.collection('joueurs').doc(id).delete().catch(e => alert(t('commun.erreur') + e.message));
   }
@@ -2686,6 +2706,7 @@ function collecterLignes(listeId, equipeId){
   return arr;
 }
 function sauverMatch(){
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }
   const domId = document.getElementById('m-dom').value;
   const extId = document.getElementById('m-ext').value;
   const prolongation = document.getElementById('m-pro').checked;
@@ -2710,6 +2731,7 @@ function sauverMatch(){
   }).catch(e => alert(t('commun.erreur') + e.message));
 }
 function supprimerMatch(id){
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }
   if(confirm(t('match.confirmSuppr'))){
     db.collection('matchs').doc(id).delete().catch(e => alert(t('commun.erreur') + e.message));
   }
@@ -2951,6 +2973,7 @@ function rendrePalmares(){
   appliquerRoles();
 }
 function ajouterTrophee(){
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }
   const titre = document.getElementById('pal-titre').value.trim();
   const gagnant = document.getElementById('pal-gagnant').value.trim();
   const desc = document.getElementById('pal-desc').value.trim();
@@ -2963,6 +2986,7 @@ function ajouterTrophee(){
     }).catch(e => alert(t('commun.erreur') + e.message));
 }
 function supprimerTrophee(id){
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }
   if(confirm(t('palmares.confirmSuppr'))){
     db.collection('palmares').doc(id).delete().catch(e => alert(t('commun.erreur') + e.message));
   }
@@ -3142,6 +3166,7 @@ function rendrePreviewImport(){
 }
 
 function confirmerImport(){
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }
   const coches = Array.prototype.slice.call(document.querySelectorAll('.imp-chk:checked'));
   if(coches.length === 0){ impStatut(t('import.rienCoche'), false); return; }
   let faits = 0, total = coches.length;
@@ -3240,6 +3265,7 @@ function ouvrirCal(id){
 }
 function fermerCal(){ document.getElementById('modale-cal').classList.remove('open'); }
 function sauverCal(){
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }
   const date = document.getElementById('cal-date').value;
   const heure = document.getElementById('cal-heure').value;
   const domId = document.getElementById('cal-dom').value, extId = document.getElementById('cal-ext').value;
@@ -3252,6 +3278,7 @@ function sauverCal(){
   action.then(() => fermerCal()).catch(e => alert(t('commun.erreur') + e.message));
 }
 function supprimerCal(id){
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }
   if(confirm(t('calendrier.confirmSuppr'))){
     db.collection('calendrier').doc(id).delete().catch(e => alert(t('commun.erreur') + e.message));
   }
@@ -3340,10 +3367,12 @@ function rendreInscriptions(){
   cont.innerHTML = html;
 }
 function basculerInscription(id, versTraite){
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }
   db.collection('inscriptions').doc(id).update({ statut: versTraite ? 'traite' : 'nouveau' })
     .catch(e => alert(t('commun.erreur') + e.message));
 }
 function supprimerInscription(id){
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }
   if(confirm(t('insc.confirmSuppr'))){
     db.collection('inscriptions').doc(id).delete().catch(e => alert(t('commun.erreur') + e.message));
   }
@@ -3352,6 +3381,7 @@ function supprimerInscription(id){
 /* Crée un joueur à partir d'une inscription : nom + compte EA (gamertag)
    déjà reliés — AUCUN appel à EA (gratuit). L'admin choisit juste l'équipe. */
 function creerJoueurDepuisInscription(inscId){
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }
   if(!snapInsc) return;
   let insc = null;
   snapInsc.forEach(d => { if(d.id === inscId) insc = Object.assign({id:d.id}, d.data()); });
