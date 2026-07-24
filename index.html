@@ -218,7 +218,9 @@ footer .gold-text{font-family:'Cinzel',serif;font-weight:700}
   box-shadow:0 4px 18px rgba(212,175,55,.18)}
 .prop-nom{font-size:13.5px;font-weight:700;color:var(--texte);letter-spacing:.02em;line-height:1.25;text-align:center}
 .prop-role{font-size:11px;color:var(--or);letter-spacing:.1em;text-transform:uppercase;text-align:center;line-height:1.3}
-.prop-carte .del-btn{position:absolute;top:-6px;right:-6px;padding:3px 8px;font-size:11px;margin-top:0}
+.prop-actions{position:absolute;top:-8px;right:-8px;gap:4px}
+body.is-admin .prop-actions.admin-only{display:flex !important}
+.prop-actions .btn-mini,.prop-actions .del-btn{padding:3px 7px;font-size:11px;margin-top:0;line-height:1.2}
 .prop-vide{color:var(--texte-doux);font-size:12.5px}
 @media(max-width:520px){.prop-grid{gap:18px}.prop-carte{width:92px}
   .prop-photo,.prop-ini{width:60px;height:60px}.prop-ini{font-size:20px}}
@@ -1120,12 +1122,8 @@ a.live-row:hover{background:rgba(212,175,55,.06)}
   <div class="prop-zone">
     <div class="prop-titre" data-i18n="prop.titre">Propriétaires</div>
     <div id="prop-list" class="prop-grid"></div>
-    <div class="admin-panel admin-only" style="max-width:520px;margin:18px auto 0;text-align:left">
-      <div class="lbl" data-i18n="prop.adm">Admin · Ajouter un propriétaire</div>
-      <input id="prop-nom" placeholder="Nom" data-i18n-ph="prop.ph.nom">
-      <input id="prop-role" placeholder="Rôle (ex. Commissaire)" data-i18n-ph="prop.ph.role">
-      <input id="prop-photo" placeholder="Photo — lien d'image (optionnel)" data-i18n-ph="prop.ph.photo">
-      <button class="btn btn-or" onclick="ajouterProprietaire()" data-i18n="prop.ajouter">Ajouter</button>
+    <div class="admin-only" style="margin-top:16px">
+      <button class="btn btn-or" onclick="ouvrirProprietaire()" data-i18n="prop.ajouter">+ Ajouter un propriétaire</button>
     </div>
   </div>
   <div class="foot-crown">&#9819;</div>
@@ -1165,6 +1163,23 @@ a.live-row:hover{background:rgba(212,175,55,.06)}
     <div class="cta-row" style="margin-top:12px">
       <button class="btn btn-or" onclick="sauverEquipe()" data-i18n="btn.enregistrer">Enregistrer</button>
       <button class="btn btn-ghost" onclick="fermerEquipe()" data-i18n="commun.annuler">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================ MODALE PROPRIÉTAIRE (ajout / modification) ============================ -->
+<div class="modal" id="modale-prop">
+  <div class="modal-box" style="max-width:380px;text-align:left">
+    <h3 class="cinzel" id="prop-modal-titre" style="text-align:center">Nouveau propriétaire</h3>
+    <label class="champ-lbl" data-i18n="prop.lbl.nom">Nom</label>
+    <input id="prop-nom" placeholder="Ex. Kevin Dompierre" data-i18n-ph="prop.ph.nom">
+    <label class="champ-lbl" data-i18n="prop.lbl.role">Rôle</label>
+    <input id="prop-role" placeholder="Ex. Commissaire" data-i18n-ph="prop.ph.role">
+    <label class="champ-lbl" data-i18n="prop.lbl.photo">Photo — lien d'image (optionnel)</label>
+    <input id="prop-photo" placeholder="https://...  (vide = initiales)" data-i18n-ph="prop.ph.photo">
+    <div class="cta-row" style="margin-top:12px">
+      <button class="btn btn-or" onclick="sauverProprietaire()" data-i18n="btn.enregistrer">Enregistrer</button>
+      <button class="btn btn-ghost" onclick="fermerProprietaire()" data-i18n="commun.annuler">Annuler</button>
     </div>
   </div>
 </div>
@@ -1420,7 +1435,7 @@ const DICT = {
     'commun.construction':'Section en construction',
     'equipes.titre':'Équipes','equipes.sous':'Les équipes de la ligue DYNASTY.','equipes.ajouter':'+ Ajouter une équipe',
     'equipes.vide.t':'🛡️ En préparation','equipes.vide.s':'Les équipes de la Saison 1 seront dévoilées bientôt.',
-    'footer.ligne':'Ligue CHEL · NHL 27 · © 2026','footer.tag':'Hockey compétitif · NHL 27 · World of Chel','prop.titre':'Propriétaires','prop.adm':'Admin · Ajouter un propriétaire','prop.ph.nom':'Nom','prop.ph.role':'Rôle (ex. Commissaire)','prop.ph.photo':'Photo — lien d\'image (optionnel)','prop.ajouter':'Ajouter','prop.besoin':'Entre au moins un nom.','prop.confirmSuppr':'Retirer ce propriétaire ?','prop.vide':'Aucun propriétaire affiché pour l\'instant.',
+    'footer.ligne':'Ligue CHEL · NHL 27 · © 2026','footer.tag':'Hockey compétitif · NHL 27 · World of Chel','prop.titre':'Propriétaires','prop.ajouter':'+ Ajouter un propriétaire','prop.modal.nouveau':'Nouveau propriétaire','prop.modal.modifier':'Modifier le propriétaire','prop.lbl.nom':'Nom','prop.lbl.role':'Rôle','prop.lbl.photo':'Photo — lien d\'image (optionnel)','prop.ph.nom':'Nom','prop.ph.role':'Rôle (ex. Commissaire)','prop.ph.photo':'Photo — lien d\'image (optionnel)','prop.besoin':'Entre au moins un nom.','prop.confirmSuppr':'Retirer ce propriétaire ?','prop.vide':'Aucun propriétaire affiché pour l\'instant.',
     'admin.titre':'Mode admin','admin.sous':'Entre le mot de passe admin ou ton code DG.','admin.ph':'Mot de passe / code DG',
     'admin.connexion':'Se connecter','admin.incorrect':'Mot de passe incorrect.',
     'commun.fermer':'Fermer','commun.annuler':'Annuler','btn.enregistrer':'Enregistrer','commun.chargement':'Chargement…',
@@ -1519,7 +1534,7 @@ const DICT = {
     'commun.construction':'Section under construction',
     'equipes.titre':'Teams','equipes.sous':'The teams of the DYNASTY league.','equipes.ajouter':'+ Add a team',
     'equipes.vide.t':'🛡️ In the works','equipes.vide.s':'Season 1 teams will be revealed soon.',
-    'footer.ligne':'CHEL League · NHL 27 · © 2026','footer.tag':'Competitive hockey · NHL 27 · World of Chel','prop.titre':'Owners','prop.adm':'Admin · Add an owner','prop.ph.nom':'Name','prop.ph.role':'Role (e.g. Commissioner)','prop.ph.photo':'Photo — image link (optional)','prop.ajouter':'Add','prop.besoin':'Enter at least a name.','prop.confirmSuppr':'Remove this owner?','prop.vide':'No owners listed yet.',
+    'footer.ligne':'CHEL League · NHL 27 · © 2026','footer.tag':'Competitive hockey · NHL 27 · World of Chel','prop.titre':'Owners','prop.ajouter':'+ Add an owner','prop.modal.nouveau':'New owner','prop.modal.modifier':'Edit owner','prop.lbl.nom':'Name','prop.lbl.role':'Role','prop.lbl.photo':'Photo — image link (optional)','prop.ph.nom':'Name','prop.ph.role':'Role (e.g. Commissioner)','prop.ph.photo':'Photo — image link (optional)','prop.besoin':'Enter at least a name.','prop.confirmSuppr':'Remove this owner?','prop.vide':'No owners listed yet.',
     'admin.titre':'Admin mode','admin.sous':'Enter the admin password or your GM code.','admin.ph':'Password / GM code',
     'admin.connexion':'Log in','admin.incorrect':'Incorrect password.',
     'commun.fermer':'Close','commun.annuler':'Cancel','btn.enregistrer':'Save','commun.chargement':'Loading…',
@@ -3073,24 +3088,42 @@ function rendreProprietaires(){
       + visuel
       + '<div class="prop-nom">' + escapeHtml(nom) + '</div>'
       + (p.role ? '<div class="prop-role">' + escapeHtml(p.role) + '</div>' : '')
-      + '<button class="del-btn admin-only" onclick="supprimerProprietaire(\'' + d.id + '\')">✕</button>'
+      + '<span class="prop-actions admin-only">'
+        + '<button class="btn-mini" onclick="ouvrirProprietaire(\'' + d.id + '\')" title="Modifier">✏️</button>'
+        + '<button class="del-btn" onclick="supprimerProprietaire(\'' + d.id + '\')" title="Retirer">✕</button>'
+      + '</span>'
       + '</div>';
   });
   cont.innerHTML = html;
   appliquerRoles();
 }
-function ajouterProprietaire(){
+let proprietaireEnEdition = null;
+function ouvrirProprietaire(id){
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }
+  proprietaireEnEdition = id || null;
+  document.getElementById('prop-modal-titre').textContent = id ? t('prop.modal.modifier') : t('prop.modal.nouveau');
+  let p = {};
+  if(id && snapProprietaires) snapProprietaires.forEach(d => { if(d.id === id) p = d.data() || {}; });
+  document.getElementById('prop-nom').value = p.nom || '';
+  document.getElementById('prop-role').value = p.role || '';
+  document.getElementById('prop-photo').value = p.photo || '';
+  document.getElementById('modale-prop').classList.add('open');
+}
+function fermerProprietaire(){
+  document.getElementById('modale-prop').classList.remove('open');
+  proprietaireEnEdition = null;
+}
+function sauverProprietaire(){
   if(!estAdmin){ alert(t('err.adminSeul')); return; }
   const nom = document.getElementById('prop-nom').value.trim();
   const role = document.getElementById('prop-role').value.trim();
   const photo = document.getElementById('prop-photo').value.trim();
   if(!nom){ alert(t('prop.besoin')); return; }
-  db.collection('proprietaires').add({ nom, role, photo, ts: firebase.firestore.FieldValue.serverTimestamp() })
-    .then(() => {
-      document.getElementById('prop-nom').value = '';
-      document.getElementById('prop-role').value = '';
-      document.getElementById('prop-photo').value = '';
-    }).catch(e => alert(t('commun.erreur') + e.message));
+  const donnees = { nom, role, photo };
+  const p = proprietaireEnEdition
+    ? db.collection('proprietaires').doc(proprietaireEnEdition).update(donnees)
+    : db.collection('proprietaires').add(Object.assign({ ts: firebase.firestore.FieldValue.serverTimestamp() }, donnees));
+  p.then(fermerProprietaire).catch(e => alert(t('commun.erreur') + e.message));
 }
 function supprimerProprietaire(id){
   if(!estAdmin){ alert(t('err.adminSeul')); return; }
