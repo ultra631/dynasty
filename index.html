@@ -565,6 +565,9 @@ th.cl-eq{display:table-cell}
 .ic-meta{color:var(--texte);font-size:13.5px;margin-top:7px}
 .ic-dg{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;letter-spacing:.02em;
   border-radius:99px;padding:4px 11px;margin-top:8px}
+.ic-jours{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.jour-tag{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--or);
+  background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.35);border-radius:6px;padding:3px 8px}
 .ic-dg.dg-oui{color:#f0d27a;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.4)}
 .ic-dg.dg-peut{color:var(--texte-doux);background:rgba(140,140,160,.1);border:1px solid var(--bordure)}
 .ic-date{color:var(--texte-doux);font-size:12px;margin-top:3px}
@@ -991,10 +994,52 @@ a.live-row:hover{background:rgba(212,175,55,.06)}
       </div>
     </div>
 
+    <!-- ===== INSCRIPTION GM CONNECTED ===== -->
+    <div class="card" style="margin-top:22px;border-color:var(--or)">
+      <h3 data-i18n="gmc.titre">🎮 Inscription — Ligue GM Connected</h3>
+      <p data-i18n="gmc.texte">Inscris-toi pour la ligue GM Connected. Indique tes disponibilités dans la semaine.</p>
+      <div class="insc-form">
+        <label class="champ-lbl" data-i18n="insc.nom">Nom / Gamertag</label>
+        <input id="gmc-nom" placeholder="Ton gamertag en jeu" data-i18n-ph="insc.nom.ph">
+        <label class="champ-lbl" data-i18n="insc.plateforme">Plateforme</label>
+        <select id="gmc-plateforme">
+          <option value="PS5">PS5</option>
+          <option value="Xbox Series">Xbox Series</option>
+        </select>
+        <label class="champ-lbl" data-i18n="gmc.dispo">Tes disponibilités</label>
+        <div id="gmc-dispo" class="pos-group">
+          <label class="pos-chip"><input type="checkbox" value="Lundi" onchange="togglePos(this)"><span data-i18n="jour.lun">Lundi</span></label>
+          <label class="pos-chip"><input type="checkbox" value="Mardi" onchange="togglePos(this)"><span data-i18n="jour.mar">Mardi</span></label>
+          <label class="pos-chip"><input type="checkbox" value="Mercredi" onchange="togglePos(this)"><span data-i18n="jour.mer">Mercredi</span></label>
+          <label class="pos-chip"><input type="checkbox" value="Jeudi" onchange="togglePos(this)"><span data-i18n="jour.jeu">Jeudi</span></label>
+          <label class="pos-chip"><input type="checkbox" value="Vendredi" onchange="togglePos(this)"><span data-i18n="jour.ven">Vendredi</span></label>
+          <label class="pos-chip"><input type="checkbox" value="Samedi" onchange="togglePos(this)"><span data-i18n="jour.sam">Samedi</span></label>
+          <label class="pos-chip"><input type="checkbox" value="Dimanche" onchange="togglePos(this)"><span data-i18n="jour.dim">Dimanche</span></label>
+        </div>
+        <label class="champ-lbl" data-i18n="gmc.loterie">Acceptes-tu de jouer avec l'équipe que tu obtiendras à la loterie?</label>
+        <select id="gmc-loterie">
+          <option value="oui" data-i18n="gmc.lot.oui">Oui, j'accepte n'importe quelle équipe</option>
+          <option value="non" data-i18n="gmc.lot.non">Non, j'ai des préférences</option>
+        </select>
+        <label class="champ-lbl" data-i18n="insc.discord">Discord</label>
+        <input id="gmc-discord" placeholder="ton_pseudo" data-i18n-ph="insc.discord.ph">
+        <div id="gmc-merci" class="insc-merci" style="display:none" data-i18n="insc.merci">Merci! Ton inscription est envoyée. Un admin va te contacter.</div>
+        <div class="cta-row" style="justify-content:flex-start;margin-top:14px">
+          <button class="btn btn-or" onclick="envoyerInscriptionGM()" data-i18n="insc.envoyer">M'inscrire</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Admin : inscriptions reçues -->
     <div class="admin-only" style="margin-top:22px">
       <div class="eyebrow" style="margin-bottom:12px" data-i18n="insc.admin.titre">Inscriptions reçues</div>
       <div id="inscriptions-list"></div>
+    </div>
+
+    <!-- Admin : inscriptions GM Connected -->
+    <div class="admin-only" style="margin-top:22px">
+      <div class="eyebrow" style="margin-bottom:12px" data-i18n="gmc.admin.titre">Inscriptions GM Connected</div>
+      <div id="gmc-list"></div>
     </div>
   </section>
 
@@ -1422,7 +1467,7 @@ const DICT = {
     'inscriptions.titre':'Inscriptions','inscriptions.sous':'Rejoins la ligue DYNASTY.',
     'inscriptions.commenttitre':"Comment s'inscrire",'inscriptions.commenttexte':"Remplis le formulaire pour t'inscrire comme joueur (free agent). Un admin va te contacter sur Discord.",
     'inscriptions.bouton':"Formulaire d'inscription",
-    'insc.nom':'Nom / Gamertag','insc.nom.ph':'Ton gamertag en jeu','insc.plateforme':'Plateforme','insc.position':'Positions','insc.discord':'Discord','insc.discord.ph':'ton_pseudo','insc.dg':'Veux-tu être directeur général (DG)?','insc.dg.non':'Non, juste jouer','insc.dg.oui':'Oui, j\'aimerais gérer une équipe','insc.dg.peutetre':'Peut-être / ouvert à en discuter','insc.dgBadge':'Intéressé à être DG','insc.dgPeut':'DG — peut-être',
+    'insc.nom':'Nom / Gamertag','insc.nom.ph':'Ton gamertag en jeu','insc.plateforme':'Plateforme','insc.position':'Positions','insc.discord':'Discord','insc.discord.ph':'ton_pseudo','insc.dg':'Veux-tu être directeur général (DG)?','insc.dg.non':'Non, juste jouer','insc.dg.oui':'Oui, j\'aimerais gérer une équipe','insc.dg.peutetre':'Peut-être / ouvert à en discuter','insc.dgBadge':'Intéressé à être DG','gmc.titre':'🎮 Inscription — Ligue GM Connected','gmc.texte':'Inscris-toi pour la ligue GM Connected. Indique tes disponibilités dans la semaine.','gmc.dispo':'Tes disponibilités','gmc.loterie':'Acceptes-tu de jouer avec l\'équipe que tu obtiendras à la loterie?','gmc.lot.oui':'Oui, j\'accepte n\'importe quelle équipe','gmc.lot.non':'Non, j\'ai des préférences','gmc.admin.titre':'Inscriptions GM Connected','gmc.besoinDispo':'Choisis au moins une journée de disponibilité.','gmc.lotBadgeOui':'Accepte l\'équipe de la loterie','gmc.lotBadgeNon':'A des préférences d\'équipe','jour.lun':'Lundi','jour.mar':'Mardi','jour.mer':'Mercredi','jour.jeu':'Jeudi','jour.ven':'Vendredi','jour.sam':'Samedi','jour.dim':'Dimanche','insc.dgPeut':'DG — peut-être',
     'insc.envoyer':"M'inscrire",'insc.merci':'Merci! Ton inscription est envoyée. Un admin va te contacter.','insc.besoinNom':'Mets au moins ton nom / gamertag.',
     'insc.admin.titre':'Inscriptions reçues','insc.vide':'Aucune inscription pour le moment.','insc.nouveau':'Nouveau','insc.traite':'Traité',
     'insc.marquerTraite':'Marquer traité','insc.marquerNouveau':'Remettre nouveau','insc.confirmSuppr':'Supprimer cette inscription ?',
@@ -1521,7 +1566,7 @@ const DICT = {
     'inscriptions.titre':'Sign-up','inscriptions.sous':'Join the DYNASTY league.',
     'inscriptions.commenttitre':'How to sign up','inscriptions.commenttexte':'Fill out the form to sign up as a player (free agent). An admin will reach out on Discord.',
     'inscriptions.bouton':'Sign-up form',
-    'insc.nom':'Name / Gamertag','insc.nom.ph':'Your in-game gamertag','insc.plateforme':'Platform','insc.position':'Positions','insc.discord':'Discord','insc.discord.ph':'your_handle','insc.dg':'Do you want to be a general manager (GM)?','insc.dg.non':'No, just play','insc.dg.oui':'Yes, I\'d like to manage a team','insc.dg.peutetre':'Maybe / open to it','insc.dgBadge':'Interested in being GM','insc.dgPeut':'GM — maybe',
+    'insc.nom':'Name / Gamertag','insc.nom.ph':'Your in-game gamertag','insc.plateforme':'Platform','insc.position':'Positions','insc.discord':'Discord','insc.discord.ph':'your_handle','insc.dg':'Do you want to be a general manager (GM)?','insc.dg.non':'No, just play','insc.dg.oui':'Yes, I\'d like to manage a team','insc.dg.peutetre':'Maybe / open to it','insc.dgBadge':'Interested in being GM','gmc.titre':'🎮 Registration — GM Connected League','gmc.texte':'Sign up for the GM Connected league. Tell us your weekly availability.','gmc.dispo':'Your availability','gmc.loterie':'Do you accept to play with the team you get in the lottery?','gmc.lot.oui':'Yes, any team works','gmc.lot.non':'No, I have preferences','gmc.admin.titre':'GM Connected registrations','gmc.besoinDispo':'Pick at least one day.','gmc.lotBadgeOui':'Accepts lottery team','gmc.lotBadgeNon':'Has team preferences','jour.lun':'Monday','jour.mar':'Tuesday','jour.mer':'Wednesday','jour.jeu':'Thursday','jour.ven':'Friday','jour.sam':'Saturday','jour.dim':'Sunday','insc.dgPeut':'GM — maybe',
     'insc.envoyer':'Sign me up','insc.merci':'Thanks! Your registration is in. An admin will reach out.','insc.besoinNom':'Enter at least your name / gamertag.',
     'insc.admin.titre':'Registrations received','insc.vide':'No registrations yet.','insc.nouveau':'New','insc.traite':'Processed',
     'insc.marquerTraite':'Mark processed','insc.marquerNouveau':'Mark as new','insc.confirmSuppr':'Delete this registration?',
@@ -3465,6 +3510,73 @@ function initInscriptions(){
     if(c) c.innerHTML = videHTML(ico('warning'), t('err.connexion'), err.message);
   });
 }
+
+/* ===== INSCRIPTIONS GM CONNECTED ===== */
+let snapInscGM = null;
+function initInscriptionsGM(){
+  db.collection('inscriptionsGM').orderBy('createdAt','desc').onSnapshot(snap => {
+    snapInscGM = snap; rendreInscriptionsGM();
+  }, err => {
+    const c = document.getElementById('gmc-list');
+    if(c) c.innerHTML = videHTML(ico('warning'), t('err.connexion'), err.message);
+  });
+}
+function envoyerInscriptionGM(){
+  const nom = document.getElementById('gmc-nom').value.trim();
+  const plateforme = document.getElementById('gmc-plateforme').value;
+  const dispo = collectPositions('gmc-dispo');
+  const loterie = document.getElementById('gmc-loterie').value;
+  const discord = document.getElementById('gmc-discord').value.trim();
+  if(!nom){ alert(t('insc.besoinNom')); return; }
+  if(!dispo){ alert(t('gmc.besoinDispo')); return; }
+  db.collection('inscriptionsGM').add({
+    nom, plateforme, dispo, loterie, discord, statut:'nouveau',
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  }).then(() => {
+    document.getElementById('gmc-nom').value = '';
+    document.getElementById('gmc-discord').value = '';
+    document.querySelectorAll('#gmc-dispo input:checked').forEach(cb => { cb.checked = false; togglePos(cb); });
+    const m = document.getElementById('gmc-merci');
+    if(m){ m.style.display = 'block'; setTimeout(() => { m.style.display = 'none'; }, 6000); }
+  }).catch(e => alert(t('commun.erreur') + e.message));
+}
+function rendreInscriptionsGM(){
+  const cont = document.getElementById('gmc-list');
+  if(!cont) return;
+  if(!snapInscGM || snapInscGM.empty){ cont.innerHTML = '<div class="je-vide">' + t('insc.vide') + '</div>'; return; }
+  let html = '';
+  snapInscGM.forEach(d => {
+    const i = Object.assign({id:d.id}, d.data());
+    const traite = (i.statut === 'traite');
+    const jours = (i.dispo || '').split(',').map(s => s.trim()).filter(Boolean);
+    html += '<div class="insc-card' + (traite ? ' traite' : '') + '">'
+      + '<div class="ic-head"><b>' + escapeHtml(i.nom || '') + '</b>'
+        + '<span class="ic-statut ' + (traite ? 's-ok' : 's-new') + '">' + t(traite ? 'insc.traite' : 'insc.nouveau') + '</span></div>'
+      + '<div class="ic-meta">' + escapeHtml(i.plateforme || '')
+        + (i.discord ? (' · 💬 ' + escapeHtml(i.discord)) : '') + '</div>'
+      + (jours.length ? '<div class="ic-jours">' + jours.map(j => '<span class="jour-tag">' + escapeHtml(j.slice(0,3)) + '</span>').join('') + '</div>' : '')
+      + (i.loterie === 'oui'
+          ? '<div class="ic-dg dg-oui">🎲 ' + t('gmc.lotBadgeOui') + '</div>'
+          : '<div class="ic-dg dg-peut">🎲 ' + t('gmc.lotBadgeNon') + '</div>')
+      + '<div class="ic-date">' + formaterDate(i.createdAt) + '</div>'
+      + '<div class="ic-actions">'
+        + '<button class="btn-mini' + (traite ? '' : ' ok') + '" onclick="basculerInscriptionGM(\'' + i.id + '\',' + (traite ? 'false' : 'true') + ')">' + t(traite ? 'insc.marquerNouveau' : 'insc.marquerTraite') + '</button>'
+        + '<button class="del-btn" onclick="supprimerInscriptionGM(\'' + i.id + '\')">' + t('btn.supprimer') + '</button>'
+      + '</div></div>';
+  });
+  cont.innerHTML = html;
+}
+function basculerInscriptionGM(id, traite){
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }
+  db.collection('inscriptionsGM').doc(id).update({ statut: traite ? 'traite' : 'nouveau' })
+    .catch(e => alert(t('commun.erreur') + e.message));
+}
+function supprimerInscriptionGM(id){
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }
+  if(confirm(t('insc.confirmSuppr'))){
+    db.collection('inscriptionsGM').doc(id).delete().catch(e => alert(t('commun.erreur') + e.message));
+  }
+}
 function envoyerInscription(){
   const nom = document.getElementById('insc-nom').value.trim();
   const plateforme = document.getElementById('insc-plateforme').value;
@@ -3642,7 +3754,7 @@ function traduirePosEA(pos){
 }
 
 /* Redessine les listes dynamiques (au changement de langue / rôle) */
-function rafraichirDynamique(){ rendreAnnonces(); rendreTransactions(); rendreReglements(); rendreEquipes(); rendreJoueurs(); rendreTrades(); rendreResultats(); rendreClassements(); rendreCalendrier(); rendreGardiens(); rendreInscriptions(); rendrePalmares(); rendreProprietaires(); rendreAccueilLive(); }
+function rafraichirDynamique(){ rendreAnnonces(); rendreTransactions(); rendreReglements(); rendreEquipes(); rendreJoueurs(); rendreTrades(); rendreResultats(); rendreClassements(); rendreCalendrier(); rendreGardiens(); rendreInscriptions(); rendreInscriptionsGM(); rendrePalmares(); rendreProprietaires(); rendreAccueilLive(); }
 
 /* =========================================================
    6) DÉMARRAGE
@@ -3663,6 +3775,7 @@ function demarrer(){
   initMatchs();
   initCalendrier();
   initInscriptions();
+  initInscriptionsGM();
   initDiscordConfig();
   initTransactions();
   initDiscordTxConfig();
