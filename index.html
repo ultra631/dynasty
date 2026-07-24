@@ -205,6 +205,23 @@ textarea{resize:vertical;min-height:90px}
 /* ===== Bas de page ===== */
 footer{border-top:1px solid var(--bordure);padding:26px 0;text-align:center;color:var(--texte-doux);font-size:12px;letter-spacing:.05em}
 footer .gold-text{font-family:'Cinzel',serif;font-weight:700}
+.prop-zone{max-width:900px;margin:0 auto 30px;padding:0 20px 26px;border-bottom:1px solid var(--bordure)}
+.prop-titre{font-family:'Cinzel',serif;font-size:13px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--or);margin-bottom:18px}
+.prop-grid{display:flex;flex-wrap:wrap;gap:26px;justify-content:center}
+.prop-carte{display:flex;flex-direction:column;align-items:center;gap:8px;width:112px;position:relative}
+.prop-photo{width:72px;height:72px;border-radius:50%;object-fit:cover;object-position:center;
+  border:2px solid var(--or);background:#0a0a0e;box-shadow:0 4px 18px rgba(212,175,55,.18)}
+.prop-ini{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;
+  font-family:'Cinzel',serif;font-size:24px;font-weight:700;color:#0a0a0e;
+  background:linear-gradient(145deg,#e8c964,#b8912c);border:2px solid var(--or);
+  box-shadow:0 4px 18px rgba(212,175,55,.18)}
+.prop-nom{font-size:13.5px;font-weight:700;color:var(--texte);letter-spacing:.02em;line-height:1.25;text-align:center}
+.prop-role{font-size:11px;color:var(--or);letter-spacing:.1em;text-transform:uppercase;text-align:center;line-height:1.3}
+.prop-carte .del-btn{position:absolute;top:-6px;right:-6px;padding:3px 8px;font-size:11px;margin-top:0}
+.prop-vide{color:var(--texte-doux);font-size:12.5px}
+@media(max-width:520px){.prop-grid{gap:18px}.prop-carte{width:92px}
+  .prop-photo,.prop-ini{width:60px;height:60px}.prop-ini{font-size:20px}}
 
 @media (max-width:520px){
   .stat-grid{grid-template-columns:repeat(3,1fr)}
@@ -1100,6 +1117,17 @@ a.live-row:hover{background:rgba(212,175,55,.06)}
 </main>
 
 <footer>
+  <div class="prop-zone">
+    <div class="prop-titre" data-i18n="prop.titre">Propriétaires</div>
+    <div id="prop-list" class="prop-grid"></div>
+    <div class="admin-panel admin-only" style="max-width:520px;margin:18px auto 0;text-align:left">
+      <div class="lbl" data-i18n="prop.adm">Admin · Ajouter un propriétaire</div>
+      <input id="prop-nom" placeholder="Nom" data-i18n-ph="prop.ph.nom">
+      <input id="prop-role" placeholder="Rôle (ex. Commissaire)" data-i18n-ph="prop.ph.role">
+      <input id="prop-photo" placeholder="Photo — lien d'image (optionnel)" data-i18n-ph="prop.ph.photo">
+      <button class="btn btn-or" onclick="ajouterProprietaire()" data-i18n="prop.ajouter">Ajouter</button>
+    </div>
+  </div>
   <div class="foot-crown">&#9819;</div>
   <div class="foot-mark gold-text">DYNASTY</div>
   <div class="foot-tag" data-i18n="footer.tag">Hockey compétitif · NHL 27 · World of Chel</div>
@@ -1392,7 +1420,7 @@ const DICT = {
     'commun.construction':'Section en construction',
     'equipes.titre':'Équipes','equipes.sous':'Les équipes de la ligue DYNASTY.','equipes.ajouter':'+ Ajouter une équipe',
     'equipes.vide.t':'🛡️ En préparation','equipes.vide.s':'Les équipes de la Saison 1 seront dévoilées bientôt.',
-    'footer.ligne':'Ligue CHEL · NHL 27 · © 2026','footer.tag':'Hockey compétitif · NHL 27 · World of Chel',
+    'footer.ligne':'Ligue CHEL · NHL 27 · © 2026','footer.tag':'Hockey compétitif · NHL 27 · World of Chel','prop.titre':'Propriétaires','prop.adm':'Admin · Ajouter un propriétaire','prop.ph.nom':'Nom','prop.ph.role':'Rôle (ex. Commissaire)','prop.ph.photo':'Photo — lien d\'image (optionnel)','prop.ajouter':'Ajouter','prop.besoin':'Entre au moins un nom.','prop.confirmSuppr':'Retirer ce propriétaire ?','prop.vide':'Aucun propriétaire affiché pour l\'instant.',
     'admin.titre':'Mode admin','admin.sous':'Entre le mot de passe admin ou ton code DG.','admin.ph':'Mot de passe / code DG',
     'admin.connexion':'Se connecter','admin.incorrect':'Mot de passe incorrect.',
     'commun.fermer':'Fermer','commun.annuler':'Annuler','btn.enregistrer':'Enregistrer','commun.chargement':'Chargement…',
@@ -1491,7 +1519,7 @@ const DICT = {
     'commun.construction':'Section under construction',
     'equipes.titre':'Teams','equipes.sous':'The teams of the DYNASTY league.','equipes.ajouter':'+ Add a team',
     'equipes.vide.t':'🛡️ In the works','equipes.vide.s':'Season 1 teams will be revealed soon.',
-    'footer.ligne':'CHEL League · NHL 27 · © 2026','footer.tag':'Competitive hockey · NHL 27 · World of Chel',
+    'footer.ligne':'CHEL League · NHL 27 · © 2026','footer.tag':'Competitive hockey · NHL 27 · World of Chel','prop.titre':'Owners','prop.adm':'Admin · Add an owner','prop.ph.nom':'Name','prop.ph.role':'Role (e.g. Commissioner)','prop.ph.photo':'Photo — image link (optional)','prop.ajouter':'Add','prop.besoin':'Enter at least a name.','prop.confirmSuppr':'Remove this owner?','prop.vide':'No owners listed yet.',
     'admin.titre':'Admin mode','admin.sous':'Enter the admin password or your GM code.','admin.ph':'Password / GM code',
     'admin.connexion':'Log in','admin.incorrect':'Incorrect password.',
     'commun.fermer':'Close','commun.annuler':'Cancel','btn.enregistrer':'Save','commun.chargement':'Loading…',
@@ -2993,6 +3021,60 @@ function supprimerTrophee(id){
 }
 
 /* =========================================================
+   10h) PROPRIÉTAIRES (section du bas de page)
+   ========================================================= */
+let snapProprietaires = null;
+function initProprietaires(){
+  db.collection('proprietaires').orderBy('ts','asc').onSnapshot(snap => {
+    snapProprietaires = snap; rendreProprietaires();
+  }, err => console.warn('proprietaires:', err.message));
+}
+function rendreProprietaires(){
+  const cont = document.getElementById('prop-list');
+  if(!cont) return;
+  if(!snapProprietaires || snapProprietaires.empty){
+    cont.innerHTML = estAdmin ? '<div class="prop-vide">' + t('prop.vide') + '</div>' : '';
+    return;
+  }
+  let html = '';
+  snapProprietaires.forEach(d => {
+    const p = d.data();
+    const nom = p.nom || '';
+    const ini = nom.trim().split(/\s+/).map(m => m[0] || '').join('').slice(0,2).toUpperCase() || '?';
+    const visuel = p.photo
+      ? '<img class="prop-photo" src="' + escapeHtml(p.photo) + '" alt="" onerror="this.outerHTML=\'<div class=&quot;prop-ini&quot;>' + escapeHtml(ini) + '</div>\'">'
+      : '<div class="prop-ini">' + escapeHtml(ini) + '</div>';
+    html += '<div class="prop-carte">'
+      + visuel
+      + '<div class="prop-nom">' + escapeHtml(nom) + '</div>'
+      + (p.role ? '<div class="prop-role">' + escapeHtml(p.role) + '</div>' : '')
+      + '<button class="del-btn admin-only" onclick="supprimerProprietaire(\'' + d.id + '\')">✕</button>'
+      + '</div>';
+  });
+  cont.innerHTML = html;
+  appliquerRoles();
+}
+function ajouterProprietaire(){
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }
+  const nom = document.getElementById('prop-nom').value.trim();
+  const role = document.getElementById('prop-role').value.trim();
+  const photo = document.getElementById('prop-photo').value.trim();
+  if(!nom){ alert(t('prop.besoin')); return; }
+  db.collection('proprietaires').add({ nom, role, photo, ts: firebase.firestore.FieldValue.serverTimestamp() })
+    .then(() => {
+      document.getElementById('prop-nom').value = '';
+      document.getElementById('prop-role').value = '';
+      document.getElementById('prop-photo').value = '';
+    }).catch(e => alert(t('commun.erreur') + e.message));
+}
+function supprimerProprietaire(id){
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }
+  if(confirm(t('prop.confirmSuppr'))){
+    db.collection('proprietaires').doc(id).delete().catch(e => alert(t('commun.erreur') + e.message));
+  }
+}
+
+/* =========================================================
    10b) IMPORT EA (via le proxy Cloudflare + Scrapfly)
    ========================================================= */
 const EA_WORKER  = 'https://dynasty-ea.dompierrekevin70.workers.dev';
@@ -3502,7 +3584,7 @@ function traduirePosEA(pos){
 }
 
 /* Redessine les listes dynamiques (au changement de langue / rôle) */
-function rafraichirDynamique(){ rendreAnnonces(); rendreTransactions(); rendreReglements(); rendreEquipes(); rendreJoueurs(); rendreTrades(); rendreResultats(); rendreClassements(); rendreCalendrier(); rendreGardiens(); rendreInscriptions(); rendrePalmares(); rendreAccueilLive(); }
+function rafraichirDynamique(){ rendreAnnonces(); rendreTransactions(); rendreReglements(); rendreEquipes(); rendreJoueurs(); rendreTrades(); rendreResultats(); rendreClassements(); rendreCalendrier(); rendreGardiens(); rendreInscriptions(); rendrePalmares(); rendreProprietaires(); rendreAccueilLive(); }
 
 /* =========================================================
    6) DÉMARRAGE
@@ -3527,6 +3609,7 @@ function demarrer(){
   initTransactions();
   initDiscordTxConfig();
   initPalmares();
+  initProprietaires();
 }
 demarrer();
 
