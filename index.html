@@ -1675,7 +1675,8 @@ function eqVisuel(e, taille){
   taille = taille || 22;
   if(!e) return '';
   if(e.logo){
-    return '<img class="eq-mini" style="width:'+taille+'px;height:'+taille+'px" src="' + e.logo + '" alt="" onerror="this.style.display=\'none\'">';
+    return '<img class="eq-mini" style="width:'+taille+'px;height:'+taille+'px" src="' + escapeHtml(lienImageDirect(e.logo)) + '" alt="" referrerpolicy="no-referrer" onerror="this.style.display=\'none\';var s=this.nextElementSibling;if(s)s.style.display=\'inline-flex\';">'
+      + eqInitialesHTML(e, taille).replace('class="eq-mini eq-ini"', 'class="eq-mini eq-ini" data-repli="1"').replace('style="', 'style="display:none;');
   }
   return eqInitialesHTML(e, taille);
 }
@@ -2059,7 +2060,8 @@ function rendreEquipes(){
     // Visuel : logo si fourni, sinon initiales sur fond coloré
     let visuel;
     if(e.logo){
-      visuel = '<img class="team-logo" src="' + e.logo + '" alt="" onerror="this.style.display=\'none\'">';
+      visuel = '<img class="team-logo" src="' + escapeHtml(lienImageDirect(e.logo)) + '" alt="" referrerpolicy="no-referrer" onerror="this.style.display=\'none\';var s=this.nextElementSibling;if(s)s.style.display=\'grid\';">'
+        + '<div class="team-initials" style="display:none;background:' + couleur + '">' + ini + '</div>';
     } else {
       const ini = (e.nom || '?').trim().split(/\s+/).map(m => m[0]).slice(0,2).join('').toUpperCase();
       visuel = '<div class="team-initials" style="background:' + couleur + '">' + ini + '</div>';
@@ -3029,6 +3031,25 @@ function initProprietaires(){
     snapProprietaires = snap; rendreProprietaires();
   }, err => console.warn('proprietaires:', err.message));
 }
+/* Corrige automatiquement les liens d'image qui pointent vers une PAGE
+   au lieu du fichier image (erreur la plus fréquente). */
+function lienImageDirect(url){
+  let u = String(url || '').trim();
+  if(!u) return '';
+  // GitHub : .../blob/... → raw.githubusercontent.com
+  let m = u.match(/^https?:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/(.+)$/i);
+  if(m) return 'https://raw.githubusercontent.com/' + m[1] + '/' + m[2] + '/' + m[3];
+  // Dropbox : lien de partage → fichier direct
+  if(/^https?:\/\/(www\.)?dropbox\.com\//i.test(u)){
+    let base = u.split('?')[0];
+    return base + '?raw=1';
+  }
+  // Google Drive : /file/d/ID/view → lien direct
+  m = u.match(/^https?:\/\/drive\.google\.com\/file\/d\/([^/]+)/i);
+  if(m) return 'https://drive.google.com/uc?export=view&id=' + m[1];
+  return u;
+}
+
 function rendreProprietaires(){
   const cont = document.getElementById('prop-list');
   if(!cont) return;
@@ -3041,8 +3062,12 @@ function rendreProprietaires(){
     const p = d.data();
     const nom = p.nom || '';
     const ini = nom.trim().split(/\s+/).map(m => m[0] || '').join('').slice(0,2).toUpperCase() || '?';
-    const visuel = p.photo
-      ? '<img class="prop-photo" src="' + escapeHtml(p.photo) + '" alt="" onerror="this.outerHTML=\'<div class=&quot;prop-ini&quot;>' + escapeHtml(ini) + '</div>\'">'
+    const src = lienImageDirect(p.photo);
+    // L'image et les initiales coexistent : si l'image plante, on bascule proprement
+    const visuel = src
+      ? '<img class="prop-photo" src="' + escapeHtml(src) + '" alt="" referrerpolicy="no-referrer" '
+        + 'onerror="this.style.display=\'none\';var s=this.nextElementSibling;if(s)s.style.display=\'grid\';">'
+        + '<div class="prop-ini" style="display:none">' + escapeHtml(ini) + '</div>'
       : '<div class="prop-ini">' + escapeHtml(ini) + '</div>';
     html += '<div class="prop-carte">'
       + visuel
