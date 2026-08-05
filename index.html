@@ -566,6 +566,15 @@ th.cl-eq{display:table-cell}
 .ic-dg{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;letter-spacing:.02em;
   border-radius:99px;padding:4px 11px;margin-top:8px}
 .ic-jours{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.insc-resume{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px}
+.ir-compte{font-family:'Oswald',sans-serif;font-size:15px;font-weight:600;letter-spacing:.04em;color:var(--or);
+  background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.3);border-radius:99px;padding:6px 16px}
+.ir-dbl{font-size:13px;font-weight:600;color:#FFB3AB;background:rgba(255,77,61,.1);border:1px solid rgba(255,77,61,.4);
+  border-radius:99px;padding:6px 14px}
+.ir-ok{font-size:13px;color:#7Bd19a;background:rgba(95,208,138,.08);border:1px solid rgba(95,208,138,.3);
+  border-radius:99px;padding:6px 14px}
+.insc-card.doublon{border-color:rgba(255,77,61,.55);box-shadow:0 0 0 1px rgba(255,77,61,.25)}
+.ic-dbl-badge{font-size:11px;font-weight:700;color:#fff;background:var(--rouge);border-radius:6px;padding:2px 8px;margin-left:8px}
 .jour-tag{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--or);
   background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.35);border-radius:6px;padding:3px 8px}
 .ic-dg.dg-oui{color:#f0d27a;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.4)}
@@ -1032,13 +1041,13 @@ a.live-row:hover{background:rgba(212,175,55,.06)}
 
     <!-- Admin : inscriptions reçues -->
     <div class="admin-only" style="margin-top:22px">
-      <div class="eyebrow" style="margin-bottom:12px" data-i18n="insc.admin.titre">Inscriptions reçues</div>
+      <div class="eyebrow" style="margin-bottom:12px" data-i18n="insc.admin.titre">Inscriptions — Ligue 4S</div>
       <div id="inscriptions-list"></div>
     </div>
 
     <!-- Admin : inscriptions GM Connected -->
     <div class="admin-only" style="margin-top:22px">
-      <div class="eyebrow" style="margin-bottom:12px" data-i18n="gmc.admin.titre">Inscriptions GM Connected</div>
+      <div class="eyebrow" style="margin-bottom:12px" data-i18n="gmc.admin.titre">Inscriptions — Ligue GM Connected</div>
       <div id="gmc-list"></div>
     </div>
   </section>
@@ -1467,9 +1476,9 @@ const DICT = {
     'inscriptions.titre':'Inscriptions','inscriptions.sous':'Rejoins la ligue DYNASTY.',
     'inscriptions.commenttitre':"Comment s'inscrire",'inscriptions.commenttexte':"Remplis le formulaire pour t'inscrire comme joueur (free agent). Un admin va te contacter sur Discord.",
     'inscriptions.bouton':"Formulaire d'inscription",
-    'insc.nom':'Nom / Gamertag','insc.nom.ph':'Ton gamertag en jeu','insc.plateforme':'Plateforme','insc.position':'Positions','insc.discord':'Discord','insc.discord.ph':'ton_pseudo','insc.dg':'Veux-tu être directeur général (DG)?','insc.dg.non':'Non, juste jouer','insc.dg.oui':'Oui, j\'aimerais gérer une équipe','insc.dg.peutetre':'Peut-être / ouvert à en discuter','insc.dgBadge':'Intéressé à être DG','gmc.titre':'🎮 Inscription — Ligue GM Connected','gmc.texte':'Inscris-toi pour la ligue GM Connected. Indique tes disponibilités dans la semaine.','gmc.dispo':'Tes disponibilités','gmc.loterie':'Acceptes-tu de jouer avec l\'équipe que tu obtiendras à la loterie?','gmc.lot.oui':'Oui, j\'accepte n\'importe quelle équipe','gmc.lot.non':'Non, j\'ai des préférences','gmc.admin.titre':'Inscriptions GM Connected','gmc.besoinDispo':'Choisis au moins une journée de disponibilité.','gmc.lotBadgeOui':'Accepte l\'équipe de la loterie','gmc.lotBadgeNon':'A des préférences d\'équipe','jour.lun':'Lundi','jour.mar':'Mardi','jour.mer':'Mercredi','jour.jeu':'Jeudi','jour.ven':'Vendredi','jour.sam':'Samedi','jour.dim':'Dimanche','insc.dgPeut':'DG — peut-être',
+    'insc.nom':'Nom / Gamertag','insc.nom.ph':'Ton gamertag en jeu','insc.plateforme':'Plateforme','insc.position':'Positions','insc.discord':'Discord','insc.discord.ph':'ton_pseudo','insc.dg':'Veux-tu être directeur général (DG)?','insc.dg.non':'Non, juste jouer','insc.dg.oui':'Oui, j\'aimerais gérer une équipe','insc.dg.peutetre':'Peut-être / ouvert à en discuter','insc.dgBadge':'Intéressé à être DG','gmc.titre':'🎮 Inscription — Ligue GM Connected','gmc.texte':'Inscris-toi pour la ligue GM Connected. Indique tes disponibilités dans la semaine.','gmc.dispo':'Tes disponibilités','gmc.loterie':'Acceptes-tu de jouer avec l\'équipe que tu obtiendras à la loterie?','gmc.lot.oui':'Oui, j\'accepte n\'importe quelle équipe','gmc.lot.non':'Non, j\'ai des préférences','gmc.admin.titre':'Inscriptions — Ligue GM Connected','gmc.besoinDispo':'Choisis au moins une journée de disponibilité.','gmc.lotBadgeOui':'Accepte l\'équipe de la loterie','gmc.lotBadgeNon':'A des préférences d\'équipe','jour.lun':'Lundi','jour.mar':'Mardi','jour.mer':'Mercredi','jour.jeu':'Jeudi','jour.ven':'Vendredi','jour.sam':'Samedi','jour.dim':'Dimanche','insc.dgPeut':'DG — peut-être',
     'insc.envoyer':"M'inscrire",'insc.merci':'Merci! Ton inscription est envoyée. Un admin va te contacter.','insc.besoinNom':'Mets au moins ton nom / gamertag.',
-    'insc.admin.titre':'Inscriptions reçues','insc.vide':'Aucune inscription pour le moment.','insc.nouveau':'Nouveau','insc.traite':'Traité',
+    'insc.admin.titre':'Inscriptions — Ligue 4S','insc.compteur':'inscrit(s)','insc.doublons':'doublon(s) détecté(s)','insc.aucunDoublon':'Aucun doublon','insc.dblBadge':'Double inscription','insc.vide':'Aucune inscription pour le moment.','insc.nouveau':'Nouveau','insc.traite':'Traité',
     'insc.marquerTraite':'Marquer traité','insc.marquerNouveau':'Remettre nouveau','insc.confirmSuppr':'Supprimer cette inscription ?',
     'reseaux.titre':'Réseaux sociaux','reseaux.sous':'Suis la ligue partout.',
     'classements.titre':'Classements','classements.sous':'Le classement, calculé automatiquement.','classements.construction':'On bâtit le tableau des classements à la prochaine étape.',
@@ -1566,9 +1575,9 @@ const DICT = {
     'inscriptions.titre':'Sign-up','inscriptions.sous':'Join the DYNASTY league.',
     'inscriptions.commenttitre':'How to sign up','inscriptions.commenttexte':'Fill out the form to sign up as a player (free agent). An admin will reach out on Discord.',
     'inscriptions.bouton':'Sign-up form',
-    'insc.nom':'Name / Gamertag','insc.nom.ph':'Your in-game gamertag','insc.plateforme':'Platform','insc.position':'Positions','insc.discord':'Discord','insc.discord.ph':'your_handle','insc.dg':'Do you want to be a general manager (GM)?','insc.dg.non':'No, just play','insc.dg.oui':'Yes, I\'d like to manage a team','insc.dg.peutetre':'Maybe / open to it','insc.dgBadge':'Interested in being GM','gmc.titre':'🎮 Registration — GM Connected League','gmc.texte':'Sign up for the GM Connected league. Tell us your weekly availability.','gmc.dispo':'Your availability','gmc.loterie':'Do you accept to play with the team you get in the lottery?','gmc.lot.oui':'Yes, any team works','gmc.lot.non':'No, I have preferences','gmc.admin.titre':'GM Connected registrations','gmc.besoinDispo':'Pick at least one day.','gmc.lotBadgeOui':'Accepts lottery team','gmc.lotBadgeNon':'Has team preferences','jour.lun':'Monday','jour.mar':'Tuesday','jour.mer':'Wednesday','jour.jeu':'Thursday','jour.ven':'Friday','jour.sam':'Saturday','jour.dim':'Sunday','insc.dgPeut':'GM — maybe',
+    'insc.nom':'Name / Gamertag','insc.nom.ph':'Your in-game gamertag','insc.plateforme':'Platform','insc.position':'Positions','insc.discord':'Discord','insc.discord.ph':'your_handle','insc.dg':'Do you want to be a general manager (GM)?','insc.dg.non':'No, just play','insc.dg.oui':'Yes, I\'d like to manage a team','insc.dg.peutetre':'Maybe / open to it','insc.dgBadge':'Interested in being GM','gmc.titre':'🎮 Registration — GM Connected League','gmc.texte':'Sign up for the GM Connected league. Tell us your weekly availability.','gmc.dispo':'Your availability','gmc.loterie':'Do you accept to play with the team you get in the lottery?','gmc.lot.oui':'Yes, any team works','gmc.lot.non':'No, I have preferences','gmc.admin.titre':'Registrations — GM Connected League','gmc.besoinDispo':'Pick at least one day.','gmc.lotBadgeOui':'Accepts lottery team','gmc.lotBadgeNon':'Has team preferences','jour.lun':'Monday','jour.mar':'Tuesday','jour.mer':'Wednesday','jour.jeu':'Thursday','jour.ven':'Friday','jour.sam':'Saturday','jour.dim':'Sunday','insc.dgPeut':'GM — maybe',
     'insc.envoyer':'Sign me up','insc.merci':'Thanks! Your registration is in. An admin will reach out.','insc.besoinNom':'Enter at least your name / gamertag.',
-    'insc.admin.titre':'Registrations received','insc.vide':'No registrations yet.','insc.nouveau':'New','insc.traite':'Processed',
+    'insc.admin.titre':'Registrations — 4S League','insc.compteur':'registered','insc.doublons':'duplicate(s) found','insc.aucunDoublon':'No duplicates','insc.dblBadge':'Duplicate entry','insc.vide':'No registrations yet.','insc.nouveau':'New','insc.traite':'Processed',
     'insc.marquerTraite':'Mark processed','insc.marquerNouveau':'Mark as new','insc.confirmSuppr':'Delete this registration?',
     'reseaux.titre':'Social media','reseaux.sous':'Follow the league everywhere.',
     'classements.titre':'Standings','classements.sous':'Standings, calculated automatically.','classements.construction':"We're building the standings table in the next step.",
@@ -3543,14 +3552,18 @@ function envoyerInscriptionGM(){
 function rendreInscriptionsGM(){
   const cont = document.getElementById('gmc-list');
   if(!cont) return;
-  if(!snapInscGM || snapInscGM.empty){ cont.innerHTML = '<div class="je-vide">' + t('insc.vide') + '</div>'; return; }
-  let html = '';
+  const { total, doublons } = analyseInscriptions(snapInscGM);
+  if(!snapInscGM || snapInscGM.empty){ cont.innerHTML = barreResume(0, doublons) + '<div class="je-vide">' + t('insc.vide') + '</div>'; return; }
+  let html = barreResume(total, doublons);
   snapInscGM.forEach(d => {
     const i = Object.assign({id:d.id}, d.data());
     const traite = (i.statut === 'traite');
     const jours = (i.dispo || '').split(',').map(s => s.trim()).filter(Boolean);
-    html += '<div class="insc-card' + (traite ? ' traite' : '') + '">'
+    const cle = (i.nom || '').trim().toLowerCase();
+    const estDoublon = cle && doublons.has(cle);
+    html += '<div class="insc-card' + (traite ? ' traite' : '') + (estDoublon ? ' doublon' : '') + '">'
       + '<div class="ic-head"><b>' + escapeHtml(i.nom || '') + '</b>'
+        + (estDoublon ? '<span class="ic-dbl-badge">⚠️ ' + t('insc.dblBadge') + '</span>' : '')
         + '<span class="ic-statut ' + (traite ? 's-ok' : 's-new') + '">' + t(traite ? 'insc.traite' : 'insc.nouveau') + '</span></div>'
       + '<div class="ic-meta">' + escapeHtml(i.plateforme || '')
         + (i.discord ? (' · 💬 ' + escapeHtml(i.discord)) : '') + '</div>'
@@ -3594,16 +3607,42 @@ function envoyerInscription(){
     if(m){ m.style.display = 'block'; setTimeout(() => { m.style.display = 'none'; }, 6000); }
   }).catch(e => alert(t('commun.erreur') + e.message));
 }
+/* Analyse une liste d'inscriptions : total + doublons (par gamertag) */
+function analyseInscriptions(snap){
+  const compte = {}; let total = 0;
+  if(snap) snap.forEach(d => {
+    total++;
+    const cle = ((d.data().nom || '').trim().toLowerCase());
+    if(cle) compte[cle] = (compte[cle] || 0) + 1;
+  });
+  const doublons = new Set(Object.keys(compte).filter(k => compte[k] > 1));
+  return { total, doublons, compte };
+}
+/* Barre de résumé (compteur + alerte doublons) */
+function barreResume(total, doublons){
+  let h = '<div class="insc-resume"><span class="ir-compte">📋 ' + total + ' ' + t('insc.compteur') + '</span>';
+  if(doublons.size){
+    h += '<span class="ir-dbl">⚠️ ' + doublons.size + ' ' + t('insc.doublons') + '</span>';
+  } else if(total > 0){
+    h += '<span class="ir-ok">✓ ' + t('insc.aucunDoublon') + '</span>';
+  }
+  return h + '</div>';
+}
+
 function rendreInscriptions(){
   const cont = document.getElementById('inscriptions-list');
   if(!cont) return;
-  if(!snapInsc || snapInsc.empty){ cont.innerHTML = '<div class="je-vide">' + t('insc.vide') + '</div>'; return; }
-  let html = '';
+  const { total, doublons } = analyseInscriptions(snapInsc);
+  if(!snapInsc || snapInsc.empty){ cont.innerHTML = barreResume(0, doublons) + '<div class="je-vide">' + t('insc.vide') + '</div>'; return; }
+  let html = barreResume(total, doublons);
   snapInsc.forEach(d => {
     const i = Object.assign({id:d.id}, d.data());
     const traite = (i.statut === 'traite');
-    html += '<div class="insc-card' + (traite ? ' traite' : '') + '">'
+    const cle = (i.nom || '').trim().toLowerCase();
+    const estDoublon = cle && doublons.has(cle);
+    html += '<div class="insc-card' + (traite ? ' traite' : '') + (estDoublon ? ' doublon' : '') + '">'
       + '<div class="ic-head"><b>' + escapeHtml(i.nom || '') + '</b>'
+        + (estDoublon ? '<span class="ic-dbl-badge">⚠️ ' + t('insc.dblBadge') + '</span>' : '')
         + '<span class="ic-statut ' + (traite ? 's-ok' : 's-new') + '">' + t(traite ? 'insc.traite' : 'insc.nouveau') + '</span></div>'
       + '<div class="ic-meta">' + escapeHtml(i.position || '') + ' · ' + escapeHtml(i.plateforme || '')
         + (i.discord ? (' · 💬 ' + escapeHtml(i.discord)) : '') + '</div>'
