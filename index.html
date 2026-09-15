@@ -1161,8 +1161,9 @@ a.live-row:hover{background:rgba(212,175,55,.06)}
     <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="equipes.titre">Équipes</h2><p data-i18n="equipes.sous">Les équipes de la ligue DYNASTY.</p></div>
 
     <!-- Bouton admin : ajouter une équipe -->
-    <div class="admin-only" style="margin-bottom:18px">
+    <div class="btn-rangee admin-only" style="margin-bottom:18px">
       <button class="btn btn-or" onclick="ouvrirEquipe()" data-i18n="equipes.ajouter">+ Ajouter une équipe</button>
+      <button class="btn btn-ghost" onclick="nettoyerOrphelins()" data-i18n="equipes.nettoyer" title="Efface les matchs, calendrier et joueurs dont l'équipe n'existe plus">🧹 Nettoyer les données orphelines</button>
     </div>
 
     <div id="equipes-grid" class="teams-grid">
@@ -1539,7 +1540,7 @@ const DICT = {
     'detail.titre':'Feuille de match','detail.aucunJoueur':'Aucune stat de joueur pour ce match.',
     'palmares.titre':'Palmarès','palmares.sous':'Les trophées et honneurs de la ligue.','palmares.admlbl':'Admin · Remettre un trophée','palmares.ph.titre':'Ex. Champion Saison 1','palmares.ph.gagnant':'Équipe ou joueur gagnant','palmares.ph.desc':'Description (optionnel)','palmares.remettre':'Remettre le trophée','palmares.vide.t':'La chasse aux trophées est ouverte','palmares.vide.s':'Les honneurs seront remis à la fin de la saison. 👑','palmares.besoin':'Écris le titre et le gagnant.','palmares.confirmSuppr':'Retirer ce trophée ?',
     'ea.profil':'Profil EA','ea.titre':'Profil EA','ea.rafraichir':'🔄 Rafraîchir depuis EA','ea.chargement':'Connexion à EA… (10-20 sec)','ea.trouve':'Profil trouvé sur EA! (mis en mémoire)','ea.introuvable':'Aucun joueur trouvé avec ce gamertag sur EA.','ea.erreur':'Erreur de connexion à EA. Réessaie.','ea.sansNom':'Cette inscription n\'a pas de gamertag.','ea.fiche':'Fiche','ea.vpct':'% Vict.','ea.ptspg':'Pts/match','ea.tricks':'Tours du chapeau','ea.gardien':'Comme gardien','insc.creerJoueur':'Créer le joueur',
-    'eq.besoinNom':"Donne un nom à l'équipe.",'eq.confirmSuppr':'Supprimer cette équipe ?',
+    'eq.besoinNom':"Donne un nom à l'équipe.",'equipes.nettoyer':'🧹 Nettoyer les données orphelines','eq.cascade':'⚠️ Ça va aussi effacer : {m} match(s), {c} match(s) au calendrier et {j} joueur(s) de cette équipe.','eq.rienANettoyer':'Rien à nettoyer — toutes les données sont rattachées à une équipe existante. ✅','eq.confirmNettoyer':'Effacer {m} match(s), {c} match(s) au calendrier et {j} joueur(s) dont l\'équipe n\'existe plus ?','eq.nettoye':'✅ Nettoyage terminé!','eq.confirmSuppr':'Supprimer cette équipe ?',
     'joueurs.ajouter':'+ Ajouter un joueur','joueurs.vide.t':'🏒 Les alignements se construisent','joueurs.vide.s':'Les joueurs seront affichés ici dès la formation des équipes.',
     'joueurs.pasdequipe.t':'🏒 Les alignements se construisent','joueurs.pasdequipe.s':'Les joueurs seront affichés ici dès la formation des équipes.',
     'joueurs.equipevide':'Aucun joueur dans cette équipe.',
@@ -1638,7 +1639,7 @@ const DICT = {
     'detail.titre':'Game sheet','detail.aucunJoueur':'No player stats for this game.',
     'palmares.titre':'Honours','palmares.sous':'League trophies and honours.','palmares.admlbl':'Admin · Award a trophy','palmares.ph.titre':'Ex. Season 1 Champion','palmares.ph.gagnant':'Winning team or player','palmares.ph.desc':'Description (optional)','palmares.remettre':'Award trophy','palmares.vide.t':'The trophy hunt is on','palmares.vide.s':'Honours will be awarded at the end of the season. 👑','palmares.besoin':'Write the title and the winner.','palmares.confirmSuppr':'Remove this trophy?',
     'ea.profil':'EA Profile','ea.titre':'EA Profile','ea.rafraichir':'🔄 Refresh from EA','ea.chargement':'Connecting to EA… (10-20 sec)','ea.trouve':'Profile found on EA! (cached)','ea.introuvable':'No player found with this gamertag on EA.','ea.erreur':'EA connection error. Try again.','ea.sansNom':'This registration has no gamertag.','ea.fiche':'Record','ea.vpct':'Win %','ea.ptspg':'Pts/game','ea.tricks':'Hat tricks','ea.gardien':'As goalie','insc.creerJoueur':'Create player',
-    'eq.besoinNom':'Give the team a name.','eq.confirmSuppr':'Delete this team?',
+    'eq.besoinNom':'Give the team a name.','equipes.nettoyer':'🧹 Clean orphaned data','eq.cascade':'⚠️ This will also delete: {m} game(s), {c} scheduled game(s) and {j} player(s) of this team.','eq.rienANettoyer':'Nothing to clean — all data belongs to an existing team. ✅','eq.confirmNettoyer':'Delete {m} game(s), {c} scheduled game(s) and {j} player(s) whose team no longer exists?','eq.nettoye':'✅ Cleanup done!','eq.confirmSuppr':'Delete this team?',
     'joueurs.ajouter':'+ Add a player','joueurs.vide.t':'🏒 Rosters in the making','joueurs.vide.s':'Players will show up here as teams are formed.',
     'joueurs.pasdequipe.t':'🏒 Rosters in the making','joueurs.pasdequipe.s':'Players will show up here as teams are formed.',
     'joueurs.equipevide':'No players on this team.',
@@ -2223,11 +2224,49 @@ function sauverEquipe(){
   action.then(() => fermerEquipe()).catch(e => alert(t('commun.erreur') + e.message));
 }
 
+/* Une équipe existe-t-elle encore ? (sert à ignorer les données orphelines) */
+function equipeExiste(id){ return !!(id && trouverEquipeParId(id)); }
+
+/* Compte tout ce qui est rattaché à une équipe */
+function donneesLieesEquipe(id){
+  const matchs = [], cal = [], joueurs = [];
+  if(snapMatchs) snapMatchs.forEach(d => { const m = d.data(); if(m.domId === id || m.extId === id) matchs.push(d.ref); });
+  if(snapCal) snapCal.forEach(d => { const c = d.data(); if(c.domId === id || c.extId === id) cal.push(d.ref); });
+  if(snapJoueurs) snapJoueurs.forEach(d => { if(d.data().equipeId === id) joueurs.push(d.ref); });
+  return { matchs, cal, joueurs };
+}
+
 function supprimerEquipe(id){
   if(!estAdmin){ alert(t('err.adminSeul')); return; }
-  if(confirm(t('eq.confirmSuppr'))){
-    db.collection('equipes').doc(id).delete().catch(e => alert(t('commun.erreur') + e.message));
+  const lie = donneesLieesEquipe(id);
+  const total = lie.matchs.length + lie.cal.length + lie.joueurs.length;
+  let msg = t('eq.confirmSuppr');
+  if(total) msg += '\n\n' + t('eq.cascade')
+    .replace('{m}', lie.matchs.length).replace('{c}', lie.cal.length).replace('{j}', lie.joueurs.length);
+  if(!confirm(msg)) return;
+  // Supprime l'équipe ET tout ce qui y est rattaché (par lots de 400 max)
+  const refs = [db.collection('equipes').doc(id)].concat(lie.matchs, lie.cal, lie.joueurs);
+  const lots = [];
+  for(let i = 0; i < refs.length; i += 400){
+    const b = db.batch(); refs.slice(i, i + 400).forEach(r => b.delete(r)); lots.push(b.commit());
   }
+  Promise.all(lots).catch(e => alert(t('commun.erreur') + e.message));
+}
+
+/* Nettoie les données dont l'équipe n'existe plus (matchs, calendrier, joueurs orphelins) */
+function nettoyerOrphelins(){
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }
+  const refs = []; let nM = 0, nC = 0, nJ = 0;
+  if(snapMatchs) snapMatchs.forEach(d => { const m = d.data(); if(!equipeExiste(m.domId) || !equipeExiste(m.extId)){ refs.push(d.ref); nM++; } });
+  if(snapCal) snapCal.forEach(d => { const c = d.data(); if(!equipeExiste(c.domId) || !equipeExiste(c.extId)){ refs.push(d.ref); nC++; } });
+  if(snapJoueurs) snapJoueurs.forEach(d => { const j = d.data(); if(j.equipeId && !equipeExiste(j.equipeId)){ refs.push(d.ref); nJ++; } });
+  if(!refs.length){ alert(t('eq.rienANettoyer')); return; }
+  if(!confirm(t('eq.confirmNettoyer').replace('{m}', nM).replace('{c}', nC).replace('{j}', nJ))) return;
+  const lots = [];
+  for(let i = 0; i < refs.length; i += 400){
+    const b = db.batch(); refs.slice(i, i + 400).forEach(r => b.delete(r)); lots.push(b.commit());
+  }
+  Promise.all(lots).then(() => alert(t('eq.nettoye'))).catch(e => alert(t('commun.erreur') + e.message));
 }
 
 /* =========================================================
@@ -2604,6 +2643,7 @@ function rendreResultats(){
   let html = '';
   snapMatchs.forEach(d => {
     const m = Object.assign({id:d.id}, d.data());
+    if(!equipeExiste(m.domId) || !equipeExiste(m.extId)) return;   // équipe supprimée → on ignore
     const bd = +m.butsDom, be = +m.butsExt;
     const domGagne = bd > be;
     const eqD = trouverEquipeParId(m.domId) || {};
@@ -3031,7 +3071,7 @@ function rendreAccueilLive(){
   if(!R || !C || !M) return;
   // Derniers résultats (3)
   const derniers = [];
-  if(snapMatchs){ snapMatchs.forEach(d => { if(derniers.length < 3) derniers.push(Object.assign({id:d.id}, d.data())); }); }
+  if(snapMatchs){ snapMatchs.forEach(d => { const m = d.data(); if(derniers.length < 3 && equipeExiste(m.domId) && equipeExiste(m.extId)) derniers.push(Object.assign({id:d.id}, m)); }); }
   R.innerHTML = derniers.length
     ? derniers.map(m => {
         const eqD = trouverEquipeParId(m.domId) || {};
@@ -3044,7 +3084,7 @@ function rendreAccueilLive(){
     : '<div class="je-vide">' + t('live.aucunResultat') + '</div>';
   // Prochains matchs (3)
   const prochains = [];
-  if(snapCal){ snapCal.forEach(d => { if(prochains.length < 3) prochains.push(d.data()); }); }
+  if(snapCal){ snapCal.forEach(d => { const c = d.data(); if(prochains.length < 3 && equipeExiste(c.domId) && equipeExiste(c.extId)) prochains.push(c); }); }
   C.innerHTML = prochains.length
     ? prochains.map(c => {
         const eqD = trouverEquipeParId(c.domId) || {};
@@ -3444,6 +3484,7 @@ function rendreCalendrier(){
   let html = '';
   snapCal.forEach(d => {
     const m = Object.assign({id:d.id}, d.data());
+    if(!equipeExiste(m.domId) || !equipeExiste(m.extId)) return;   // équipe supprimée → on ignore
     html += '<div class="cal-row">'
       + '<div class="cal-date">' + escapeHtml(formaterDateCal(m.date)) + (m.heure ? '<span>' + escapeHtml(m.heure) + '</span>' : '') + '</div>'
       + '<div class="cal-match"><b>' + escapeHtml(m.domNom || '') + '</b> <em>' + t('calendrier.vs') + '</em> <b>' + escapeHtml(m.extNom || '') + '</b></div>';
