@@ -147,6 +147,25 @@ nav.tabs::-webkit-scrollbar{display:none}
   box-shadow:0 4px 14px -6px rgba(212,175,55,.6);
 }
 .nav-sep{flex-shrink:0;width:1px;align-self:center;height:20px;background:var(--bordure);margin:0 4px}
+nav.tabs{overflow:visible;justify-content:center;flex-wrap:wrap}
+.nav-grp{position:relative;flex-shrink:0}
+.nav-btn{background:transparent;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:4px}
+.nav-btn .chev{font-size:10px;transition:transform .18s;opacity:.7}
+.nav-grp.open .nav-btn .chev{transform:rotate(180deg)}
+.nav-grp.active-grp>.nav-btn{color:var(--or);border-color:rgba(212,175,55,.45)}
+.nav-grp.active-grp.open>.nav-btn{color:var(--noir);background:var(--grad-or)}
+.nav-menu{
+  display:none;position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);
+  min-width:190px;background:#0d0d12;border:1px solid var(--bordure);border-radius:14px;padding:6px;
+  box-shadow:0 18px 40px -12px rgba(0,0,0,.8),0 0 0 1px rgba(212,175,55,.08);z-index:60;flex-direction:column;gap:2px
+}
+.nav-grp.open .nav-menu{display:flex}
+.nav-menu .nav-link{display:block;border-radius:9px;padding:9px 14px;text-align:left}
+.nav-menu .nav-link:hover{background:rgba(255,255,255,.04)}
+.nav-menu .nav-link.current{color:var(--noir);background:var(--grad-or)}
+@media(max-width:640px){
+  .nav-menu{position:fixed;left:12px;right:12px;top:auto;transform:none;min-width:0}
+}
 
 /* ===== Pages ===== */
 main{padding:26px 0 60px}
@@ -796,23 +815,38 @@ a.live-row:hover{background:rgba(212,175,55,.06)}
     <button class="admin-btn" onclick="ouvrirModale()" title="Mode admin">&#9819;</button>
   </div>
   <nav class="tabs" id="nav">
-    <!-- PORTAIL -->
     <a class="nav-link" data-route="accueil" href="#accueil" data-i18n="nav.accueil">Accueil</a>
-    <a class="nav-link" data-route="annonces" href="#annonces" data-i18n="nav.annonces">Annonces</a>
-    <a class="nav-link" data-route="transactions" href="#transactions" data-i18n="nav.transactions">Transactions</a>
-    <a class="nav-link" data-route="reglements" href="#reglements" data-i18n="nav.reglements">Règlements</a>
-    <a class="nav-link" data-route="inscriptions" href="#inscriptions" data-i18n="nav.inscriptions">Inscriptions</a>
-    <a class="nav-link" data-route="reseaux" href="#reseaux" data-i18n="nav.reseaux">Réseaux</a>
-    <span class="nav-sep"></span>
-    <!-- STATS -->
-    <a class="nav-link" data-route="classements" href="#classements" data-i18n="nav.classements">Classements</a>
-    <a class="nav-link" data-route="joueurs" href="#joueurs" data-i18n="nav.joueurs">Joueurs</a>
-    <a class="nav-link" data-route="gardiens" href="#gardiens" data-i18n="nav.gardiens">Gardiens</a>
-    <a class="nav-link" data-route="calendrier" href="#calendrier" data-i18n="nav.calendrier">Calendrier</a>
-    <a class="nav-link" data-route="resultats" href="#resultats" data-i18n="nav.resultats">Résultats</a>
-    <a class="nav-link" data-route="equipes" href="#equipes" data-i18n="nav.equipes">Équipes</a>
-    <a class="nav-link" data-route="echanges" href="#echanges" data-i18n="nav.echanges">Échanges</a>
-    <a class="nav-link" data-route="palmares" href="#palmares" data-i18n="nav.palmares">Palmarès</a>
+
+    <div class="nav-grp" data-routes="annonces,transactions,reglements,inscriptions,reseaux">
+      <button type="button" class="nav-link nav-btn" onclick="toggleGrp(this)"><span data-i18n="nav.grp.ligue">Ligue</span> <span class="chev">▾</span></button>
+      <div class="nav-menu">
+        <a class="nav-link" data-route="annonces" href="#annonces" data-i18n="nav.annonces">Annonces</a>
+        <a class="nav-link" data-route="transactions" href="#transactions" data-i18n="nav.transactions">Transactions</a>
+        <a class="nav-link" data-route="reglements" href="#reglements" data-i18n="nav.reglements">Règlements</a>
+        <a class="nav-link" data-route="inscriptions" href="#inscriptions" data-i18n="nav.inscriptions">Inscriptions</a>
+        <a class="nav-link" data-route="reseaux" href="#reseaux" data-i18n="nav.reseaux">Réseaux</a>
+      </div>
+    </div>
+
+    <div class="nav-grp" data-routes="classements,joueurs,gardiens,palmares">
+      <button type="button" class="nav-link nav-btn" onclick="toggleGrp(this)"><span data-i18n="nav.grp.stats">Stats</span> <span class="chev">▾</span></button>
+      <div class="nav-menu">
+        <a class="nav-link" data-route="classements" href="#classements" data-i18n="nav.classements">Classements</a>
+        <a class="nav-link" data-route="joueurs" href="#joueurs" data-i18n="nav.joueurs">Joueurs</a>
+        <a class="nav-link" data-route="gardiens" href="#gardiens" data-i18n="nav.gardiens">Gardiens</a>
+        <a class="nav-link" data-route="palmares" href="#palmares" data-i18n="nav.palmares">Palmarès</a>
+      </div>
+    </div>
+
+    <div class="nav-grp" data-routes="calendrier,resultats,equipes,echanges">
+      <button type="button" class="nav-link nav-btn" onclick="toggleGrp(this)"><span data-i18n="nav.grp.saison">Saison</span> <span class="chev">▾</span></button>
+      <div class="nav-menu">
+        <a class="nav-link" data-route="calendrier" href="#calendrier" data-i18n="nav.calendrier">Calendrier</a>
+        <a class="nav-link" data-route="resultats" href="#resultats" data-i18n="nav.resultats">Résultats</a>
+        <a class="nav-link" data-route="equipes" href="#equipes" data-i18n="nav.equipes">Équipes</a>
+        <a class="nav-link" data-route="echanges" href="#echanges" data-i18n="nav.echanges">Échanges</a>
+      </div>
+    </div>
   </nav>
 </header>
 
@@ -1481,7 +1515,7 @@ const db = firebase.firestore();
    ========================================================= */
 const DICT = {
   fr: {
-    'nav.accueil':'Accueil','nav.annonces':'Annonces','nav.transactions':'Transactions','nav.reglements':'Règlements',
+    'nav.accueil':'Accueil','nav.grp.ligue':'Ligue','nav.grp.stats':'Stats','nav.grp.saison':'Saison','nav.annonces':'Annonces','nav.transactions':'Transactions','nav.reglements':'Règlements',
     'nav.inscriptions':'Inscriptions','nav.reseaux':'Réseaux','nav.classements':'Classements',
     'nav.joueurs':'Joueurs','nav.gardiens':'Gardiens','nav.calendrier':'Calendrier',
     'nav.resultats':'Résultats','nav.equipes':'Équipes',
@@ -1580,7 +1614,7 @@ const DICT = {
     'jo.pos':'POS','jo.joueur':'Joueur','jo.b':'B','jo.a':'A','joueur.stats':'Statistiques'
   },
   en: {
-    'nav.accueil':'Home','nav.annonces':'News','nav.transactions':'Transactions','nav.reglements':'Rules',
+    'nav.accueil':'Home','nav.grp.ligue':'League','nav.grp.stats':'Stats','nav.grp.saison':'Season','nav.annonces':'News','nav.transactions':'Transactions','nav.reglements':'Rules',
     'nav.inscriptions':'Sign-up','nav.reseaux':'Socials','nav.classements':'Standings',
     'nav.joueurs':'Players','nav.gardiens':'Goalies','nav.calendrier':'Schedule',
     'nav.resultats':'Results','nav.equipes':'Teams',
@@ -1850,13 +1884,27 @@ function afficherRoute(){
   let h = location.hash.replace('#','') || 'accueil';
   if(!ROUTES.includes(h)) h = 'accueil';
   document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === h));
-  document.querySelectorAll('.nav-link').forEach(a => a.classList.toggle('current', a.dataset.route === h));
-  // recentre l'onglet actif dans la barre
-  const actif = document.querySelector('.nav-link.current');
-  if(actif) actif.scrollIntoView({inline:'center', block:'nearest', behavior:'smooth'});
+  document.querySelectorAll('.nav-link[data-route]').forEach(a => a.classList.toggle('current', a.dataset.route === h));
+  // surligne le menu déroulant qui contient la page active, et ferme les menus ouverts
+  document.querySelectorAll('.nav-grp').forEach(g => {
+    g.classList.toggle('active-grp', (g.dataset.routes || '').split(',').includes(h));
+    g.classList.remove('open');
+  });
   window.scrollTo({top:0});
 }
 window.addEventListener('hashchange', afficherRoute);
+
+/* Menus déroulants du nav */
+function toggleGrp(btn){
+  const g = btn.closest('.nav-grp');
+  const dejaOuvert = g.classList.contains('open');
+  document.querySelectorAll('.nav-grp.open').forEach(x => x.classList.remove('open'));
+  if(!dejaOuvert) g.classList.add('open');
+}
+document.addEventListener('click', e => {
+  if(!e.target.closest('.nav-grp')) document.querySelectorAll('.nav-grp.open').forEach(x => x.classList.remove('open'));
+});
+document.addEventListener('keydown', e => { if(e.key === 'Escape') document.querySelectorAll('.nav-grp.open').forEach(x => x.classList.remove('open')); });
 
 /* =========================================================
    4) ANNONCES (lecture/écriture en direct)
