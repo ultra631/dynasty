@@ -525,6 +525,16 @@ body.is-admin .peut-editer, body.is-dg .peut-editer{display:block}
 .cl-eq{text-align:left;color:var(--platine);font-weight:600;display:flex;align-items:center;gap:8px}
 th.cl-eq{display:table-cell}
 .cl-pts{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--or);font-weight:400}
+.sa-grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.sa-carte{background:var(--carte);border:1px solid var(--bordure);border-radius:14px;padding:12px 14px}
+.sa-titre{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.12em;color:var(--or);text-transform:uppercase;margin-bottom:8px}
+.sa-table{min-width:0;table-layout:fixed}
+.sa-table td{padding:6px 6px;font-size:13px}
+.sa-table td.cl-eq{overflow:hidden;text-overflow:ellipsis}
+.sa-table td.cl-pts{width:58px;text-align:right}
+.sa-table .cl-rang{width:26px}
+.jr-table th,.jr-table td{padding:7px 7px;font-size:12.5px;white-space:nowrap}
+.gd-wrap{overflow-x:auto}
 
 /* ===== Résultats (matchs) ===== */
 .match-row{display:flex;align-items:center;gap:10px;background:linear-gradient(180deg,var(--charbon),#0d0d14);
@@ -1143,6 +1153,9 @@ a.live-row:hover{background:rgba(212,175,55,.06)}
 
     <div class="sous-head"><h3 data-i18n="meneurs.gardiens">Meilleurs gardiens</h3></div>
     <div id="meneurs-gardiens"><div class="je-vide" data-i18n="live.aucunMeneur">Les meneurs apparaîtront ici.</div></div>
+
+    <div class="sous-head"><h3 data-i18n="st.avancees">📊 Stats avancées</h3></div>
+    <div id="stats-avancees"><div class="je-vide" data-i18n="st.avancees.vide">Les stats avancées apparaîtront après le premier import EA.</div></div>
   </section>
   <section class="page" id="joueurs">
     <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="joueurs.titre">Joueurs</h2><p data-i18n="joueurs.sous">Les joueurs, par équipe.</p></div>
@@ -1610,7 +1623,7 @@ const DICT = {
     'calendrier.besoinDate':'Choisis une date.','calendrier.confirmSuppr':'Supprimer ce match du calendrier ?','calendrier.vs':'vs','calendrier.jouer':'Jouer',
     'box.joue':'Joué','box.note':'Le score se calcule à partir des buts. Coche les joueurs qui ont joué.',
     'gardiens.vide.t':'🥅 En préparation','gardiens.vide.s':'Les stats des gardiens s\'afficheront dès les premiers matchs.',
-    'gd.pj':'PJ','gd.v':'V','gd.d':'D','gd.bl':'BL','gd.bc':'BC','gd.moy':'MOY','gardien.modal.titre':'Stats du gardien',
+    'gd.pj':'PJ','gd.v':'V','gd.d':'D','gd.bl':'BL','gd.bc':'BC','gd.moy':'MOY','st.tirs':'T','st.tirs.l':'Tirs au but','st.pctTirs':'%T','st.pctTirs.l':'% de tirs','st.hits':'MÉ','st.hits.l':'Mises en échec','st.bloques':'TB','st.bloques.l':'Tirs bloqués','st.maj':'%MAJ','st.maj.l':'% mises en jeu','st.passes':'%P','st.passes.l':'% de passes','st.pim':'PUN','st.pim.l':'Minutes de pénalité','st.tg':'TG','st.tg.l':'Temps de glace moyen','st.arr':'ARR','st.arr.l':'Arrêts','st.tirsRecus':'TIRS','st.tirsRecus.l':'Tirs reçus','st.eff':'EFF','st.eff.l':'Efficacité (909 = .909)','st.echap':'ÉCH','st.echap.l':'Arrêts sur échappée','st.pen':'PÉN','st.pen.l':'Arrêts sur tir de pénalité','st.desesp':'AD','st.desesp.l':'Arrêts désespérés','st.poke':'CB','st.poke.l':'Coups de bâton','st.avancees':'📊 Stats avancées','st.avancees.vide':'Les stats avancées apparaîtront après le premier import EA.','st.tirsL':'Plus de tirs','st.hitsL':'Plus de mises en échec','st.bloquesL':'Plus de tirs bloqués','st.pmL':'Meilleur +/-','st.majL':'% mises en jeu (min. 10)','st.passL':'% de passes (min. 20)','st.volesL':'Plus de revirements provoqués','st.tgL':'Temps de glace / match','gardien.modal.titre':'Stats du gardien',
     'jo.pos':'POS','jo.joueur':'Joueur','jo.b':'B','jo.a':'A','joueur.stats':'Statistiques'
   },
   en: {
@@ -1709,7 +1722,7 @@ const DICT = {
     'calendrier.besoinDate':'Pick a date.','calendrier.confirmSuppr':'Remove this match from the schedule?','calendrier.vs':'vs','calendrier.jouer':'Play',
     'box.joue':'Played','box.note':'The score is calculated from goals. Check the players who played.',
     'gardiens.vide.t':'🥅 In the works','gardiens.vide.s':'Goalie stats will show up after the first games.',
-    'gd.pj':'GP','gd.v':'W','gd.d':'L','gd.bl':'SO','gd.bc':'GA','gd.moy':'GAA','gardien.modal.titre':'Goalie stats',
+    'gd.pj':'GP','gd.v':'W','gd.d':'L','gd.bl':'SO','gd.bc':'GA','gd.moy':'GAA','st.tirs':'S','st.tirs.l':'Shots','st.pctTirs':'S%','st.pctTirs.l':'Shooting %','st.hits':'HIT','st.hits.l':'Hits','st.bloques':'BLK','st.bloques.l':'Blocked shots','st.maj':'FO%','st.maj.l':'Faceoff %','st.passes':'P%','st.passes.l':'Pass %','st.pim':'PIM','st.pim.l':'Penalty minutes','st.tg':'TOI','st.tg.l':'Avg time on ice','st.arr':'SV','st.arr.l':'Saves','st.tirsRecus':'SA','st.tirsRecus.l':'Shots against','st.eff':'SV%','st.eff.l':'Save % (909 = .909)','st.echap':'BRK','st.echap.l':'Breakaway saves','st.pen':'PS','st.pen.l':'Penalty shot saves','st.desesp':'DSV','st.desesp.l':'Desperation saves','st.poke':'PK','st.poke.l':'Poke checks','st.avancees':'📊 Advanced stats','st.avancees.vide':'Advanced stats will appear after the first EA import.','st.tirsL':'Most shots','st.hitsL':'Most hits','st.bloquesL':'Most blocked shots','st.pmL':'Best +/-','st.majL':'Faceoff % (min. 10)','st.passL':'Pass % (min. 20)','st.volesL':'Most takeaways','st.tgL':'Time on ice / game','gardien.modal.titre':'Goalie stats',
     'jo.pos':'POS','jo.joueur':'Player','jo.b':'G','jo.a':'A','joueur.stats':'Statistics'
   }
 };
@@ -2368,11 +2381,19 @@ function rendreJoueurs(){
       html += '<div class="gd-wrap"><table class="gd-table jr-table"><thead><tr>'
             + '<th>' + t('jo.pos') + '</th><th class="cl-eq">' + t('jo.joueur') + '</th>'
             + '<th>' + t('cl.pj') + '</th><th>' + t('jo.b') + '</th><th>' + t('jo.a') + '</th><th>' + t('cl.pts') + '</th>'
+            + '<th>+/-</th><th title="' + t('st.tirs.l') + '">' + t('st.tirs') + '</th><th title="' + t('st.pctTirs.l') + '">' + t('st.pctTirs') + '</th>'
+            + '<th title="' + t('st.hits.l') + '">' + t('st.hits') + '</th><th title="' + t('st.bloques.l') + '">' + t('st.bloques') + '</th>'
+            + '<th title="' + t('st.maj.l') + '">' + t('st.maj') + '</th><th title="' + t('st.passes.l') + '">' + t('st.passes') + '</th>'
+            + '<th title="' + t('st.pim.l') + '">' + t('st.pim') + '</th><th title="' + t('st.tg.l') + '">' + t('st.tg') + '</th>'
             + (peut ? '<th></th>' : '') + '</tr></thead><tbody>';
       joueurs.forEach(j => {
         html += '<tr><td class="jr-pos2">' + escapeHtml(j.position || '') + '</td>'
               + '<td class="cl-eq"><a class="lien-eq" onclick="ouvrirProfilJoueur(\'' + j.id + '\')"><span>' + escapeHtml(j.nom || '') + '</span></a></td>'
               + '<td>' + j.pj + '</td><td>' + j.b + '</td><td>' + j.a + '</td><td class="cl-pts">' + j.pts + '</td>'
+              + '<td>' + (j.plusMin>0?'+':'') + j.plusMin + '</td><td>' + j.tirs + '</td><td>' + (j.pctTirs!=null?j.pctTirs.toFixed(1)+'%':'—') + '</td>'
+              + '<td>' + j.hits + '</td><td>' + j.bloques + '</td>'
+              + '<td>' + (j.majPct!=null?j.majPct.toFixed(0)+'%':'—') + '</td><td>' + (j.passPct!=null?j.passPct.toFixed(0)+'%':'—') + '</td>'
+              + '<td>' + j.pim + '</td><td>' + formatTG(j.tgSec, j.pj) + '</td>'
               + (peut ? ('<td><span class="jr-actions"><button class="btn-mini" onclick="ouvrirJoueur(\'' + j.id + '\')">' + t('btn.modifier') + '</button>'
                   + '<button class="del-btn" onclick="supprimerJoueur(\'' + j.id + '\')">' + t('btn.supprimer') + '</button></span></td>') : '')
               + '</tr>';
@@ -2811,19 +2832,85 @@ function rendreMeneurs(){
       rows += '<tr class="' + (i===0?'rang-or':i===1?'rang-argent':i===2?'rang-bronze':'') + '">'
         + '<td class="cl-rang">' + (i+1) + '</td>'
         + '<td class="cl-eq"><a class="lien-eq" onclick="ouvrirProfilJoueur(\'' + g.id + '\')">' + eqVisuel(eq, 20) + '<span>' + escapeHtml(g.nom) + '</span></a></td>'
-        + '<td>' + g.pj + '</td><td>' + g.v + '</td><td>' + g.bl + '</td><td>' + (g.arrPct || '—') + '</td><td class="cl-pts">' + g.moy + '</td></tr>';
+        + '<td>' + g.pj + '</td><td>' + g.v + '</td><td>' + g.bl + '</td><td>' + g.arr + '</td><td>' + g.tirs + '</td><td>' + (g.arrEA || '—') + '</td><td class="cl-pts">' + g.moy + '</td>'
+        + '<td>' + g.arrEchap + '/' + g.tirsEchap + '</td><td>' + g.arrPen + '/' + g.tirsPen + '</td><td>' + g.arrDesesp + '</td><td>' + g.pokechecks + '</td></tr>';
     });
     contG.innerHTML = '<div class="cl-wrap"><table class="cl-table"><thead><tr>'
-      + '<th>#</th><th class="cl-eq">' + t('jo.joueur') + '</th><th>' + t('gd.pj') + '</th><th>' + t('gd.v') + '</th><th>' + t('gd.bl') + '</th><th>' + t('gd.arrpct') + '</th><th>' + t('gd.moy') + '</th>'
+      + '<th>#</th><th class="cl-eq">' + t('jo.joueur') + '</th><th>' + t('gd.pj') + '</th><th>' + t('gd.v') + '</th><th>' + t('gd.bl') + '</th>'
+      + '<th title="' + t('st.arr.l') + '">' + t('st.arr') + '</th><th title="' + t('st.tirsRecus.l') + '">' + t('st.tirsRecus') + '</th>'
+      + '<th title="' + t('st.eff.l') + '">' + t('st.eff') + '</th><th>' + t('gd.moy') + '</th>'
+      + '<th title="' + t('st.echap.l') + '">' + t('st.echap') + '</th><th title="' + t('st.pen.l') + '">' + t('st.pen') + '</th>'
+      + '<th title="' + t('st.desesp.l') + '">' + t('st.desesp') + '</th><th title="' + t('st.poke.l') + '">' + t('st.poke') + '</th>'
       + '</tr></thead><tbody>' + rows + '</tbody></table></div>';
   }
+  rendreStatsAvancees();
+}
+
+/* ----- Stats avancées : 6 classements tirés des stats EA ----- */
+function rendreStatsAvancees(){
+  const cont = document.getElementById('stats-avancees');
+  if(!cont) return;
+  const tous = [];
+  if(snapJoueurs){ snapJoueurs.forEach(d => { const j=d.data(); const s=statsJoueur(d.id);
+    if(s.pj>0 && Object.keys(s.tot).length) tous.push(Object.assign({id:d.id, nom:j.nom||'', equipeId:j.equipeId}, s)); }); }
+  if(!tous.length){ cont.innerHTML = '<div class="je-vide">' + t('st.avancees.vide') + '</div>'; return; }
+  const carte = (titre, ico, liste, val) => {
+    if(!liste.length) return '';
+    let rows = '';
+    liste.slice(0,5).forEach((p,i) => { const eq = trouverEquipeParId(p.equipeId)||{};
+      rows += '<tr class="' + (i===0?'rang-or':i===1?'rang-argent':i===2?'rang-bronze':'') + '"><td class="cl-rang">' + (i+1) + '</td>'
+        + '<td class="cl-eq"><a class="lien-eq" onclick="ouvrirProfilJoueur(\'' + p.id + '\')">' + eqVisuel(eq,18) + '<span>' + escapeHtml(p.nom) + '</span></a></td>'
+        + '<td class="cl-pts">' + val(p) + '</td></tr>'; });
+    return '<div class="sa-carte"><div class="sa-titre">' + ico + ' ' + titre + '</div><table class="cl-table sa-table"><tbody>' + rows + '</tbody></table></div>';
+  };
+  const parTirs = tous.filter(p=>p.tirs>0).sort((a,b)=>b.tirs-a.tirs);
+  const parHits = tous.filter(p=>p.hits>0).sort((a,b)=>b.hits-a.hits);
+  const parBloq = tous.filter(p=>p.bloques>0).sort((a,b)=>b.bloques-a.bloques);
+  const parPM   = tous.filter(p=>p.tot.skplusmin!==undefined).sort((a,b)=>b.plusMin-a.plusMin);
+  const parMaj  = tous.filter(p=>(p.majG+p.majP)>=10).sort((a,b)=>b.majPct-a.majPct);
+  const parPass = tous.filter(p=>p.passesT>=20).sort((a,b)=>b.passPct-a.passPct);
+  const parVol  = tous.filter(p=>p.voles>0).sort((a,b)=>b.voles-a.voles);
+  const parTG   = tous.filter(p=>p.tgSec>0).sort((a,b)=>(b.tgSec/b.pj)-(a.tgSec/a.pj));
+  cont.innerHTML = '<div class="sa-grille">'
+    + carte(t('st.tirsL'),'🎯',parTirs,p=>p.tirs)
+    + carte(t('st.hitsL'),'💥',parHits,p=>p.hits)
+    + carte(t('st.bloquesL'),'🛡️',parBloq,p=>p.bloques)
+    + carte(t('st.pmL'),'➕',parPM,p=>(p.plusMin>0?'+':'')+p.plusMin)
+    + carte(t('st.majL'),'⚔️',parMaj,p=>p.majPct.toFixed(0)+'%')
+    + carte(t('st.passL'),'🎽',parPass,p=>p.passPct.toFixed(0)+'%')
+    + carte(t('st.volesL'),'🧤',parVol,p=>p.voles)
+    + carte(t('st.tgL'),'⏱️',parTG,p=>formatTG(p.tgSec,p.pj))
+    + '</div>';
 }
 
 /* ----- Helpers d'agrégation : les stats sont CALCULÉES à partir des matchs ----- */
+/* Cumule TOUTES les stats EA (l.stats) d'un joueur sur ses matchs */
+function cumulerStatsEA(pid){
+  const tot = {};
+  if(snapMatchs){ snapMatchs.forEach(d => { const m=d.data(); const l=(m.lignes||[]).find(x=>x.pid===pid);
+    if(l && l.stats){ for(const k in l.stats){ const v=+l.stats[k]; if(!isNaN(v)) tot[k]=(tot[k]||0)+v; } } }); }
+  return tot;
+}
+const pctDe = (x,y) => y>0 ? (x/y*100) : null;
+function formatTG(sec, matchs){
+  if(!sec || sec<=0) return '—';
+  const s = matchs>0 ? Math.round(sec/matchs) : sec;
+  return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0');
+}
 function statsJoueur(pid){
   let pj=0, b=0, a=0;
   if(snapMatchs){ snapMatchs.forEach(d => { const m=d.data(); const l=(m.lignes||[]).find(x=>x.pid===pid); if(l){ pj++; b+=(+l.b||0); a+=(+l.a||0); } }); }
-  return { pj, b, a, pts: b+a };
+  const t = cumulerStatsEA(pid), n = k => t[k]||0;
+  return { pj, b, a, pts: b+a, tot: t,
+    plusMin: n('skplusmin'),
+    tirs: n('skshots'), tentatives: n('skshotattempts'), pctTirs: pctDe(n('skgoals'), n('skshots')),
+    hits: n('skhits'), bloques: n('skbs'), pim: n('skpim'),
+    majG: n('skfow'), majP: n('skfol'), majPct: pctDe(n('skfow'), n('skfow')+n('skfol')),
+    passes: n('skpasses'), passesT: n('skpassattempts'), passPct: pctDe(n('skpasses'), n('skpassattempts')),
+    voles: n('sktakeaways'), perdus: n('skgiveaways'), interceptions: n('skinterceptions'),
+    ppg: n('skppg'), shg: n('skshg'), gwg: n('skgwg'), penObt: n('skpenaltiesdrawn'),
+    tgSec: n('toiseconds')
+  };
 }
 function statsGardien(pid){
   let pj=0, v=0, dd=0, dp=0, bc=0, bl=0, arr=0, tirs=0;
@@ -2836,8 +2923,12 @@ function statsGardien(pid){
     if(pour > contre) v++; else { if(m.prolongation) dp++; else dd++; }
     arr += (+l.arr||0); tirs += (+l.tirs||0);   // stats EA (arrêts / tirs reçus) si importées
   }); }
+  const t = cumulerStatsEA(pid), n = k => t[k]||0;
   return { pj, v, dd, dp, bc, bl, moy: pj>0 ? (bc/pj).toFixed(2) : '—',
-           arr, tirs, arrPct: tirs>0 ? ((arr/tirs)*100).toFixed(1)+'%' : null };
+           arr, tirs, arrPct: tirs>0 ? ((arr/tirs)*100).toFixed(1)+'%' : null,
+           arrEA: tirs>0 ? ((arr/tirs)*1000).toFixed(0) : null,
+           arrEchap: n('glbrksaves'), tirsEchap: n('glbrkshots'), arrPen: n('glpensaves'), tirsPen: n('glpenshots'),
+           arrDesesp: n('gldsaves'), pokechecks: n('glpokechecks'), tgSec: n('toiseconds') };
 }
 
 /* ----- Feuille de match (effectif + buts/passes) ----- */
