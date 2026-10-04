@@ -532,6 +532,7 @@ body.is-admin .peut-editer, body.is-dg .peut-editer{display:block}
 .cl-eq{text-align:left;color:var(--platine);font-weight:600;display:flex;align-items:center;gap:8px}
 th.cl-eq{display:table-cell}
 .cl-pts{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--or);font-weight:400}
+.cal-jour{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.2em;color:var(--or);text-transform:uppercase;margin:18px 0 6px;padding-bottom:4px;border-bottom:1px solid var(--bordure)}
 .badge-g{margin-left:6px;font-size:12px;vertical-align:middle}
 .badge-tc{margin-left:7px;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:.1em;padding:1px 6px;border-radius:5px;background:rgba(95,208,138,.12);border:1px solid rgba(95,208,138,.45);color:#7BD19A;vertical-align:middle}
 .sa-grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
@@ -2811,6 +2812,7 @@ function initMatchs(){
   db.collection('matchs').orderBy('createdAt','desc').onSnapshot(snap => {
     snapMatchs = snap;
     rendreResultats(); rendreClassements();
+    if(typeof rendreCalendrier === 'function') rendreCalendrier();   // une game importée disparaît du calendrier à venir
     if(typeof rendreJoueurs === 'function') rendreJoueurs();   // stats joueurs = somme des matchs
     if(typeof rendreGardiens === 'function') rendreGardiens();  // stats gardiens = somme des matchs
   }, err => {
@@ -3445,7 +3447,7 @@ function rendreAccueilLive(){
     : '<div class="je-vide">' + t('live.aucunResultat') + '</div>';
   // Prochains matchs (3)
   const prochains = [];
-  if(snapCal){ snapCal.forEach(d => { const c = d.data(); if(prochains.length < 3 && equipeExiste(c.domId) && equipeExiste(c.extId)) prochains.push(c); }); }
+  calAVenir().slice(0, 3).forEach(c => prochains.push(c));
   C.innerHTML = prochains.length
     ? prochains.map(c => {
         const eqD = trouverEquipeParId(c.domId) || {};
@@ -3838,14 +3840,27 @@ function formaterDateCal(s){
   if(isNaN(d.getTime())) return s;
   return d.toLocaleDateString(langue === 'en' ? 'en-CA' : 'fr-CA', {weekday:'short', day:'numeric', month:'short'});
 }
+/* Calendrier à venir : retire les games déjà jouées (match importé lié par calId) et trie par date PUIS heure */
+function calAVenir(){
+  const joues = new Set();
+  if(snapMatchs) snapMatchs.forEach(d => { const c = d.data().calId; if(c) joues.add(c); });
+  const out = [];
+  if(snapCal) snapCal.forEach(d => {
+    const m = Object.assign({id:d.id}, d.data());
+    if(joues.has(d.id) || !equipeExiste(m.domId) || !equipeExiste(m.extId)) return;
+    out.push(m);
+  });
+  out.sort((a,b) => String(a.date||'').localeCompare(String(b.date||'')) || String(a.heure||'').localeCompare(String(b.heure||'')));
+  return out;
+}
 function rendreCalendrier(){
   const cont = document.getElementById('calendrier-list');
   if(!cont) return;
-  if(!snapCal || snapCal.empty){ cont.innerHTML = videHTML(ico('calendar'), t('calendrier.vide.t'), t('calendrier.vide.s')); return; }
-  let html = '';
-  snapCal.forEach(d => {
-    const m = Object.assign({id:d.id}, d.data());
-    if(!equipeExiste(m.domId) || !equipeExiste(m.extId)) return;   // équipe supprimée → on ignore
+  const aVenir = calAVenir();
+  if(!aVenir.length){ cont.innerHTML = videHTML(ico('calendar'), t('calendrier.vide.t'), t('calendrier.vide.s')); if(typeof rendreAccueilLive === 'function') rendreAccueilLive(); return; }
+  let html = '', dateCourante = '';
+  aVenir.forEach(m => {
+    if(m.date !== dateCourante){ dateCourante = m.date; html += '<div class="cal-jour">' + escapeHtml(formaterDateCal(m.date)) + '</div>'; }
     html += '<div class="cal-row">'
       + '<div class="cal-date">' + escapeHtml(formaterDateCal(m.date)) + (m.heure ? '<span>' + escapeHtml(m.heure) + '</span>' : '') + '</div>'
       + '<div class="cal-match"><b>' + escapeHtml(m.domNom || '') + '</b> <em>' + t('calendrier.vs') + '</em> <b>' + escapeHtml(m.extNom || '') + '</b></div>';
