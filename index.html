@@ -541,6 +541,9 @@ th.cl-eq{display:table-cell}
 .code-game{display:inline-flex;align-items:center;gap:5px;margin-left:12px;padding:2px 9px;border:1px solid rgba(212,175,55,.45);border-radius:99px;background:rgba(212,175,55,.08);font-size:11px;letter-spacing:.05em;color:var(--argent2);white-space:nowrap}
 .code-game b{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:.1em;color:var(--or2)}
 .code-game-mini{font-family:'Bebas Neue',sans-serif;letter-spacing:.08em;color:var(--or2)}
+.bx-remp-bar{display:flex;gap:6px;padding:8px 12px 0}
+.bx-remp-bar select{flex:1;min-width:0;margin:0;padding:6px 8px;font-size:12.5px}
+.remp-tag{margin-left:6px;font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:.1em;padding:0 5px;border-radius:4px;border:1px solid rgba(147,197,253,.5);color:#93C5FD}
 .remp-eq{margin-left:7px;font-size:11px;color:var(--argent2);font-weight:400}
 .badge-remp{margin-left:7px;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:.1em;padding:1px 6px;border-radius:5px;background:rgba(147,197,253,.1);border:1px solid rgba(147,197,253,.45);color:#93C5FD;vertical-align:middle}
 .badge-g{margin-left:6px;font-size:12px;vertical-align:middle}
@@ -1421,11 +1424,13 @@ a.live-row:hover{background:rgba(212,175,55,.06)}
     <div class="box-score">
       <div class="box-col">
         <div class="box-head"><span id="box-dom-nom"></span><b id="box-dom-total">0</b></div>
+        <div class="bx-remp-bar"><select id="bx-remp-dom"></select><button type="button" class="btn-mini ok" onclick="ajouterRemplacantMatch('dom')" data-i18n="box.remp.btn">+ Ajouter</button></div>
         <div class="box-cols-lbl"><span class="bx-jlbl" data-i18n="box.joue">Joué</span><span data-i18n="jo.b">B</span><span data-i18n="jo.a">A</span></div>
         <div id="box-dom-list" class="box-list"></div>
       </div>
       <div class="box-col">
         <div class="box-head"><span id="box-ext-nom"></span><b id="box-ext-total">0</b></div>
+        <div class="bx-remp-bar"><select id="bx-remp-ext"></select><button type="button" class="btn-mini ok" onclick="ajouterRemplacantMatch('ext')" data-i18n="box.remp.btn">+ Ajouter</button></div>
         <div class="box-cols-lbl"><span class="bx-jlbl" data-i18n="box.joue">Joué</span><span data-i18n="jo.b">B</span><span data-i18n="jo.a">A</span></div>
         <div id="box-ext-list" class="box-list"></div>
       </div>
@@ -1675,7 +1680,7 @@ const DICT = {
     'calendrier.ajouter':'+ Ajouter au calendrier','calendrier.vide.t':'📅 Horaire en préparation','calendrier.vide.s':'L\'horaire de la Saison 1 sera publié bientôt.',
     'calendrier.date':'Date','calendrier.heure':'Heure (optionnel)','calendrier.modal.nouveau':'Nouveau match','calendrier.modal.modifier':'Modifier le match',
     'calendrier.besoinDate':'Choisis une date.','calendrier.confirmSuppr':'Supprimer ce match du calendrier ?','calendrier.vs':'vs','calendrier.jouer':'Jouer',
-    'box.joue':'Joué','match.forfait':'Forfait','match.forfaitAucun':'— Aucun forfait —','match.forfaitVictoire':'Victoire par forfait','match.forfaitAppliquer':'Appliquer le forfait','match.forfaitAide':'1) Coche « Joué » pour les joueurs qui auraient joué (le site te demandera qui est le gardien). 2) Choisis l\'équipe gagnante. 3) Appliquer : score 6-0, chaque joueur gagnant 2 buts + 4 passes, gardien gagnant .900 (sans jeu blanc), perdants à 0, gardien perdant retiré.','match.forfaitChoix':'Choisis d\'abord l\'équipe gagnante par forfait.','match.forfaitJoueurs':'Coche d\'abord « Joué » pour les joueurs de l\'équipe GAGNANTE .','cl.forfaitAbbr':'FORFAIT','jo.remp':'🔁 Remplaçants','jo.remp.vide':'Aucun remplaçant pour l\'instant.','cal.code':'Code','cal.codeTitre':'Code de la game privée (équipe à domicile)','gardiens.ajouter':'+ Ajouter un gardien','match.scoreDom':'Score domicile (facultatif)','match.scoreExt':'Score visiteur (facultatif)','match.scoreAide':'Les stats avancées d\'EA sont conservées quand tu modifies un match. Remplis les DEUX cases de score seulement pour forcer un score précis. Le +/- de chaque joueur se calcule tout seul (différence de buts de son équipe), sauf si tu le tapes dans 📊.','box.note':'Le score se calcule à partir des buts. Coche les joueurs qui ont joué.',
+    'box.joue':'Joué','match.forfait':'Forfait','match.forfaitAucun':'— Aucun forfait —','match.forfaitVictoire':'Victoire par forfait','match.forfaitAppliquer':'Appliquer le forfait','match.forfaitAide':'1) Coche « Joué » pour les joueurs qui auraient joué (le site te demandera qui est le gardien). 2) Choisis l\'équipe gagnante. 3) Appliquer : score 6-0, chaque joueur gagnant 2 buts + 4 passes, gardien gagnant .900 (sans jeu blanc), perdants à 0, gardien perdant retiré.','match.forfaitChoix':'Choisis d\'abord l\'équipe gagnante par forfait.','match.forfaitJoueurs':'Coche d\'abord « Joué » pour les joueurs de l\'équipe GAGNANTE .','cl.forfaitAbbr':'FORFAIT','jo.remp':'🔁 Remplaçants','jo.remp.vide':'Aucun remplaçant pour l\'instant.','cal.code':'Code','cal.codeTitre':'Code de la game privée (équipe à domicile)','gardiens.ajouter':'+ Ajouter un gardien','jo.equipe.remp':'🔁 Remplaçant (sans équipe)','box.remp.choisir':'— Ajouter un remplaçant —','box.remp.btn':'+ Ajouter','box.remp.deja':'Ce joueur est déjà dans la feuille de match.','match.scoreDom':'Score domicile (facultatif)','match.scoreExt':'Score visiteur (facultatif)','match.scoreAide':'Les stats avancées d\'EA sont conservées quand tu modifies un match. Remplis les DEUX cases de score seulement pour forcer un score précis. Le +/- de chaque joueur se calcule tout seul (différence de buts de son équipe), sauf si tu le tapes dans 📊.','box.note':'Le score se calcule à partir des buts. Coche les joueurs qui ont joué.',
     'gardiens.vide.t':'🥅 En préparation','gardiens.vide.s':'Les stats des gardiens s\'afficheront dès les premiers matchs.',
     'gd.pj':'PJ','gd.v':'V','gd.d':'D','gd.bl':'BL','gd.bc':'BC','gd.moy':'MOY','st.tirs':'T','st.tirs.l':'Tirs au but','st.pctTirs':'%T','st.pctTirs.l':'% de tirs','st.hits':'MÉ','st.hits.l':'Mises en échec','st.bloques':'TB','st.bloques.l':'Tirs bloqués','st.maj':'%MAJ','st.maj.l':'% mises en jeu','st.passes':'%P','st.passes.l':'% de passes','st.pim':'PUN','st.pim.l':'Minutes de pénalité','st.tg':'TG','st.tg.l':'Temps de glace moyen','st.arr':'ARR','st.arr.l':'Arrêts','st.tirsRecus':'TIRS','st.tirsRecus.l':'Tirs reçus','st.eff':'EFF','st.eff.l':'Efficacité (909 = .909)','st.echap':'ÉCH','st.echap.l':'Arrêts sur échappée','st.pen':'PÉN','st.pen.l':'Arrêts sur tir de pénalité','st.desesp':'AD','st.desesp.l':'Arrêts désespérés','st.poke':'CB','st.poke.l':'Coups de bâton','st.avancees':'📊 Stats avancées','st.avancees.vide':'Les stats avancées apparaîtront après le premier import EA.','st.tirsL':'Plus de tirs','st.hitsL':'Plus de mises en échec','st.bloquesL':'Plus de tirs bloqués','st.pmL':'Meilleur +/-','st.majL':'% mises en jeu (min. 10)','st.passL':'% de passes (min. 20)','st.volesL':'Plus de revirements provoqués','st.tgL':'Temps de glace / match','gardien.modal.titre':'Stats du gardien',
     'jo.pos':'POS','jo.joueur':'Joueur','jo.b':'B','jo.a':'A','joueur.stats':'Statistiques'
@@ -1774,7 +1779,7 @@ const DICT = {
     'calendrier.ajouter':'+ Add to schedule','calendrier.vide.t':'📅 Schedule in the works','calendrier.vide.s':'The Season 1 schedule will be posted soon.',
     'calendrier.date':'Date','calendrier.heure':'Time (optional)','calendrier.modal.nouveau':'New match','calendrier.modal.modifier':'Edit match',
     'calendrier.besoinDate':'Pick a date.','calendrier.confirmSuppr':'Remove this match from the schedule?','calendrier.vs':'vs','calendrier.jouer':'Play',
-    'box.joue':'Played','match.forfait':'Forfeit','match.forfaitAucun':'— No forfeit —','match.forfaitVictoire':'Forfeit win','match.forfaitAppliquer':'Apply forfeit','match.forfaitAide':'1) Tick "Played" for the players who would have played (the site will ask who the goalie is). 2) Pick the winning team. 3) Apply: 6-0 score, each winning player 2 goals + 4 assists, winning goalie .900, losers at 0, losing goalie removed.','match.forfaitChoix':'Pick the winning team by forfeit first.','match.forfaitJoueurs':'First tick "Played" for the WINNING team players .','cl.forfaitAbbr':'FORFEIT','jo.remp':'🔁 Substitutes','jo.remp.vide':'No substitutes yet.','cal.code':'Code','cal.codeTitre':'Private game code (home team)','gardiens.ajouter':'+ Add a goalie','match.scoreDom':'Home score (optional)','match.scoreExt':'Away score (optional)','match.scoreAide':'EA advanced stats are kept when you edit a match. Fill BOTH score boxes only to force an exact score. Each player\'s +/- is calculated automatically (his team\'s goal difference), unless you type it in 📊.','box.note':'The score is calculated from goals. Check the players who played.',
+    'box.joue':'Played','match.forfait':'Forfeit','match.forfaitAucun':'— No forfeit —','match.forfaitVictoire':'Forfeit win','match.forfaitAppliquer':'Apply forfeit','match.forfaitAide':'1) Tick "Played" for the players who would have played (the site will ask who the goalie is). 2) Pick the winning team. 3) Apply: 6-0 score, each winning player 2 goals + 4 assists, winning goalie .900, losers at 0, losing goalie removed.','match.forfaitChoix':'Pick the winning team by forfeit first.','match.forfaitJoueurs':'First tick "Played" for the WINNING team players .','cl.forfaitAbbr':'FORFEIT','jo.remp':'🔁 Substitutes','jo.remp.vide':'No substitutes yet.','cal.code':'Code','cal.codeTitre':'Private game code (home team)','gardiens.ajouter':'+ Add a goalie','jo.equipe.remp':'🔁 Substitute (no team)','box.remp.choisir':'— Add a substitute —','box.remp.btn':'+ Add','box.remp.deja':'This player is already in the match sheet.','match.scoreDom':'Home score (optional)','match.scoreExt':'Away score (optional)','match.scoreAide':'EA advanced stats are kept when you edit a match. Fill BOTH score boxes only to force an exact score. Each player\'s +/- is calculated automatically (his team\'s goal difference), unless you type it in 📊.','box.note':'The score is calculated from goals. Check the players who played.',
     'gardiens.vide.t':'🥅 In the works','gardiens.vide.s':'Goalie stats will show up after the first games.',
     'gd.pj':'GP','gd.v':'W','gd.d':'L','gd.bl':'SO','gd.bc':'GA','gd.moy':'GAA','st.tirs':'S','st.tirs.l':'Shots','st.pctTirs':'S%','st.pctTirs.l':'Shooting %','st.hits':'HIT','st.hits.l':'Hits','st.bloques':'BLK','st.bloques.l':'Blocked shots','st.maj':'FO%','st.maj.l':'Faceoff %','st.passes':'P%','st.passes.l':'Pass %','st.pim':'PIM','st.pim.l':'Penalty minutes','st.tg':'TOI','st.tg.l':'Avg time on ice','st.arr':'SV','st.arr.l':'Saves','st.tirsRecus':'SA','st.tirsRecus.l':'Shots against','st.eff':'SV%','st.eff.l':'Save % (909 = .909)','st.echap':'BRK','st.echap.l':'Breakaway saves','st.pen':'PS','st.pen.l':'Penalty shot saves','st.desesp':'DSV','st.desesp.l':'Desperation saves','st.poke':'PK','st.poke.l':'Poke checks','st.avancees':'📊 Advanced stats','st.avancees.vide':'Advanced stats will appear after the first EA import.','st.tirsL':'Most shots','st.hitsL':'Most hits','st.bloquesL':'Most blocked shots','st.pmL':'Best +/-','st.majL':'Faceoff % (min. 10)','st.passL':'Pass % (min. 20)','st.volesL':'Most takeaways','st.tgL':'Time on ice / game','gardien.modal.titre':'Goalie stats',
     'jo.pos':'POS','jo.joueur':'Player','jo.b':'G','jo.a':'A','joueur.stats':'Statistics'
@@ -2562,6 +2567,9 @@ function remplirSelectEquipes(){
       sel.appendChild(o);
     });
   }
+  const r = document.createElement('option');          // un remplaçant n'a pas d'équipe
+  r.value = '__remp__'; r.textContent = t('jo.equipe.remp');
+  sel.appendChild(r);
 }
 function verrouillerEquipeSiDG(){
   const sel = document.getElementById('jo-equipe');
@@ -2577,7 +2585,7 @@ function ouvrirJoueur(id){
     db.collection('joueurs').doc(id).get().then(doc => {
       const j = doc.data() || {};
       document.getElementById('jo-nom').value = j.nom || '';
-      document.getElementById('jo-equipe').value = j.equipeId || '';
+      document.getElementById('jo-equipe').value = estRemplacant(j) ? '__remp__' : (j.equipeId || '');
       setPositions('jo-positions', j.position || '');
       document.getElementById('jo-eanom').value = j.eaNom || '';
       verrouillerEquipeSiDG();
@@ -2596,14 +2604,16 @@ function fermerJoueur(){ document.getElementById('modale-joueur').classList.remo
 function sauverJoueur(){
   if(!estAdmin && !dgTeamId){ alert(t('err.adminSeul')); return; }
   const nom = document.getElementById('jo-nom').value.trim();
-  const equipeId = document.getElementById('jo-equipe').value;
+  const choixEquipe = document.getElementById('jo-equipe').value;
+  const estRemp = (choixEquipe === '__remp__');
+  const equipeId = estRemp ? '' : choixEquipe;
   const position = collectPositions('jo-positions');
   const eaNom = document.getElementById('jo-eanom').value.trim();
   if(!nom){ alert(t('joueur.besoinNom')); return; }
-  if(!equipeId){ alert(t('joueur.besoinEquipe')); return; }
+  if(!equipeId && !estRemp){ alert(t('joueur.besoinEquipe')); return; }
   // Sécurité : un DG ne peut créer/déplacer un joueur que dans SON équipe
   if(dgTeamId && !estAdmin && equipeId !== dgTeamId){ alert(t('dg.refus')); return; }
-  const donnees = { nom, equipeId, position, eaNom };
+  const donnees = { nom, equipeId, position, eaNom, remplacant: estRemp, reserviste: false };
   let action;
   if(joueurEnEdition){
     action = db.collection('joueurs').doc(joueurEnEdition).update(donnees);  // par ID, jamais par nom
@@ -3130,27 +3140,57 @@ function majGardienRow(cb){
   row.querySelector('.adv-sk').style.display = g ? 'none' : 'flex';
   row.querySelector('.adv-gk').style.display = g ? 'flex' : 'none';
 }
+function htmlLigneBox(pid, nom, l, remp){
+  const coche = l ? 'checked' : '';
+  const bv = l ? (l.b||0) : '';
+  const av = l ? (l.a||0) : '';
+  return '<div class="bx-row">'
+      + '<label class="bx-chk"><input type="checkbox" class="bx-joue" data-pid="' + pid + '" ' + coche + ' onchange="majTotaux()"><span>' + escapeHtml(nom||'') + '</span>' + (remp ? '<small class="remp-tag">REMP</small>' : '') + '</label>'
+      + '<input type="number" min="0" class="bx-b" data-pid="' + pid + '" value="' + bv + '" placeholder="0" oninput="majTotaux()">'
+      + '<input type="number" min="0" class="bx-a" data-pid="' + pid + '" value="' + av + '" placeholder="0">'
+      + '<label class="bx-g-lbl" title="A joué GARDIEN dans ce match"><input type="checkbox" class="bx-g" data-pid="' + pid + '" ' + (estLigneGardien(l) ? 'checked' : '') + ' onchange="majGardienRow(this)">🥅</label>'
+      + '<button type="button" class="bx-adv-btn' + ((l && l.stats && Object.keys(l.stats).length) ? ' has' : '') + '" title="Stats avancées" onclick="toggleAdv(this)">📊</button>'
+      + '<div class="bx-gx" style="display:' + (estLigneGardien(l) ? 'flex' : 'none') + '">🥅 Arrêts <input type="number" min="0" class="bx-arr" data-pid="' + pid + '" value="' + ((l && l.arr != null) ? l.arr : '') + '" placeholder="0"> Tirs reçus <input type="number" min="0" class="bx-tirs" data-pid="' + pid + '" value="' + ((l && l.tirs != null) ? l.tirs : '') + '" placeholder="0"></div>'
+      + htmlAdv(l, estLigneGardien(l))
+      + '</div>';
+}
 function boxListe(equipeId, lignes){
   if(!snapJoueurs || !equipeId) return '<div class="je-vide">' + t('echanges.aucunDispo') + '</div>';
   let html = '';
   snapJoueurs.forEach(d => {
     const j = d.data();
-    if(j.equipeId !== equipeId) return;
-    const l = (lignes || []).find(x => x.pid === d.id);
-    const coche = l ? 'checked' : '';
-    const bv = l ? (l.b||0) : '';
-    const av = l ? (l.a||0) : '';
-    html += '<div class="bx-row">'
-      + '<label class="bx-chk"><input type="checkbox" class="bx-joue" data-pid="' + d.id + '" ' + coche + ' onchange="majTotaux()"><span>' + escapeHtml(j.nom||'') + '</span></label>'
-      + '<input type="number" min="0" class="bx-b" data-pid="' + d.id + '" value="' + bv + '" placeholder="0" oninput="majTotaux()">'
-      + '<input type="number" min="0" class="bx-a" data-pid="' + d.id + '" value="' + av + '" placeholder="0">'
-      + '<label class="bx-g-lbl" title="A joué GARDIEN dans ce match"><input type="checkbox" class="bx-g" data-pid="' + d.id + '" ' + (estLigneGardien(l) ? 'checked' : '') + ' onchange="majGardienRow(this)">🥅</label>'
-      + '<button type="button" class="bx-adv-btn' + ((l && l.stats && Object.keys(l.stats).length) ? ' has' : '') + '" title="Stats avancées" onclick="toggleAdv(this)">📊</button>'
-      + '<div class="bx-gx" style="display:' + (estLigneGardien(l) ? 'flex' : 'none') + '">🥅 Arrêts <input type="number" min="0" class="bx-arr" data-pid="' + d.id + '" value="' + ((l && l.arr != null) ? l.arr : '') + '" placeholder="0"> Tirs reçus <input type="number" min="0" class="bx-tirs" data-pid="' + d.id + '" value="' + ((l && l.tirs != null) ? l.tirs : '') + '" placeholder="0"></div>'
-      + htmlAdv(l, estLigneGardien(l))
-      + '</div>';
+    const l = (lignes || []).find(x => x.pid === d.id && (!x.eqId || x.eqId === equipeId));
+    const remp = estRemplacant(j);
+    /* Un joueur de l'équipe apparaît toujours ; un remplaçant (ou prêté) seulement s'il a joué ce match pour cette équipe */
+    if(!((j.equipeId === equipeId && !remp) || l)) return;
+    html += htmlLigneBox(d.id, j.nom, l, remp);
   });
   return html || '<div class="je-vide">' + t('echanges.aucunDispo') + '</div>';
+}
+/* Menu « + Remplaçant » de chaque équipe (exclut ceux déjà dans la feuille) */
+function remplirSelectRemplacants(){
+  const pris = new Set(Array.from(document.querySelectorAll('#modale-match .bx-joue')).map(c => c.getAttribute('data-pid')));
+  ['dom','ext'].forEach(cote => {
+    const sel = document.getElementById('bx-remp-' + cote); if(!sel) return;
+    const liste = [];
+    if(snapJoueurs) snapJoueurs.forEach(d => { const j = d.data(); if(estRemplacant(j) && !pris.has(d.id)) liste.push({ id:d.id, nom:j.nom||'' }); });
+    liste.sort((x, y) => x.nom.localeCompare(y.nom));
+    sel.innerHTML = '<option value="">' + t('box.remp.choisir') + '</option>' + liste.map(x => '<option value="' + x.id + '">' + escapeHtml(x.nom) + '</option>').join('');
+  });
+}
+function ajouterRemplacantMatch(cote){
+  const sel = document.getElementById('bx-remp-' + cote); if(!sel || !sel.value) return;
+  const pid = sel.value;
+  if(document.querySelector('#modale-match .bx-joue[data-pid="' + pid + '"]')){ alert(t('box.remp.deja')); return; }
+  let nom = '';
+  if(snapJoueurs) snapJoueurs.forEach(d => { if(d.id === pid) nom = d.data().nom || ''; });
+  const liste = document.getElementById('box-' + cote + '-list');
+  const vide = liste.querySelector('.je-vide'); if(vide) vide.remove();
+  const tmp = document.createElement('div');
+  tmp.innerHTML = htmlLigneBox(pid, nom, { pid:pid, b:0, a:0 }, true);          // « Joué » déjà coché
+  liste.appendChild(tmp.firstChild);
+  majTotaux();
+  remplirSelectRemplacants();
 }
 
 /* ===== FORFAIT : victoire 6-0 ; chaque joueur gagnant 2 buts + 4 passes ; gardien gagnant .900 (9 arrêts / 10 tirs) ;
@@ -3216,6 +3256,7 @@ function majBox(lignes){
   if(sf){ sf.options[1].textContent = t('match.forfaitVictoire') + ' : ' + ((trouverEquipeParId(domId)||{}).nom || ''); sf.options[2].textContent = t('match.forfaitVictoire') + ' : ' + ((trouverEquipeParId(extId)||{}).nom || ''); }
   document.getElementById('box-dom-list').innerHTML = boxListe(domId, lignes);
   document.getElementById('box-ext-list').innerHTML = boxListe(extId, lignes);
+  remplirSelectRemplacants();
   majTotaux();
 }
 function totalCote(listeId){
@@ -4109,17 +4150,20 @@ function rendreGardiens(){
   const cont = document.getElementById('gardiens-list');
   if(!cont) return;
   if(!snapEquipes || snapEquipes.empty){ cont.innerHTML = videHTML(ico('net'), t('gardiens.vide.t'), t('gardiens.vide.s')); return; }
-  const parEquipe = {}; let total = 0;
+  const parEquipe = {}, remplG = []; let total = 0;
   if(snapJoueurs){
-    snapJoueurs.forEach(d => { const j = d.data(); if(estGardienPur(j) || statsGardien(d.id).pj > 0){ (parEquipe[j.equipeId] = parEquipe[j.equipeId] || []).push(Object.assign({id:d.id}, j)); total++; } });
+    snapJoueurs.forEach(d => { const j = d.data(); if(estGardienPur(j) || statsGardien(d.id).pj > 0){ (estRemplacant(j) ? remplG : (parEquipe[j.equipeId] = parEquipe[j.equipeId] || [])).push(Object.assign({id:d.id}, j)); total++; } });
   }
   if(total === 0){ cont.innerHTML = videHTML(ico('net'), t('gardiens.vide.t'), t('gardiens.vide.s')); return; }
   let html = '';
-  snapEquipes.forEach(docE => {
-    const e = docE.data(); const eid = docE.id; const gs = parEquipe[eid] || [];
+  const groupes = [];
+  snapEquipes.forEach(docE => groupes.push({ eid: docE.id, e: docE.data(), remp: false }));
+  groupes.push({ eid: '__remplacants__', e: { nom: t('jo.remp'), couleur: '#93C5FD' }, remp: true });
+  groupes.forEach(g => {
+    const e = g.e; const eid = g.eid; const gs = g.remp ? remplG : (parEquipe[eid] || []);
     if(gs.length === 0) return;
     const couleur = e.couleur || '#D4AF37';
-    const peut = peutEditerEquipe(eid);
+    const peut = g.remp ? !!estAdmin : peutEditerEquipe(eid);
     html += '<div class="joueurs-equipe"><div class="je-head"><span class="je-dot" style="background:' + couleur + '"></span><h3>' + escapeHtml(e.nom || '') + '</h3></div>';
     html += '<div class="gd-wrap"><table class="gd-table"><thead><tr><th class="cl-eq">' + t('cl.equipe') + '</th><th>' + t('gd.pj') + '</th><th>' + t('gd.v') + '</th><th>' + t('gd.d') + '</th><th>' + t('cl.dp') + '</th><th>' + t('gd.bl') + '</th><th>' + t('gd.arrpct') + '</th><th>' + t('gd.moy') + '</th>' + (peut ? '<th></th>' : '') + '</tr></thead><tbody>';
     gs.forEach(g => {
