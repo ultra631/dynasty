@@ -538,6 +538,7 @@ th.cl-eq{display:table-cell}
 .forfait-aide{flex-basis:100%;font-size:11.5px;color:var(--argent2);line-height:1.5}
 .mr-score em.forfait,.dt-chiffres em.forfait{font-style:normal;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:.1em;margin-left:6px;padding:1px 6px;border-radius:5px;border:1px solid rgba(224,85,85,.6);color:#FFB3AB}
 .cal-jour{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.2em;color:var(--or);text-transform:uppercase;margin:18px 0 6px;padding-bottom:4px;border-bottom:1px solid var(--bordure)}
+.remp-eq{margin-left:7px;font-size:11px;color:var(--argent2);font-weight:400}
 .badge-remp{margin-left:7px;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:.1em;padding:1px 6px;border-radius:5px;background:rgba(147,197,253,.1);border:1px solid rgba(147,197,253,.45);color:#93C5FD;vertical-align:middle}
 .badge-g{margin-left:6px;font-size:12px;vertical-align:middle}
 .badge-tc{margin-left:7px;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:.1em;padding:1px 6px;border-radius:5px;background:rgba(95,208,138,.12);border:1px solid rgba(95,208,138,.45);color:#7BD19A;vertical-align:middle}
@@ -1668,7 +1669,7 @@ const DICT = {
     'calendrier.ajouter':'+ Ajouter au calendrier','calendrier.vide.t':'📅 Horaire en préparation','calendrier.vide.s':'L\'horaire de la Saison 1 sera publié bientôt.',
     'calendrier.date':'Date','calendrier.heure':'Heure (optionnel)','calendrier.modal.nouveau':'Nouveau match','calendrier.modal.modifier':'Modifier le match',
     'calendrier.besoinDate':'Choisis une date.','calendrier.confirmSuppr':'Supprimer ce match du calendrier ?','calendrier.vs':'vs','calendrier.jouer':'Jouer',
-    'box.joue':'Joué','match.forfait':'Forfait','match.forfaitAucun':'— Aucun forfait —','match.forfaitVictoire':'Victoire par forfait','match.forfaitAppliquer':'Appliquer le forfait','match.forfaitAide':'1) Coche « Joué » pour les joueurs qui auraient joué (le site te demandera qui est le gardien). 2) Choisis l\'équipe gagnante. 3) Appliquer : score 6-0, chaque joueur gagnant 2 buts + 4 passes, gardien gagnant .900 (sans jeu blanc), perdants à 0, gardien perdant retiré.','match.forfaitChoix':'Choisis d\'abord l\'équipe gagnante par forfait.','match.forfaitJoueurs':'Coche d\'abord « Joué » pour les joueurs de l\'équipe GAGNANTE .','cl.forfaitAbbr':'FORFAIT','match.scoreDom':'Score domicile (facultatif)','match.scoreExt':'Score visiteur (facultatif)','match.scoreAide':'Les stats avancées d\'EA sont conservées quand tu modifies un match. Remplis les DEUX cases de score seulement pour forcer un score précis. Le +/- de chaque joueur se calcule tout seul (différence de buts de son équipe), sauf si tu le tapes dans 📊.','box.note':'Le score se calcule à partir des buts. Coche les joueurs qui ont joué.',
+    'box.joue':'Joué','match.forfait':'Forfait','match.forfaitAucun':'— Aucun forfait —','match.forfaitVictoire':'Victoire par forfait','match.forfaitAppliquer':'Appliquer le forfait','match.forfaitAide':'1) Coche « Joué » pour les joueurs qui auraient joué (le site te demandera qui est le gardien). 2) Choisis l\'équipe gagnante. 3) Appliquer : score 6-0, chaque joueur gagnant 2 buts + 4 passes, gardien gagnant .900 (sans jeu blanc), perdants à 0, gardien perdant retiré.','match.forfaitChoix':'Choisis d\'abord l\'équipe gagnante par forfait.','match.forfaitJoueurs':'Coche d\'abord « Joué » pour les joueurs de l\'équipe GAGNANTE .','cl.forfaitAbbr':'FORFAIT','jo.remp':'🔁 Remplaçants','jo.remp.vide':'Aucun remplaçant pour l\'instant.','match.scoreDom':'Score domicile (facultatif)','match.scoreExt':'Score visiteur (facultatif)','match.scoreAide':'Les stats avancées d\'EA sont conservées quand tu modifies un match. Remplis les DEUX cases de score seulement pour forcer un score précis. Le +/- de chaque joueur se calcule tout seul (différence de buts de son équipe), sauf si tu le tapes dans 📊.','box.note':'Le score se calcule à partir des buts. Coche les joueurs qui ont joué.',
     'gardiens.vide.t':'🥅 En préparation','gardiens.vide.s':'Les stats des gardiens s\'afficheront dès les premiers matchs.',
     'gd.pj':'PJ','gd.v':'V','gd.d':'D','gd.bl':'BL','gd.bc':'BC','gd.moy':'MOY','st.tirs':'T','st.tirs.l':'Tirs au but','st.pctTirs':'%T','st.pctTirs.l':'% de tirs','st.hits':'MÉ','st.hits.l':'Mises en échec','st.bloques':'TB','st.bloques.l':'Tirs bloqués','st.maj':'%MAJ','st.maj.l':'% mises en jeu','st.passes':'%P','st.passes.l':'% de passes','st.pim':'PUN','st.pim.l':'Minutes de pénalité','st.tg':'TG','st.tg.l':'Temps de glace moyen','st.arr':'ARR','st.arr.l':'Arrêts','st.tirsRecus':'TIRS','st.tirsRecus.l':'Tirs reçus','st.eff':'EFF','st.eff.l':'Efficacité (909 = .909)','st.echap':'ÉCH','st.echap.l':'Arrêts sur échappée','st.pen':'PÉN','st.pen.l':'Arrêts sur tir de pénalité','st.desesp':'AD','st.desesp.l':'Arrêts désespérés','st.poke':'CB','st.poke.l':'Coups de bâton','st.avancees':'📊 Stats avancées','st.avancees.vide':'Les stats avancées apparaîtront après le premier import EA.','st.tirsL':'Plus de tirs','st.hitsL':'Plus de mises en échec','st.bloquesL':'Plus de tirs bloqués','st.pmL':'Meilleur +/-','st.majL':'% mises en jeu (min. 10)','st.passL':'% de passes (min. 20)','st.volesL':'Plus de revirements provoqués','st.tgL':'Temps de glace / match','gardien.modal.titre':'Stats du gardien',
     'jo.pos':'POS','jo.joueur':'Joueur','jo.b':'B','jo.a':'A','joueur.stats':'Statistiques'
@@ -1767,7 +1768,7 @@ const DICT = {
     'calendrier.ajouter':'+ Add to schedule','calendrier.vide.t':'📅 Schedule in the works','calendrier.vide.s':'The Season 1 schedule will be posted soon.',
     'calendrier.date':'Date','calendrier.heure':'Time (optional)','calendrier.modal.nouveau':'New match','calendrier.modal.modifier':'Edit match',
     'calendrier.besoinDate':'Pick a date.','calendrier.confirmSuppr':'Remove this match from the schedule?','calendrier.vs':'vs','calendrier.jouer':'Play',
-    'box.joue':'Played','match.forfait':'Forfeit','match.forfaitAucun':'— No forfeit —','match.forfaitVictoire':'Forfeit win','match.forfaitAppliquer':'Apply forfeit','match.forfaitAide':'1) Tick "Played" for the players who would have played (the site will ask who the goalie is). 2) Pick the winning team. 3) Apply: 6-0 score, each winning player 2 goals + 4 assists, winning goalie .900, losers at 0, losing goalie removed.','match.forfaitChoix':'Pick the winning team by forfeit first.','match.forfaitJoueurs':'First tick "Played" for the WINNING team players .','cl.forfaitAbbr':'FORFEIT','match.scoreDom':'Home score (optional)','match.scoreExt':'Away score (optional)','match.scoreAide':'EA advanced stats are kept when you edit a match. Fill BOTH score boxes only to force an exact score. Each player\'s +/- is calculated automatically (his team\'s goal difference), unless you type it in 📊.','box.note':'The score is calculated from goals. Check the players who played.',
+    'box.joue':'Played','match.forfait':'Forfeit','match.forfaitAucun':'— No forfeit —','match.forfaitVictoire':'Forfeit win','match.forfaitAppliquer':'Apply forfeit','match.forfaitAide':'1) Tick "Played" for the players who would have played (the site will ask who the goalie is). 2) Pick the winning team. 3) Apply: 6-0 score, each winning player 2 goals + 4 assists, winning goalie .900, losers at 0, losing goalie removed.','match.forfaitChoix':'Pick the winning team by forfeit first.','match.forfaitJoueurs':'First tick "Played" for the WINNING team players .','cl.forfaitAbbr':'FORFEIT','jo.remp':'🔁 Substitutes','jo.remp.vide':'No substitutes yet.','match.scoreDom':'Home score (optional)','match.scoreExt':'Away score (optional)','match.scoreAide':'EA advanced stats are kept when you edit a match. Fill BOTH score boxes only to force an exact score. Each player\'s +/- is calculated automatically (his team\'s goal difference), unless you type it in 📊.','box.note':'The score is calculated from goals. Check the players who played.',
     'gardiens.vide.t':'🥅 In the works','gardiens.vide.s':'Goalie stats will show up after the first games.',
     'gd.pj':'GP','gd.v':'W','gd.d':'L','gd.bl':'SO','gd.bc':'GA','gd.moy':'GAA','st.tirs':'S','st.tirs.l':'Shots','st.pctTirs':'S%','st.pctTirs.l':'Shooting %','st.hits':'HIT','st.hits.l':'Hits','st.bloques':'BLK','st.bloques.l':'Blocked shots','st.maj':'FO%','st.maj.l':'Faceoff %','st.passes':'P%','st.passes.l':'Pass %','st.pim':'PIM','st.pim.l':'Penalty minutes','st.tg':'TOI','st.tg.l':'Avg time on ice','st.arr':'SV','st.arr.l':'Saves','st.tirsRecus':'SA','st.tirsRecus.l':'Shots against','st.eff':'SV%','st.eff.l':'Save % (909 = .909)','st.echap':'BRK','st.echap.l':'Breakaway saves','st.pen':'PS','st.pen.l':'Penalty shot saves','st.desesp':'DSV','st.desesp.l':'Desperation saves','st.poke':'PK','st.poke.l':'Poke checks','st.avancees':'📊 Advanced stats','st.avancees.vide':'Advanced stats will appear after the first EA import.','st.tirsL':'Most shots','st.hitsL':'Most hits','st.bloquesL':'Most blocked shots','st.pmL':'Best +/-','st.majL':'Faceoff % (min. 10)','st.passL':'Pass % (min. 20)','st.volesL':'Most takeaways','st.tgL':'Time on ice / game','gardien.modal.titre':'Goalie stats',
     'jo.pos':'POS','jo.joueur':'Player','jo.b':'G','jo.a':'A','joueur.stats':'Statistics'
@@ -2397,7 +2398,7 @@ function appliquerCompensations(){
   const arr = p.creer.concat(p.reassigner);
   const norm = arr.filter(x => !x.tc), tc = arr.filter(x => x.tc);
   if(norm.length){ msg += '➕ Nouveaux joueurs (' + norm.length + ') :\n' + norm.map(x => '   ' + x.nom + ' → ' + x.equipe).join('\n') + '\n\n'; }
-  if(tc.length){ msg += '🪑 Réservistes TC (' + tc.length + ') :\n' + tc.map(x => '   ' + x.nom + ' → ' + x.equipe).join('\n') + '\n\n'; }
+  if(tc.length){ msg += '🔁 Remplaçants (' + tc.length + ') :\n' + tc.map(x => '   ' + x.nom + ' → ' + x.equipe).join('\n') + '\n\n'; }
   if(p.deja.length) msg += '✓ Déjà fait (' + p.deja.length + ') — ignorés.\n\n';
   if(p.problemes.length) msg += '⚠️ À vérifier :\n' + p.problemes.map(x => '   ' + x).join('\n') + '\n\n';
   if(!total){ alert(msg + (p.deja.length ? 'Tout est déjà appliqué. ✅' : 'Rien à faire.')); return; }
@@ -2406,11 +2407,11 @@ function appliquerCompensations(){
   const b = db.batch();
   p.liberer.forEach(x => b.update(db.collection('joueurs').doc(x.id), { equipeId:'', libre:true, ancienneEquipe:x.equipeId, reserviste:false }));
   p.reassigner.forEach(x => {
-    const maj = { equipeId:x.eqId, libre:false, reserviste:x.tc, salaire:x.salaire, eaNom:x.nom };
+    const maj = { equipeId:x.eqId, libre:false, remplacant:x.tc, reserviste:false, salaire:x.salaire, eaNom:x.nom };
     if(!x.positionExistante && x.position) maj.position = x.position;
     b.update(db.collection('joueurs').doc(x.id), maj);
   });
-  p.creer.forEach(x => b.set(db.collection('joueurs').doc(), { nom:x.nom, equipeId:x.eqId, position:x.position, eaNom:x.nom, salaire:x.salaire, reserviste:x.tc, createdAt: firebase.firestore.FieldValue.serverTimestamp() }));
+  p.creer.forEach(x => b.set(db.collection('joueurs').doc(), { nom:x.nom, equipeId:x.eqId, position:x.position, eaNom:x.nom, salaire:x.salaire, remplacant:x.tc, reserviste:false, createdAt: firebase.firestore.FieldValue.serverTimestamp() }));
   b.commit()
     .then(() => { alert('✅ Terminé : ' + p.liberer.length + ' retiré(s), ' + (p.creer.length + p.reassigner.length) + ' ajouté(s).' + (arr.some(x => !x.position) ? '\n\n💡 Complète les positions manquantes dans Joueurs → Modifier.' : '')); })
     .catch(e => alert(t('commun.erreur') + e.message));
@@ -2482,6 +2483,8 @@ function initJoueurs(){
   });
 }
 
+/* Les anciens « TC » sont maintenant des REMPLAÇANTS : même catégorie (anciens drapeaux reserviste / remplacant) */
+const estRemplacant = j => !!(j && (j.remplacant || j.reserviste));
 function rendreJoueurs(){
   const cont = document.getElementById('joueurs-list');
   if(!cont) return;
@@ -2489,25 +2492,29 @@ function rendreJoueurs(){
     cont.innerHTML = videHTML(ico('shield'), t('joueurs.pasdequipe.t'), t('joueurs.pasdequipe.s'));
     return;
   }
-  const parEquipe = {};
+  const parEquipe = {}, remplacants = [];
   if(snapJoueurs){
     snapJoueurs.forEach(d => {
       const j = d.data();
+      if(estRemplacant(j)){ remplacants.push(Object.assign({id:d.id}, j)); return; }   // les remplaçants ont leur propre section
       (parEquipe[j.equipeId] = parEquipe[j.equipeId] || []).push(Object.assign({id:d.id}, j));
     });
   }
   let html = '';
-  snapEquipes.forEach(docE => {
-    const e = docE.data(); const eid = docE.id;
+  const groupes = [];
+  snapEquipes.forEach(docE => groupes.push({ eid: docE.id, e: docE.data(), remp: false }));
+  groupes.push({ eid: '__remplacants__', e: { nom: t('jo.remp'), couleur: '#93C5FD' }, remp: true });
+  groupes.forEach(g => {
+    const e = g.e; const eid = g.eid;
     const couleur = e.couleur || '#D4AF37';
-    let joueurs = (parEquipe[eid] || []).map(j => Object.assign({}, j, statsJoueur(j.id)));
-    const peut = peutEditerEquipe(eid);
-    // Tri par points décroissant, puis par nom
-    joueurs.sort((a,b) => (b.pts - a.pts) || (a.nom||'').localeCompare(b.nom||''));
+    let joueurs = (g.remp ? remplacants : (parEquipe[eid] || [])).map(j => Object.assign({}, j, statsJoueur(j.id), { _aJoue: (statsJoueur(j.id).pj > 0 || statsGardien(j.id).pj > 0) }));
+    const peut = g.remp ? !!estAdmin : peutEditerEquipe(eid);
+    // Tri par points décroissant, puis par nom (remplaçants : ceux qui ont joué d'abord)
+    joueurs.sort((a,b) => (g.remp ? ((b._aJoue?1:0) - (a._aJoue?1:0)) : 0) || (b.pts - a.pts) || (a.nom||'').localeCompare(b.nom||''));
     html += '<div class="joueurs-equipe"><div class="je-head"><span class="je-dot" style="background:' + couleur + '"></span>'
           + '<h3>' + escapeHtml(e.nom || '') + '</h3><span class="je-count">' + joueurs.length + '</span></div>';
     if(joueurs.length === 0){
-      html += '<div class="je-vide">' + t('joueurs.equipevide') + '</div>';
+      html += '<div class="je-vide">' + (g.remp ? t('jo.remp.vide') : t('joueurs.equipevide')) + '</div>';
     } else {
       html += '<div class="gd-wrap"><table class="gd-table jr-table"><thead><tr>'
             + '<th class="cl-eq">' + t('jo.joueur') + '</th>'
@@ -2519,7 +2526,7 @@ function rendreJoueurs(){
             + (peut ? '<th></th>' : '') + '</tr></thead><tbody>';
       joueurs.forEach(j => {
         html += '<tr>'
-              + '<td class="cl-eq"><a class="lien-eq" onclick="ouvrirProfilJoueur(\'' + j.id + '\')"><span>' + escapeHtml(j.nom || '') + '</span>' + ((estGardienPur(j) || statsGardien(j.id).pj > 0) ? '<span class="badge-g" title="Gardien">🥅</span>' : '') + (j.remplacant ? '<span class="badge-remp" title="Remplaçant">REMP</span>' : '') + (j.reserviste ? '<span class="badge-tc" title="Réserviste (TC)">TC</span>' : '') + '</a></td>'
+              + '<td class="cl-eq"><a class="lien-eq" onclick="ouvrirProfilJoueur(\'' + j.id + '\')"><span>' + escapeHtml(j.nom || '') + '</span>' + ((estGardienPur(j) || statsGardien(j.id).pj > 0) ? '<span class="badge-g" title="Gardien">🥅</span>' : '') + (g.remp && j.equipeId && trouverEquipeParId(j.equipeId) ? '<small class="remp-eq">(' + escapeHtml(trouverEquipeParId(j.equipeId).nom || '') + ')</small>' : '') + '</a></td>'
               + '<td>' + j.pj + '</td><td>' + j.b + '</td><td>' + j.a + '</td><td class="cl-pts">' + j.pts + '</td>'
               + '<td>' + (j.plusMin>0?'+':'') + j.plusMin + '</td><td>' + j.tirs + '</td><td>' + (j.pctTirs!=null?j.pctTirs.toFixed(1)+'%':'—') + '</td>'
               + '<td>' + j.hits + '</td><td>' + j.bloques + '</td>'
@@ -3506,7 +3513,7 @@ function ouvrirProfilEquipe(eqId){
   if(snapJoueurs){
     snapJoueurs.forEach(d => {
       const j = d.data();
-      if(j.equipeId !== eqId) return;
+      if(j.equipeId !== eqId || estRemplacant(j)) return;
       roster.push(Object.assign({id:d.id, nom:j.nom||'', gardien:(statsGardien(d.id).pj > 0 || estGardienPur(j))}, statsJoueur(d.id)));
     });
   }
@@ -4520,5 +4527,3 @@ if('serviceWorker' in navigator){
 </script>
 </body>
 </html>
-
-  
