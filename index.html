@@ -1246,6 +1246,7 @@ a.live-row:hover{background:rgba(212,175,55,.06)}
     <div class="admin-only btn-rangee" style="margin-bottom:16px">
       <button class="btn btn-or" onclick="ouvrirMatch()" data-i18n="resultats.ajouter">+ Ajouter un résultat</button>
       <button class="btn btn-ghost" onclick="ouvrirImport()" data-i18n="import.btn">📥 Importer depuis EA</button>
+      <button class="btn btn-ghost" onclick="recalculerPlusMoins()" data-i18n="pm.btn">🔄 Recalculer les +/- de tous les matchs</button>
     </div>
 
     <div id="resultats-list">
@@ -1683,7 +1684,7 @@ const DICT = {
     'calendrier.ajouter':'+ Ajouter au calendrier','calendrier.vide.t':'📅 Horaire en préparation','calendrier.vide.s':'L\'horaire de la Saison 1 sera publié bientôt.',
     'calendrier.date':'Date','calendrier.heure':'Heure (optionnel)','calendrier.modal.nouveau':'Nouveau match','calendrier.modal.modifier':'Modifier le match',
     'calendrier.besoinDate':'Choisis une date.','calendrier.confirmSuppr':'Supprimer ce match du calendrier ?','calendrier.vs':'vs','calendrier.jouer':'Jouer',
-    'box.joue':'Joué','match.forfait':'Forfait','match.forfaitAucun':'— Aucun forfait —','match.forfaitVictoire':'Victoire par forfait','match.forfaitAppliquer':'Appliquer le forfait','match.forfaitAide':'1) Coche « Joué » pour les joueurs qui auraient joué (le site te demandera qui est le gardien). 2) Choisis l\'équipe gagnante. 3) Appliquer : score 6-0, chaque joueur gagnant 2 buts + 4 passes, gardien gagnant .900 (sans jeu blanc), perdants à 0, gardien perdant retiré.','match.forfaitChoix':'Choisis d\'abord l\'équipe gagnante par forfait.','match.forfaitJoueurs':'Coche d\'abord « Joué » pour les joueurs de l\'équipe GAGNANTE .','cl.forfaitAbbr':'FORFAIT','jo.remp':'🔁 Remplaçants','jo.remp.vide':'Aucun remplaçant pour l\'instant.','cal.code':'Code','cal.codeTitre':'Code de la game privée (équipe à domicile)','gardiens.ajouter':'+ Ajouter un gardien','jo.equipe.remp':'🔁 Remplaçant (sans équipe)','box.remp.choisir':'— Ajouter un remplaçant —','box.remp.btn':'+ Ajouter','box.remp.deja':'Ce joueur est déjà dans la feuille de match.','box.remp.retirer':'Retirer ce remplaçant de la game','box.remp.retirerCourt':'Retirer de la game','box.remp.retirerConfirm':'Retirer {n} de la game ? Ses buts et passes saisis seront perdus.','match.scoreDom':'Score domicile (facultatif)','match.scoreExt':'Score visiteur (facultatif)','match.scoreAide':'Les stats avancées d\'EA sont conservées quand tu modifies un match. Remplis les DEUX cases de score seulement pour forcer un score précis. Le +/- de chaque joueur se calcule tout seul (différence de buts de son équipe), sauf si tu le tapes dans 📊.','box.note':'Le score se calcule à partir des buts. Coche les joueurs qui ont joué.',
+    'box.joue':'Joué','match.forfait':'Forfait','match.forfaitAucun':'— Aucun forfait —','match.forfaitVictoire':'Victoire par forfait','match.forfaitAppliquer':'Appliquer le forfait','match.forfaitAide':'1) Coche « Joué » pour les joueurs qui auraient joué (le site te demandera qui est le gardien). 2) Choisis l\'équipe gagnante. 3) Appliquer : score 6-0, chaque joueur gagnant 2 buts + 4 passes, gardien gagnant .900 (sans jeu blanc), perdants à 0, gardien perdant retiré.','match.forfaitChoix':'Choisis d\'abord l\'équipe gagnante par forfait.','match.forfaitJoueurs':'Coche d\'abord « Joué » pour les joueurs de l\'équipe GAGNANTE .','cl.forfaitAbbr':'FORFAIT','jo.remp':'🔁 Remplaçants','jo.remp.vide':'Aucun remplaçant pour l\'instant.','cal.code':'Code','cal.codeTitre':'Code de la game privée (équipe à domicile)','gardiens.ajouter':'+ Ajouter un gardien','jo.equipe.remp':'🔁 Remplaçant (sans équipe)','box.remp.choisir':'— Ajouter un remplaçant —','box.remp.btn':'+ Ajouter','box.remp.deja':'Ce joueur est déjà dans la feuille de match.','box.remp.retirer':'Retirer ce remplaçant de la game','box.remp.retirerCourt':'Retirer de la game','box.remp.retirerConfirm':'Retirer {n} de la game ? Ses buts et passes saisis seront perdus.','pm.btn':'🔄 Recalculer les +/- de tous les matchs','pm.titre':'Recalcul des +/-','pm.remplis':'+/- manquants remplis','pm.lignes':'ligne(s)','pm.rafraichis':'+/- automatiques mis à jour','pm.pasTouche':'Jamais touchés : les forfaits, les gardiens, et les +/- que tu as tapés à la main.','pm.confirm1':'Appliquer ?','pm.rien':'Rien à faire : tous les +/- sont déjà à jour. ✅','pm.ecarts':'ligne(s) d\'EA ont un +/- différent de la différence de buts de l\'équipe.','pm.confirm2':'Les REMPLACER aussi par la différence de buts ? (Annuler = garder les chiffres d\'EA.)','pm.fait':'match(s) mis à jour.','match.scoreDom':'Score domicile (facultatif)','match.scoreExt':'Score visiteur (facultatif)','match.scoreAide':'Les stats avancées d\'EA sont conservées quand tu modifies un match. Remplis les DEUX cases de score seulement pour forcer un score précis. Le +/- de chaque joueur se calcule tout seul (différence de buts de son équipe), sauf si tu le tapes dans 📊.','box.note':'Le score se calcule à partir des buts. Coche les joueurs qui ont joué.',
     'gardiens.vide.t':'🥅 En préparation','gardiens.vide.s':'Les stats des gardiens s\'afficheront dès les premiers matchs.',
     'gd.pj':'PJ','gd.v':'V','gd.d':'D','gd.bl':'BL','gd.bc':'BC','gd.moy':'MOY','st.tirs':'T','st.tirs.l':'Tirs au but','st.pctTirs':'%T','st.pctTirs.l':'% de tirs','st.hits':'MÉ','st.hits.l':'Mises en échec','st.bloques':'TB','st.bloques.l':'Tirs bloqués','st.maj':'%MAJ','st.maj.l':'% mises en jeu','st.passes':'%P','st.passes.l':'% de passes','st.pim':'PUN','st.pim.l':'Minutes de pénalité','st.tg':'TG','st.tg.l':'Temps de glace moyen','st.arr':'ARR','st.arr.l':'Arrêts','st.tirsRecus':'TIRS','st.tirsRecus.l':'Tirs reçus','st.eff':'EFF','st.eff.l':'Efficacité (909 = .909)','st.echap':'ÉCH','st.echap.l':'Arrêts sur échappée','st.pen':'PÉN','st.pen.l':'Arrêts sur tir de pénalité','st.desesp':'AD','st.desesp.l':'Arrêts désespérés','st.poke':'CB','st.poke.l':'Coups de bâton','st.avancees':'📊 Stats avancées','st.avancees.vide':'Les stats avancées apparaîtront après le premier import EA.','st.tirsL':'Plus de tirs','st.hitsL':'Plus de mises en échec','st.bloquesL':'Plus de tirs bloqués','st.pmL':'Meilleur +/-','st.majL':'% mises en jeu (min. 10)','st.passL':'% de passes (min. 20)','st.volesL':'Plus de revirements provoqués','st.tgL':'Temps de glace / match','gardien.modal.titre':'Stats du gardien',
     'jo.pos':'POS','jo.joueur':'Joueur','jo.b':'B','jo.a':'A','joueur.stats':'Statistiques'
@@ -1782,7 +1783,7 @@ const DICT = {
     'calendrier.ajouter':'+ Add to schedule','calendrier.vide.t':'📅 Schedule in the works','calendrier.vide.s':'The Season 1 schedule will be posted soon.',
     'calendrier.date':'Date','calendrier.heure':'Time (optional)','calendrier.modal.nouveau':'New match','calendrier.modal.modifier':'Edit match',
     'calendrier.besoinDate':'Pick a date.','calendrier.confirmSuppr':'Remove this match from the schedule?','calendrier.vs':'vs','calendrier.jouer':'Play',
-    'box.joue':'Played','match.forfait':'Forfeit','match.forfaitAucun':'— No forfeit —','match.forfaitVictoire':'Forfeit win','match.forfaitAppliquer':'Apply forfeit','match.forfaitAide':'1) Tick "Played" for the players who would have played (the site will ask who the goalie is). 2) Pick the winning team. 3) Apply: 6-0 score, each winning player 2 goals + 4 assists, winning goalie .900, losers at 0, losing goalie removed.','match.forfaitChoix':'Pick the winning team by forfeit first.','match.forfaitJoueurs':'First tick "Played" for the WINNING team players .','cl.forfaitAbbr':'FORFEIT','jo.remp':'🔁 Substitutes','jo.remp.vide':'No substitutes yet.','cal.code':'Code','cal.codeTitre':'Private game code (home team)','gardiens.ajouter':'+ Add a goalie','jo.equipe.remp':'🔁 Substitute (no team)','box.remp.choisir':'— Add a substitute —','box.remp.btn':'+ Add','box.remp.deja':'This player is already in the match sheet.','box.remp.retirer':'Remove this substitute from the game','box.remp.retirerCourt':'Remove from game','box.remp.retirerConfirm':'Remove {n} from the game? The goals and assists entered will be lost.','match.scoreDom':'Home score (optional)','match.scoreExt':'Away score (optional)','match.scoreAide':'EA advanced stats are kept when you edit a match. Fill BOTH score boxes only to force an exact score. Each player\'s +/- is calculated automatically (his team\'s goal difference), unless you type it in 📊.','box.note':'The score is calculated from goals. Check the players who played.',
+    'box.joue':'Played','match.forfait':'Forfeit','match.forfaitAucun':'— No forfeit —','match.forfaitVictoire':'Forfeit win','match.forfaitAppliquer':'Apply forfeit','match.forfaitAide':'1) Tick "Played" for the players who would have played (the site will ask who the goalie is). 2) Pick the winning team. 3) Apply: 6-0 score, each winning player 2 goals + 4 assists, winning goalie .900, losers at 0, losing goalie removed.','match.forfaitChoix':'Pick the winning team by forfeit first.','match.forfaitJoueurs':'First tick "Played" for the WINNING team players .','cl.forfaitAbbr':'FORFEIT','jo.remp':'🔁 Substitutes','jo.remp.vide':'No substitutes yet.','cal.code':'Code','cal.codeTitre':'Private game code (home team)','gardiens.ajouter':'+ Add a goalie','jo.equipe.remp':'🔁 Substitute (no team)','box.remp.choisir':'— Add a substitute —','box.remp.btn':'+ Add','box.remp.deja':'This player is already in the match sheet.','box.remp.retirer':'Remove this substitute from the game','box.remp.retirerCourt':'Remove from game','box.remp.retirerConfirm':'Remove {n} from the game? The goals and assists entered will be lost.','pm.btn':'🔄 Recalculate +/- for all games','pm.titre':'+/- recalculation','pm.remplis':'Missing +/- filled','pm.lignes':'line(s)','pm.rafraichis':'Automatic +/- refreshed','pm.pasTouche':'Never touched: forfeits, goalies, and +/- you typed by hand.','pm.confirm1':'Apply?','pm.rien':'Nothing to do: every +/- is already up to date. ✅','pm.ecarts':'EA line(s) have a +/- different from the team goal difference.','pm.confirm2':'Replace them too with the goal difference? (Cancel = keep EA numbers.)','pm.fait':'game(s) updated.','match.scoreDom':'Home score (optional)','match.scoreExt':'Away score (optional)','match.scoreAide':'EA advanced stats are kept when you edit a match. Fill BOTH score boxes only to force an exact score. Each player\'s +/- is calculated automatically (his team\'s goal difference), unless you type it in 📊.','box.note':'The score is calculated from goals. Check the players who played.',
     'gardiens.vide.t':'🥅 In the works','gardiens.vide.s':'Goalie stats will show up after the first games.',
     'gd.pj':'GP','gd.v':'W','gd.d':'L','gd.bl':'SO','gd.bc':'GA','gd.moy':'GAA','st.tirs':'S','st.tirs.l':'Shots','st.pctTirs':'S%','st.pctTirs.l':'Shooting %','st.hits':'HIT','st.hits.l':'Hits','st.bloques':'BLK','st.bloques.l':'Blocked shots','st.maj':'FO%','st.maj.l':'Faceoff %','st.passes':'P%','st.passes.l':'Pass %','st.pim':'PIM','st.pim.l':'Penalty minutes','st.tg':'TOI','st.tg.l':'Avg time on ice','st.arr':'SV','st.arr.l':'Saves','st.tirsRecus':'SA','st.tirsRecus.l':'Shots against','st.eff':'SV%','st.eff.l':'Save % (909 = .909)','st.echap':'BRK','st.echap.l':'Breakaway saves','st.pen':'PS','st.pen.l':'Penalty shot saves','st.desesp':'DSV','st.desesp.l':'Desperation saves','st.poke':'PK','st.poke.l':'Poke checks','st.avancees':'📊 Advanced stats','st.avancees.vide':'Advanced stats will appear after the first EA import.','st.tirsL':'Most shots','st.hitsL':'Most hits','st.bloquesL':'Most blocked shots','st.pmL':'Best +/-','st.majL':'Faceoff % (min. 10)','st.passL':'Pass % (min. 20)','st.volesL':'Most takeaways','st.tgL':'Time on ice / game','gardien.modal.titre':'Goalie stats',
     'jo.pos':'POS','jo.joueur':'Player','jo.b':'G','jo.a':'A','joueur.stats':'Statistics'
@@ -4165,6 +4166,73 @@ function supprimerCal(id){
    12) GARDIENS (joueurs en position G ; stats éditables par admin ou DG)
    Moyenne (MOY) = buts contre / parties jouées
    ========================================================= */
+
+/* =====================================================================
+   RECALCULER LES +/- DE TOUS LES MATCHS DÉJÀ FAITS
+   En 4S tout le monde est toujours sur la glace : +/- d'un joueur = différence de buts de son équipe.
+   Étape 1 (sûre) : remplit les lignes SANS +/- et rafraîchit celles déjà calculées automatiquement.
+   Étape 2 (sur confirmation) : aligne aussi les +/- venus d'EA qui diffèrent du score (l'original est gardé dans pmEA).
+   Jamais touchés : forfaits, gardiens, et les +/- tapés à la main dans un match entré à la main.
+   ===================================================================== */
+function planPlusMoins(){
+  const plan = { matchs: [], manquants: 0, rafraichis: 0, ecartsEA: [] };
+  if(!snapMatchs) return plan;
+  snapMatchs.forEach(d => {
+    const m = d.data();
+    if(m.forfait) return;
+    const bd = Number(m.butsDom), be = Number(m.butsExt);
+    if(isNaN(bd) || isNaN(be)) return;
+    const importe = !!m.eaMatchId;
+    const lignes = JSON.parse(JSON.stringify(m.lignes || []));
+    const base = JSON.parse(JSON.stringify(lignes));
+    const ecarts = [];
+    lignes.forEach((l, i) => {
+      if(estLigneGardien(l)) return;
+      const diff = (l.eqId === m.domId) ? (bd - be) : ((l.eqId === m.extId) ? (be - bd) : null);
+      if(diff === null) return;
+      const actuel = (l.stats && l.stats.skplusmin !== undefined) ? Number(l.stats.skplusmin) : undefined;
+      if(actuel === undefined){ l.stats = l.stats || {}; l.stats.skplusmin = diff; l.pmAuto = true; plan.manquants++; return; }
+      if(l.pmAuto){ if(actuel !== diff){ l.stats.skplusmin = diff; plan.rafraichis++; } return; }
+      if(importe && actuel !== diff) ecarts.push(i);          // valeur d'EA différente du score → seulement sur confirmation
+    });
+    plan.matchs.push({ id: d.id, nom: (m.domNom || '') + ' ' + bd + '-' + be + ' ' + (m.extNom || ''), base, lignes, ecarts });
+    ecarts.forEach(i => plan.ecartsEA.push({ match: (m.domNom || '') + ' ' + bd + '-' + be + ' ' + (m.extNom || ''), idMatch: d.id, i, actuel: Number(lignes[i].stats.skplusmin), diff: (lignes[i].eqId === m.domId) ? (bd - be) : (be - bd) }));
+  });
+  return plan;
+}
+function recalculerPlusMoins(){
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }
+  const p = planPlusMoins();
+  const aChanger = p.matchs.filter(x => JSON.stringify(x.base) !== JSON.stringify(x.lignes));
+  if(!aChanger.length && !p.ecartsEA.length){ alert(t('pm.rien')); return; }
+  let msg = '🔄 ' + t('pm.titre') + '\\n\\n';
+  msg += '➕ ' + t('pm.remplis') + ' : ' + p.manquants + ' ' + t('pm.lignes') + '\\n';
+  if(p.rafraichis) msg += '♻️ ' + t('pm.rafraichis') + ' : ' + p.rafraichis + ' ' + t('pm.lignes') + '\\n';
+  msg += '\\n' + t('pm.pasTouche');
+  let alignerEA = false;
+  if(p.manquants || p.rafraichis){ if(!confirm(msg + '\\n\\n' + t('pm.confirm1'))) return; }
+  if(p.ecartsEA.length){
+    const ex = p.ecartsEA.slice(0, 4).map(e => '   ' + e.match + ' : EA ' + (e.actuel > 0 ? '+' : '') + e.actuel + ' → ' + (e.diff > 0 ? '+' : '') + e.diff).join('\\n');
+    alignerEA = confirm('📥 ' + p.ecartsEA.length + ' ' + t('pm.ecarts') + '\\n\\n' + ex + (p.ecartsEA.length > 4 ? '\\n   …' : '') + '\\n\\n' + t('pm.confirm2'));
+  }
+  const maj = [];
+  p.matchs.forEach(x => {
+    const lignes = JSON.parse(JSON.stringify(x.lignes));
+    if(alignerEA) x.ecarts.forEach(i => {
+      const l = lignes[i]; const e = p.ecartsEA.find(z => z.idMatch === x.id && z.i === i);
+      if(e){ l.pmEA = e.actuel; l.stats.skplusmin = e.diff; l.pmAuto = true; }
+    });
+    if(JSON.stringify(lignes) !== JSON.stringify(x.base)) maj.push({ id: x.id, lignes });
+  });
+  if(!maj.length){ alert(t('pm.rien')); return; }
+  const lots = [];
+  for(let i = 0; i < maj.length; i += 400){
+    const b = db.batch();
+    maj.slice(i, i + 400).forEach(x => b.update(db.collection('matchs').doc(x.id), { lignes: x.lignes }));
+    lots.push(b.commit());
+  }
+  Promise.all(lots).then(() => alert('✅ ' + maj.length + ' ' + t('pm.fait'))).catch(e => alert(t('commun.erreur') + e.message));
+}
 function ouvrirNouveauGardien(){ ouvrirJoueur(); setPositions('jo-positions', 'G'); }
 function rendreGardiens(){
   const cont = document.getElementById('gardiens-list');
