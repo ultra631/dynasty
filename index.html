@@ -538,6 +538,7 @@ th.cl-eq{display:table-cell}
 .forfait-aide{flex-basis:100%;font-size:11.5px;color:var(--argent2);line-height:1.5}
 .mr-score em.forfait,.dt-chiffres em.forfait{font-style:normal;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:.1em;margin-left:6px;padding:1px 6px;border-radius:5px;border:1px solid rgba(224,85,85,.6);color:#FFB3AB}
 .cal-jour{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.2em;color:var(--or);text-transform:uppercase;margin:18px 0 6px;padding-bottom:4px;border-bottom:1px solid var(--bordure)}
+.badge-remp{margin-left:7px;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:.1em;padding:1px 6px;border-radius:5px;background:rgba(147,197,253,.1);border:1px solid rgba(147,197,253,.45);color:#93C5FD;vertical-align:middle}
 .badge-g{margin-left:6px;font-size:12px;vertical-align:middle}
 .badge-tc{margin-left:7px;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:.1em;padding:1px 6px;border-radius:5px;background:rgba(95,208,138,.12);border:1px solid rgba(95,208,138,.45);color:#7BD19A;vertical-align:middle}
 .sa-grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
@@ -1325,7 +1326,7 @@ a.live-row:hover{background:rgba(212,175,55,.06)}
     <label class="champ-lbl" data-i18n="eq.codeDG">Code DG (optionnel)</label>
     <input id="eq-codedg" placeholder="Mot de passe du DG de l'équipe" data-i18n-ph="eq.codeDG.ph">
     <label class="champ-lbl" data-i18n="eq.eaclub">ID du club EA (pour l'import auto)</label>
-    <input id="eq-eaclub" placeholder="Ex. 13494" data-i18n-ph="eq.eaclub.ph" inputmode="numeric">
+    <input id="eq-eaclub" placeholder="Ex. 13494  (ou 13494, 51234 si un autre club sert de dépannage)" data-i18n-ph="eq.eaclub.ph">
     <div class="cta-row" style="margin-top:12px">
       <button class="btn btn-or" onclick="sauverEquipe()" data-i18n="btn.enregistrer">Enregistrer</button>
       <button class="btn btn-ghost" onclick="fermerEquipe()" data-i18n="commun.annuler">Annuler</button>
@@ -1624,7 +1625,7 @@ const DICT = {
     'an.besoin':'Écris au moins un titre ou un texte.','an.confirmSuppr':'Supprimer cette annonce ?',
     'discord.lbl':'Admin · Webhook Discord (annonces auto)','discord.ph':'https://discord.com/api/webhooks/…','discord.actif':'Poster les annonces sur Discord automatiquement','discord.save':'Enregistrer','discord.test':'Test','discord.enregistre':'✓ Webhook enregistré.','discord.besoinUrl':"Colle le lien du webhook d'abord.",'discord.testMsg':'🏒 Test DYNASTY — le webhook fonctionne!','discord.testOk':'✓ Message test envoyé sur Discord!','discord.testErr':'Échec. Vérifie le lien du webhook.',
     'transactions.titre':'Transactions','transactions.sous':'Signatures, échanges, libérations et rappels.','transactions.admlbl':'Admin · Nouvelle transaction','transactions.ph.texte':'Détails (optionnel si image)…','transactions.ping':'Notifier @everyone sur Discord','transactions.publier':'Publier la transaction','transactions.dclbl':'Admin · Webhook Discord des transactions','transactions.dcactif':'Poster les transactions sur Discord automatiquement','transactions.vide.t':'🔁 Le marché est calme… pour l\'instant','transactions.vide.s':'Signatures, échanges et rappels apparaîtront ici dès l\'ouverture du marché.','transactions.besoin':'Ajoute un détail ou une image.','transactions.confirmSuppr':'Supprimer cette transaction ?','transactions.footer':'Transactions DYNASTY','transactions.testMsg':'🔁 Test transactions DYNASTY — le webhook fonctionne!','tx.type.signature':'Signature','tx.type.echange':'Échange','tx.type.liberation':'Libération','tx.type.rappel':'Rappel','tx.type.autre':'Autre',
-    'eq.eaclub':'ID du club EA (pour l\'import auto)','eq.eaclub.ph':'Ex. 13494','joueur.eanom':'Gamertag EA (si différent du nom)','joueur.eanom.ph':'Ex. Dj_lavabo','import.btn':'📥 Importer depuis EA','import.titre':'📥 Importer depuis EA','import.intro':'Choisis une équipe (qui a un ID club EA) pour aller chercher ses 5 derniers matchs.','import.equipe':'Équipe à importer','import.chercher':'Chercher les matchs','import.confirmer':'Importer les matchs cochés','import.aucuneEquipe':'Aucune équipe n\'a d\'ID club EA. Ajoute-le dans la fiche de l\'équipe.','import.chargement':'Connexion à EA… (ça peut prendre 10-20 sec)','import.erreur':'Erreur de connexion à EA.','import.vide':'Aucun match trouvé pour ce club.','import.horsLigue':'adversaire hors-ligue','import.deja':'déjà importé','import.nul':'égalité (ignoré)','import.pret':'prêt','import.joueursManq':'{n} joueur(s) non reliés','import.trouve':'{n} matchs trouvés · {ok} prêts à importer','import.rienCoche':'Coche au moins un match.','import.enCours':'Import en cours…','import.fini':'{n}/{t} matchs importés! Les stats sont à jour.',
+    'eq.eaclub':'ID du club EA (pour l\'import auto)','eq.eaclub.ph':'Ex. 13494  (ou 13494, 51234 si un autre club sert de dépannage)','joueur.eanom':'Gamertag EA (si différent du nom)','joueur.eanom.ph':'Ex. Dj_lavabo','import.btn':'📥 Importer depuis EA','import.titre':'📥 Importer depuis EA','import.intro':'Choisis une équipe (qui a un ID club EA) pour aller chercher ses 5 derniers matchs.','import.equipe':'Équipe à importer','import.chercher':'Chercher les matchs','import.confirmer':'Importer les matchs cochés','import.aucuneEquipe':'Aucune équipe n\'a d\'ID club EA. Ajoute-le dans la fiche de l\'équipe.','import.chargement':'Connexion à EA… (ça peut prendre 10-20 sec)','import.erreur':'Erreur de connexion à EA.','import.vide':'Aucun match trouvé pour ce club.','import.horsLigue':'adversaire hors-ligue','import.deja':'déjà importé','import.nul':'égalité (ignoré)','import.pret':'prêt','import.joueursManq':'{n} joueur(s) non reliés','import.trouve':'{n} matchs trouvés · {ok} prêts à importer','import.rienCoche':'Coche au moins un match.','import.enCours':'Import en cours…','import.fini':'{n}/{t} matchs importés! Les stats sont à jour.',
     'nav.palmares':'Palmarès','commun.fermer':'Fermer',
     'live.derniers':'Derniers résultats','live.prochains':'Prochains matchs','live.meneurs':'Meneurs','live.aucunResultat':'Premiers matchs ce soir! 🏒','live.aucunMatch':'Horaire à venir 📅','live.aucunMeneur':'La course aux points commence ce soir 🏆',
     'meneurs.pointeurs':'Meilleurs pointeurs','meneurs.gardiens':'Meilleurs gardiens','gd.arrpct':'Arr%',
@@ -2518,7 +2519,7 @@ function rendreJoueurs(){
             + (peut ? '<th></th>' : '') + '</tr></thead><tbody>';
       joueurs.forEach(j => {
         html += '<tr>'
-              + '<td class="cl-eq"><a class="lien-eq" onclick="ouvrirProfilJoueur(\'' + j.id + '\')"><span>' + escapeHtml(j.nom || '') + '</span>' + ((estGardienPur(j) || statsGardien(j.id).pj > 0) ? '<span class="badge-g" title="Gardien">🥅</span>' : '') + (j.reserviste ? '<span class="badge-tc" title="Réserviste (TC)">TC</span>' : '') + '</a></td>'
+              + '<td class="cl-eq"><a class="lien-eq" onclick="ouvrirProfilJoueur(\'' + j.id + '\')"><span>' + escapeHtml(j.nom || '') + '</span>' + ((estGardienPur(j) || statsGardien(j.id).pj > 0) ? '<span class="badge-g" title="Gardien">🥅</span>' : '') + (j.remplacant ? '<span class="badge-remp" title="Remplaçant">REMP</span>' : '') + (j.reserviste ? '<span class="badge-tc" title="Réserviste (TC)">TC</span>' : '') + '</a></td>'
               + '<td>' + j.pj + '</td><td>' + j.b + '</td><td>' + j.a + '</td><td class="cl-pts">' + j.pts + '</td>'
               + '<td>' + (j.plusMin>0?'+':'') + j.plusMin + '</td><td>' + j.tirs + '</td><td>' + (j.pctTirs!=null?j.pctTirs.toFixed(1)+'%':'—') + '</td>'
               + '<td>' + j.hits + '</td><td>' + j.bloques + '</td>'
@@ -3682,7 +3683,7 @@ function equipeParEaClub(eaClubId){
   if(snapEquipes){
     snapEquipes.forEach(d => {
       const e = d.data();
-      if(e.eaClubId && String(e.eaClubId).trim() === String(eaClubId).trim()) res = { id:d.id, nom:e.nom||'' };
+      if(e.eaClubId && String(e.eaClubId).split(/[\s,;]+/).map(x => x.trim()).filter(Boolean).indexOf(String(eaClubId).trim()) !== -1) res = { id:d.id, nom:e.nom||'' };
     });
   }
   return res;
@@ -3716,11 +3717,11 @@ function ouvrirImport(){
   if(snapEquipes){
     snapEquipes.forEach(d => {
       const e = d.data();
-      if(e.eaClubId && String(e.eaClubId).trim()){
+      String(e.eaClubId || '').split(/[\s,;]+/).map(x => x.trim()).filter(Boolean).forEach(id => {
         const o = document.createElement('option');
-        o.value = String(e.eaClubId).trim(); o.textContent = (e.nom||'') + ' (EA ' + e.eaClubId + ')';
+        o.value = id; o.textContent = (e.nom||'') + ' (EA ' + id + ')';
         sel.appendChild(o); count++;
-      }
+      });
     });
   }
   document.getElementById('imp-preview').innerHTML = '';
@@ -3905,10 +3906,10 @@ const HORAIRE_ALIAS = {"Montreal":["montreal","canadiensdemontreal","canadiendem
 
 function chargerHoraireSaison(){
   if(!estAdmin){ alert(t('err.adminSeul')); return; }
-  const equipes = []; if(snapEquipes) snapEquipes.forEach(d => { const e = d.data(); equipes.push({id:d.id, nom:e.nom||'', ea:String(e.eaClubId||'').trim()}); });
+  const equipes = []; if(snapEquipes) snapEquipes.forEach(d => { const e = d.data(); equipes.push({id:d.id, nom:e.nom||'', ea:String(e.eaClubId||'').trim(), eas:String(e.eaClubId||'').split(/[\s,;]+/).map(x => x.trim()).filter(Boolean)}); });
   const resolue = {}, manquantes = [];
   Object.keys(HORAIRE_EA).forEach(nom => {
-    const eq = equipes.find(e => e.ea && e.ea === HORAIRE_EA[nom]) || equipes.find(e => HORAIRE_ALIAS[nom].indexOf(_nrm(e.nom)) !== -1);
+    const eq = equipes.find(e => e.eas && e.eas.indexOf(HORAIRE_EA[nom]) !== -1) || equipes.find(e => HORAIRE_ALIAS[nom].indexOf(_nrm(e.nom)) !== -1);
     if(eq) resolue[nom] = eq; else manquantes.push(nom);
   });
   if(manquantes.length){
