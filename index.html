@@ -538,6 +538,9 @@ th.cl-eq{display:table-cell}
 .forfait-aide{flex-basis:100%;font-size:11.5px;color:var(--argent2);line-height:1.5}
 .mr-score em.forfait,.dt-chiffres em.forfait{font-style:normal;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:.1em;margin-left:6px;padding:1px 6px;border-radius:5px;border:1px solid rgba(224,85,85,.6);color:#FFB3AB}
 .cal-jour{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.2em;color:var(--or);text-transform:uppercase;margin:18px 0 6px;padding-bottom:4px;border-bottom:1px solid var(--bordure)}
+.code-game{display:inline-flex;align-items:center;gap:5px;margin-left:12px;padding:2px 9px;border:1px solid rgba(212,175,55,.45);border-radius:99px;background:rgba(212,175,55,.08);font-size:11px;letter-spacing:.05em;color:var(--argent2);white-space:nowrap}
+.code-game b{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:.1em;color:var(--or2)}
+.code-game-mini{font-family:'Bebas Neue',sans-serif;letter-spacing:.08em;color:var(--or2)}
 .remp-eq{margin-left:7px;font-size:11px;color:var(--argent2);font-weight:400}
 .badge-remp{margin-left:7px;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:.1em;padding:1px 6px;border-radius:5px;background:rgba(147,197,253,.1);border:1px solid rgba(147,197,253,.45);color:#93C5FD;vertical-align:middle}
 .badge-g{margin-left:6px;font-size:12px;vertical-align:middle}
@@ -1669,7 +1672,7 @@ const DICT = {
     'calendrier.ajouter':'+ Ajouter au calendrier','calendrier.vide.t':'📅 Horaire en préparation','calendrier.vide.s':'L\'horaire de la Saison 1 sera publié bientôt.',
     'calendrier.date':'Date','calendrier.heure':'Heure (optionnel)','calendrier.modal.nouveau':'Nouveau match','calendrier.modal.modifier':'Modifier le match',
     'calendrier.besoinDate':'Choisis une date.','calendrier.confirmSuppr':'Supprimer ce match du calendrier ?','calendrier.vs':'vs','calendrier.jouer':'Jouer',
-    'box.joue':'Joué','match.forfait':'Forfait','match.forfaitAucun':'— Aucun forfait —','match.forfaitVictoire':'Victoire par forfait','match.forfaitAppliquer':'Appliquer le forfait','match.forfaitAide':'1) Coche « Joué » pour les joueurs qui auraient joué (le site te demandera qui est le gardien). 2) Choisis l\'équipe gagnante. 3) Appliquer : score 6-0, chaque joueur gagnant 2 buts + 4 passes, gardien gagnant .900 (sans jeu blanc), perdants à 0, gardien perdant retiré.','match.forfaitChoix':'Choisis d\'abord l\'équipe gagnante par forfait.','match.forfaitJoueurs':'Coche d\'abord « Joué » pour les joueurs de l\'équipe GAGNANTE .','cl.forfaitAbbr':'FORFAIT','jo.remp':'🔁 Remplaçants','jo.remp.vide':'Aucun remplaçant pour l\'instant.','match.scoreDom':'Score domicile (facultatif)','match.scoreExt':'Score visiteur (facultatif)','match.scoreAide':'Les stats avancées d\'EA sont conservées quand tu modifies un match. Remplis les DEUX cases de score seulement pour forcer un score précis. Le +/- de chaque joueur se calcule tout seul (différence de buts de son équipe), sauf si tu le tapes dans 📊.','box.note':'Le score se calcule à partir des buts. Coche les joueurs qui ont joué.',
+    'box.joue':'Joué','match.forfait':'Forfait','match.forfaitAucun':'— Aucun forfait —','match.forfaitVictoire':'Victoire par forfait','match.forfaitAppliquer':'Appliquer le forfait','match.forfaitAide':'1) Coche « Joué » pour les joueurs qui auraient joué (le site te demandera qui est le gardien). 2) Choisis l\'équipe gagnante. 3) Appliquer : score 6-0, chaque joueur gagnant 2 buts + 4 passes, gardien gagnant .900 (sans jeu blanc), perdants à 0, gardien perdant retiré.','match.forfaitChoix':'Choisis d\'abord l\'équipe gagnante par forfait.','match.forfaitJoueurs':'Coche d\'abord « Joué » pour les joueurs de l\'équipe GAGNANTE .','cl.forfaitAbbr':'FORFAIT','jo.remp':'🔁 Remplaçants','jo.remp.vide':'Aucun remplaçant pour l\'instant.','cal.code':'Code','cal.codeTitre':'Code de la game privée (équipe à domicile)','match.scoreDom':'Score domicile (facultatif)','match.scoreExt':'Score visiteur (facultatif)','match.scoreAide':'Les stats avancées d\'EA sont conservées quand tu modifies un match. Remplis les DEUX cases de score seulement pour forcer un score précis. Le +/- de chaque joueur se calcule tout seul (différence de buts de son équipe), sauf si tu le tapes dans 📊.','box.note':'Le score se calcule à partir des buts. Coche les joueurs qui ont joué.',
     'gardiens.vide.t':'🥅 En préparation','gardiens.vide.s':'Les stats des gardiens s\'afficheront dès les premiers matchs.',
     'gd.pj':'PJ','gd.v':'V','gd.d':'D','gd.bl':'BL','gd.bc':'BC','gd.moy':'MOY','st.tirs':'T','st.tirs.l':'Tirs au but','st.pctTirs':'%T','st.pctTirs.l':'% de tirs','st.hits':'MÉ','st.hits.l':'Mises en échec','st.bloques':'TB','st.bloques.l':'Tirs bloqués','st.maj':'%MAJ','st.maj.l':'% mises en jeu','st.passes':'%P','st.passes.l':'% de passes','st.pim':'PUN','st.pim.l':'Minutes de pénalité','st.tg':'TG','st.tg.l':'Temps de glace moyen','st.arr':'ARR','st.arr.l':'Arrêts','st.tirsRecus':'TIRS','st.tirsRecus.l':'Tirs reçus','st.eff':'EFF','st.eff.l':'Efficacité (909 = .909)','st.echap':'ÉCH','st.echap.l':'Arrêts sur échappée','st.pen':'PÉN','st.pen.l':'Arrêts sur tir de pénalité','st.desesp':'AD','st.desesp.l':'Arrêts désespérés','st.poke':'CB','st.poke.l':'Coups de bâton','st.avancees':'📊 Stats avancées','st.avancees.vide':'Les stats avancées apparaîtront après le premier import EA.','st.tirsL':'Plus de tirs','st.hitsL':'Plus de mises en échec','st.bloquesL':'Plus de tirs bloqués','st.pmL':'Meilleur +/-','st.majL':'% mises en jeu (min. 10)','st.passL':'% de passes (min. 20)','st.volesL':'Plus de revirements provoqués','st.tgL':'Temps de glace / match','gardien.modal.titre':'Stats du gardien',
     'jo.pos':'POS','jo.joueur':'Joueur','jo.b':'B','jo.a':'A','joueur.stats':'Statistiques'
@@ -1768,7 +1771,7 @@ const DICT = {
     'calendrier.ajouter':'+ Add to schedule','calendrier.vide.t':'📅 Schedule in the works','calendrier.vide.s':'The Season 1 schedule will be posted soon.',
     'calendrier.date':'Date','calendrier.heure':'Time (optional)','calendrier.modal.nouveau':'New match','calendrier.modal.modifier':'Edit match',
     'calendrier.besoinDate':'Pick a date.','calendrier.confirmSuppr':'Remove this match from the schedule?','calendrier.vs':'vs','calendrier.jouer':'Play',
-    'box.joue':'Played','match.forfait':'Forfeit','match.forfaitAucun':'— No forfeit —','match.forfaitVictoire':'Forfeit win','match.forfaitAppliquer':'Apply forfeit','match.forfaitAide':'1) Tick "Played" for the players who would have played (the site will ask who the goalie is). 2) Pick the winning team. 3) Apply: 6-0 score, each winning player 2 goals + 4 assists, winning goalie .900, losers at 0, losing goalie removed.','match.forfaitChoix':'Pick the winning team by forfeit first.','match.forfaitJoueurs':'First tick "Played" for the WINNING team players .','cl.forfaitAbbr':'FORFEIT','jo.remp':'🔁 Substitutes','jo.remp.vide':'No substitutes yet.','match.scoreDom':'Home score (optional)','match.scoreExt':'Away score (optional)','match.scoreAide':'EA advanced stats are kept when you edit a match. Fill BOTH score boxes only to force an exact score. Each player\'s +/- is calculated automatically (his team\'s goal difference), unless you type it in 📊.','box.note':'The score is calculated from goals. Check the players who played.',
+    'box.joue':'Played','match.forfait':'Forfeit','match.forfaitAucun':'— No forfeit —','match.forfaitVictoire':'Forfeit win','match.forfaitAppliquer':'Apply forfeit','match.forfaitAide':'1) Tick "Played" for the players who would have played (the site will ask who the goalie is). 2) Pick the winning team. 3) Apply: 6-0 score, each winning player 2 goals + 4 assists, winning goalie .900, losers at 0, losing goalie removed.','match.forfaitChoix':'Pick the winning team by forfeit first.','match.forfaitJoueurs':'First tick "Played" for the WINNING team players .','cl.forfaitAbbr':'FORFEIT','jo.remp':'🔁 Substitutes','jo.remp.vide':'No substitutes yet.','cal.code':'Code','cal.codeTitre':'Private game code (home team)','match.scoreDom':'Home score (optional)','match.scoreExt':'Away score (optional)','match.scoreAide':'EA advanced stats are kept when you edit a match. Fill BOTH score boxes only to force an exact score. Each player\'s +/- is calculated automatically (his team\'s goal difference), unless you type it in 📊.','box.note':'The score is calculated from goals. Check the players who played.',
     'gardiens.vide.t':'🥅 In the works','gardiens.vide.s':'Goalie stats will show up after the first games.',
     'gd.pj':'GP','gd.v':'W','gd.d':'L','gd.bl':'SO','gd.bc':'GA','gd.moy':'GAA','st.tirs':'S','st.tirs.l':'Shots','st.pctTirs':'S%','st.pctTirs.l':'Shooting %','st.hits':'HIT','st.hits.l':'Hits','st.bloques':'BLK','st.bloques.l':'Blocked shots','st.maj':'FO%','st.maj.l':'Faceoff %','st.passes':'P%','st.passes.l':'Pass %','st.pim':'PIM','st.pim.l':'Penalty minutes','st.tg':'TOI','st.tg.l':'Avg time on ice','st.arr':'SV','st.arr.l':'Saves','st.tirsRecus':'SA','st.tirsRecus.l':'Shots against','st.eff':'SV%','st.eff.l':'Save % (909 = .909)','st.echap':'BRK','st.echap.l':'Breakaway saves','st.pen':'PS','st.pen.l':'Penalty shot saves','st.desesp':'DSV','st.desesp.l':'Desperation saves','st.poke':'PK','st.poke.l':'Poke checks','st.avancees':'📊 Advanced stats','st.avancees.vide':'Advanced stats will appear after the first EA import.','st.tirsL':'Most shots','st.hitsL':'Most hits','st.bloquesL':'Most blocked shots','st.pmL':'Best +/-','st.majL':'Faceoff % (min. 10)','st.passL':'Pass % (min. 20)','st.volesL':'Most takeaways','st.tgL':'Time on ice / game','gardien.modal.titre':'Goalie stats',
     'jo.pos':'POS','jo.joueur':'Player','jo.b':'G','jo.a':'A','joueur.stats':'Statistics'
@@ -3559,7 +3562,7 @@ function rendreAccueilLive(){
         return '<div class="live-row"><span class="lr-eq">' + eqVisuel(eqD, 20) + escapeHtml(c.domNom||'') + '</span>'
           + '<span class="lr-vs">VS</span>'
           + '<span class="lr-eq ext">' + escapeHtml(c.extNom||'') + eqVisuel(eqE, 20) + '</span>'
-          + '<span class="lr-date">' + escapeHtml(dt) + '</span></div>';
+          + '<span class="lr-date">' + escapeHtml(dt) + (codeGameDe(c.domId) ? ' · <b class="code-game-mini">' + codeGameDe(c.domId) + '</b>' : '') + '</span></div>';
       }).join('')
     : '<div class="je-vide">' + t('live.aucunMatch') + '</div>';
   // Meneurs (top 3)
@@ -3994,6 +3997,21 @@ function chargerHoraireSaison(){
   Promise.all(lots).then(() => alert('✅ ' + aAjouter.length + ' matchs ajoutés au calendrier!')).catch(e => alert(t('commun.erreur') + e.message));
 }
 
+/* Code de la game privée = celui de l'équipe À DOMICILE */
+const CODES_GAME = {"Calgary":"DHLCGY","Washington":"DHLCAP","Buffalo":"DHLBUF","Boston":"DHLBOS","Montreal":"DHLCAN","Detroit":"DHLDET","Toronto":"DHLTOR","NY Rangers":"DHLRAN"};
+function codeGameDe(equipeId){
+  let code = '';
+  if(snapEquipes) snapEquipes.forEach(d => {
+    if(d.id !== equipeId || code) return;
+    const e = d.data();
+    const ids = String(e.eaClubId || '').split(/[\s,;]+/).map(x => x.trim()).filter(Boolean);
+    Object.keys(CODES_GAME).forEach(nom => {
+      if(code) return;
+      if(ids.indexOf(HORAIRE_EA[nom]) !== -1 || (HORAIRE_ALIAS[nom] || []).indexOf(_nrm(e.nom)) !== -1) code = CODES_GAME[nom];
+    });
+  });
+  return code;
+}
 /* Calendrier à venir : retire les games déjà jouées (match importé lié par calId) et trie par date PUIS heure */
 function calAVenir(){
   const joues = new Set();
@@ -4017,7 +4035,8 @@ function rendreCalendrier(){
     if(m.date !== dateCourante){ dateCourante = m.date; html += '<div class="cal-jour">' + escapeHtml(formaterDateCal(m.date)) + '</div>'; }
     html += '<div class="cal-row">'
       + '<div class="cal-date">' + escapeHtml(formaterDateCal(m.date)) + (m.heure ? '<span>' + escapeHtml(m.heure) + '</span>' : '') + '</div>'
-      + '<div class="cal-match"><b>' + escapeHtml(m.domNom || '') + '</b> <em>' + t('calendrier.vs') + '</em> <b>' + escapeHtml(m.extNom || '') + '</b></div>';
+      + '<div class="cal-match"><b>' + escapeHtml(m.domNom || '') + '</b> <em>' + t('calendrier.vs') + '</em> <b>' + escapeHtml(m.extNom || '') + '</b>'
+      + (codeGameDe(m.domId) ? '<span class="code-game" title="' + t('cal.codeTitre') + '">🏠 ' + t('cal.code') + ' <b>' + codeGameDe(m.domId) + '</b></span>' : '') + '</div>';
     if(estAdmin){
       html += '<div class="cal-actions">'
             + '<button class="btn-mini ok" onclick="jouerMatch(\'' + m.id + '\')">' + t('calendrier.jouer') + '</button>'
