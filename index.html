@@ -1409,7 +1409,7 @@ a.live-row:hover{background:rgba(212,175,55,.06)}
       <span class="forfait-titre">🏳️ <span data-i18n="match.forfait">Forfait</span></span>
       <select id="m-forfait"><option value="" data-i18n="match.forfaitAucun">— Aucun forfait —</option><option value="dom">Domicile gagne</option><option value="ext">Visiteur gagne</option></select>
       <button type="button" class="btn-mini ok" onclick="appliquerForfait()" data-i18n="match.forfaitAppliquer">Appliquer le forfait</button>
-      <div class="forfait-aide" data-i18n="match.forfaitAide">1) Coche « Joué » pour les joueurs qui auraient joué (et 🥅 le gardien gagnant). 2) Choisis l'équipe gagnante. 3) Appliquer : score 6-0, chaque joueur gagnant 2 buts + 4 passes, gardien gagnant .900 (sans jeu blanc), perdants à 0, gardien perdant retiré.</div>
+      <div class="forfait-aide" data-i18n="match.forfaitAide">1) Coche « Joué » pour les joueurs qui auraient joué (le site te demandera qui est le gardien). 2) Choisis l'équipe gagnante. 3) Appliquer : score 6-0, chaque joueur gagnant 2 buts + 4 passes, gardien gagnant .900 (sans jeu blanc), perdants à 0, gardien perdant retiré.</div>
     </div>
     <div class="box-score">
       <div class="box-col">
@@ -1668,7 +1668,7 @@ const DICT = {
     'calendrier.ajouter':'+ Ajouter au calendrier','calendrier.vide.t':'📅 Horaire en préparation','calendrier.vide.s':'L\'horaire de la Saison 1 sera publié bientôt.',
     'calendrier.date':'Date','calendrier.heure':'Heure (optionnel)','calendrier.modal.nouveau':'Nouveau match','calendrier.modal.modifier':'Modifier le match',
     'calendrier.besoinDate':'Choisis une date.','calendrier.confirmSuppr':'Supprimer ce match du calendrier ?','calendrier.vs':'vs','calendrier.jouer':'Jouer',
-    'box.joue':'Joué','match.forfait':'Forfait','match.forfaitAucun':'— Aucun forfait —','match.forfaitVictoire':'Victoire par forfait','match.forfaitAppliquer':'Appliquer le forfait','match.forfaitAide':'1) Coche « Joué » pour les joueurs qui auraient joué (et 🥅 le gardien gagnant). 2) Choisis l\'équipe gagnante. 3) Appliquer : score 6-0, chaque joueur gagnant 2 buts + 4 passes, gardien gagnant .900 (sans jeu blanc), perdants à 0, gardien perdant retiré.','match.forfaitChoix':'Choisis d\'abord l\'équipe gagnante par forfait.','match.forfaitJoueurs':'Coche d\'abord « Joué » pour les joueurs de l\'équipe GAGNANTE (et 🥅 son gardien).','cl.forfaitAbbr':'FORFAIT','match.scoreDom':'Score domicile (facultatif)','match.scoreExt':'Score visiteur (facultatif)','match.scoreAide':'Les stats avancées d\'EA sont conservées quand tu modifies un match. Remplis les DEUX cases de score seulement pour forcer un score précis.','box.note':'Le score se calcule à partir des buts. Coche les joueurs qui ont joué.',
+    'box.joue':'Joué','match.forfait':'Forfait','match.forfaitAucun':'— Aucun forfait —','match.forfaitVictoire':'Victoire par forfait','match.forfaitAppliquer':'Appliquer le forfait','match.forfaitAide':'1) Coche « Joué » pour les joueurs qui auraient joué (le site te demandera qui est le gardien). 2) Choisis l\'équipe gagnante. 3) Appliquer : score 6-0, chaque joueur gagnant 2 buts + 4 passes, gardien gagnant .900 (sans jeu blanc), perdants à 0, gardien perdant retiré.','match.forfaitChoix':'Choisis d\'abord l\'équipe gagnante par forfait.','match.forfaitJoueurs':'Coche d\'abord « Joué » pour les joueurs de l\'équipe GAGNANTE .','cl.forfaitAbbr':'FORFAIT','match.scoreDom':'Score domicile (facultatif)','match.scoreExt':'Score visiteur (facultatif)','match.scoreAide':'Les stats avancées d\'EA sont conservées quand tu modifies un match. Remplis les DEUX cases de score seulement pour forcer un score précis.','box.note':'Le score se calcule à partir des buts. Coche les joueurs qui ont joué.',
     'gardiens.vide.t':'🥅 En préparation','gardiens.vide.s':'Les stats des gardiens s\'afficheront dès les premiers matchs.',
     'gd.pj':'PJ','gd.v':'V','gd.d':'D','gd.bl':'BL','gd.bc':'BC','gd.moy':'MOY','st.tirs':'T','st.tirs.l':'Tirs au but','st.pctTirs':'%T','st.pctTirs.l':'% de tirs','st.hits':'MÉ','st.hits.l':'Mises en échec','st.bloques':'TB','st.bloques.l':'Tirs bloqués','st.maj':'%MAJ','st.maj.l':'% mises en jeu','st.passes':'%P','st.passes.l':'% de passes','st.pim':'PUN','st.pim.l':'Minutes de pénalité','st.tg':'TG','st.tg.l':'Temps de glace moyen','st.arr':'ARR','st.arr.l':'Arrêts','st.tirsRecus':'TIRS','st.tirsRecus.l':'Tirs reçus','st.eff':'EFF','st.eff.l':'Efficacité (909 = .909)','st.echap':'ÉCH','st.echap.l':'Arrêts sur échappée','st.pen':'PÉN','st.pen.l':'Arrêts sur tir de pénalité','st.desesp':'AD','st.desesp.l':'Arrêts désespérés','st.poke':'CB','st.poke.l':'Coups de bâton','st.avancees':'📊 Stats avancées','st.avancees.vide':'Les stats avancées apparaîtront après le premier import EA.','st.tirsL':'Plus de tirs','st.hitsL':'Plus de mises en échec','st.bloquesL':'Plus de tirs bloqués','st.pmL':'Meilleur +/-','st.majL':'% mises en jeu (min. 10)','st.passL':'% de passes (min. 20)','st.volesL':'Plus de revirements provoqués','st.tgL':'Temps de glace / match','gardien.modal.titre':'Stats du gardien',
     'jo.pos':'POS','jo.joueur':'Joueur','jo.b':'B','jo.a':'A','joueur.stats':'Statistiques'
@@ -1767,7 +1767,7 @@ const DICT = {
     'calendrier.ajouter':'+ Add to schedule','calendrier.vide.t':'📅 Schedule in the works','calendrier.vide.s':'The Season 1 schedule will be posted soon.',
     'calendrier.date':'Date','calendrier.heure':'Time (optional)','calendrier.modal.nouveau':'New match','calendrier.modal.modifier':'Edit match',
     'calendrier.besoinDate':'Pick a date.','calendrier.confirmSuppr':'Remove this match from the schedule?','calendrier.vs':'vs','calendrier.jouer':'Play',
-    'box.joue':'Played','match.forfait':'Forfeit','match.forfaitAucun':'— No forfeit —','match.forfaitVictoire':'Forfeit win','match.forfaitAppliquer':'Apply forfeit','match.forfaitAide':'1) Tick "Played" for the players who would have played (and 🥅 the winning goalie). 2) Pick the winning team. 3) Apply: 6-0 score, each winning player 2 goals + 4 assists, winning goalie .900, losers at 0, losing goalie removed.','match.forfaitChoix':'Pick the winning team by forfeit first.','match.forfaitJoueurs':'First tick "Played" for the WINNING team players (and 🥅 their goalie).','cl.forfaitAbbr':'FORFEIT','match.scoreDom':'Home score (optional)','match.scoreExt':'Away score (optional)','match.scoreAide':'EA advanced stats are kept when you edit a match. Fill BOTH score boxes only to force an exact score.','box.note':'The score is calculated from goals. Check the players who played.',
+    'box.joue':'Played','match.forfait':'Forfeit','match.forfaitAucun':'— No forfeit —','match.forfaitVictoire':'Forfeit win','match.forfaitAppliquer':'Apply forfeit','match.forfaitAide':'1) Tick "Played" for the players who would have played (the site will ask who the goalie is). 2) Pick the winning team. 3) Apply: 6-0 score, each winning player 2 goals + 4 assists, winning goalie .900, losers at 0, losing goalie removed.','match.forfaitChoix':'Pick the winning team by forfeit first.','match.forfaitJoueurs':'First tick "Played" for the WINNING team players .','cl.forfaitAbbr':'FORFEIT','match.scoreDom':'Home score (optional)','match.scoreExt':'Away score (optional)','match.scoreAide':'EA advanced stats are kept when you edit a match. Fill BOTH score boxes only to force an exact score.','box.note':'The score is calculated from goals. Check the players who played.',
     'gardiens.vide.t':'🥅 In the works','gardiens.vide.s':'Goalie stats will show up after the first games.',
     'gd.pj':'GP','gd.v':'W','gd.d':'L','gd.bl':'SO','gd.bc':'GA','gd.moy':'GAA','st.tirs':'S','st.tirs.l':'Shots','st.pctTirs':'S%','st.pctTirs.l':'Shooting %','st.hits':'HIT','st.hits.l':'Hits','st.bloques':'BLK','st.bloques.l':'Blocked shots','st.maj':'FO%','st.maj.l':'Faceoff %','st.passes':'P%','st.passes.l':'Pass %','st.pim':'PIM','st.pim.l':'Penalty minutes','st.tg':'TOI','st.tg.l':'Avg time on ice','st.arr':'SV','st.arr.l':'Saves','st.tirsRecus':'SA','st.tirsRecus.l':'Shots against','st.eff':'SV%','st.eff.l':'Save % (909 = .909)','st.echap':'BRK','st.echap.l':'Breakaway saves','st.pen':'PS','st.pen.l':'Penalty shot saves','st.desesp':'DSV','st.desesp.l':'Desperation saves','st.poke':'PK','st.poke.l':'Poke checks','st.avancees':'📊 Advanced stats','st.avancees.vide':'Advanced stats will appear after the first EA import.','st.tirsL':'Most shots','st.hitsL':'Most hits','st.bloquesL':'Most blocked shots','st.pmL':'Best +/-','st.majL':'Faceoff % (min. 10)','st.passL':'Pass % (min. 20)','st.volesL':'Most takeaways','st.tgL':'Time on ice / game','gardien.modal.titre':'Goalie stats',
     'jo.pos':'POS','jo.joueur':'Player','jo.b':'G','jo.a':'A','joueur.stats':'Statistics'
@@ -2824,10 +2824,14 @@ let matchOrig = null;   // données du match tel qu'enregistré (pour ne rien pe
 function initMatchs(){
   db.collection('matchs').orderBy('createdAt','desc').onSnapshot(snap => {
     snapMatchs = snap;
-    rendreResultats(); rendreClassements();
-    if(typeof rendreCalendrier === 'function') rendreCalendrier();   // une game importée disparaît du calendrier à venir
-    if(typeof rendreJoueurs === 'function') rendreJoueurs();   // stats joueurs = somme des matchs
-    if(typeof rendreGardiens === 'function') rendreGardiens();  // stats gardiens = somme des matchs
+    /* Chaque affichage est isolé : si un seul plante (ex. à cause d'une donnée inattendue), les autres s'affichent quand même */
+    const sur = (nom, f) => { try { f(); } catch(e){ console.error('[DYNASTY] Affichage « ' + nom + ' » a échoué :', e); } };
+    sur('Classements', rendreClassements);
+    sur('Résultats', rendreResultats);
+    sur('Calendrier', () => { if(typeof rendreCalendrier === 'function') rendreCalendrier(); });   // une game importée disparaît du calendrier à venir
+    sur('Joueurs', () => { if(typeof rendreJoueurs === 'function') rendreJoueurs(); });           // stats joueurs = somme des matchs
+    sur('Gardiens', () => { if(typeof rendreGardiens === 'function') rendreGardiens(); });        // stats gardiens = somme des matchs
+    sur('Accueil', () => { if(typeof rendreAccueilLive === 'function') rendreAccueilLive(); });
   }, err => {
     const c = document.getElementById('resultats-list');
     if(c) c.innerHTML = videHTML(ico('warning'), t('err.connexion'), err.message);
@@ -2861,7 +2865,6 @@ function rendreResultats(){
     html += '</div>';
   });
   cont.innerHTML = html;
-  if(typeof rendreAccueilLive === 'function') rendreAccueilLive();
 }
 
 /* ----- Classement calculé à partir des résultats ----- */
@@ -3109,6 +3112,7 @@ function htmlAdv(l, estG){
 function toggleAdv(btn){ const a = btn.closest('.bx-row').querySelector('.bx-adv'); a.style.display = (a.style.display === 'block') ? 'none' : 'block'; }
 function majGardienRow(cb){
   const row = cb.closest('.bx-row'), g = cb.checked;
+  if(g){ const j = row.querySelector('.bx-joue'); if(j && !j.checked){ j.checked = true; if(typeof majTotaux === 'function') majTotaux(); } }
   row.querySelector('.bx-gx').style.display = g ? 'flex' : 'none';
   row.querySelector('.adv-sk').style.display = g ? 'none' : 'flex';
   row.querySelector('.adv-gk').style.display = g ? 'flex' : 'none';
@@ -3146,9 +3150,31 @@ function appliquerForfait(){
   const lignesDe = id => Array.from(document.querySelectorAll('#' + id + ' .bx-row'));
   const rowsG = lignesDe(cote === 'dom' ? 'box-dom-list' : 'box-ext-list');
   const rowsP = lignesDe(cote === 'dom' ? 'box-ext-list' : 'box-dom-list');
-  const jouesG = rowsG.filter(r => r.querySelector('.bx-joue').checked);
+  const aJoue = r => { const g = r.querySelector('.bx-g'); return r.querySelector('.bx-joue').checked || !!(g && g.checked); };
+  [].concat(rowsG, rowsP).forEach(r => { const g = r.querySelector('.bx-g'); if(g && g.checked) r.querySelector('.bx-joue').checked = true; });   // 🥅 coché → « Joué » coché
+  const jouesG = rowsG.filter(aJoue);
   if(!jouesG.length){ alert(t('match.forfaitJoueurs')); return; }
   const set = (row, sel, v) => { const el = row.querySelector(sel); if(el) el.value = v; };
+  /* Gardien de chaque équipe : case 🥅 cochée, ou joueur dont la position est exactement « G » ; sinon on DEMANDE à l'admin */
+  const pidDe = r => r.querySelector('.bx-joue').getAttribute('data-pid');
+  const joueurDe = pid => { let o = null; if(snapJoueurs) snapJoueurs.forEach(d => { if(d.id === pid) o = d.data(); }); return o; };
+  const estGardienRow = r => { const g = r.querySelector('.bx-g'); return !!(g && g.checked) || estGardienPur(joueurDe(pidDe(r))); };
+  const marquerGardien = r => { const g = r.querySelector('.bx-g'); if(g){ g.checked = true; majGardienRow(g); } };
+  const idEqG = (cote === 'dom') ? document.getElementById('m-dom').value : document.getElementById('m-ext').value;
+  const idEqP = (cote === 'dom') ? document.getElementById('m-ext').value : document.getElementById('m-dom').value;
+  const trouverGardien = (rows, idEq, aide) => {
+    const joues = rows.filter(r => r.querySelector('.bx-joue').checked);
+    if(!joues.length) return;
+    const deja = joues.filter(estGardienRow);
+    if(deja.length){ deja.forEach(marquerGardien); return; }
+    const noms = joues.map(r => (joueurDe(pidDe(r)) || {}).nom || '?');
+    const rep = prompt('Quel joueur est le GARDIEN de ' + ((trouverEquipeParId(idEq) || {}).nom || '') + ' ?\n\n'
+      + noms.map((n, i) => (i + 1) + ') ' + n).join('\n') + '\n\n' + aide + '\nTape son numéro (ou laisse vide s\'il n\'y a pas de gardien) :');
+    const k = parseInt(rep, 10);
+    if(k >= 1 && k <= joues.length) marquerGardien(joues[k - 1]);
+  };
+  trouverGardien(rowsG, idEqG, '(Il aura 9 arrêts sur 10 tirs.)');
+  trouverGardien(rowsP, idEqP, '(Il sera retiré du match : rien dans ses stats.)');
   jouesG.forEach(r => {
     const g = r.querySelector('.bx-g');
     if(g && g.checked){                                  // gardien gagnant : .900
@@ -3223,7 +3249,8 @@ function fermerMatch(){ document.getElementById('modale-match').classList.remove
 function collecterLignes(listeId, equipeId){
   const arr = [];
   document.querySelectorAll('#' + listeId + ' .bx-row').forEach(row => {
-    if(!row.querySelector('.bx-joue').checked) return;
+    const cgJoue = row.querySelector('.bx-g');
+    if(!row.querySelector('.bx-joue').checked && !(cgJoue && cgJoue.checked)) return;   // 🥅 coché = a joué
     const ligne = {
       pid: row.querySelector('.bx-joue').getAttribute('data-pid'),
       eqId: equipeId,
