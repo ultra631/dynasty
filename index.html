@@ -791,8 +791,9 @@ th.cl-eq{display:table-cell}
 /* ---- Badges/logos d'équipe partout ---- */
 .eq-mini{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;
   object-fit:cover;vertical-align:middle;flex:none;border:1px solid var(--bordure);overflow:hidden}
-img.eq-mini{display:inline-block;object-fit:cover;object-position:center}
-img.team-logo{object-fit:cover;object-position:center;overflow:hidden}
+/* Logos d'équipe : pastille claire derrière pour que les logos foncés (Washington, Toronto…) se voient sur le fond noir */
+img.eq-mini{display:inline-block;object-fit:contain;object-position:center;background:radial-gradient(circle at 50% 40%,#ffffff 0%,#ece6d6 100%);box-sizing:border-box;border-color:rgba(212,175,55,.45)}
+img.team-logo{object-fit:contain;object-position:center;overflow:hidden;background:radial-gradient(circle at 50% 40%,#ffffff 0%,#ece6d6 100%);padding:9px;box-sizing:border-box;border-color:rgba(212,175,55,.55)}
 .eq-ini{color:#0A0A0C;font-weight:800;font-family:Inter,sans-serif;letter-spacing:.02em}
 .lien-eq{display:inline-flex;align-items:center;gap:8px;cursor:pointer;color:inherit;text-decoration:none}
 .lien-eq:hover span{color:var(--or)}
@@ -1955,7 +1956,7 @@ function eqVisuel(e, taille){
   taille = taille || 22;
   if(!e) return '';
   if(e.logo){
-    return '<img class="eq-mini" style="width:'+taille+'px;height:'+taille+'px" src="' + escapeHtml(lienImageDirect(e.logo)) + '" alt="" referrerpolicy="no-referrer" onerror="this.style.display=\'none\';var s=this.nextElementSibling;if(s)s.style.display=\'inline-flex\';">'
+    return '<img class="eq-mini" style="width:'+taille+'px;height:'+taille+'px;padding:'+Math.max(2, Math.round(taille*0.12))+'px" src="' + escapeHtml(lienImageDirect(e.logo)) + '" alt="" referrerpolicy="no-referrer" onerror="this.style.display=\'none\';var s=this.nextElementSibling;if(s)s.style.display=\'inline-flex\';">'
       + eqInitialesHTML(e, taille).replace('class="eq-mini eq-ini"', 'class="eq-mini eq-ini" data-repli="1"').replace('style="', 'style="display:none;');
   }
   return eqInitialesHTML(e, taille);
