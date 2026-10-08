@@ -521,6 +521,18 @@ body.is-admin .peut-editer, body.is-dg .peut-editer{display:block}
 
 /* ===== Classement (tableau) ===== */
 .cl-wrap{overflow-x:auto;border:1px solid var(--bordure);border-radius:14px;background:linear-gradient(180deg,var(--charbon),#0d0d14)}
+.etoiles-list{margin-bottom:6px}.et-soiree{background:rgba(255,255,255,.03);border:1px solid var(--bordure);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.et-date{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--or);margin-bottom:8px}
+.et-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);flex-wrap:wrap}
+.et-row:last-child{border-bottom:none}.et-star{min-width:54px;font-size:12px}.et-nom{font-weight:700}.et-eq{opacity:.65;font-size:12px}.et-stat{margin-left:auto;font-weight:600;font-size:13px}
+.et-1 .et-nom{color:#F0D27A}.et-plus{margin-bottom:8px}.et-plus summary{cursor:pointer;padding:8px 2px;opacity:.85}.et-aide{font-size:11.5px;opacity:.6;margin-top:6px}
+.duel-box{background:rgba(255,255,255,.03);border:1px solid var(--bordure);border-radius:12px;padding:14px;margin-bottom:18px}
+.duel-head{font-weight:700;margin-bottom:10px}.duel-sel{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}.duel-sel select{flex:1;min-width:130px}
+.duel-titre{font-size:16px;font-weight:700;color:var(--or);margin-bottom:4px}.duel-buts{font-size:12.5px;opacity:.75;margin-bottom:8px}
+.duel-game{display:flex;gap:10px;align-items:center;padding:7px 0;border-top:1px solid rgba(255,255,255,.05);cursor:pointer;font-size:13px}.duel-game span{opacity:.6;min-width:78px}
+.duel-v{color:#5fd38a}.duel-d{color:#ff7b86}
+.masse-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}.masse-top span{font-size:12px;opacity:.75}.masse-neg{color:#ff7b86;opacity:1!important}
+.masse-barre{height:8px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}.masse-barre i{display:block;height:100%;background:var(--or)}.masse-barre i.masse-rouge{background:#e0505e}
 .cl-forme{white-space:nowrap}
 .fm{display:inline-block;min-width:20px;padding:2px 4px;margin:0 1px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.02em;line-height:1.3}
 .fm-v{background:rgba(60,180,100,.18);color:#5fd38a}
@@ -985,6 +997,11 @@ a.live-row:hover{background:rgba(212,175,55,.06)}
       </div>
     </div>
 
+    <div class="live-col etoiles-home reveal">
+      <div class="live-head"><span>⭐</span><h3 data-i18n="et.dern">Étoiles de la dernière soirée</h3></div>
+      <div id="live-etoiles" class="live-body"><div class="je-vide" data-i18n="et.vide">Les étoiles apparaîtront après la première soirée.</div></div>
+    </div>
+
     <!-- Bande Discord -->
     <div class="discord-band reveal">
       <div>
@@ -1199,6 +1216,9 @@ a.live-row:hover{background:rgba(212,175,55,.06)}
       <div class="empty"><div class="ico" data-ico="trophy"></div><b data-i18n="classements.vide.t">Aucune équipe</b><span data-i18n="classements.vide.s">Ajoute des équipes pour voir le classement.</span></div>
     </div>
 
+    <div class="sous-head"><h3 data-i18n="et.titre">⭐ Étoiles de la soirée</h3></div>
+    <div id="etoiles-list" class="etoiles-list"><div class="je-vide" data-i18n="et.vide">Les étoiles apparaîtront après la première soirée.</div></div>
+
     <div class="sous-head"><h3 data-i18n="meneurs.pointeurs">Meilleurs pointeurs</h3></div>
     <div id="meneurs-list"><div class="je-vide" data-i18n="live.aucunMeneur">Les meneurs apparaîtront ici.</div></div>
 
@@ -1268,6 +1288,12 @@ a.live-row:hover{background:rgba(212,175,55,.06)}
       <button class="btn btn-or" onclick="ouvrirEquipe()" data-i18n="equipes.ajouter">+ Ajouter une équipe</button>
       <button class="btn btn-ghost" onclick="appliquerCompensations()" data-i18n="equipes.comp">🔄 Appliquer les compensations</button>
       <button class="btn btn-ghost" onclick="nettoyerOrphelins()" data-i18n="equipes.nettoyer" title="Efface les matchs, calendrier et joueurs dont l'équipe n'existe plus">🧹 Nettoyer les données orphelines</button>
+    </div>
+
+    <div class="duel-box">
+      <div class="duel-head" data-i18n="duel.titre">⚔️ Duel entre deux équipes</div>
+      <div class="duel-sel"><select id="duel-a" onchange="rendreDuel()"></select><span>vs</span><select id="duel-b" onchange="rendreDuel()"></select></div>
+      <div id="duel-res"><div class="je-vide" data-i18n="duel.choisir">Choisis deux équipes pour voir leur bilan.</div></div>
     </div>
 
     <div id="equipes-grid" class="teams-grid">
@@ -1508,10 +1534,18 @@ a.live-row:hover{background:rgba(212,175,55,.06)}
       </div>
     </div>
     <div class="pf-stats" id="ep-stats"></div>
+    <div class="sous-head" style="margin-top:14px"><h3 data-i18n="ep.masse">Masse salariale</h3></div>
+    <div id="ep-masse" class="ep-masse"></div>
+    <div class="sous-head" style="margin-top:14px"><h3 data-i18n="ep.prochain">Prochain match</h3></div>
+    <div id="ep-prochain" class="pf-histo"></div>
+    <div class="sous-head" style="margin-top:14px"><h3 data-i18n="ep.gardien">Gardien partant</h3></div>
+    <div id="ep-gardien" class="pf-histo"></div>
     <div class="sous-head" style="margin-top:14px"><h3 data-i18n="ep.derniers">5 derniers matchs</h3></div>
     <div id="ep-forme" class="ep-forme"></div>
     <div class="sous-head" style="margin-top:14px"><h3 data-i18n="ep.alignement">Alignement</h3></div>
     <div id="ep-roster" class="pf-histo"></div>
+    <div class="sous-head" style="margin-top:14px"><h3 data-i18n="ep.duels">Bilan contre chaque équipe</h3></div>
+    <div id="ep-duels" class="pf-histo"></div>
     <div class="cta-row" style="margin-top:14px">
       <button class="btn btn-ghost" onclick="fermerProfilEquipe()" data-i18n="commun.fermer">Fermer</button>
     </div>
@@ -1691,7 +1725,7 @@ const DICT = {
     'calendrier.ajouter':'+ Ajouter au calendrier','calendrier.vide.t':'📅 Horaire en préparation','calendrier.vide.s':'L\'horaire de la Saison 1 sera publié bientôt.',
     'calendrier.date':'Date','calendrier.heure':'Heure (optionnel)','calendrier.modal.nouveau':'Nouveau match','calendrier.modal.modifier':'Modifier le match',
     'calendrier.besoinDate':'Choisis une date.','calendrier.confirmSuppr':'Supprimer ce match du calendrier ?','calendrier.vs':'vs','calendrier.jouer':'Jouer',
-    'box.joue':'Joué','match.forfait':'Forfait','match.forfaitAucun':'— Aucun forfait —','match.forfaitVictoire':'Victoire par forfait','match.forfaitAppliquer':'Appliquer le forfait','match.forfaitAide':'1) Coche « Joué » pour les joueurs qui auraient joué (le site te demandera qui est le gardien). 2) Choisis l\'équipe gagnante. 3) Appliquer : score 6-0, chaque joueur gagnant 2 buts + 2 passes, gardien gagnant .800 (sans jeu blanc), perdants à 0, gardien perdant retiré.','match.forfaitChoix':'Choisis d\'abord l\'équipe gagnante par forfait.','match.forfaitJoueurs':'Coche d\'abord « Joué » pour les joueurs de l\'équipe GAGNANTE .','cl.forfaitAbbr':'FORFAIT','jo.remp':'🔁 Remplaçants','jo.remp.vide':'Aucun remplaçant pour l\'instant.','cal.code':'Code','cal.codeTitre':'Code de la game privée (équipe à domicile)','gardiens.ajouter':'+ Ajouter un gardien','jo.equipe.remp':'🔁 Remplaçant (sans équipe)','box.remp.choisir':'— Ajouter un remplaçant —','box.remp.btn':'+ Ajouter','box.remp.deja':'Ce joueur est déjà dans la feuille de match.','box.remp.retirer':'Retirer ce remplaçant de la game','box.remp.retirerCourt':'Retirer de la game','box.remp.retirerConfirm':'Retirer {n} de la game ? Ses buts et passes saisis seront perdus.','pm.btn':'🔄 Recalculer les +/- de tous les matchs','pm.titre':'Recalcul des +/-','pm.remplis':'+/- manquants remplis','pm.lignes':'ligne(s)','pm.rafraichis':'+/- automatiques mis à jour','pm.pasTouche':'Jamais touchés : les forfaits, les gardiens, et les +/- que tu as tapés à la main.','pm.confirm1':'Appliquer ?','pm.rien':'Rien à faire : tous les +/- sont déjà à jour. ✅','pm.ecarts':'ligne(s) d\'EA ont un +/- différent de la différence de buts de l\'équipe.','pm.confirm2':'Les REMPLACER aussi par la différence de buts ? (Annuler = garder les chiffres d\'EA.)','pm.fait':'match(s) mis à jour.','cl.forme':'5 derniers','cl.serie':'Série','cl.formeTitre':'5 dernières games (V = victoire, D = défaite, DP = défaite en prolongation)','match.scoreDom':'Score domicile (facultatif)','match.scoreExt':'Score visiteur (facultatif)','match.scoreAide':'Les stats avancées d\'EA sont conservées quand tu modifies un match. Remplis les DEUX cases de score seulement pour forcer un score précis. Le +/- de chaque joueur se calcule tout seul (différence de buts de son équipe), sauf si tu le tapes dans 📊.','box.note':'Le score se calcule à partir des buts. Coche les joueurs qui ont joué.',
+    'box.joue':'Joué','match.forfait':'Forfait','match.forfaitAucun':'— Aucun forfait —','match.forfaitVictoire':'Victoire par forfait','match.forfaitAppliquer':'Appliquer le forfait','match.forfaitAide':'1) Coche « Joué » pour les joueurs qui auraient joué (le site te demandera qui est le gardien). 2) Choisis l\'équipe gagnante. 3) Appliquer : score 6-0, chaque joueur gagnant 2 buts + 2 passes, gardien gagnant .800 (sans jeu blanc), perdants à 0, gardien perdant retiré.','match.forfaitChoix':'Choisis d\'abord l\'équipe gagnante par forfait.','match.forfaitJoueurs':'Coche d\'abord « Joué » pour les joueurs de l\'équipe GAGNANTE .','cl.forfaitAbbr':'FORFAIT','jo.remp':'🔁 Remplaçants','jo.remp.vide':'Aucun remplaçant pour l\'instant.','cal.code':'Code','cal.codeTitre':'Code de la game privée (équipe à domicile)','gardiens.ajouter':'+ Ajouter un gardien','jo.equipe.remp':'🔁 Remplaçant (sans équipe)','box.remp.choisir':'— Ajouter un remplaçant —','box.remp.btn':'+ Ajouter','box.remp.deja':'Ce joueur est déjà dans la feuille de match.','box.remp.retirer':'Retirer ce remplaçant de la game','box.remp.retirerCourt':'Retirer de la game','box.remp.retirerConfirm':'Retirer {n} de la game ? Ses buts et passes saisis seront perdus.','pm.btn':'🔄 Recalculer les +/- de tous les matchs','pm.titre':'Recalcul des +/-','pm.remplis':'+/- manquants remplis','pm.lignes':'ligne(s)','pm.rafraichis':'+/- automatiques mis à jour','pm.pasTouche':'Jamais touchés : les forfaits, les gardiens, et les +/- que tu as tapés à la main.','pm.confirm1':'Appliquer ?','pm.rien':'Rien à faire : tous les +/- sont déjà à jour. ✅','pm.ecarts':'ligne(s) d\'EA ont un +/- différent de la différence de buts de l\'équipe.','pm.confirm2':'Les REMPLACER aussi par la différence de buts ? (Annuler = garder les chiffres d\'EA.)','pm.fait':'match(s) mis à jour.','cl.forme':'5 derniers','cl.serie':'Série','cl.formeTitre':'5 dernières games (V = victoire, D = défaite, DP = défaite en prolongation)','et.titre':'⭐ Étoiles de la soirée','et.dern':'Étoiles de la dernière soirée','et.vide':'Les étoiles apparaîtront après la première soirée.','et.arrets':'arrêts','et.blanchi':'blanchissage','et.aide':'Calcul automatique : patineur = 3 par but + 2 par passe ; gardien = 0,4 par arrêt − 1,5 par but alloué (+4 si blanchissage). Les forfaits ne comptent pas.','duel.titre':'⚔️ Duel entre deux équipes','duel.choisir':'Choisis deux équipes pour voir leur bilan.','duel.aucun':'Ces deux équipes ne se sont pas encore affrontées.','duel.egal':'{a} et {b} : égalité {n}-{n}','duel.mene':'{x} mène {n} contre {y}','duel.buts':'buts','ep.masse':'Masse salariale','ep.masseNon':'Salaires pas encore inscrits.','ep.dispo':'{n} M$ de marge','ep.depasse':'{n} M$ au-dessus du plafond','ep.gardien':'Gardien partant','ep.gardienNon':'Aucun gardien.','ep.prochain':'Prochain match','ep.prochainNon':'Aucun match prévu.','ep.vs':'reçoit','ep.chez':'visite','ep.duels':'Bilan contre chaque équipe','match.scoreDom':'Score domicile (facultatif)','match.scoreExt':'Score visiteur (facultatif)','match.scoreAide':'Les stats avancées d\'EA sont conservées quand tu modifies un match. Remplis les DEUX cases de score seulement pour forcer un score précis. Le +/- de chaque joueur se calcule tout seul (différence de buts de son équipe), sauf si tu le tapes dans 📊.','box.note':'Le score se calcule à partir des buts. Coche les joueurs qui ont joué.',
     'gardiens.vide.t':'🥅 En préparation','gardiens.vide.s':'Les stats des gardiens s\'afficheront dès les premiers matchs.',
     'gd.pj':'PJ','gd.v':'V','gd.d':'D','gd.bl':'BL','gd.bc':'BC','gd.moy':'MOY','st.tirs':'T','st.tirs.l':'Tirs au but','st.pctTirs':'%T','st.pctTirs.l':'% de tirs','st.hits':'MÉ','st.hits.l':'Mises en échec','st.bloques':'TB','st.bloques.l':'Tirs bloqués','st.maj':'%MAJ','st.maj.l':'% mises en jeu','st.passes':'%P','st.passes.l':'% de passes','st.pim':'PUN','st.pim.l':'Minutes de pénalité','st.tg':'TG','st.tg.l':'Temps de glace moyen','st.arr':'ARR','st.arr.l':'Arrêts','st.tirsRecus':'TIRS','st.tirsRecus.l':'Tirs reçus','st.eff':'EFF','st.eff.l':'Efficacité (909 = .909)','st.echap':'ÉCH','st.echap.l':'Arrêts sur échappée','st.pen':'PÉN','st.pen.l':'Arrêts sur tir de pénalité','st.desesp':'AD','st.desesp.l':'Arrêts désespérés','st.poke':'CB','st.poke.l':'Coups de bâton','st.avancees':'📊 Stats avancées','st.avancees.vide':'Les stats avancées apparaîtront après le premier import EA.','st.tirsL':'Plus de tirs','st.hitsL':'Plus de mises en échec','st.bloquesL':'Plus de tirs bloqués','st.pmL':'Meilleur +/-','st.majL':'% mises en jeu (min. 10)','st.passL':'% de passes (min. 20)','st.volesL':'Plus de revirements provoqués','st.tgL':'Temps de glace / match','gardien.modal.titre':'Stats du gardien',
     'jo.pos':'POS','jo.joueur':'Joueur','jo.b':'B','jo.a':'A','joueur.stats':'Statistiques'
@@ -1790,7 +1824,7 @@ const DICT = {
     'calendrier.ajouter':'+ Add to schedule','calendrier.vide.t':'📅 Schedule in the works','calendrier.vide.s':'The Season 1 schedule will be posted soon.',
     'calendrier.date':'Date','calendrier.heure':'Time (optional)','calendrier.modal.nouveau':'New match','calendrier.modal.modifier':'Edit match',
     'calendrier.besoinDate':'Pick a date.','calendrier.confirmSuppr':'Remove this match from the schedule?','calendrier.vs':'vs','calendrier.jouer':'Play',
-    'box.joue':'Played','match.forfait':'Forfeit','match.forfaitAucun':'— No forfeit —','match.forfaitVictoire':'Forfeit win','match.forfaitAppliquer':'Apply forfeit','match.forfaitAide':'1) Tick "Played" for the players who would have played (the site will ask who the goalie is). 2) Pick the winning team. 3) Apply: 6-0 score, each winning player 2 goals + 2 assists, winning goalie .800, losers at 0, losing goalie removed.','match.forfaitChoix':'Pick the winning team by forfeit first.','match.forfaitJoueurs':'First tick "Played" for the WINNING team players .','cl.forfaitAbbr':'FORFEIT','jo.remp':'🔁 Substitutes','jo.remp.vide':'No substitutes yet.','cal.code':'Code','cal.codeTitre':'Private game code (home team)','gardiens.ajouter':'+ Add a goalie','jo.equipe.remp':'🔁 Substitute (no team)','box.remp.choisir':'— Add a substitute —','box.remp.btn':'+ Add','box.remp.deja':'This player is already in the match sheet.','box.remp.retirer':'Remove this substitute from the game','box.remp.retirerCourt':'Remove from game','box.remp.retirerConfirm':'Remove {n} from the game? The goals and assists entered will be lost.','pm.btn':'🔄 Recalculate +/- for all games','pm.titre':'+/- recalculation','pm.remplis':'Missing +/- filled','pm.lignes':'line(s)','pm.rafraichis':'Automatic +/- refreshed','pm.pasTouche':'Never touched: forfeits, goalies, and +/- you typed by hand.','pm.confirm1':'Apply?','pm.rien':'Nothing to do: every +/- is already up to date. ✅','pm.ecarts':'EA line(s) have a +/- different from the team goal difference.','pm.confirm2':'Replace them too with the goal difference? (Cancel = keep EA numbers.)','pm.fait':'game(s) updated.','cl.forme':'Last 5','cl.serie':'Streak','cl.formeTitre':'Last 5 games (W = win, L = loss, OT = overtime loss)','match.scoreDom':'Home score (optional)','match.scoreExt':'Away score (optional)','match.scoreAide':'EA advanced stats are kept when you edit a match. Fill BOTH score boxes only to force an exact score. Each player\'s +/- is calculated automatically (his team\'s goal difference), unless you type it in 📊.','box.note':'The score is calculated from goals. Check the players who played.',
+    'box.joue':'Played','match.forfait':'Forfeit','match.forfaitAucun':'— No forfeit —','match.forfaitVictoire':'Forfeit win','match.forfaitAppliquer':'Apply forfeit','match.forfaitAide':'1) Tick "Played" for the players who would have played (the site will ask who the goalie is). 2) Pick the winning team. 3) Apply: 6-0 score, each winning player 2 goals + 2 assists, winning goalie .800, losers at 0, losing goalie removed.','match.forfaitChoix':'Pick the winning team by forfeit first.','match.forfaitJoueurs':'First tick "Played" for the WINNING team players .','cl.forfaitAbbr':'FORFEIT','jo.remp':'🔁 Substitutes','jo.remp.vide':'No substitutes yet.','cal.code':'Code','cal.codeTitre':'Private game code (home team)','gardiens.ajouter':'+ Add a goalie','jo.equipe.remp':'🔁 Substitute (no team)','box.remp.choisir':'— Add a substitute —','box.remp.btn':'+ Add','box.remp.deja':'This player is already in the match sheet.','box.remp.retirer':'Remove this substitute from the game','box.remp.retirerCourt':'Remove from game','box.remp.retirerConfirm':'Remove {n} from the game? The goals and assists entered will be lost.','pm.btn':'🔄 Recalculate +/- for all games','pm.titre':'+/- recalculation','pm.remplis':'Missing +/- filled','pm.lignes':'line(s)','pm.rafraichis':'Automatic +/- refreshed','pm.pasTouche':'Never touched: forfeits, goalies, and +/- you typed by hand.','pm.confirm1':'Apply?','pm.rien':'Nothing to do: every +/- is already up to date. ✅','pm.ecarts':'EA line(s) have a +/- different from the team goal difference.','pm.confirm2':'Replace them too with the goal difference? (Cancel = keep EA numbers.)','pm.fait':'game(s) updated.','cl.forme':'Last 5','cl.serie':'Streak','cl.formeTitre':'Last 5 games (W = win, L = loss, OT = overtime loss)','et.titre':'⭐ Stars of the night','et.dern':'Stars of the last night','et.vide':'Stars will appear after the first night.','et.arrets':'saves','et.blanchi':'shutout','et.aide':'Automatic scoring: skater = 3 per goal + 2 per assist; goalie = 0.4 per save − 1.5 per goal against (+4 for a shutout). Forfeits do not count.','duel.titre':'⚔️ Head-to-head','duel.choisir':'Pick two teams to see their record.','duel.aucun':'These two teams have not met yet.','duel.egal':'{a} and {b}: tied {n}-{n}','duel.mene':'{x} leads {n} against {y}','duel.buts':'goals','ep.masse':'Payroll','ep.masseNon':'Salaries not entered yet.','ep.dispo':'{n} M$ of room','ep.depasse':'{n} M$ over the cap','ep.gardien':'Starting goalie','ep.gardienNon':'No goalie.','ep.prochain':'Next game','ep.prochainNon':'No game scheduled.','ep.vs':'hosts','ep.chez':'visits','ep.duels':'Record vs each team','match.scoreDom':'Home score (optional)','match.scoreExt':'Away score (optional)','match.scoreAide':'EA advanced stats are kept when you edit a match. Fill BOTH score boxes only to force an exact score. Each player\'s +/- is calculated automatically (his team\'s goal difference), unless you type it in 📊.','box.note':'The score is calculated from goals. Check the players who played.',
     'gardiens.vide.t':'🥅 In the works','gardiens.vide.s':'Goalie stats will show up after the first games.',
     'gd.pj':'GP','gd.v':'W','gd.d':'L','gd.bl':'SO','gd.bc':'GA','gd.moy':'GAA','st.tirs':'S','st.tirs.l':'Shots','st.pctTirs':'S%','st.pctTirs.l':'Shooting %','st.hits':'HIT','st.hits.l':'Hits','st.bloques':'BLK','st.bloques.l':'Blocked shots','st.maj':'FO%','st.maj.l':'Faceoff %','st.passes':'P%','st.passes.l':'Pass %','st.pim':'PIM','st.pim.l':'Penalty minutes','st.tg':'TOI','st.tg.l':'Avg time on ice','st.arr':'SV','st.arr.l':'Saves','st.tirsRecus':'SA','st.tirsRecus.l':'Shots against','st.eff':'SV%','st.eff.l':'Save % (909 = .909)','st.echap':'BRK','st.echap.l':'Breakaway saves','st.pen':'PS','st.pen.l':'Penalty shot saves','st.desesp':'DSV','st.desesp.l':'Desperation saves','st.poke':'PK','st.poke.l':'Poke checks','st.avancees':'📊 Advanced stats','st.avancees.vide':'Advanced stats will appear after the first EA import.','st.tirsL':'Most shots','st.hitsL':'Most hits','st.bloquesL':'Most blocked shots','st.pmL':'Best +/-','st.majL':'Faceoff % (min. 10)','st.passL':'Pass % (min. 20)','st.volesL':'Most takeaways','st.tgL':'Time on ice / game','gardien.modal.titre':'Goalie stats',
     'jo.pos':'POS','jo.joueur':'Player','jo.b':'G','jo.a':'A','joueur.stats':'Statistics'
@@ -2266,7 +2300,7 @@ let snapEquipes = null;
 function initEquipes(){
   // Lecture en temps réel : se synchronise entre tous les admins connectés
   db.collection('equipes').orderBy('nom').onSnapshot(snap => {
-    snapEquipes = snap; rendreEquipes();
+    snapEquipes = snap; rendreEquipes(); try{ rendreDuel(); rendreEtoiles(); }catch(e){ console.error(e); }
     if(typeof appliquerRoles === 'function') appliquerRoles();  // rafraîchit bannière DG + droits joueurs
     if(typeof rendreClassements === 'function') rendreClassements();  // le classement dépend des équipes
   }, err => {
@@ -2497,7 +2531,7 @@ function escapeHtml(s){
 
 function initJoueurs(){
   db.collection('joueurs').orderBy('nom').onSnapshot(snap => {
-    snapJoueurs = snap; rendreJoueurs();
+    snapJoueurs = snap; rendreJoueurs(); try{ rendreEtoiles(); }catch(e){ console.error(e); }
     if(typeof rendreGardiens === 'function') rendreGardiens();
   }, err => {
     const c = document.getElementById('joueurs-list');
@@ -2867,6 +2901,8 @@ function initMatchs(){
     sur('Joueurs', () => { if(typeof rendreJoueurs === 'function') rendreJoueurs(); });           // stats joueurs = somme des matchs
     sur('Gardiens', () => { if(typeof rendreGardiens === 'function') rendreGardiens(); });        // stats gardiens = somme des matchs
     sur('Accueil', () => { if(typeof rendreAccueilLive === 'function') rendreAccueilLive(); });
+    sur('Étoiles', rendreEtoiles);
+    sur('Duel', rendreDuel);
   }, err => {
     const c = document.getElementById('resultats-list');
     if(c) c.innerHTML = videHTML(ico('warning'), t('err.connexion'), err.message);
@@ -3612,9 +3648,184 @@ function ouvrirProfilEquipe(eqId){
         + '<a class="lien-eq" onclick="fermerProfilEquipe();ouvrirProfilJoueur(\'' + r.id + '\')">' + escapeHtml(r.nom) + '</a>'
         + '<span class="dt-stat"><b>' + r.b + 'B</b> · ' + r.a + 'A · ' + r.pts + ' ' + t('cl.pts').toLowerCase() + '</span></div>').join('')
     : '<div class="je-vide">' + t('joueurs.equipevide') + '</div>';
+  completerProfilEquipe(eqId, roster);
   document.getElementById('modale-equipe-profil').classList.add('open');
 }
 function fermerProfilEquipe(){ document.getElementById('modale-equipe-profil').classList.remove('open'); }
+
+/* =========================================================
+   ÉTOILES DE LA SOIRÉE · DUEL · MASSE SALARIALE (calculés automatiquement des matchs)
+   ========================================================= */
+const PLAFOND_SALARIAL = 34;   // M$
+/* Barème des étoiles :
+   patineur = 3 par but + 2 par passe ; gardien = 0,4 par arrêt − 1,5 par but alloué (+4 si blanchissage).
+   Les forfaits ne comptent pas (stats fictives). Un joueur qui joue plusieurs games le même soir additionne. */
+const ETOILE_BUT = 3, ETOILE_PASSE = 2, ETOILE_ARRET = 0.4, ETOILE_BUT_ALLOUE = 1.5, ETOILE_BLANCHI = 4;
+
+function dateSoireeMatch(m){
+  const enDate = sec => new Intl.DateTimeFormat('en-CA', {timeZone:'America/Toronto', year:'numeric', month:'2-digit', day:'2-digit'}).format(new Date(sec * 1000));
+  if(+m.eaTs) return enDate(+m.eaTs);
+  if(m.calId && snapCal){ let r = ''; snapCal.forEach(d => { if(d.id === m.calId) r = d.data().date || ''; }); if(r) return r; }
+  const c = m.createdAt, sec = c && (c.seconds || (c.toMillis && c.toMillis() / 1000));
+  return sec ? enDate(sec) : '';
+}
+function docJoueurParId(pid){ let r = null; if(snapJoueurs) snapJoueurs.forEach(d => { if(d.id === pid) r = d.data(); }); return r; }
+
+/* Retourne [{date, etoiles:[{pid,nom,eqId,score,b,a,arr,tirs,ga,gardien,blanchi}]}] du plus récent au plus ancien */
+function calculerEtoiles(){
+  const soirees = {};
+  if(!snapMatchs) return [];
+  snapMatchs.forEach(d => {
+    const m = d.data();
+    if(m.forfait) return;
+    const date = dateSoireeMatch(m);
+    if(!date) return;
+    const S = soirees[date] = soirees[date] || {};
+    (m.lignes || []).forEach(l => {
+      if(!l || !l.pid) return;
+      const x = S[l.pid] = S[l.pid] || {pid:l.pid, eqId:l.eqId, score:0, b:0, a:0, arr:0, tirs:0, ga:0, nbGardien:0, nbPatineur:0, blanchi:0};
+      if(estLigneGardien(l)){
+        const arr = +l.arr || 0, tirs = +l.tirs || 0, ga = Math.max(0, tirs - arr);
+        const contre = (l.eqId === m.domId) ? (+m.butsExt || 0) : (+m.butsDom || 0);
+        const bl = (contre === 0 && tirs > 0) ? 1 : 0;
+        x.arr += arr; x.tirs += tirs; x.ga += ga; x.blanchi += bl; x.nbGardien++;
+        x.score += arr * ETOILE_ARRET - ga * ETOILE_BUT_ALLOUE + bl * ETOILE_BLANCHI;
+      } else {
+        const b = +l.b || 0, a = +l.a || 0;
+        x.b += b; x.a += a; x.nbPatineur++;
+        x.score += b * ETOILE_BUT + a * ETOILE_PASSE;
+      }
+    });
+  });
+  return Object.keys(soirees).sort().reverse().map(date => {
+    const liste = Object.values(soirees[date]).filter(x => x.score > 0).map(x => {
+      const j = docJoueurParId(x.pid) || {};
+      return Object.assign(x, {nom: j.nom || '?', gardien: x.nbGardien > x.nbPatineur});
+    });
+    liste.sort((p, q) => q.score - p.score || q.b - p.b || q.arr - p.arr);
+    return {date, etoiles: liste.slice(0, 3)};
+  }).filter(s => s.etoiles.length);
+}
+function htmlEtoilesSoiree(s, compact){
+  const lignes = s.etoiles.map((x, i) => {
+    const eq = trouverEquipeParId(x.eqId) || {};
+    const stat = x.gardien
+      ? '🥅 ' + x.arr + ' ' + t('et.arrets') + (x.tirs ? ' · ' + (x.arr / x.tirs).toFixed(3).replace(/^0/, '') : '') + (x.blanchi ? ' · ' + t('et.blanchi') : '')
+      : x.b + ' ' + t('jo.b') + ' · ' + x.a + ' ' + t('jo.a');
+    return '<div class="et-row et-' + (i + 1) + '"><span class="et-star">' + '⭐'.repeat(3 - i) + '</span>'
+      + '<a class="lien-eq et-nom" onclick="ouvrirProfilJoueur(\'' + x.pid + '\')">' + escapeHtml(x.nom) + '</a>'
+      + '<span class="et-eq">' + escapeHtml(eq.nom || '') + '</span>'
+      + '<span class="et-stat">' + stat + '</span></div>';
+  }).join('');
+  return '<div class="et-soiree"><div class="et-date">' + escapeHtml(formaterDateCal(s.date)) + '</div>' + lignes + '</div>';
+}
+function rendreEtoiles(){
+  const soirees = calculerEtoiles();
+  const vide = '<div class="je-vide">' + t('et.vide') + '</div>';
+  const L = document.getElementById('etoiles-list');
+  if(L){
+    L.innerHTML = soirees.length
+      ? htmlEtoilesSoiree(soirees[0]) + soirees.slice(1).map(s => '<details class="et-plus"><summary>' + escapeHtml(formaterDateCal(s.date)) + ' · ' + escapeHtml(s.etoiles[0].nom) + ' ⭐</summary>' + htmlEtoilesSoiree(s) + '</details>').join('')
+        + '<div class="et-aide">' + t('et.aide') + '</div>'
+      : vide;
+  }
+  const H = document.getElementById('live-etoiles');
+  if(H) H.innerHTML = soirees.length ? htmlEtoilesSoiree(soirees[0]) : vide;
+}
+
+/* ----- Duel : bilan des confrontations entre deux équipes ----- */
+function bilanDuel(idA, idB){
+  const r = {a:0, b:0, butsA:0, butsB:0, liste:[]};
+  if(!snapMatchs) return r;
+  snapMatchs.forEach(d => {
+    const m = d.data();
+    const ab = (m.domId === idA && m.extId === idB), ba = (m.domId === idB && m.extId === idA);
+    if(!ab && !ba) return;
+    const gA = ab ? (+m.butsDom || 0) : (+m.butsExt || 0), gB = ab ? (+m.butsExt || 0) : (+m.butsDom || 0);
+    if(gA === gB) return;
+    r.butsA += gA; r.butsB += gB;
+    if(gA > gB) r.a++; else r.b++;
+    r.liste.push({id:d.id, gA, gB, ot:!!m.prolongation, date:dateSoireeMatch(m)});
+  });
+  r.liste.sort((x, y) => String(y.date).localeCompare(String(x.date)));
+  return r;
+}
+function rendreDuel(){
+  const sA = document.getElementById('duel-a'), sB = document.getElementById('duel-b'), out = document.getElementById('duel-res');
+  if(!sA || !sB || !out || !snapEquipes) return;
+  const eqs = []; snapEquipes.forEach(d => eqs.push({id:d.id, nom:d.data().nom || ''}));
+  eqs.sort((x, y) => x.nom.localeCompare(y.nom));
+  const opts = sel => '<option value="">—</option>' + eqs.map(e => '<option value="' + e.id + '"' + (e.id === sel ? ' selected' : '') + '>' + escapeHtml(e.nom) + '</option>').join('');
+  const va = sA.value, vb = sB.value;
+  sA.innerHTML = opts(va); sB.innerHTML = opts(vb);
+  if(!va || !vb || va === vb){ out.innerHTML = '<div class="je-vide">' + t('duel.choisir') + '</div>'; return; }
+  const A = trouverEquipeParId(va) || {}, B = trouverEquipeParId(vb) || {};
+  const r = bilanDuel(va, vb);
+  if(!r.liste.length){ out.innerHTML = '<div class="je-vide">' + t('duel.aucun') + '</div>'; return; }
+  const titre = r.a === r.b ? t('duel.egal').replace('{a}', escapeHtml(A.nom)).replace('{b}', escapeHtml(B.nom)) .replace('{n}', r.a)
+    : (r.a > r.b ? t('duel.mene').replace('{x}', escapeHtml(A.nom)).replace('{y}', escapeHtml(B.nom)).replace('{n}', r.a + '-' + r.b)
+                 : t('duel.mene').replace('{x}', escapeHtml(B.nom)).replace('{y}', escapeHtml(A.nom)).replace('{n}', r.b + '-' + r.a));
+  out.innerHTML = '<div class="duel-titre">' + titre + '</div>'
+    + '<div class="duel-buts">' + escapeHtml(A.nom) + ' ' + r.butsA + ' ' + t('duel.buts') + ' · ' + escapeHtml(B.nom) + ' ' + r.butsB + ' ' + t('duel.buts') + '</div>'
+    + r.liste.map(x => '<a class="duel-game" onclick="ouvrirDetail(\'' + x.id + '\')"><span>' + escapeHtml(formaterDateCal(x.date)) + '</span><b>' + escapeHtml(A.nom) + ' ' + x.gA + ' - ' + x.gB + ' ' + escapeHtml(B.nom) + '</b>' + (x.ot ? ' <em>' + t('cl.proAbbr') + '</em>' : '') + '</a>').join('');
+}
+
+/* ----- Ajouts à la fiche d'équipe : masse salariale, gardien partant, prochain match, bilan vs chaque adversaire ----- */
+function completerProfilEquipe(eqId, roster){
+  const el = id => document.getElementById(id);
+  // Masse salariale
+  let masse = 0, nbSal = 0;
+  if(snapJoueurs) snapJoueurs.forEach(d => { const j = d.data(); if(j.equipeId !== eqId || estRemplacant(j)) return; const s = Number(j.salaire); if(!isNaN(s) && j.salaire !== undefined && j.salaire !== null && j.salaire !== ''){ masse += s; nbSal++; } });
+  const M = el('ep-masse');
+  if(M){
+    if(!nbSal){ M.innerHTML = '<div class="je-vide">' + t('ep.masseNon') + '</div>'; }
+    else {
+      const pct = Math.min(100, Math.round(masse / PLAFOND_SALARIAL * 100)), reste = PLAFOND_SALARIAL - masse;
+      M.innerHTML = '<div class="masse-top"><b>' + masse + ' / ' + PLAFOND_SALARIAL + ' M$</b><span class="' + (reste < 0 ? 'masse-neg' : '') + '">' + (reste >= 0 ? t('ep.dispo').replace('{n}', reste) : t('ep.depasse').replace('{n}', -reste)) + '</span></div>'
+        + '<div class="masse-barre"><i class="' + (reste < 0 ? 'masse-rouge' : '') + '" style="width:' + pct + '%"></i></div>';
+    }
+  }
+  // Gardien partant = celui qui a le plus de games dans les buts (sinon un gardien « G » de l'alignement)
+  const G = el('ep-gardien');
+  if(G){
+    const gs = (roster || []).filter(r => r.gardien).map(r => Object.assign({}, r, {g: statsGardien(r.id)})).sort((p, q) => q.g.pj - p.g.pj);
+    if(!gs.length) G.innerHTML = '<div class="je-vide">' + t('ep.gardienNon') + '</div>';
+    else {
+      const g = gs[0], pct = g.g.tirs ? ' · ' + (g.g.arr / g.g.tirs).toFixed(3).replace(/^0/, '') : '';
+      G.innerHTML = '<div class="dt-row"><span class="jr-pos2">🥅</span><a class="lien-eq" onclick="fermerProfilEquipe();ouvrirProfilJoueur(\'' + g.id + '\')">' + escapeHtml(g.nom) + '</a><span class="dt-stat">' + g.g.pj + ' ' + t('cl.pj') + pct + '</span></div>';
+    }
+  }
+  // Prochain match
+  const P = el('ep-prochain');
+  if(P){
+    const m = calAVenir().find(x => x.domId === eqId || x.extId === eqId);
+    if(!m) P.innerHTML = '<div class="je-vide">' + t('ep.prochainNon') + '</div>';
+    else {
+      const dom = (m.domId === eqId), adv = dom ? m.extNom : m.domNom, code = codeGameDe(m.domId);
+      P.innerHTML = '<div class="dt-row"><span class="jr-pos2">📅</span><span>' + escapeHtml(formaterDateCal(m.date)) + (m.heure ? ' · ' + escapeHtml(m.heure) : '') + ' — ' + (dom ? '🏠 ' + t('ep.vs') : '✈️ ' + t('ep.chez')) + ' <b>' + escapeHtml(adv || '') + '</b></span>'
+        + '<span class="dt-stat">' + (code ? t('cal.code') + ' <b>' + code + '</b>' : '') + '</span></div>';
+    }
+  }
+  // Bilan contre chaque adversaire
+  const D = el('ep-duels');
+  if(D){
+    const adv = {};
+    if(snapMatchs) snapMatchs.forEach(d => {
+      const m = d.data();
+      if(m.domId !== eqId && m.extId !== eqId) return;
+      const dom = (m.domId === eqId), oid = dom ? m.extId : m.domId;
+      const pour = dom ? (+m.butsDom || 0) : (+m.butsExt || 0), contre = dom ? (+m.butsExt || 0) : (+m.butsDom || 0);
+      if(pour === contre || !equipeExiste(oid)) return;
+      const x = adv[oid] = adv[oid] || {v:0, d:0, bp:0, bc:0};
+      if(pour > contre) x.v++; else x.d++;
+      x.bp += pour; x.bc += contre;
+    });
+    const ids = Object.keys(adv).sort((p, q) => (adv[q].v + adv[q].d) - (adv[p].v + adv[p].d));
+    D.innerHTML = ids.length ? ids.map(oid => { const o = trouverEquipeParId(oid) || {}, x = adv[oid];
+      return '<div class="dt-row"><span class="jr-pos2"></span><span>' + escapeHtml(o.nom || '') + '</span><span class="dt-stat"><b class="' + (x.v > x.d ? 'duel-v' : (x.v < x.d ? 'duel-d' : '')) + '">' + x.v + '-' + x.d + '</b> · ' + x.bp + '-' + x.bc + '</span></div>'; }).join('')
+      : '<div class="je-vide">' + t('profil.aucunMatch') + '</div>';
+  }
+}
 
 /* =========================================================
    10f) ACCUEIL VIVANT (derniers résultats / prochains / meneurs)
@@ -4020,7 +4231,7 @@ function confirmerImport(){
 let snapCal = null, calEnEdition = null;
 function initCalendrier(){
   db.collection('calendrier').orderBy('date','asc').onSnapshot(snap => {
-    snapCal = snap; rendreCalendrier();
+    snapCal = snap; rendreCalendrier(); try{ rendreEtoiles(); }catch(e){ console.error(e); }
   }, err => {
     const c = document.getElementById('calendrier-list');
     if(c) c.innerHTML = videHTML(ico('warning'), t('err.connexion'), err.message);
