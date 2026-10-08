@@ -2772,7 +2772,7 @@ function verrouillerEquipeSiDG(){
 }
 
 function ouvrirJoueur(id){
-  if(!id && !estAdmin){ alert(t('err.adminSeul')); return; }   // seul l'admin ajoute des joueurs
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }   // seul l'admin ajoute ou modifie des joueurs
   joueurEnEdition = id || null;
   remplirSelectEquipes();
   document.getElementById('jo-modal-titre').textContent = id ? t('joueur.modal.modifier') : t('joueur.modal.nouveau');
@@ -2797,8 +2797,7 @@ function ouvrirJoueur(id){
 function fermerJoueur(){ document.getElementById('modale-joueur').classList.remove('open'); }
 
 function sauverJoueur(){
-  if(!estAdmin && !dgTeamId){ alert(t('err.adminSeul')); return; }
-  if(!estAdmin && !joueurEnEdition){ alert(t('err.adminSeul')); return; }   // un DG peut modifier, pas ajouter
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }   // seul l'admin ajoute ou modifie des joueurs
   const nom = document.getElementById('jo-nom').value.trim();
   const choixEquipe = document.getElementById('jo-equipe').value;
   const estRemp = (choixEquipe === '__remp__');
@@ -4290,8 +4289,8 @@ function celluleJoueur(j, eq, extra){
     + '<span><b>' + escapeHtml(j.nom || '') + '</b>' + (extra || '') + '<small>' + escapeHtml(eq.nom || t('jo.filtreRemp')) + '</small></span></a></td>';
 }
 function boutonsEdition(j){
-  const peut = estRemplacant(j) ? !!estAdmin : peutEditerEquipe(j.equipeId);
-  if(!(estAdmin || dgTeamId)) return '';
+  const peut = !!estAdmin;                       // modifier / supprimer un joueur : admin seulement
+  if(!estAdmin) return '';
   return '<td>' + (peut ? '<span class="jr-actions"><button class="btn-mini" onclick="ouvrirJoueur(\'' + j.id + '\')">' + t('btn.modifier') + '</button>'
     + (estAdmin ? '<button class="del-btn" onclick="supprimerJoueur(\'' + j.id + '\')">' + t('btn.supprimer') + '</button>' : '') + '</span>' : '') + '</td>';
 }
@@ -4331,12 +4330,12 @@ function rendreJoueursPhase(){
     + thTri('hits', t('st.hits'), t('st.hits.l'), T, fn) + thTri('bloques', t('st.bloques'), t('st.bloques.l'), T, fn)
     + thTri('majPct', t('st.maj'), t('st.maj.l'), T, fn) + thTri('passPct', t('st.passes'), t('st.passes.l'), T, fn)
     + thTri('pim', t('st.pim'), t('st.pim.l'), T, fn) + thTri('tgMoy', t('st.tg'), t('st.tg.l'), T, fn)
-    + ((estAdmin || dgTeamId) ? '<th></th>' : '') + '</tr></thead><tbody>';
+    + (estAdmin ? '<th></th>' : '') + '</tr></thead><tbody>';
   let rangJ = 0, sepJ = false;
   liste.forEach((j, i) => {
     const eq = j.remp ? {} : (trouverEquipeParId(j.equipeId) || {});
     const s = j.s, q = qualifJ(j);
-    if(!q && !sepJ){ sepJ = true; html += '<tr class="st-sep"><td colspan="' + ((estAdmin || dgTeamId) ? 16 : 15) + '">' + t(catJ.minTxt) + '</td></tr>'; }
+    if(!q && !sepJ){ sepJ = true; html += '<tr class="st-sep"><td colspan="' + (estAdmin ? 16 : 15) + '">' + t(catJ.minTxt) + '</td></tr>'; }
     rangJ++;
     html += '<tr' + (s.pj === 0 ? ' class="st-zero"' : '') + '><td class="cl-rang">' + (q ? rangJ : '–') + '</td>' + celluleJoueur(j, eq, j.gard ? ' <span class="badge-g" title="Gardien">🥅</span>' : '')
       + '<td>' + s.pj + '</td><td>' + s.b + '</td><td>' + s.a + '</td><td class="cl-pts">' + s.pts + '</td>'
@@ -4379,7 +4378,7 @@ function rendreGardiensPhase(){
     const c = (typeof va === 'string') ? va.localeCompare(vb) : (va - vb);
     return (triG.desc ? -c : c) || (b.g.pj - a.g.pj) || (a.nom || '').localeCompare(b.nom || '');
   });
-  const fn = 'trierGardiens', T = triG, colEd = (estAdmin || dgTeamId);
+  const fn = 'trierGardiens', T = triG, colEd = !!estAdmin;
   let html = '<div class="gd-wrap st-wrap"><table class="gd-table st-table"><thead><tr><th>#</th>' + thTri('nom', t('et.colGardien'), '', T, fn).replace('<th class="', '<th class="cl-eq st-nom ')
     + thTri('pj', t('gd.pj'), '', T, fn) + thTri('v', t('gd.v'), '', T, fn) + thTri('dd', t('gd.d'), '', T, fn) + thTri('dp', t('cl.dp'), '', T, fn)
     + thTri('bl', t('gd.bl'), '', T, fn) + thTri('pct', t('gd.arrpct'), '', T, fn) + thTri('moy', t('gd.moy'), '', T, fn) + (colEd ? '<th></th>' : '') + '</tr></thead><tbody>';
