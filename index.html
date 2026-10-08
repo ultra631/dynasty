@@ -254,7 +254,8 @@ textarea{resize:vertical;min-height:90px}
 /* ===== Modale admin ===== */
 .modal{position:fixed;inset:0;z-index:100;display:none;place-items:center;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);padding:20px}
 .modal.open{display:grid}
-.modal-box{background:var(--charbon);border:1px solid var(--or);border-radius:18px;padding:26px;max-width:340px;width:100%;text-align:center}
+.modal-box{background:var(--charbon);border:1px solid var(--or);border-radius:18px;padding:26px;max-width:340px;width:100%;text-align:center;max-height:calc(100vh - 40px);max-height:calc(100dvh - 40px);overflow-y:auto;-webkit-overflow-scrolling:touch}
+.modal-x{position:sticky;top:-14px;float:right;z-index:3;margin:-12px -12px 0 0;width:34px;height:34px;border-radius:50%;border:1px solid var(--or);background:var(--charbon);color:var(--or);font-size:18px;line-height:1;cursor:pointer}
 .modal-box h3{font-family:'Cinzel',serif;color:var(--or);margin-bottom:6px}
 .modal-box p{font-size:13px;color:var(--texte-doux);margin-bottom:16px}
 .modal-box .err{color:var(--rouge-clair);font-size:13px;min-height:18px;margin-bottom:6px}
@@ -1505,7 +1506,7 @@ a.live-row:hover{background:rgba(212,175,55,.06)}
 </div>
 
 <!-- ============================ MODALE PROFIL JOUEUR ============================ -->
-<div class="modal" id="modale-profil">
+<div class="modal" id="modale-profil" onclick="if(event.target===this)fermerProfil()">
   <div class="modal-box" style="max-width:540px;text-align:left">
     <div class="pf-head">
       <div class="pf-avatar" id="pf-avatar">?</div>
@@ -1524,8 +1525,9 @@ a.live-row:hover{background:rgba(212,175,55,.06)}
 </div>
 
 <!-- ============================ MODALE PROFIL ÉQUIPE ============================ -->
-<div class="modal" id="modale-equipe-profil">
+<div class="modal" id="modale-equipe-profil" onclick="if(event.target===this)fermerProfilEquipe()">
   <div class="modal-box" style="max-width:560px;text-align:left">
+    <button type="button" class="modal-x" onclick="fermerProfilEquipe()" aria-label="Fermer">✕</button>
     <div class="pf-head">
       <div class="pf-avatar" id="ep-logo">?</div>
       <div class="pf-id">
@@ -1553,7 +1555,7 @@ a.live-row:hover{background:rgba(212,175,55,.06)}
 </div>
 
 <!-- ============================ MODALE DÉTAIL DE MATCH ============================ -->
-<div class="modal" id="modale-detail">
+<div class="modal" id="modale-detail" onclick="if(event.target===this)fermerDetail()">
   <div class="modal-box" style="max-width:600px;text-align:left">
     <h3 class="cinzel" style="text-align:center" data-i18n="detail.titre">Feuille de match</h3>
     <div class="dt-score" id="dt-score"></div>
@@ -2021,7 +2023,7 @@ function toggleGrp(btn){
 document.addEventListener('click', e => {
   if(!e.target.closest('.nav-grp')) document.querySelectorAll('.nav-grp.open').forEach(x => x.classList.remove('open'));
 });
-document.addEventListener('keydown', e => { if(e.key === 'Escape') document.querySelectorAll('.nav-grp.open').forEach(x => x.classList.remove('open')); });
+document.addEventListener('keydown', e => { if(e.key === 'Escape'){ document.querySelectorAll('.nav-grp.open').forEach(x => x.classList.remove('open')); ['modale-equipe-profil','modale-profil','modale-detail'].forEach(id => { const m = document.getElementById(id); if(m) m.classList.remove('open'); }); } });
 
 /* =========================================================
    4) ANNONCES (lecture/écriture en direct)
