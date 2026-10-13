@@ -1814,6 +1814,8 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+/* Cache local (IndexedDB) : quelqu'un qui revient sur le site ne relit que ce qui a changé → beaucoup moins de lectures Firebase */
+try { db.enablePersistence({synchronizeTabs:true}).catch(() => {}); } catch(e){}
 
 /* =========================================================
    0) TRADUCTION (Français / English)
@@ -2139,6 +2141,7 @@ function peutEditerEquipe(equipeId){ return estAdmin || (!!dgTeamId && dgTeamId 
 
 // Applique l'affichage selon le rôle connecté
 function appliquerRoles(){
+  try { if(typeof db !== 'undefined' && _modeCal !== null){ initCalendrier(); initInscriptions(); initInscriptionsGM(); } } catch(e){ console.error(e); }
   document.body.classList.toggle('is-admin', estAdmin);
   document.body.classList.toggle('is-dg', !!dgTeamId);
   const banner = document.getElementById('dg-banner');
@@ -5263,8 +5266,15 @@ function confirmerImport(){
    11) CALENDRIER (matchs à venir)
    ========================================================= */
 let snapCal = null, calEnEdition = null;
+let _desabCal = null, _modeCal = null;
 function initCalendrier(){
-  db.collection('calendrier').orderBy('date','asc').onSnapshot(snap => {
+  const complet = !!estAdmin;                       // l'admin a besoin de tout (charger l'horaire, nettoyer, modifier)
+  if(_desabCal && _modeCal === complet) return;
+  if(_desabCal){ _desabCal(); _desabCal = null; }
+  _modeCal = complet;
+  const hier = new Intl.DateTimeFormat('en-CA', {timeZone:'America/Toronto', year:'numeric', month:'2-digit', day:'2-digit'}).format(new Date(Date.now() - 86400000));
+  const q = complet ? db.collection('calendrier').orderBy('date','asc') : db.collection('calendrier').where('date', '>=', hier).orderBy('date','asc');
+  _desabCal = q.onSnapshot(snap => {
     snapCal = snap; rendreCalendrier(); try{ rendreEtoiles(); rendreMonEquipe(); }catch(e){ console.error(e); }
   }, err => {
     const c = document.getElementById('calendrier-list');
@@ -5506,8 +5516,11 @@ function ouvrirNouveauGardien(){ ouvrirJoueur(); setPositions('jo-positions', 'G
    13) INSCRIPTIONS (formulaire joueur → Firebase ; liste côté admin)
    ========================================================= */
 let snapInsc = null;
+let _desabInsc = null, _desabInscGM = null;
 function initInscriptions(){
-  db.collection('inscriptions').orderBy('createdAt','desc').onSnapshot(snap => {
+  if(!estAdmin){ if(_desabInsc){ _desabInsc(); _desabInsc = null; } return; }   // liste visible seulement par l'admin : pas de lecture pour les visiteurs
+  if(_desabInsc) return;
+  _desabInsc = db.collection('inscriptions').orderBy('createdAt','desc').onSnapshot(snap => {
     snapInsc = snap; rendreInscriptions();
   }, err => {
     const c = document.getElementById('inscriptions-list');
@@ -5518,7 +5531,9 @@ function initInscriptions(){
 /* ===== INSCRIPTIONS GM CONNECTED ===== */
 let snapInscGM = null;
 function initInscriptionsGM(){
-  db.collection('inscriptionsGM').orderBy('createdAt','desc').onSnapshot(snap => {
+  if(!estAdmin){ if(_desabInscGM){ _desabInscGM(); _desabInscGM = null; } return; }
+  if(_desabInscGM) return;
+  _desabInscGM = db.collection('inscriptionsGM').orderBy('createdAt','desc').onSnapshot(snap => {
     snapInscGM = snap; rendreInscriptionsGM();
   }, err => {
     const c = document.getElementById('gmc-list');
