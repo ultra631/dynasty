@@ -4855,10 +4855,11 @@ function htmlEtoilesMatch(m){
 /* ---------- Graphique match par match dans la fiche du joueur (une seule série : pas de légende) ---------- */
 function graphiqueJoueur(pid, modeForce){
   const tous = [];
-  if(snapMatchs) snapMatchs.forEach(d => { const m = d.data(); if(m.forfait) return; const l = (m.lignes || []).find(x => x.pid === pid); if(l) tous.push({m, l}); });
+  /* mêmes matchs que les stats du profil (forfaits inclus, marqués FF) */
+  if(snapMatchs) snapMatchs.forEach(d => { const m = d.data(); const l = (m.lignes || []).find(x => x.pid === pid); if(l) tous.push({m, l}); });
   const crt = m => { const c = m.createdAt; return c ? (c.seconds || (typeof c === 'number' ? c : 0)) : 0; };
   tous.sort((a, b) => String(dateSoireeMatch(a.m)).localeCompare(String(dateSoireeMatch(b.m))) || ((+a.m.eaTs || 0) - (+b.m.eaTs || 0)) || (crt(a.m) - crt(b.m)));
-  const pat = tous.filter(p => !estLigneGardien(p.l)), gar = tous.filter(p => estLigneGardien(p.l) && (+p.l.tirs || 0) > 0);
+  const pat = tous.filter(p => !estLigneGardien(p.l)), gar = tous.filter(p => estLigneGardien(p.l));
   if(!pat.length && !gar.length) return '';
   const mode = modeForce || (gar.length > pat.length ? 'g' : 'p');
   const gardien = mode === 'g', serie = gardien ? gar : pat;
@@ -4866,10 +4867,13 @@ function graphiqueJoueur(pid, modeForce){
   const onglets = (pat.length && gar.length) ? '<div class="st-phase pg-onglets"><button type="button" class="' + (!gardien ? 'on' : '') + '" onclick="changerGraph(\'' + pid + '\',\'p\')">🏒 ' + t('pg.patineur') + ' (' + pat.length + ')</button>'
     + '<button type="button" class="' + (gardien ? 'on' : '') + '" onclick="changerGraph(\'' + pid + '\',\'g\')">🥅 ' + t('pg.gardien') + ' (' + gar.length + ')</button></div>' : '';
   if(!serie.length) return '';
-  const val = p => gardien ? (+p.l.arr || 0) / (+p.l.tirs || 1) : (+p.l.b || 0) + (+p.l.a || 0);
-  const fmt = v => gardien ? v.toFixed(3).replace(/^0/, '') : String(v);
-  const vals = serie.map(val), n = serie.length;
-  const moy = vals.reduce((a, b) => a + b, 0) / n, best = Math.max(...vals);
+  const val = p => gardien ? ((+p.l.tirs || 0) > 0 ? (+p.l.arr || 0) / (+p.l.tirs) : null) : (+p.l.b || 0) + (+p.l.a || 0);
+  const fmt = v => v === null ? '—' : (gardien ? v.toFixed(3).replace(/^0/, '') : String(v));
+  const vals = serie.map(val), n = serie.length, valsOk = vals.filter(v => v !== null);
+  if(!valsOk.length) valsOk.push(0);
+  // Gardien : efficacité = total des arrêts ÷ total des tirs (comme dans les stats), pas la moyenne des matchs
+  const totArr = serie.reduce((a, p) => a + (+p.l.arr || 0), 0), totTirs = serie.reduce((a, p) => a + (+p.l.tirs || 0), 0);
+  const moy = gardien ? (totTirs ? totArr / totTirs : 0) : vals.reduce((a, b) => a + b, 0) / n, best = Math.max(...valsOk);
   const victoires = serie.filter(p => { const dom = p.l.eqId === p.m.domId; return (dom ? +p.m.butsDom : +p.m.butsExt) > (dom ? +p.m.butsExt : +p.m.butsDom); }).length;
   // résumé en tuiles
   const tuiles = '<div class="pg-tuiles">'
@@ -4881,7 +4885,7 @@ function graphiqueJoueur(pid, modeForce){
   const H = 190, padL = 34, padR = 8, padT = 22, padB = 40, W = Math.max(320, Math.min(620, padL + padR + n * 46 + 30));   // largeur selon le nombre de matchs : lisible sur téléphone
   const pasMax = 46, pas = Math.min(pasMax, (W - padL - padR) / n), bw = Math.max(4, Math.min(24, pas * 0.6));
   const x0 = padL + ((W - padL - padR) - pas * n) / 2;
-  const vmax = gardien ? 1 : Math.max(2, Math.ceil(best)), vmin = gardien ? Math.max(0, Math.floor((Math.min(...vals) - 0.05) * 10) / 10) : 0;
+  const vmax = gardien ? 1 : Math.max(2, Math.ceil(best)), vmin = gardien ? Math.max(0, Math.floor((Math.min(...valsOk, moy) - 0.05) * 10) / 10) : 0;
   const y = v => padT + (H - padT - padB) * (1 - (v - vmin) / ((vmax - vmin) || 1));
   const base = H - padB;
   // grille légère : 3 lignes
@@ -4892,10 +4896,10 @@ function graphiqueJoueur(pid, modeForce){
   const etiquettesTous = n <= 14, pasEtiq = Math.ceil(n / 14);
   let barres = '';
   serie.forEach((p, i) => {
-    const v = vals[i], cx = x0 + i * pas + pas / 2, x = cx - bw / 2, yv = y(v), h = Math.max(0, base - yv);
+    const v = vals[i], cx = x0 + i * pas + pas / 2, x = cx - bw / 2, yv = v === null ? base : y(v), h = Math.max(0, base - yv);
     const dom = p.l.eqId === p.m.domId, pour = dom ? +p.m.butsDom || 0 : +p.m.butsExt || 0, contre = dom ? +p.m.butsExt || 0 : +p.m.butsDom || 0, gagne = pour > contre;
     const advId = dom ? p.m.extId : p.m.domId, adv = trouverEquipeParId(advId) || {nom: dom ? p.m.extNom : p.m.domNom};
-    const info = dateMatchTexte(p.m, false) + ' · ' + (langue === 'en' ? 'vs ' : 'c. ') + (adv.nom || '') + ' ' + pour + '-' + contre + (gagne ? ' (V)' : ' (D)') + ' — '
+    const info = dateMatchTexte(p.m, false) + ' · ' + (langue === 'en' ? 'vs ' : 'c. ') + (adv.nom || '') + ' ' + pour + '-' + contre + (gagne ? ' (V)' : ' (D)') + (p.m.forfait ? ' · ' + t('cl.forfaitAbbr') : '') + ' — '
       + (gardien ? (+p.l.arr || 0) + '/' + (+p.l.tirs || 0) + ' (' + fmt(v) + ')' : (+p.l.b || 0) + ' ' + t('jo.b') + ' · ' + (+p.l.a || 0) + ' ' + t('jo.a') + ' = ' + v + ' ' + t('cl.pts').toLowerCase());
     const r = Math.min(4, bw / 2, h);
     const chemin = h > 0.5 ? 'M' + x + ',' + base + 'V' + (yv + r) + 'Q' + x + ',' + yv + ' ' + (x + r) + ',' + yv + 'H' + (x + bw - r) + 'Q' + (x + bw) + ',' + yv + ' ' + (x + bw) + ',' + (yv + r) + 'V' + base + 'Z' : '';
@@ -4904,7 +4908,7 @@ function graphiqueJoueur(pid, modeForce){
       + (chemin ? '<path d="' + chemin + '" class="pg-barre' + (gagne ? '' : ' pg-perdu') + '"/>' : '<rect x="' + x + '" y="' + (base - 2) + '" width="' + bw + '" height="2" class="pg-zero"/>')
       + (n <= 20 ? '<text x="' + cx + '" y="' + (yv - 5) + '" text-anchor="middle" class="pg-val">' + fmt(v) + '</text>' : '')
       + (montrer ? '<text x="' + cx + '" y="' + (base + 13) + '" text-anchor="middle" class="pg-adv">' + escapeHtml(abrevEquipe(adv)) + '</text>'
-        + '<text x="' + cx + '" y="' + (base + 25) + '" text-anchor="middle" class="pg-txt">' + escapeHtml(dateCourte(dateSoireeMatch(p.m))) + '</text>' : '')
+        + '<text x="' + cx + '" y="' + (base + 25) + '" text-anchor="middle" class="pg-txt">' + (p.m.forfait ? 'FF' : escapeHtml(dateCourte(dateSoireeMatch(p.m)))) + '</text>' : '')
       + '<rect x="' + (cx - 3) + '" y="' + (base + 30) + '" width="6" height="3" rx="1.5" class="' + (gagne ? 'pg-pv' : 'pg-pd') + '"/>'
       + '<title>' + escapeHtml(info) + '</title></g>';
   });
