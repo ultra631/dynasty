@@ -946,7 +946,7 @@ a.live-row:hover{background:rgba(212,175,55,.06)}
   align-items:center;justify-content:center;flex:none;overflow:hidden}
 .pf-id h3{margin:0;font-size:20px}
 .pf-sub{display:flex;align-items:center;gap:10px;margin-top:4px;font-size:12.5px;color:var(--texte-doux)}
-.sal-tag{font-style:normal;font-size:11px;font-weight:700;color:#7ee0a0;background:rgba(126,224,160,.1);border:1px solid rgba(126,224,160,.25);padding:0 6px;border-radius:99px;margin-left:4px;white-space:nowrap}
+.sal-tag{display:inline-block;vertical-align:middle;font-style:normal;font-size:10.5px;line-height:15px;font-weight:700;letter-spacing:0;text-transform:none;color:#7ee0a0;background:rgba(126,224,160,.1);border:1px solid rgba(126,224,160,.28);padding:0 6px;border-radius:99px;margin-left:5px;white-space:nowrap}
 .td-sal{color:#7ee0a0;white-space:nowrap}
 .pf-positions{background:rgba(212,175,55,.12);color:var(--or);padding:1px 10px;border-radius:99px;font-size:11px;letter-spacing:.05em}
 .pf-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
@@ -2871,7 +2871,7 @@ function initTrades(){
 function estConcerne(tr){ return !!dgTeamId && (tr.deId === dgTeamId || tr.versId === dgTeamId); }
 
 function listeNoms(arr){
-  return (arr || []).map(p => escapeHtml(p.nom || '')).join(', ') || '—';
+  return (arr || []).map(p => escapeHtml(p.nom || '') + salHTML(p.id)).join(', ') || '—';
 }
 function badgeStatut(s){
   const map = {propose:'statut.propose', accepte_dg:'statut.accepte_dg', approuve:'statut.approuve', refuse:'statut.refuse', contre:'statut.contre'};
@@ -3086,9 +3086,9 @@ function masseApresEchange(eqId, sortants, entrants){
   if(snapJoueurs) snapJoueurs.forEach(d => {
     const j = d.data();
     if(j.equipeId !== eqId || estRemplacant(j) || ids.has(d.id)) return;
-    if(j.salaire !== undefined && j.salaire !== null && j.salaire !== '' && !isNaN(Number(j.salaire))){ masse += Number(j.salaire); nb++; }
+    const sJ = salaireJ(j); if(sJ !== null){ masse += sJ; nb++; }
   });
-  (entrants || []).forEach(p => { const j = trouverJoueurData(p.id); if(j && j.salaire !== undefined && j.salaire !== null && j.salaire !== '' && !isNaN(Number(j.salaire))){ masse += Number(j.salaire); nb++; } });
+  (entrants || []).forEach(p => { const j = trouverJoueurData(p.id); const sJ = salaireJ(j); if(sJ !== null){ masse += sJ; nb++; } });
   return nb ? masse : null;
 }
 function avertissementPlafond(tr){
@@ -3268,7 +3268,7 @@ function rendreMeneurs(){
       const eq = trouverEquipeParId(p.equipeId) || {};
       rows += '<tr class="' + (i===0?'rang-or':i===1?'rang-argent':i===2?'rang-bronze':'') + '">'
         + '<td class="cl-rang">' + (i+1) + '</td>'
-        + '<td class="cl-eq"><a class="lien-eq" onclick="ouvrirProfilJoueur(\'' + p.id + '\')">' + eqVisuel(eq, 20) + '<span>' + escapeHtml(p.nom) + '</span></a></td>'
+        + '<td class="cl-eq"><a class="lien-eq" onclick="ouvrirProfilJoueur(\'' + p.id + '\')">' + eqVisuel(eq, 20) + '<span>' + escapeHtml(p.nom) + salHTML(p.id) + '</span></a></td>'
         + '<td>' + p.pj + '</td><td>' + p.b + '</td><td>' + p.a + '</td><td class="cl-pts">' + p.pts + '</td></tr>';
     });
     cont.innerHTML = '<div class="cl-wrap"><table class="cl-table"><thead><tr>'
@@ -3283,7 +3283,7 @@ function rendreMeneurs(){
       const eq = trouverEquipeParId(g.equipeId) || {};
       rows += '<tr class="' + (i===0?'rang-or':i===1?'rang-argent':i===2?'rang-bronze':'') + '">'
         + '<td class="cl-rang">' + (i+1) + '</td>'
-        + '<td class="cl-eq"><a class="lien-eq" onclick="ouvrirProfilJoueur(\'' + g.id + '\')">' + eqVisuel(eq, 20) + '<span>' + escapeHtml(g.nom) + '</span></a></td>'
+        + '<td class="cl-eq"><a class="lien-eq" onclick="ouvrirProfilJoueur(\'' + g.id + '\')">' + eqVisuel(eq, 20) + '<span>' + escapeHtml(g.nom) + salHTML(g.id) + '</span></a></td>'
         + '<td>' + g.pj + '</td><td>' + g.v + '</td><td>' + g.bl + '</td><td>' + g.arr + '</td><td>' + g.tirs + '</td><td>' + (g.arrEA || '—') + '</td><td class="cl-pts">' + g.moy + '</td>'
         + '<td>' + g.arrEchap + '/' + g.tirsEchap + '</td><td>' + g.arrPen + '/' + g.tirsPen + '</td><td>' + g.arrDesesp + '</td><td>' + g.pokechecks + '</td></tr>';
     });
@@ -3311,7 +3311,7 @@ function rendreStatsAvancees(){
     let rows = '';
     liste.slice(0,5).forEach((p,i) => { const eq = trouverEquipeParId(p.equipeId)||{};
       rows += '<tr class="' + (i===0?'rang-or':i===1?'rang-argent':i===2?'rang-bronze':'') + '"><td class="cl-rang">' + (i+1) + '</td>'
-        + '<td class="cl-eq"><a class="lien-eq" onclick="ouvrirProfilJoueur(\'' + p.id + '\')">' + eqVisuel(eq,18) + '<span>' + escapeHtml(p.nom) + '</span></a></td>'
+        + '<td class="cl-eq"><a class="lien-eq" onclick="ouvrirProfilJoueur(\'' + p.id + '\')">' + eqVisuel(eq,18) + '<span>' + escapeHtml(p.nom) + salHTML(p.id) + '</span></a></td>'
         + '<td class="cl-pts">' + val(p) + '</td></tr>'; });
     return '<div class="sa-carte"><div class="sa-titre">' + ico + ' ' + titre + '</div><table class="cl-table sa-table"><tbody>' + rows + '</tbody></table></div>';
   };
@@ -3799,7 +3799,7 @@ function detailCote(m, eqId){
     } else {
       statTxt = '<b>' + (+l.b||0) + 'B</b> · ' + (+l.a||0) + 'A';
     }
-    html += '<div class="dt-row"><a class="lien-eq" onclick="fermerDetail();ouvrirProfilJoueur(\'' + l.pid + '\')">' + escapeHtml(nom) + '</a><span class="dt-stat">' + statTxt + '</span></div>';
+    html += '<div class="dt-row"><a class="lien-eq" onclick="fermerDetail();ouvrirProfilJoueur(\'' + l.pid + '\')">' + escapeHtml(nom) + salHTML(l.pid) + '</a><span class="dt-stat">' + statTxt + '</span></div>';
   });
   return html;
 }
@@ -3808,10 +3808,24 @@ function fermerDetail(){ document.getElementById('modale-detail').classList.remo
 /* =========================================================
    10d) PROFIL JOUEUR
    ========================================================= */
-/* Salaire d'un joueur (en M$) — null si pas entré */
+/* Salaires du repêchage (Saison 1) — utilisés quand le joueur n'a pas de salaire entré dans le site.
+   Un salaire entré dans le site (Modifier un joueur) a toujours priorité. */
+const SALAIRES_REPECHAGE = {"ASSELINOO": 7, "Azgod_02": 5, "B3GNØCH3": 1, "BigShot 899687": 3, "Bxnenfant": 7, "Carlcoreqc": 1, "Clapped by9179": 3, "Clutch98Qc": 3, "Cmplxcty": 9, "ComaTikss70": 1, "Dangles x 91": 3, "Darkjoe78": 3, "Demidxv x 93": 3, "Dodo x L31L": 1, "Dxnut__": 1, "eric74robert": 1, "FireStar QC": 3, "Fkco": 9, "FL_ULTRA-": 5, "Hardy i27i": 5, "I AAAAAA I": 3, "IIcasseauII33": 3, "Israsaucier": 7, "Jaimelemou-": 9, "JoPascaleQC3": 5, "Kaizen x 96": 7, "KxshhNHL": 7, "L notmad l": 7, "l vaklex l": 3, "LA CALÈCHE I": 7, "La-_-Coquina": 3, "LCHQ Titou05": 3, "Le shérif 4": 5, "Lxnctot": 5, "Malekx94": 9, "Mamanetore": 3, "McKenna x72x": 5, "Mxxch1x": 1, "N0rmy I96I": 5, "OhPresTs": 5, "Pat-alias-poulin": 3, "Pellty I18I": 3, "Qc famous777": 5, "Qc SpitFire89": 7, "Slyr_chucky": 7, "SpaceLtm": 3, "Swayman": 3, "Swmpyy": 5, "Tanguay l40l": 7, "The_Chad_is_gr8": 3, "thebeastjes": 3, "Thxmpson x48": 5, "Tr-xAssassiNx-Qc": 3, "UNFAZED_QC": 5, "vuftr": 5, "Woodzz I56I": 9, "XX_Fowler_32xx": 3, "XxCrosbyQcxX": 3, "XxfroadenxX": 3, "XxHutson48xX": 3, "XxSlim x 11": 3, "Zkxviiperz": 1, "comcocmbrokam": 1, "Alexi_Hockey": 1, "Volk4rius_": 5, "iR0sty": 9, "Thewall12322": 1, "Easy-_-MoneyGang": 1, "Kraax": 9, "McXpicher": 5, "Creepy": 7, "Xirox_88": 3, "xLapss": 5, "yeetmasterkeith": 1, "Bolducx76x": 5, "Mxdness": 5, "Orgenote7940427": 3, "Loobzz": 5, "BoostGreecy": 5, "I kylzee i": 7, "CrazyPelt x 18": 3, "Jess guns": 3, "XxColdAimxX": 3};
+let _salRep = null;
+function _cleSal(s){ return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, ''); }
+/* Salaire d'un joueur (en M$) — null si inconnu */
 function salaireJ(j){
-  if(!j || j.salaire === undefined || j.salaire === null || j.salaire === '' || isNaN(Number(j.salaire))) return null;
-  return Number(j.salaire);
+  if(!j) return null;
+  if(j.salaire !== undefined && j.salaire !== null && j.salaire !== '' && !isNaN(Number(j.salaire))) return Number(j.salaire);
+  if(!_salRep){ _salRep = {}; Object.keys(SALAIRES_REPECHAGE).forEach(k => _salRep[_cleSal(k)] = SALAIRES_REPECHAGE[k]); }
+  const s = _salRep[_cleSal(j.nom)]; if(s !== undefined) return s;
+  const s2 = _salRep[_cleSal(j.eaNom)]; return s2 !== undefined ? s2 : null;
+}
+/* Petite étiquette « 5 M$ » à mettre juste à côté du nom (pid ou données du joueur) */
+function salHTML(x){
+  const j = (typeof x === 'string') ? trouverJoueurData(x) : x;
+  const s = salaireJ(j);
+  return s === null ? '' : ' <span class="sal-tag">' + fmtSal(s) + '</span>';
 }
 function fmtSal(n){ return (n === null || n === undefined) ? '—' : ((langue === 'en' ? String(n) : String(n).replace('.', ',')) + ' M$'); }
 function ouvrirProfilJoueur(pid){
@@ -3824,11 +3838,9 @@ function ouvrirProfilJoueur(pid){
   const av = document.getElementById('pf-avatar');
   av.innerHTML = eqVisuel(eq, 54) || '?';
   av.style.background = 'transparent';
-  document.getElementById('pf-nom').textContent = j.nom || '';
+  document.getElementById('pf-nom').innerHTML = escapeHtml(j.nom || '') + salHTML(j);
   document.getElementById('pf-equipe').innerHTML = '<a class="lien-eq" onclick="fermerProfil();ouvrirProfilEquipe(\'' + (j.equipeId||'') + '\')">' + escapeHtml(eq.nom || '—') + '</a>';
-  const salPf = salaireJ(j), pfPos = document.getElementById('pf-pos');
-  pfPos.textContent = salPf === null ? '' : ('💰 ' + t('sal.lbl') + ' : ' + fmtSal(salPf));
-  pfPos.style.display = salPf === null ? 'none' : '';
+  const pfPos = document.getElementById('pf-pos'); pfPos.textContent = ''; pfPos.style.display = 'none';
   // Stats de saison
   const s = statsJoueur(pid), g = statsGardien(pid);
   const montrerGardien = g.pj > 0 || estGardienPur(j);
@@ -3912,8 +3924,8 @@ function ouvrirProfilEquipe(eqId){
   roster.sort((a,b) => b.pts - a.pts || (a.nom||'').localeCompare(b.nom||''));
   document.getElementById('ep-roster').innerHTML = roster.length
     ? roster.map(r => '<div class="dt-row"><span class="jr-pos2">' + (r.gardien ? '🥅' : '') + '</span>'
-        + '<a class="lien-eq" onclick="fermerProfilEquipe();ouvrirProfilJoueur(\'' + r.id + '\')">' + escapeHtml(r.nom) + '</a>'
-        + '<span class="dt-stat"><b>' + r.b + 'B</b> · ' + r.a + 'A · ' + r.pts + ' ' + t('cl.pts').toLowerCase() + (r.sal !== null ? ' <span class="sal-tag">' + fmtSal(r.sal) + '</span>' : '') + '</span></div>').join('')
+        + '<a class="lien-eq" onclick="fermerProfilEquipe();ouvrirProfilJoueur(\'' + r.id + '\')">' + escapeHtml(r.nom) + salHTML(r.id) + '</a>'
+        + '<span class="dt-stat"><b>' + r.b + 'B</b> · ' + r.a + 'A · ' + r.pts + ' ' + t('cl.pts').toLowerCase() + '</span></div>').join('')
     : '<div class="je-vide">' + t('joueurs.equipevide') + '</div>';
   completerProfilEquipe(eqId, roster);
   document.getElementById('modale-equipe-profil').classList.add('open');
@@ -3989,7 +4001,7 @@ function htmlEtoilesSoiree(s){
   const nomEq = id => ((trouverEquipeParId(id) || {}).nom || '');
   const fmtMoy = v => v.toFixed(2).replace('.', langue === 'en' ? '.' : ',');
   const section = (ico2, titre, liste, stat, g) => '<div class="et-cat"><div class="et-cat-titre">' + ico2 + ' ' + titre + '</div>'
-    + (liste.length ? liste.map(x => '<div class="et-row"><a class="lien-eq et-nom" onclick="ouvrirProfilJoueur(\'' + x.pid + '\')">' + escapeHtml(x.nom) + '</a>'
+    + (liste.length ? liste.map(x => '<div class="et-row"><a class="lien-eq et-nom" onclick="ouvrirProfilJoueur(\'' + x.pid + '\')">' + escapeHtml(x.nom) + salHTML(x.pid) + '</a>'
         + '<span class="et-eq">' + escapeHtml(nomEq(g ? (x.eqIdG || x.eqId) : x.eqId)) + '</span><span class="et-stat">' + stat(x) + '</span></div>').join('')
       : '<div class="et-aucun">' + t('et.aucun') + '</div>') + '</div>';
   const c = s.cats;
@@ -4005,7 +4017,7 @@ function rendreEtoiles(){
   const vide = '<div class="je-vide">' + t('et.vide') + '</div>';
   const L = document.getElementById('etoiles-list');
   if(L){
-    const resume = s => { const p = s.cats.pointeur[0] || s.cats.buteur[0] || s.cats.gardien[0]; return p ? ' · ' + escapeHtml(p.nom) + ' ⭐' : ''; };
+    const resume = s => { const p = s.cats.pointeur[0] || s.cats.buteur[0] || s.cats.gardien[0]; return p ? ' · ' + escapeHtml(p.nom) + salHTML(p.pid) + ' ⭐' : ''; };
     L.innerHTML = soirees.length
       ? htmlEtoilesSoiree(soirees[0]) + soirees.slice(1).map(s => '<details class="et-plus"><summary>' + escapeHtml(formaterDateCal(s.date)) + resume(s) + '</summary>' + htmlEtoilesSoiree(s) + '</details>').join('')
         + '<div class="et-aide">' + t('et.aide') + '</div>'
@@ -4084,7 +4096,7 @@ function completerProfilEquipe(eqId, roster){
   const el = id => document.getElementById(id);
   // Masse salariale
   let masse = 0, nbSal = 0;
-  if(snapJoueurs) snapJoueurs.forEach(d => { const j = d.data(); if(j.equipeId !== eqId || estRemplacant(j)) return; const s = Number(j.salaire); if(!isNaN(s) && j.salaire !== undefined && j.salaire !== null && j.salaire !== ''){ masse += s; nbSal++; } });
+  if(snapJoueurs) snapJoueurs.forEach(d => { const j = d.data(); if(j.equipeId !== eqId || estRemplacant(j)) return; const s = salaireJ(j); if(s !== null){ masse += s; nbSal++; } });
   const M = el('ep-masse');
   if(M){
     if(!nbSal){ M.innerHTML = '<div class="je-vide">' + t('ep.masseNon') + '</div>'; }
@@ -4101,7 +4113,7 @@ function completerProfilEquipe(eqId, roster){
     if(!gs.length) G.innerHTML = '<div class="je-vide">' + t('ep.gardienNon') + '</div>';
     else {
       const g = gs[0], pct = g.g.tirs ? ' · ' + (g.g.arr / g.g.tirs).toFixed(3).replace(/^0/, '') : '';
-      G.innerHTML = '<div class="dt-row"><span class="jr-pos2">🥅</span><a class="lien-eq" onclick="fermerProfilEquipe();ouvrirProfilJoueur(\'' + g.id + '\')">' + escapeHtml(g.nom) + '</a><span class="dt-stat">' + g.g.pj + ' ' + t('cl.pj') + pct + '</span></div>';
+      G.innerHTML = '<div class="dt-row"><span class="jr-pos2">🥅</span><a class="lien-eq" onclick="fermerProfilEquipe();ouvrirProfilJoueur(\'' + g.id + '\')">' + escapeHtml(g.nom) + salHTML(g.id) + '</a><span class="dt-stat">' + g.g.pj + ' ' + t('cl.pj') + pct + '</span></div>';
     }
   }
   // Prochain match
@@ -4211,7 +4223,7 @@ function rendreMonEquipe(){
     const joueursEq = [];
     if(snapJoueurs) snapJoueurs.forEach(d => { const j = d.data(); if(j.equipeId !== eqId || estRemplacant(j)) return; const s2 = statsJoueur(d.id); if(s2.pj > 0) joueursEq.push({id:d.id, nom:j.nom || '', s:s2}); });
     const meilleur = (cle) => joueursEq.slice().sort((a, b) => b.s[cle] - a.s[cle] || b.s.pts - a.s.pts)[0];
-    const carte = (ico2, lbl, x, cle, signe) => x ? '<a class="me-lead" onclick="ouvrirProfilJoueur(\'' + x.id + '\')"><span class="me-lead-lbl">' + ico2 + ' ' + lbl + '</span><b class="me-lead-val">' + (signe && x.s[cle] > 0 ? '+' : '') + x.s[cle] + '</b><span class="me-lead-nom">' + escapeHtml(x.nom) + '</span></a>' : '';
+    const carte = (ico2, lbl, x, cle, signe) => x ? '<a class="me-lead" onclick="ouvrirProfilJoueur(\'' + x.id + '\')"><span class="me-lead-lbl">' + ico2 + ' ' + lbl + '</span><b class="me-lead-val">' + (signe && x.s[cle] > 0 ? '+' : '') + x.s[cle] + '</b><span class="me-lead-nom">' + escapeHtml(x.nom) + salHTML(x.id) + '</span></a>' : '';
     html += bloc('🏅 ' + t('me.leaders'), joueursEq.length
       ? '<div class="me-leads">' + carte('🏒', t('me.lPts'), meilleur('pts'), 'pts') + carte('🎯', t('me.lButs'), meilleur('b'), 'b') + carte('🅰️', t('me.lPasses'), meilleur('a'), 'a') + carte('➕', t('me.lPm'), meilleur('plusMin'), 'plusMin', true) + '</div>'
       : '<div class="je-vide">' + t('profil.aucunMatch') + '</div>');
@@ -4257,7 +4269,7 @@ function rendreMonEquipe(){
   const roster = [];
   if(snapJoueurs) snapJoueurs.forEach(d => { const j = d.data(); if(j.equipeId !== eqId || estRemplacant(j)) return;
     const s = statsJoueur(d.id), g = statsGardien(d.id);
-    roster.push({id:d.id, nom:j.nom || '', sal: (j.salaire !== undefined && j.salaire !== null && j.salaire !== '' && !isNaN(Number(j.salaire))) ? Number(j.salaire) : null, s, g, gardien: g.pj > 0 || estGardienPur(j)}); });
+    roster.push({id:d.id, nom:j.nom || '', sal: salaireJ(j), s, g, gardien: g.pj > 0 || estGardienPur(j)}); });
   roster.sort((a, b) => b.s.pts - a.s.pts || (b.sal||0) - (a.sal||0) || a.nom.localeCompare(b.nom));
   const avecSal = roster.filter(r => r.sal !== null), masse = avecSal.reduce((t2, r) => t2 + r.sal, 0), reste = PLAFOND_SALARIAL - masse;
   const pct = Math.min(100, Math.round(masse / PLAFOND_SALARIAL * 100));
@@ -4266,10 +4278,10 @@ function rendreMonEquipe(){
       + '<div class="masse-barre"><i class="' + (reste < 0 ? 'masse-rouge' : '') + '" style="width:' + pct + '%"></i></div>'
     : '<div class="je-vide">' + t('ep.masseNon') + '</div>');
   html += bloc('👥 ' + t('ep.alignement') + ' (' + roster.length + ')', roster.length
-    ? '<div class="cl-wrap"><table class="cl-table me-table"><thead><tr><th class="cl-eq">' + t('jo.joueur') + '</th><th>' + t('me.sal') + '</th><th>' + t('cl.pj') + '</th><th>' + t('jo.b') + '</th><th>' + t('jo.a') + '</th><th>' + t('cl.pts') + '</th></tr></thead><tbody>'
-      + roster.map(r => '<tr><td class="cl-eq"><a class="lien-eq" onclick="ouvrirProfilJoueur(\'' + r.id + '\')">' + escapeHtml(r.nom) + '</a>'
+    ? '<div class="cl-wrap"><table class="cl-table me-table"><thead><tr><th class="cl-eq">' + t('jo.joueur') + '</th><th>' + t('cl.pj') + '</th><th>' + t('jo.b') + '</th><th>' + t('jo.a') + '</th><th>' + t('cl.pts') + '</th></tr></thead><tbody>'
+      + roster.map(r => '<tr><td class="cl-eq"><a class="lien-eq" onclick="ouvrirProfilJoueur(\'' + r.id + '\')">' + escapeHtml(r.nom) + salHTML(r.id) + '</a>'
         + (r.g.pj ? '<div class="me-g">🥅 ' + r.g.pj + ' ' + t('cl.pj') + ' · ' + (r.g.tirs ? (r.g.arr / r.g.tirs).toFixed(3).replace(/^0/, '') : '—') + '</div>' : '') + '</td>'
-        + '<td>' + (r.sal !== null ? r.sal : '—') + '</td><td>' + r.s.pj + '</td><td>' + r.s.b + '</td><td>' + r.s.a + '</td><td class="cl-pts">' + r.s.pts + '</td></tr>').join('')
+        + '<td>' + r.s.pj + '</td><td>' + r.s.b + '</td><td>' + r.s.a + '</td><td class="cl-pts">' + r.s.pts + '</td></tr>').join('')
       + '</tbody></table></div>'
     : '<div class="je-vide">' + t('joueurs.equipevide') + '</div>');
 
@@ -4309,8 +4321,7 @@ function htmlCats(cats, tri, fn){
 /* Met en évidence la colonne triée */
 function surlignerColonne(cont){
   const ths = Array.from(cont.querySelectorAll('thead th')); const k = ths.findIndex(th => th.classList.contains('th-actif'));
-  if(k < 0) return;
-  cont.querySelectorAll('tbody tr').forEach(tr => { const td = tr.children[k]; if(td && tr.children.length === ths.length) td.classList.add('td-actif'); });
+  if(k >= 0) cont.querySelectorAll('tbody tr').forEach(tr => { const td = tr.children[k]; if(td && tr.children.length === ths.length) td.classList.add('td-actif'); });
   // sur téléphone : ramène la catégorie choisie et la colonne triée dans l'écran
   const barre = cont.querySelector('.st-cats'), on = barre && barre.querySelector('.on');
   if(on) barre.scrollLeft = Math.max(0, on.offsetLeft - barre.offsetLeft - barre.clientWidth / 2 + on.offsetWidth / 2);
@@ -4335,7 +4346,7 @@ function thTri(cle, lbl, titre, tri, fn){
 }
 function celluleJoueur(j, eq, extra){
   return '<td class="cl-eq st-nom"><a class="lien-eq st-qui" onclick="ouvrirProfilJoueur(\'' + j.id + '\')">' + (eq.id ? eqVisuel(eq, 20) : '<span class="st-remp">REMP</span>')
-    + '<span><b>' + escapeHtml(j.nom || '') + '</b>' + (extra || '') + '<small>' + escapeHtml(eq.nom || t('jo.filtreRemp')) + '</small></span></a></td>';
+    + '<span><b>' + escapeHtml(j.nom || '') + salHTML(j) + '</b>' + (extra || '') + '<small>' + escapeHtml(eq.nom || t('jo.filtreRemp')) + '</small></span></a></td>';
 }
 function boutonsEdition(j){
   const peut = !!estAdmin;                       // modifier / supprimer un joueur : admin seulement
@@ -4378,20 +4389,20 @@ function rendreJoueursPhase(){
     + thTri('plusMin', '+/-', '', T, fn) + thTri('tirs', t('st.tirs'), t('st.tirs.l'), T, fn) + thTri('pctTirs', t('st.pctTirs'), t('st.pctTirs.l'), T, fn)
     + thTri('hits', t('st.hits'), t('st.hits.l'), T, fn) + thTri('bloques', t('st.bloques'), t('st.bloques.l'), T, fn)
     + thTri('majPct', t('st.maj'), t('st.maj.l'), T, fn) + thTri('passPct', t('st.passes'), t('st.passes.l'), T, fn)
-    + thTri('pim', t('st.pim'), t('st.pim.l'), T, fn) + thTri('tgMoy', t('st.tg'), t('st.tg.l'), T, fn) + thTri('sal', t('st.sal'), t('st.sal.l'), T, fn)
+    + thTri('pim', t('st.pim'), t('st.pim.l'), T, fn) + thTri('tgMoy', t('st.tg'), t('st.tg.l'), T, fn)
     + (estAdmin ? '<th></th>' : '') + '</tr></thead><tbody>';
   let rangJ = 0, sepJ = false;
   liste.forEach((j, i) => {
     const eq = j.remp ? {} : (trouverEquipeParId(j.equipeId) || {});
     const s = j.s, q = qualifJ(j);
-    if(!q && !sepJ){ sepJ = true; html += '<tr class="st-sep"><td colspan="' + (estAdmin ? 17 : 16) + '">' + t(catJ.minTxt) + '</td></tr>'; }
+    if(!q && !sepJ){ sepJ = true; html += '<tr class="st-sep"><td colspan="' + (estAdmin ? 16 : 15) + '">' + t(catJ.minTxt) + '</td></tr>'; }
     rangJ++;
     html += '<tr' + (s.pj === 0 ? ' class="st-zero"' : '') + '><td class="cl-rang">' + (q ? rangJ : '–') + '</td>' + celluleJoueur(j, eq, j.gard ? ' <span class="badge-g" title="Gardien">🥅</span>' : '')
       + '<td>' + s.pj + '</td><td>' + s.b + '</td><td>' + s.a + '</td><td class="cl-pts">' + s.pts + '</td>'
       + '<td>' + (s.plusMin > 0 ? '+' : '') + s.plusMin + '</td><td>' + s.tirs + '</td><td>' + (s.pctTirs != null ? s.pctTirs.toFixed(1) + '%' : '—') + '</td>'
       + '<td>' + s.hits + '</td><td>' + s.bloques + '</td>'
       + '<td>' + (s.majPct != null ? s.majPct.toFixed(0) + '%' : '—') + '</td><td>' + (s.passPct != null ? s.passPct.toFixed(0) + '%' : '—') + '</td>'
-      + '<td>' + s.pim + '</td><td>' + formatTG(s.tgSec, s.pj) + '</td><td class="td-sal">' + fmtSal(j.salN) + '</td>' + boutonsEdition(j) + '</tr>';
+      + '<td>' + s.pim + '</td><td>' + formatTG(s.tgSec, s.pj) + '</td>' + boutonsEdition(j) + '</tr>';
   });
   html += '</tbody></table></div><div class="st-aide">' + t('jo.aideTri') + '</div>';
   cont.innerHTML = htmlPhase() + htmlCats(CATS_J, triJ, 'choisirCatJ') + html;
@@ -4430,15 +4441,15 @@ function rendreGardiensPhase(){
   const fn = 'trierGardiens', T = triG, colEd = !!estAdmin;
   let html = '<div class="gd-wrap st-wrap"><table class="gd-table st-table"><thead><tr><th>#</th>' + thTri('nom', t('et.colGardien'), '', T, fn).replace('<th class="', '<th class="cl-eq st-nom ')
     + thTri('pj', t('gd.pj'), '', T, fn) + thTri('v', t('gd.v'), '', T, fn) + thTri('dd', t('gd.d'), '', T, fn) + thTri('dp', t('cl.dp'), '', T, fn)
-    + thTri('bl', t('gd.bl'), '', T, fn) + thTri('pct', t('gd.arrpct'), '', T, fn) + thTri('moy', t('gd.moy'), '', T, fn) + thTri('sal', t('st.sal'), t('st.sal.l'), T, fn) + (colEd ? '<th></th>' : '') + '</tr></thead><tbody>';
+    + thTri('bl', t('gd.bl'), '', T, fn) + thTri('pct', t('gd.arrpct'), '', T, fn) + thTri('moy', t('gd.moy'), '', T, fn) + (colEd ? '<th></th>' : '') + '</tr></thead><tbody>';
   let rang = 0, separe = false;
   liste.forEach(j => {
-    if(parMoyOuPct && !j.qualif && !separe){ separe = true; html += '<tr class="st-sep"><td colspan="' + (colEd ? 11 : 10) + '">' + t('gd.nonQualif').replace('{n}', GARDIEN_MIN_PJ) + '</td></tr>'; }
+    if(parMoyOuPct && !j.qualif && !separe){ separe = true; html += '<tr class="st-sep"><td colspan="' + (colEd ? 10 : 9) + '">' + t('gd.nonQualif').replace('{n}', GARDIEN_MIN_PJ) + '</td></tr>'; }
     rang++;
     const eq = j.remp ? {} : (trouverEquipeParId(j.equipeId) || {}), g = j.g;
     html += '<tr' + (g.pj === 0 ? ' class="st-zero"' : '') + '><td class="cl-rang">' + ((parMoyOuPct && !j.qualif) ? '–' : rang) + '</td>' + celluleJoueur(j, eq)
       + '<td>' + g.pj + '</td><td>' + g.v + '</td><td>' + g.dd + '</td><td>' + g.dp + '</td><td>' + g.bl + '</td>'
-      + '<td class="cl-pts">' + (g.tirs ? (g.arr / g.tirs).toFixed(3).replace(/^0/, '') : '—') + '</td><td>' + g.moy + '</td><td class="td-sal">' + fmtSal(j.salN) + '</td>' + boutonsEdition(j) + '</tr>';
+      + '<td class="cl-pts">' + (g.tirs ? (g.arr / g.tirs).toFixed(3).replace(/^0/, '') : '—') + '</td><td>' + g.moy + '</td>' + boutonsEdition(j) + '</tr>';
   });
   html += '</tbody></table></div><div class="st-aide">' + t('gd.aideTri').replace('{n}', GARDIEN_MIN_PJ) + '</div>';
   cont.innerHTML = htmlPhase() + htmlCats(CATS_G, triG, 'choisirCatG') + html;
@@ -4644,8 +4655,8 @@ function ouvrirAvantMatch(domId, extId, date, heure){
   const topEq = id => { const l = []; if(snapJoueurs) snapJoueurs.forEach(d => { const j = d.data(); if(j.equipeId !== id || estRemplacant(j)) return; const s = statsJoueur(d.id); if(s.pj) l.push({id:d.id, nom:j.nom || '', s}); });
     return l.sort((a, b) => b.s.pts - a.s.pts || b.s.b - a.s.b).slice(0, 3); };
   const gardienEq = id => { let best = null; if(snapJoueurs) snapJoueurs.forEach(d => { const j = d.data(); if(j.equipeId !== id || estRemplacant(j)) return; const g = statsGardien(d.id); if(g.pj && (!best || g.pj > best.g.pj)) best = {id:d.id, nom:j.nom || '', g}; }); return best; };
-  const colTop = id => topEq(id).map(x => '<div class="am-joueur"><a class="lien-eq" onclick="fermerAvantMatch();ouvrirProfilJoueur(\'' + x.id + '\')">' + escapeHtml(x.nom) + '</a><span>' + x.s.pts + ' ' + t('cl.pts').toLowerCase() + ' <em>(' + x.s.b + ' ' + t('jo.b') + ' · ' + x.s.a + ' ' + t('jo.a') + ')</em></span></div>').join('') || '<div class="je-vide">—</div>';
-  const colG = id => { const g = gardienEq(id); return g ? '<div class="am-joueur"><a class="lien-eq" onclick="fermerAvantMatch();ouvrirProfilJoueur(\'' + g.id + '\')">🥅 ' + escapeHtml(g.nom) + '</a><span>' + (g.g.tirs ? (g.g.arr / g.g.tirs).toFixed(3).replace(/^0/, '') : '—') + ' · ' + g.g.moy + ' <em>(' + g.g.pj + ' ' + t('cl.pj') + ')</em></span></div>' : '<div class="je-vide">—</div>'; };
+  const colTop = id => topEq(id).map(x => '<div class="am-joueur"><a class="lien-eq" onclick="fermerAvantMatch();ouvrirProfilJoueur(\'' + x.id + '\')">' + escapeHtml(x.nom) + salHTML(x.id) + '</a><span>' + x.s.pts + ' ' + t('cl.pts').toLowerCase() + ' <em>(' + x.s.b + ' ' + t('jo.b') + ' · ' + x.s.a + ' ' + t('jo.a') + ')</em></span></div>').join('') || '<div class="je-vide">—</div>';
+  const colG = id => { const g = gardienEq(id); return g ? '<div class="am-joueur"><a class="lien-eq" onclick="fermerAvantMatch();ouvrirProfilJoueur(\'' + g.id + '\')">🥅 ' + escapeHtml(g.nom) + salHTML(g.id) + '</a><span>' + (g.g.tirs ? (g.g.arr / g.g.tirs).toFixed(3).replace(/^0/, '') : '—') + ' · ' + g.g.moy + ' <em>(' + g.g.pj + ' ' + t('cl.pj') + ')</em></span></div>' : '<div class="je-vide">—</div>'; };
   const code = codeGameDe(domId);
   document.getElementById('am-contenu').innerHTML =
     '<div class="am-quand">' + (date ? escapeHtml(formaterDateCal(date)) : '') + (heure ? ' · ' + escapeHtml(heure) : '') + (code ? ' · ' + t('cal.code') + ' <b>' + code + '</b>' : '') + '</div>'
@@ -4696,7 +4707,7 @@ function htmlEtoilesMatch(m){
     const j = docJoueurParId(e.x.pid) || {}, eq = trouverEquipeParId(e.x.eqId) || {};
     const stat = estLigneGardien(e.x) ? '🥅 ' + (+e.x.arr || 0) + '/' + (+e.x.tirs || 0) : (+e.x.b || 0) + ' ' + t('jo.b') + ' · ' + (+e.x.a || 0) + ' ' + t('jo.a');
     return '<a class="dt-etoile" onclick="fermerDetail();ouvrirProfilJoueur(\'' + e.x.pid + '\')"><span class="dt-etoile-n">★ ' + t('dt.e' + (i + 1)) + '</span>' + eqVisuel(eq, 20)
-      + '<b>' + escapeHtml(j.nom || '') + '</b><span class="dt-etoile-s">' + stat + '</span></a>';
+      + '<b>' + escapeHtml(j.nom || '') + salHTML(e.x.pid) + '</b><span class="dt-etoile-s">' + stat + '</span></a>';
   }).join('') + '</div>';
 }
 
@@ -4786,7 +4797,7 @@ function cpSuggerer(k){
   const autre = cpChoix[k === 'a' ? 'b' : 'a'];
   const res = cpListe.filter(x => x.id !== autre && (!q || _nrm(x.nom).indexOf(q) !== -1 || _nrm(x.eq.nom || '').indexOf(q) !== -1)).slice(0, 8);
   if(cpChoix[k] && document.activeElement !== champ){ boite.innerHTML = ''; return; }
-  boite.innerHTML = res.length ? res.map(x => '<button type="button" class="cp-opt" onmousedown="event.preventDefault()" onclick="cpChoisir(\'' + k + '\',\'' + x.id + '\')">' + eqVisuel(x.eq, 18) + '<b>' + escapeHtml(x.nom) + '</b><small>' + escapeHtml(x.eq.nom || t('jo.filtreRemp')) + '</small></button>').join('')
+  boite.innerHTML = res.length ? res.map(x => '<button type="button" class="cp-opt" onmousedown="event.preventDefault()" onclick="cpChoisir(\'' + k + '\',\'' + x.id + '\')">' + eqVisuel(x.eq, 18) + '<b>' + escapeHtml(x.nom) + salHTML(x.id) + '</b><small>' + escapeHtml(x.eq.nom || t('jo.filtreRemp')) + '</small></button>').join('')
     : '<div class="cp-aucun">' + t('jo.aucunResultat') + '</div>';
 }
 function cpChoisir(k, id){
@@ -4812,7 +4823,7 @@ function rendreComparateur(){
     [t('cat.bloques'), sa.bloques, sb.bloques, String, 1], [t('cat.maj'), sa.majPct, sb.majPct, pct, 1], [t('cat.passPct'), sa.passPct, sb.passPct, pct, 1],
     [t('cat.pim'), sa.pim, sb.pim, String, -1], [t('cat.tg'), sa.pj ? sa.tgSec / sa.pj : 0, sb.pj ? sb.tgSec / sb.pj : 0, v => formatTG(v, 1), 1]
   ];
-  const tete = (j, eq, id) => '<a class="cp-tete" onclick="fermerComparateur();ouvrirProfilJoueur(\'' + id + '\')">' + eqVisuel(eq, 36) + '<b>' + escapeHtml(j.nom || '') + '</b><small>' + escapeHtml(eq.nom || t('jo.filtreRemp')) + '</small></a>';
+  const tete = (j, eq, id) => '<a class="cp-tete" onclick="fermerComparateur();ouvrirProfilJoueur(\'' + id + '\')">' + eqVisuel(eq, 36) + '<b>' + escapeHtml(j.nom || '') + salHTML(id) + '</b><small>' + escapeHtml(eq.nom || t('jo.filtreRemp')) + '</small></a>';
   out.innerHTML = '<div class="cp-tetes">' + tete(ja, ea, a) + '<span class="am-vs">VS</span>' + tete(jb, eb, b) + '</div>'
     + lignes.map(([lbl, va, vb, f, sens]) => {
       const ok = va != null && vb != null && sens && va !== vb, mA = ok && (sens > 0 ? va > vb : va < vb), mB = ok && !mA;
@@ -4855,7 +4866,7 @@ function rendreRecherche(){
       const remp = estRemplacant(x.j), eq = remp ? {} : (trouverEquipeParId(x.j.equipeId) || {});
       const s = statsJoueur(x.id), g = statsGardien(x.id);
       const stat = (g.pj > s.pj) ? '🥅 ' + g.pj + ' ' + t('cl.pj') + (g.tirs ? ' · ' + (g.arr / g.tirs).toFixed(3).replace(/^0/, '') : '') : s.pj + ' ' + t('cl.pj') + ' · ' + s.pts + ' ' + t('cl.pts').toLowerCase();
-      html += ligne((eq.id ? eqVisuel(eq, 22) : '<span class="st-remp">REMP</span>') + '<span class="rg-txt"><b>' + escapeHtml(x.j.nom || '') + '</b><small>' + escapeHtml(eq.nom || t('jo.filtreRemp')) + '</small></span><span class="rg-stat">' + stat + '</span>',
+      html += ligne((eq.id ? eqVisuel(eq, 22) : '<span class="st-remp">REMP</span>') + '<span class="rg-txt"><b>' + escapeHtml(x.j.nom || '') + salHTML(x.j) + '</b><small>' + escapeHtml(eq.nom || t('jo.filtreRemp')) + '</small></span><span class="rg-stat">' + stat + '</span>',
         () => ouvrirProfilJoueur(x.id));
     });
     if(js.length > 8) html += '<div class="rg-plus">+ ' + (js.length - 8) + ' ' + t('rg.autres') + '</div>';
@@ -4931,7 +4942,7 @@ function rendreAccueilLive(){
         const eq = trouverEquipeParId(p.equipeId) || {};
         return '<a class="live-row" onclick="ouvrirProfilJoueur(\'' + p.id + '\')">'
           + '<span class="lr-rang r' + (i+1) + '">' + (i+1) + '</span>'
-          + '<span class="lr-eq">' + eqVisuel(eq, 20) + escapeHtml(p.nom) + '</span>'
+          + '<span class="lr-eq">' + eqVisuel(eq, 20) + escapeHtml(p.nom) + salHTML(p.id) + '</span>'
           + '<b class="lr-pts">' + p.pts + ' ' + t('cl.pts').toLowerCase() + '</b></a>';
       }).join('')
     : '<div class="je-vide">' + t('live.aucunMeneur') + '</div>';
