@@ -6353,7 +6353,8 @@ function analyserMatchsEA(matchs){
         const p = joueurs[pkey];
         const pid = joueurParGamertag(eq.id, p.playername);
         if(pid){
-          const ligne = { pid:pid, eqId:eq.id, b:+p.skgoals||0, a:+p.skassists||0 };
+          const ligne = { pid:pid, eqId:eq.id, b:+p.skgoals||0, a:+p.skassists||0, position: p.position || '' };
+          const st = statsEAJoueur(p); if(Object.keys(st).length) ligne.stats = st;     // toutes les stats EA (comme le script du PC)
           // Stats de gardien EA (arrêts / tirs reçus) quand dispo
           if((p.position === 'goalie' || (+p.glshots||0) > 0)){
             ligne.arr = +p.glsaves||0; ligne.tirs = +p.glshots||0; ligne.gardien = true;
@@ -6400,6 +6401,22 @@ function rendrePreviewImport(){
   document.getElementById('imp-confirm-row').style.display = nbOk > 0 ? 'flex' : 'none';
 }
 
+/* Toutes les stats chiffrées d'EA pour un joueur (mêmes champs ignorés que le script d'import du PC) */
+const EA_IGNORES = new Set(['playername','clientplatform','playerlevel','player_level','position','possorted','teamid','teamside','opponentclubid','opponentteamid','opponentscore','score','isguest','pnhlonlinegametype','class','removedreason','player_dnf']);
+function statsEAJoueur(p){
+  const out = {};
+  Object.keys(p || {}).forEach(k => { if(EA_IGNORES.has(String(k).toLowerCase())) return; const v = p[k];
+    if(v === null || v === undefined || String(v).trim() === '') return; const n = Number(v); if(!isNaN(n)) out[k] = n; });
+  return out;
+}
+/* Durée normale d'une game (la plus fréquente parmi les matchs déjà en base, arrondie à 30 s) */
+function dureeReglementaireSite(){
+  const freq = {}; let n = 0;
+  if(snapMatchs) snapMatchs.forEach(d => { let mx = 0; (d.data().lignes || []).forEach(l => { mx = Math.max(mx, +((l.stats || {}).toiseconds) || 0); });
+    if(mx > 0){ const r = Math.round(mx / 30) * 30; freq[r] = (freq[r] || 0) + 1; n++; } });
+  if(n < 3) return null;
+  return +Object.keys(freq).sort((a, b) => freq[b] - freq[a] || a - b)[0];
+}
 function confirmerImport(){
   if(!estAdmin){ alert(t('err.adminSeul')); return; }
   const coches = Array.prototype.slice.call(document.querySelectorAll('.imp-chk:checked'));
@@ -6420,6 +6437,16 @@ function confirmerImport(){
       eaTs: x.timestamp || null,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     };
+    // lien avec la game du CALENDRIER (même soir, mêmes équipes) : domicile/visiteur selon l'horaire
+    const soir = dateSoireeMatch({eaTs: x.timestamp});
+    if(soir && snapCal){ let cal = null;
+      snapCal.forEach(d => { const c = d.data(); if(cal || c.date !== soir) return;
+        if((c.domId === x.domId && c.extId === x.extId) || (c.domId === x.extId && c.extId === x.domId)) cal = Object.assign({id: d.id}, c); });
+      if(cal){ donnees.calId = cal.id;
+        if(cal.domId === x.extId){ donnees.domId = x.extId; donnees.domNom = x.extNom; donnees.extId = x.domId; donnees.extNom = x.domNom; donnees.butsDom = x.butsExt; donnees.butsExt = x.butsDom; } } }
+    // prolongation : game nettement plus longue que la durée normale (même règle que le script du PC)
+    const reg = dureeReglementaireSite(); let mx = 0; (x.lignes || []).forEach(l => { mx = Math.max(mx, +((l.stats || {}).toiseconds) || 0); });
+    if(reg && mx > reg + 45) donnees.prolongation = true;
     return db.collection('matchs').add(donnees).then(() => { faits++; });
   });
 
@@ -6525,11 +6552,17 @@ function codeGameDe(equipeId){
 /* Calendrier à venir : retire les games déjà jouées (match importé lié par calId) et trie par date PUIS heure */
 function calAVenir(){
   const joues = new Set();
-  if(snapMatchs) snapMatchs.forEach(d => { const c = d.data().calId; if(c) joues.add(c); });
+  // résultats SANS lien au calendrier (ex. importés depuis le site) : comptés par soir + paire d'équipes
+  const libres = {};
+  const clePaire = (date, a, b) => date + '|' + [a, b].sort().join('|');
+  if(snapMatchs) snapMatchs.forEach(d => { const m = d.data(); if(m.calId){ joues.add(m.calId); return; }
+    const dt = dateSoireeMatch(m); if(!dt) return; const k = clePaire(dt, m.domId, m.extId); libres[k] = (libres[k] || 0) + 1; });
+  const cal = []; if(snapCal) snapCal.forEach(d => cal.push(Object.assign({id:d.id}, d.data())));
+  cal.sort((a,b) => String(a.date||'').localeCompare(String(b.date||'')) || String(a.heure||'').localeCompare(String(b.heure||'')));
+  cal.forEach(c => { if(joues.has(c.id)) return; const k = clePaire(c.date || '', c.domId, c.extId); if(libres[k] > 0){ libres[k]--; joues.add(c.id); } });
   const out = [];
-  if(snapCal) snapCal.forEach(d => {
-    const m = Object.assign({id:d.id}, d.data());
-    if(joues.has(d.id) || !equipeExiste(m.domId) || !equipeExiste(m.extId)) return;
+  cal.forEach(m => {
+    if(joues.has(m.id) || !equipeExiste(m.domId) || !equipeExiste(m.extId)) return;
     out.push(m);
   });
   out.sort((a,b) => String(a.date||'').localeCompare(String(b.date||'')) || String(a.heure||'').localeCompare(String(b.heure||'')));
