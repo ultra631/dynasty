@@ -2888,55 +2888,64 @@ function sauverEquipe(){
 
 
 /* =====================================================================
-   COMPENSATIONS (3 octobre 2026) — échanges de joueurs + réservistes TC
+   COMPENSATIONS — par lots. Le bouton applique le DERNIER lot seulement.
    Admin seulement. Aperçu → confirmation → application. Relançable sans doublons.
-   Les joueurs sortis sont "libérés" (equipeId vide), pas supprimés.
+   Les joueurs sortis sont « libérés » (equipeId vide), pas supprimés.
    ===================================================================== */
-const COMP_SORTIES = [
-  ['Washington','Loobzz'], ['Boston','Easy-_-MoneyGang'], ['Montreal','eric74robert'], ['Detroit','yeetmasterkeith'],
-  ['Toronto','Zkxviiperz'], ['Toronto','XX_Fowler_32xx'], ['Calgary','Dxnut__'], ['Calgary','comcocmbrokam']
+const COMP_LOTS = [
+  { nom: '3 octobre 2026',            /* (déjà appliqué — gardé pour l'historique) */
+    sorties: [['Washington','Loobzz'], ['Boston','Easy-_-MoneyGang'], ['Montreal','eric74robert'], ['Detroit','yeetmasterkeith'],
+              ['Toronto','Zkxviiperz'], ['Toronto','XX_Fowler_32xx'], ['Calgary','Dxnut__'], ['Calgary','comcocmbrokam']],
+    /* [équipe, gamertag, positions, salaire, réserviste TC ?] */
+    arrivees: [['Washington','Wunnar','A, G',5,false], ['Boston','IboeserIx6','A, D',1,false], ['Montreal','JT TREMBLAY07','',1,false],
+              ['Detroit','EKY','',1,false], ['Toronto','I-GXGNON-I','A, G',3,false], ['Toronto','LtJoXxZy','A, D',1,false],
+              ['Calgary','Elbarbu420','C, A, G',1,false], ['Calgary','NolanBoud10','C, A',1,false],
+              ['Boston','Le quebecois767','A',3,true], ['Calgary','thebeastjes','C, A',3,true], ['Washington','Darkjoe78','A',3,true],
+              ['NY Rangers','XxCrosbyQcxX','C, A, G',3,true], ['Detroit','Lucifer7961','A',3,true], ['Montreal','Tr-xAssassiNx-Qc','C, A',3,true],
+              ['Buffalo','LXCLERC-97','G',3,true], ['Toronto','SundqvistI70I','A',3,true]],
+    fil: [] },
+  { nom: '13 octobre 2026',
+    sorties: [['Toronto','I-GXGNON-I'], ['Calgary','FireStar QC'], ['Calgary','vuftr']],
+    arrivees: [['Toronto','XxCrosbyQcxX','C, A, G',3,false], ['Calgary','Dangles x 91','G',3,false], ['Calgary','Louby x 4','',5,false]],
+    /* lignes ajoutées au fil DYNASTY / page Transactions */
+    fil: [['Toronto reçoit XxCrosbyQcxX (3 M$) en compensation de I-GXGNON-I (3 M$, pas actif)'],
+          ['Calgary reçoit Dangles x 91 (3 M$) en compensation de FireStar QC (3 M$)'],
+          ['Calgary reçoit Louby x 4 (5 M$) en compensation de vuftr (5 M$)']] }
 ];
-/* [équipe, gamertag, positions, salaire, réserviste?] */
-const COMP_ARRIVEES = [
-  ['Washington','Wunnar','A, G',5,false], ['Boston','IboeserIx6','A, D',1,false], ['Montreal','JT TREMBLAY07','',1,false],
-  ['Detroit','EKY','',1,false], ['Toronto','I-GXGNON-I','A, G',3,false], ['Toronto','LtJoXxZy','A, D',1,false],
-  ['Calgary','Elbarbu420','C, A, G',1,false], ['Calgary','NolanBoud10','C, A',1,false],
-  /* Réservistes TC (3M) */
-  ['Boston','Le quebecois767','A',3,true], ['Calgary','thebeastjes','C, A',3,true], ['Washington','Darkjoe78','A',3,true],
-  ['NY Rangers','XxCrosbyQcxX','C, A, G',3,true], ['Detroit','Lucifer7961','A',3,true], ['Montreal','Tr-xAssassiNx-Qc','C, A',3,true],
-  ['Buffalo','LXCLERC-97','G',3,true], ['Toronto','SundqvistI70I','A',3,true]
-];
-const _nrm = s => String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');
+const _nrm = s => String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,'');
 
-function planCompensations(){
+function planCompensations(lot){
+  lot = lot || COMP_LOTS[COMP_LOTS.length - 1];
   const equipes = []; if(snapEquipes) snapEquipes.forEach(d => equipes.push({id:d.id, nom:(d.data().nom||'')}));
-  const joueurs = []; if(snapJoueurs) snapJoueurs.forEach(d => { const j=d.data(); joueurs.push({id:d.id, nom:j.nom||'', eaNom:j.eaNom||'', equipeId:j.equipeId||'', position:j.position||''}); });
+  const joueurs = []; if(snapJoueurs) snapJoueurs.forEach(d => { const j=d.data(); joueurs.push({id:d.id, nom:j.nom||'', eaNom:j.eaNom||'', equipeId:j.equipeId||'', position:j.position||'', remp: !!(j.remplacant || j.reserviste)}); });
   const eqIds = new Set(equipes.map(e => e.id));
   const eqParNom = n => equipes.find(e => _nrm(e.nom) === _nrm(n));
   const memeNom = (j, nom) => _nrm(j.nom) === _nrm(nom) || (j.eaNom && _nrm(j.eaNom) === _nrm(nom));
-  const plan = { liberer:[], creer:[], reassigner:[], deja:[], problemes:[] };
+  const plan = { lot: lot.nom, liberer:[], creer:[], reassigner:[], deja:[], problemes:[] };
 
-  COMP_SORTIES.forEach(([eqNom, nom]) => {
+  lot.sorties.forEach(([eqNom, nom]) => {
     const eq = eqParNom(eqNom);
     if(!eq){ plan.problemes.push('Équipe introuvable : ' + eqNom); return; }
     const j = joueurs.find(x => x.equipeId === eq.id && memeNom(x, nom));
     if(j) plan.liberer.push({ id:j.id, nom:j.nom, equipe:eq.nom, equipeId:eq.id });
-    else plan.deja.push(nom + ' (déjà retiré de ' + eq.nom + ')');
+    else if(!joueurs.some(x => memeNom(x, nom))) plan.problemes.push(nom + ' : joueur introuvable dans le site');
+    else plan.deja.push(nom + ' (pas dans ' + eq.nom + ')');
   });
 
-  COMP_ARRIVEES.forEach(([eqNom, nom, pos, sal, tc]) => {
+  lot.arrivees.forEach(([eqNom, nom, pos, sal, tc]) => {
     const eq = eqParNom(eqNom);
     if(!eq){ plan.problemes.push('Équipe introuvable : ' + eqNom); return; }
-    const dansEquipe = joueurs.find(x => x.equipeId === eq.id && memeNom(x, nom));
+    const dansEquipe = joueurs.find(x => x.equipeId === eq.id && memeNom(x, nom) && x.remp === !!tc);
     if(dansEquipe){ plan.deja.push(nom + ' (déjà chez ' + eq.nom + ')'); return; }
-    const ailleurs = joueurs.find(x => x.equipeId && eqIds.has(x.equipeId) && memeNom(x, nom));
+    // un remplaçant / réserviste peut être déplacé ; un joueur régulier d'une autre équipe, non
+    const ailleurs = joueurs.find(x => x.equipeId && eqIds.has(x.equipeId) && x.equipeId !== eq.id && !x.remp && memeNom(x, nom));
     if(ailleurs){
       const autre = equipes.find(e => e.id === ailleurs.equipeId);
-      plan.problemes.push(nom + ' est déjà dans ' + (autre?autre.nom:'une autre équipe') + ' — pas déplacé automatiquement'); return;
+      plan.problemes.push(nom + ' est un joueur régulier de ' + (autre?autre.nom:'une autre équipe') + ' — pas déplacé automatiquement'); return;
     }
-    const libre = joueurs.find(x => (!x.equipeId || !eqIds.has(x.equipeId)) && memeNom(x, nom));
+    const existant = joueurs.find(x => memeNom(x, nom));
     const fiche = { nom, eqId:eq.id, equipe:eq.nom, position:pos, salaire:sal, tc };
-    if(libre) plan.reassigner.push(Object.assign({ id:libre.id, positionExistante:libre.position }, fiche));
+    if(existant) plan.reassigner.push(Object.assign({ id:existant.id, nomSite:existant.nom, positionExistante:existant.position }, fiche));
     else plan.creer.push(fiche);
   });
   return plan;
@@ -2944,29 +2953,33 @@ function planCompensations(){
 
 function appliquerCompensations(){
   if(!estAdmin){ alert(t('err.adminSeul')); return; }
-  const p = planCompensations();
+  const lot = COMP_LOTS[COMP_LOTS.length - 1];
+  const p = planCompensations(lot);
   const total = p.liberer.length + p.creer.length + p.reassigner.length;
-  let msg = '🔄 COMPENSATIONS\n\n';
-  if(p.liberer.length){ msg += '➖ Retirés des équipes (' + p.liberer.length + ') :\n' + p.liberer.map(x => '   ' + x.nom + ' ← ' + x.equipe).join('\n') + '\n\n'; }
+  let msg = 'COMPENSATIONS — ' + lot.nom + '\n\n';
+  if(p.liberer.length){ msg += 'Retirés des équipes (' + p.liberer.length + ') :\n' + p.liberer.map(x => '   ' + x.nom + ' ← ' + x.equipe).join('\n') + '\n\n'; }
   const arr = p.creer.concat(p.reassigner);
   const norm = arr.filter(x => !x.tc), tc = arr.filter(x => x.tc);
-  if(norm.length){ msg += '➕ Nouveaux joueurs (' + norm.length + ') :\n' + norm.map(x => '   ' + x.nom + ' → ' + x.equipe).join('\n') + '\n\n'; }
-  if(tc.length){ msg += '🔁 Remplaçants (' + tc.length + ') :\n' + tc.map(x => '   ' + x.nom + ' → ' + x.equipe).join('\n') + '\n\n'; }
-  if(p.deja.length) msg += '✓ Déjà fait (' + p.deja.length + ') — ignorés.\n\n';
-  if(p.problemes.length) msg += '⚠️ À vérifier :\n' + p.problemes.map(x => '   ' + x).join('\n') + '\n\n';
-  if(!total){ alert(msg + (p.deja.length ? 'Tout est déjà appliqué. ✅' : 'Rien à faire.')); return; }
+  if(norm.length){ msg += 'Joueurs ajoutés (' + norm.length + ') :\n' + norm.map(x => '   ' + x.nom + ' → ' + x.equipe + ' (' + x.salaire + ' M$)').join('\n') + '\n\n'; }
+  if(tc.length){ msg += 'Remplaçants (' + tc.length + ') :\n' + tc.map(x => '   ' + x.nom + ' → ' + x.equipe).join('\n') + '\n\n'; }
+  if(p.deja.length) msg += 'Déjà fait (' + p.deja.length + ') — ignorés :\n' + p.deja.map(x => '   ' + x).join('\n') + '\n\n';
+  if(p.problemes.length) msg += '⚠ À vérifier :\n' + p.problemes.map(x => '   ' + x).join('\n') + '\n\n';
+  if(!total){ alert(msg + (p.deja.length ? 'Tout est déjà appliqué.' : 'Rien à faire.')); return; }
   if(!confirm(msg + 'Appliquer ces changements ?')) return;
 
   const b = db.batch();
-  p.liberer.forEach(x => b.update(db.collection('joueurs').doc(x.id), { equipeId:'', libre:true, ancienneEquipe:x.equipeId, reserviste:false }));
+  p.liberer.forEach(x => b.update(db.collection('joueurs').doc(x.id), { equipeId:'', libre:true, ancienneEquipe:x.equipeId, remplacant:false, reserviste:false }));
   p.reassigner.forEach(x => {
-    const maj = { equipeId:x.eqId, libre:false, remplacant:x.tc, reserviste:false, salaire:x.salaire, eaNom:x.nom };
+    const maj = { equipeId:x.eqId, libre:false, remplacant:x.tc, reserviste:false, salaire:x.salaire };
     if(!x.positionExistante && x.position) maj.position = x.position;
     b.update(db.collection('joueurs').doc(x.id), maj);
   });
   p.creer.forEach(x => b.set(db.collection('joueurs').doc(), { nom:x.nom, equipeId:x.eqId, position:x.position, eaNom:x.nom, salaire:x.salaire, remplacant:x.tc, reserviste:false, createdAt: firebase.firestore.FieldValue.serverTimestamp() }));
+  // le fil DYNASTY / la page Transactions (identifiants fixes : jamais en double)
+  (lot.fil || []).forEach(([texte], i) => b.set(db.collection('transactions').doc('comp-' + _nrm(lot.nom) + '-' + i),
+    { type: 'Compensation', texte, image: '', ts: firebase.firestore.FieldValue.serverTimestamp() }));
   b.commit()
-    .then(() => { alert('✅ Terminé : ' + p.liberer.length + ' retiré(s), ' + (p.creer.length + p.reassigner.length) + ' ajouté(s).' + (arr.some(x => !x.position) ? '\n\n💡 Complète les positions manquantes dans Joueurs → Modifier.' : '')); })
+    .then(() => { alert('Terminé : ' + p.liberer.length + ' retiré(s), ' + (p.creer.length + p.reassigner.length) + ' ajouté(s).' + (arr.some(x => !x.position && !x.positionExistante) ? '\n\nComplète les positions manquantes dans Joueurs → Modifier.' : '')); })
     .catch(e => alert(t('commun.erreur') + e.message));
 }
 
