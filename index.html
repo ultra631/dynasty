@@ -2552,6 +2552,11 @@ function appliquerRoles(){
   try { if(typeof db !== 'undefined' && _modeCal !== null){ initCalendrier(); initInscriptions(); initInscriptionsGM(); } } catch(e){ console.error(e); }
   document.body.classList.toggle('is-admin', estAdmin);
   document.body.classList.toggle('is-dg', !!dgTeamId);
+  // Le webhook Discord n'est lu que par l'admin connecté (il ne doit jamais partir vers un visiteur)
+  if(estAdmin && !window._cfgDiscordAbonne){
+    window._cfgDiscordAbonne = true;
+    try{ initDiscordConfig(); initDiscordTxConfig(); }catch(e){ console.error(e); }
+  }
   const banner = document.getElementById('dg-banner');
   if(banner){
     if(dgTeamId){
@@ -7238,9 +7243,7 @@ function demarrer(){
   initCalendrier();
   initInscriptions();
   initInscriptionsGM();
-  initDiscordConfig();
   initTransactions();
-  initDiscordTxConfig();
   initPalmares();
   initProprietaires();
 }
