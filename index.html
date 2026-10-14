@@ -1134,6 +1134,22 @@ nav.tabs.nav-pc{display:flex;flex-wrap:nowrap;justify-content:center;gap:2px;pad
   .es-ligne{flex-wrap:wrap}.es-qui{flex:1 1 140px}.es-chips{width:100%;justify-content:space-between}.es-chip{flex:1;min-width:0}
   .sec-head{flex-wrap:wrap}.sec-lien{font-size:13px}
 }
+
+/* ===== Icônes uniformes + menu téléphone défilant ===== */
+.icn{width:1.05em;height:1.05em;display:inline-block;vertical-align:-.16em;flex:none}
+.live-head .ic-svg{width:18px;height:18px}
+.nv-ic{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;margin-right:7px;vertical-align:-5px;background:rgba(212,175,55,.14);color:var(--or);border:1px solid rgba(212,175,55,.3)}
+.nv-ic .icn{width:14px;height:14px;vertical-align:0}.nv-ic-neg{background:rgba(255,123,134,.1);color:#ff8a96;border-color:rgba(255,123,134,.3)}
+.tl-etape span .icn{color:var(--or);margin-right:2px}.tl-etape.tl-ok span .icn{color:#7ee0a0}.tl-etape.tl-non span .icn{color:#ff8a96}
+.toast-dhl .icn{color:var(--or);margin-right:4px}
+.tk-lbl{gap:6px}.tk-lbl .icn{width:16px;height:16px}
+.badge-g .icn,.jr-pos2 .icn{color:var(--or)}
+@media (max-width:1000px){
+  nav.tabs.nav-mob{display:flex;flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;gap:0;padding:0 10px;scroll-behavior:smooth;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 14px,#000 calc(100% - 22px),transparent);mask-image:linear-gradient(90deg,transparent,#000 14px,#000 calc(100% - 22px),transparent);border-top:1px solid rgba(255,255,255,.05)}
+  nav.tabs.nav-mob .nav-link{flex:none;border-radius:0;padding:11px 11px 10px;border:0;border-bottom:3px solid transparent;background:transparent;box-shadow:none;color:#c9c4b4;font-size:15.5px}
+  nav.tabs.nav-mob .nav-link.current{color:var(--or);background:transparent;border-bottom-color:var(--or);box-shadow:none}
+}
 </style>
 </head>
 <body>
@@ -1165,13 +1181,13 @@ nav.tabs.nav-pc{display:flex;flex-wrap:nowrap;justify-content:center;gap:2px;pad
       <div class="nav-menu">
         <a class="nav-link" data-route="joueurs" href="#joueurs" data-i18n="nav.joueurs">Joueurs</a>
         <a class="nav-link" data-route="gardiens" href="#gardiens" data-i18n="nav.gardiens">Gardiens</a>
-        <a class="nav-link" data-route="etoiles" href="#etoiles" data-i18n="nav.etoiles">⭐ Étoiles</a>
+        <a class="nav-link" data-route="etoiles" href="#etoiles" data-i18n="nav.etoiles">Étoiles</a>
         <a class="nav-link" data-route="palmares" href="#palmares" data-i18n="nav.palmares">Palmarès</a>
       </div>
     </div>
-    <a class="nav-link" data-route="series" href="#series" data-i18n="nav.series">🏆 Séries</a>
+    <a class="nav-link" data-route="series" href="#series" data-i18n="nav.series">Séries</a>
     <a class="nav-link" data-route="echanges" href="#echanges" data-i18n="nav.echanges">Échanges</a>
-    <a class="nav-link" data-route="nouvelles" href="#nouvelles" data-i18n="nav.nouvelles">📰 Nouvelles</a>
+    <a class="nav-link" data-route="nouvelles" href="#nouvelles" data-i18n="nav.nouvelles">Nouvelles</a>
     <div class="nav-grp" data-routes="annonces,transactions,reglements,inscriptions,reseaux">
       <button type="button" class="nav-link nav-btn" onclick="toggleGrp(this)"><span data-i18n="nav.grp.ligue">Ligue</span> <span class="chev">▾</span></button>
       <div class="nav-menu">
@@ -1182,45 +1198,27 @@ nav.tabs.nav-pc{display:flex;flex-wrap:nowrap;justify-content:center;gap:2px;pad
         <a class="nav-link" data-route="reseaux" href="#reseaux" data-i18n="nav.reseaux">Réseaux</a>
       </div>
     </div>
-    <a class="nav-link nav-me" data-route="monequipe" href="#monequipe" data-i18n="nav.monequipe">⭐ Mon équipe</a>
+    <a class="nav-link nav-me" data-route="monequipe" href="#monequipe" data-i18n="nav.monequipe">Mon équipe</a>
   </nav>
-  <nav class="tabs nav-mob" id="nav">
+  <nav class="tabs nav-mob" id="nav" aria-label="Menu">
     <a class="nav-link" data-route="accueil" href="#accueil" data-i18n="nav.accueil">Accueil</a>
-
-    <div class="nav-grp" data-routes="nouvelles,annonces,transactions,reglements,inscriptions,reseaux">
-      <button type="button" class="nav-link nav-btn" onclick="toggleGrp(this)"><span data-i18n="nav.grp.ligue">Ligue</span> <span class="chev">▾</span></button>
-      <div class="nav-menu">
-        <a class="nav-link" data-route="nouvelles" href="#nouvelles" data-i18n="nav.nouvelles">📰 Nouvelles</a>
-        <a class="nav-link" data-route="annonces" href="#annonces" data-i18n="nav.annonces">Annonces</a>
-        <a class="nav-link" data-route="transactions" href="#transactions" data-i18n="nav.transactions">Transactions</a>
-        <a class="nav-link" data-route="reglements" href="#reglements" data-i18n="nav.reglements">Règlements</a>
-        <a class="nav-link" data-route="inscriptions" href="#inscriptions" data-i18n="nav.inscriptions">Inscriptions</a>
-        <a class="nav-link" data-route="reseaux" href="#reseaux" data-i18n="nav.reseaux">Réseaux</a>
-      </div>
-    </div>
-
-    <div class="nav-grp" data-routes="classements,etoiles,joueurs,gardiens,palmares">
-      <button type="button" class="nav-link nav-btn" onclick="toggleGrp(this)"><span data-i18n="nav.grp.stats">Stats</span> <span class="chev">▾</span></button>
-      <div class="nav-menu">
-        <a class="nav-link" data-route="classements" href="#classements" data-i18n="nav.classements">Classements</a>
-        <a class="nav-link" data-route="etoiles" href="#etoiles" data-i18n="nav.etoiles">⭐ Étoiles</a>
-        <a class="nav-link" data-route="joueurs" href="#joueurs" data-i18n="nav.joueurs">Joueurs</a>
-        <a class="nav-link" data-route="gardiens" href="#gardiens" data-i18n="nav.gardiens">Gardiens</a>
-        <a class="nav-link" data-route="palmares" href="#palmares" data-i18n="nav.palmares">Palmarès</a>
-      </div>
-    </div>
-
-    <div class="nav-grp" data-routes="calendrier,resultats,series,equipes,echanges">
-      <button type="button" class="nav-link nav-btn" onclick="toggleGrp(this)"><span data-i18n="nav.grp.saison">Saison</span> <span class="chev">▾</span></button>
-      <div class="nav-menu">
-        <a class="nav-link" data-route="calendrier" href="#calendrier" data-i18n="nav.calendrier">Calendrier</a>
-        <a class="nav-link" data-route="resultats" href="#resultats" data-i18n="nav.resultats">Résultats</a>
-        <a class="nav-link" data-route="series" href="#series" data-i18n="nav.series">🏆 Séries</a>
-        <a class="nav-link" data-route="equipes" href="#equipes" data-i18n="nav.equipes">Équipes</a>
-        <a class="nav-link" data-route="echanges" href="#echanges" data-i18n="nav.echanges">Échanges</a>
-      </div>
-    </div>
-    <a class="nav-link nav-me" data-route="monequipe" href="#monequipe" data-i18n="nav.monequipe">⭐ Mon équipe</a>
+    <a class="nav-link" data-route="calendrier" href="#calendrier" data-i18n="nav.calendrier">Calendrier</a>
+    <a class="nav-link" data-route="resultats" href="#resultats" data-i18n="nav.resultats">Résultats</a>
+    <a class="nav-link" data-route="classements" href="#classements" data-i18n="nav.classements">Classements</a>
+    <a class="nav-link" data-route="equipes" href="#equipes" data-i18n="nav.equipes">Équipes</a>
+    <a class="nav-link" data-route="joueurs" href="#joueurs" data-i18n="nav.joueurs">Joueurs</a>
+    <a class="nav-link" data-route="gardiens" href="#gardiens" data-i18n="nav.gardiens">Gardiens</a>
+    <a class="nav-link" data-route="etoiles" href="#etoiles" data-i18n="nav.etoiles">Étoiles</a>
+    <a class="nav-link" data-route="series" href="#series" data-i18n="nav.series">Séries</a>
+    <a class="nav-link" data-route="echanges" href="#echanges" data-i18n="nav.echanges">Échanges</a>
+    <a class="nav-link" data-route="nouvelles" href="#nouvelles" data-i18n="nav.nouvelles">Nouvelles</a>
+    <a class="nav-link" data-route="palmares" href="#palmares" data-i18n="nav.palmares">Palmarès</a>
+    <a class="nav-link" data-route="annonces" href="#annonces" data-i18n="nav.annonces">Annonces</a>
+    <a class="nav-link" data-route="transactions" href="#transactions" data-i18n="nav.transactions">Transactions</a>
+    <a class="nav-link" data-route="reglements" href="#reglements" data-i18n="nav.reglements">Règlements</a>
+    <a class="nav-link" data-route="inscriptions" href="#inscriptions" data-i18n="nav.inscriptions">Inscriptions</a>
+    <a class="nav-link" data-route="reseaux" href="#reseaux" data-i18n="nav.reseaux">Réseaux</a>
+    <a class="nav-link nav-me" data-route="monequipe" href="#monequipe" data-i18n="nav.monequipe">Mon équipe</a>
   </nav>
 </header>
 
@@ -1252,7 +1250,7 @@ nav.tabs.nav-pc{display:flex;flex-wrap:nowrap;justify-content:center;gap:2px;pad
       <a class="btn btn-ghost" href="#joueurs" data-i18n="btn.voirstats">Voir les stats</a>
     </div>
     <div class="ticker" id="ticker" style="display:none">
-      <span class="tk-lbl" data-i18n="tk.avis">📢 Avis</span>
+      <span class="tk-lbl"><svg class="icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10v4h3l7 4V6L7 10H4z"/><path d="M17 9a4 4 0 0 1 0 6"/></svg><span data-i18n="tk.avis">Avis</span></span>
       <div class="tk-piste"><div class="tk-defile" id="tk-defile"></div></div>
     </div>
 
@@ -1279,7 +1277,7 @@ nav.tabs.nav-pc{display:flex;flex-wrap:nowrap;justify-content:center;gap:2px;pad
 
     <div class="live-grid live-grid-pro">
       <div class="live-col">
-        <div class="live-head"><h3 data-i18n="nv.home">📰 Nouvelles de la semaine</h3></div>
+        <div class="live-head"><h3 data-i18n="nv.home">Nouvelles de la semaine</h3></div>
         <div id="live-nouvelles" class="live-body"><div class="je-vide">…</div></div>
       </div>
       <div class="live-col">
@@ -1293,14 +1291,14 @@ nav.tabs.nav-pc{display:flex;flex-wrap:nowrap;justify-content:center;gap:2px;pad
     </div>
 
     <div class="live-col etoiles-home">
-      <div class="live-head"><span>⭐</span><h3 data-i18n="et.dern">Étoiles de la dernière soirée</h3></div>
+      <div class="live-head"><span data-ico="star"></span><h3 data-i18n="et.dern">Étoiles de la dernière soirée</h3></div>
       <div id="live-etoiles" class="live-body"><div class="je-vide" data-i18n="et.vide">Les étoiles apparaîtront après la première soirée.</div></div>
     </div>
 
     <div class="sec-head"><div><h3 data-i18n="intro.eyebrow">La ligue</h3></div></div>
     <div class="intro reveal">
       <div class="eyebrow" data-i18n="intro.eyebrow">La ligue</div>
-      <p style="margin-top:10px" data-i18n="intro.text">DYNASTY, c'est une ligue compétitive de hockey vidéo sur NHL 27 en mode World of Chel (4S). Bâtie pour la communauté francophone et anglophone, on combine du vrai hockey d'équipe, des stats suivies en direct et une ambiance de tournoi à chaque match. Bienvenue dans la dynastie. 👑</p>
+      <p style="margin-top:10px" data-i18n="intro.text">DYNASTY, c'est une ligue compétitive de hockey vidéo sur NHL 27 en mode World of Chel (4S). Bâtie pour la communauté francophone et anglophone, on combine du vrai hockey d'équipe, des stats suivies en direct et une ambiance de tournoi à chaque match. Bienvenue dans la dynastie.</p>
       <div class="stat-grid">
         <div class="stat-box reveal"><div class="n gold-text">4S</div><div class="l" data-i18n="stat.mode">Mode</div></div>
         <div class="stat-box reveal"><div class="n gold-text">8</div><div class="l" data-i18n="stat.equipes">Équipes</div></div>
@@ -1472,7 +1470,7 @@ nav.tabs.nav-pc{display:flex;flex-wrap:nowrap;justify-content:center;gap:2px;pad
 
     <!-- ===== INSCRIPTION GM CONNECTED ===== -->
     <div class="card" style="margin-top:22px;border-color:var(--or)">
-      <h3 data-i18n="gmc.titre">🎮 Inscription — Ligue GM Connected</h3>
+      <h3 data-i18n="gmc.titre">Inscription — Ligue GM Connected</h3>
       <p data-i18n="gmc.texte">Inscris-toi pour la ligue GM Connected. Indique tes disponibilités dans la semaine.</p>
       <div class="insc-form">
         <label class="champ-lbl" data-i18n="insc.nom">Nom / Gamertag</label>
@@ -1539,7 +1537,7 @@ nav.tabs.nav-pc{display:flex;flex-wrap:nowrap;justify-content:center;gap:2px;pad
     <div id="classements-list">
       <div class="empty"><div class="ico" data-ico="trophy"></div><b data-i18n="classements.vide.t">Aucune équipe</b><span data-i18n="classements.vide.s">Ajoute des équipes pour voir le classement.</span></div>
     </div>
-    <div class="sous-head" style="margin-top:22px"><h3 data-i18n="pr.titre">⚡ Power ranking</h3></div>
+    <div class="sous-head" style="margin-top:22px"><h3 data-i18n="pr.titre">Power ranking</h3></div>
     <div id="power-list"><div class="je-vide" data-i18n="pr.vide">Le power ranking apparaîtra après les premières games.</div></div>
 
     <div class="sous-head"><h3 data-i18n="meneurs.pointeurs">Meilleurs pointeurs</h3></div>
@@ -1548,7 +1546,7 @@ nav.tabs.nav-pc{display:flex;flex-wrap:nowrap;justify-content:center;gap:2px;pad
     <div class="sous-head"><h3 data-i18n="meneurs.gardiens">Meilleurs gardiens</h3></div>
     <div id="meneurs-gardiens"><div class="je-vide" data-i18n="live.aucunMeneur">Les meneurs apparaîtront ici.</div></div>
 
-    <div class="sous-head"><h3 data-i18n="st.avancees">📊 Stats avancées</h3></div>
+    <div class="sous-head"><h3 data-i18n="st.avancees">Stats avancées</h3></div>
     <div id="stats-avancees"><div class="je-vide" data-i18n="st.avancees.vide">Les stats avancées apparaîtront après le premier import EA.</div></div>
   </section>
   <section class="page" id="joueurs">
@@ -1557,7 +1555,7 @@ nav.tabs.nav-pc{display:flex;flex-wrap:nowrap;justify-content:center;gap:2px;pad
     <!-- Bandeau affiché quand un DG est connecté -->
     <div id="dg-banner" class="dg-banner" style="display:none">
       <span>🎽 <b data-i18n="dg.actif">Mode DG</b> — <span id="dg-team-name"></span></span>
-      <span style="display:flex;gap:6px"><a class="btn-mini" href="#monequipe" data-i18n="nav.monequipe">⭐ Mon équipe</a><button class="btn-mini" onclick="deconnexionDG()" data-i18n="dg.quitter">Quitter</button></span>
+      <span style="display:flex;gap:6px"><a class="btn-mini" href="#monequipe" data-i18n="nav.monequipe">Mon équipe</a><button class="btn-mini" onclick="deconnexionDG()" data-i18n="dg.quitter">Quitter</button></span>
     </div>
 
     <!-- Bouton ajouter : admin seulement -->
@@ -1565,7 +1563,7 @@ nav.tabs.nav-pc{display:flex;flex-wrap:nowrap;justify-content:center;gap:2px;pad
       <button class="btn btn-or" onclick="ouvrirJoueur()" data-i18n="joueurs.ajouter">+ Ajouter un joueur</button>
     </div>
 
-    <div class="st-barre"><button type="button" class="btn btn-ghost st-comp" onclick="ouvrirComparateur()" data-i18n="cp.btn">⚖️ Comparer deux joueurs</button><select id="jo-filtre" onchange="rendreJoueurs()"></select><input id="jo-recherche" type="search" data-i18n-ph="jo.rechercher" placeholder="Rechercher un joueur…" oninput="rendreJoueurs()"></div>
+    <div class="st-barre"><button type="button" class="btn btn-ghost st-comp" onclick="ouvrirComparateur()" data-i18n="cp.btn">Comparer deux joueurs</button><select id="jo-filtre" onchange="rendreJoueurs()"></select><input id="jo-recherche" type="search" data-i18n-ph="jo.rechercher" placeholder="Rechercher un joueur…" oninput="rendreJoueurs()"></div>
     <div id="joueurs-list">
       <div class="empty"><div class="ico" data-ico="users"></div><b data-i18n="joueurs.vide.t">Aucun joueur</b><span data-i18n="joueurs.vide.s">Les joueurs apparaîtront ici.</span></div>
     </div>
@@ -1597,8 +1595,8 @@ nav.tabs.nav-pc{display:flex;flex-wrap:nowrap;justify-content:center;gap:2px;pad
 
     <div class="admin-only btn-rangee" style="margin-bottom:16px">
       <button class="btn btn-or" onclick="ouvrirMatch()" data-i18n="resultats.ajouter">+ Ajouter un résultat</button>
-      <button class="btn btn-ghost" onclick="ouvrirImport()" data-i18n="import.btn">📥 Importer depuis EA</button>
-      <button class="btn btn-ghost" onclick="recalculerPlusMoins()" data-i18n="pm.btn">🔄 Recalculer les +/- de tous les matchs</button>
+      <button class="btn btn-ghost" onclick="ouvrirImport()" data-i18n="import.btn">Importer depuis EA</button>
+      <button class="btn btn-ghost" onclick="recalculerPlusMoins()" data-i18n="pm.btn">Recalculer les +/- de tous les matchs</button>
     </div>
 
     <div id="resultats-list">
@@ -1611,12 +1609,12 @@ nav.tabs.nav-pc{display:flex;flex-wrap:nowrap;justify-content:center;gap:2px;pad
     <!-- Bouton admin : ajouter une équipe -->
     <div class="btn-rangee admin-only" style="margin-bottom:18px">
       <button class="btn btn-or" onclick="ouvrirEquipe()" data-i18n="equipes.ajouter">+ Ajouter une équipe</button>
-      <button class="btn btn-ghost" onclick="appliquerCompensations()" data-i18n="equipes.comp">🔄 Appliquer les compensations</button>
-      <button class="btn btn-ghost" onclick="nettoyerOrphelins()" data-i18n="equipes.nettoyer" title="Efface les matchs, calendrier et joueurs dont l'équipe n'existe plus">🧹 Nettoyer les données orphelines</button>
+      <button class="btn btn-ghost" onclick="appliquerCompensations()" data-i18n="equipes.comp">Appliquer les compensations</button>
+      <button class="btn btn-ghost" onclick="nettoyerOrphelins()" data-i18n="equipes.nettoyer" title="Efface les matchs, calendrier et joueurs dont l'équipe n'existe plus">Nettoyer les données orphelines</button>
     </div>
 
     <div class="duel-box">
-      <div class="duel-head" data-i18n="duel.titre">⚔️ Duel entre deux équipes</div>
+      <div class="duel-head" data-i18n="duel.titre">Duel entre deux équipes</div>
       <div class="duel-sel"><select id="duel-a" onchange="rendreDuel()"></select><span>vs</span><select id="duel-b" onchange="rendreDuel()"></select></div>
       <div id="duel-res"><div class="je-vide" data-i18n="duel.choisir">Choisis deux équipes pour voir leur bilan.</div></div>
     </div>
@@ -1639,7 +1637,7 @@ nav.tabs.nav-pc{display:flex;flex-wrap:nowrap;justify-content:center;gap:2px;pad
     </div>
 
     <div id="palmares-list">
-      <div class="empty"><div class="ico" data-ico="trophy"></div><b data-i18n="palmares.vide.t">La chasse aux trophées est ouverte</b><span data-i18n="palmares.vide.s">Les honneurs seront remis à la fin de la saison. 👑</span></div>
+      <div class="empty"><div class="ico" data-ico="trophy"></div><b data-i18n="palmares.vide.t">La chasse aux trophées est ouverte</b><span data-i18n="palmares.vide.s">Les honneurs seront remis à la fin de la saison.</span></div>
     </div>
   </section>
   <section class="page" id="series">
@@ -1653,9 +1651,9 @@ nav.tabs.nav-pc{display:flex;flex-wrap:nowrap;justify-content:center;gap:2px;pad
   </section>
   <section class="page" id="etoiles">
     <div class="page-head"><div class="eyebrow" data-i18n="eyebrow.stats">Stats</div><h2 data-i18n="et.page">Étoiles</h2><p data-i18n="et.pageSous">Les meilleurs de chaque soirée, calculés automatiquement.</p></div>
-    <div class="sous-head"><h3 data-i18n="et.saison">🏆 Étoiles de la saison</h3></div>
+    <div class="sous-head"><h3 data-i18n="et.saison">Étoiles de la saison</h3></div>
     <div id="etoiles-saison"><div class="je-vide" data-i18n="et.vide">Les étoiles apparaîtront après la première soirée.</div></div>
-    <div class="sous-head" style="margin-top:22px"><h3 data-i18n="et.titre">⭐ Étoiles de la soirée</h3></div>
+    <div class="sous-head" style="margin-top:22px"><h3 data-i18n="et.titre">Étoiles de la soirée</h3></div>
     <div id="etoiles-list" class="etoiles-list"><div class="je-vide" data-i18n="et.vide">Les étoiles apparaîtront après la première soirée.</div></div>
   </section>
   <section class="page" id="monequipe">
@@ -1787,7 +1785,7 @@ nav.tabs.nav-pc{display:flex;flex-wrap:nowrap;justify-content:center;gap:2px;pad
     <div id="ech-offre-list" class="chk-list"></div>
     <label class="champ-lbl" data-i18n="echanges.joueursDemandes">Joueurs demandés</label>
     <div id="ech-demande-list" class="chk-list"></div>
-    <label class="champ-lbl" data-i18n="ret.titreModal">💰 Rétention de salaire (optionnel)</label>
+    <label class="champ-lbl" data-i18n="ret.titreModal">Rétention de salaire (optionnel)</label>
     <div class="ret-aide" data-i18n="ret.aide">Chaque équipe peut retenir du salaire une seule fois dans la saison, sur un joueur qu’elle échange. Maximum 2 M$.</div>
     <div id="ech-ret"></div>
     <div class="cta-row" style="margin-top:12px">
@@ -1844,7 +1842,7 @@ nav.tabs.nav-pc{display:flex;flex-wrap:nowrap;justify-content:center;gap:2px;pad
 <!-- ============================ MODALE IMPORT EA ============================ -->
 <div class="modal" id="modale-import">
   <div class="modal-box" style="max-width:560px;text-align:left">
-    <h3 class="cinzel" style="text-align:center" data-i18n="import.titre">📥 Importer depuis EA</h3>
+    <h3 class="cinzel" style="text-align:center" data-i18n="import.titre">Importer depuis EA</h3>
     <p class="box-note" data-i18n="import.intro">Choisis une équipe (qui a un ID club EA) pour aller chercher ses 5 derniers matchs.</p>
     <label class="champ-lbl" data-i18n="import.equipe">Équipe à importer</label>
     <select id="imp-equipe"></select>
@@ -1962,7 +1960,7 @@ nav.tabs.nav-pc{display:flex;flex-wrap:nowrap;justify-content:center;gap:2px;pad
     <div id="ea-statut" class="insc-merci" style="display:none;margin-bottom:12px"></div>
     <div id="ea-contenu"></div>
     <div class="cta-row" style="margin-top:14px">
-      <button class="btn btn-ghost" id="ea-btn-refresh" onclick="chercherProfilEA(true)" style="display:none" data-i18n="ea.rafraichir">🔄 Rafraîchir depuis EA</button>
+      <button class="btn btn-ghost" id="ea-btn-refresh" onclick="chercherProfilEA(true)" style="display:none" data-i18n="ea.rafraichir">Rafraîchir depuis EA</button>
       <button class="btn btn-ghost" onclick="fermerProfilEA()" data-i18n="commun.fermer">Fermer</button>
     </div>
   </div>
@@ -2023,7 +2021,7 @@ const DICT = {
     'badge.mode':'Mode 4S','badge.lang':'Bilingue FR / EN','badge.saison':'Saison 1 en cours','btn.horaire':'Voir l\'horaire','horaire.jours':'Dimanche · Lundi · Mardi','horaire.periode':'4 octobre → 24 novembre 2026',
     'btn.inscrire':"S'inscrire",'btn.voirstats':'Voir les stats',
     'intro.eyebrow':'La ligue',
-    'intro.text':"DYNASTY, c'est une ligue compétitive de hockey vidéo sur NHL 27 en mode World of Chel (4S). Bâtie pour la communauté francophone et anglophone, on combine du vrai hockey d'équipe, des stats suivies en direct et une ambiance de tournoi à chaque match. Bienvenue dans la dynastie. 👑",
+    'intro.text':"DYNASTY, c'est une ligue compétitive de hockey vidéo sur NHL 27 en mode World of Chel (4S). Bâtie pour la communauté francophone et anglophone, on combine du vrai hockey d'équipe, des stats suivies en direct et une ambiance de tournoi à chaque match. Bienvenue dans la dynastie.",
     'stat.mode':'Mode','stat.equipes':'Équipes','stat.saison':'Saison',
     'feat1.titre':'Stats en direct','feat1.desc':'Classements, joueurs et gardiens mis à jour après chaque match, en temps réel.',
     'feat2.titre':'100% compétitif','feat2.desc':"Format 4S, du vrai hockey d'équipe où chaque but compte pour le titre.",
@@ -2033,14 +2031,14 @@ const DICT = {
     'eyebrow.portail':'Portail','eyebrow.stats':'Stats',
     'annonces.titre':'Annonces','annonces.sous':'Les nouvelles officielles de la ligue.',
     'annonces.admlbl':'Admin · Nouvelle annonce','annonces.ph.titre':"Titre de l'annonce",'annonces.ph.image':"Lien d'image (optionnel)",'annonces.ping':'Notifier @everyone sur Discord','annonces.ph.texte':'Contenu…',
-    'annonces.publier':"Publier l'annonce",'annonces.vide.t':'📣 Ça s\'en vient','annonces.vide.s':'Les premières annonces officielles de la ligue tomberont bientôt. Reste à l\'affût!',
+    'annonces.publier':"Publier l'annonce",'annonces.vide.t':'Ça s\'en vient','annonces.vide.s':'Les premières annonces officielles de la ligue tomberont bientôt. Reste à l\'affût!',
     'reglements.titre':'Règlements','reglements.sous':'Les règles à respecter dans la ligue.',
     'reglements.admlbl':'Admin · Modifier les règlements','reglements.ph':'Écris les règlements ici…','reglements.vide':'Aucun règlement pour le moment.',
-    'reglements.enregistres':'Règlements enregistrés ✅',
+    'reglements.enregistres':'Règlements enregistrés',
     'inscriptions.titre':'Inscriptions','inscriptions.sous':'Rejoins la ligue DYNASTY.',
     'inscriptions.commenttitre':"Comment s'inscrire",'inscriptions.commenttexte':"Remplis le formulaire pour t'inscrire comme joueur (free agent). Un admin va te contacter sur Discord.",
     'inscriptions.bouton':"Formulaire d'inscription",
-    'insc.nom':'Nom / Gamertag','insc.nom.ph':'Ton gamertag en jeu','insc.plateforme':'Plateforme','insc.position':'Positions','insc.discord':'Discord','insc.discord.ph':'ton_pseudo','insc.dg':'Veux-tu être directeur général (DG)?','insc.dg.non':'Non, juste jouer','insc.dg.oui':'Oui, j\'aimerais gérer une équipe','insc.dg.peutetre':'Peut-être / ouvert à en discuter','insc.dgBadge':'Intéressé à être DG','gmc.titre':'🎮 Inscription — Ligue GM Connected','gmc.texte':'Inscris-toi pour la ligue GM Connected. Indique tes disponibilités dans la semaine.','gmc.dispo':'Tes disponibilités','gmc.loterie':'Acceptes-tu de jouer avec l\'équipe que tu obtiendras à la loterie?','gmc.lot.oui':'Oui, j\'accepte n\'importe quelle équipe','gmc.lot.non':'Non, j\'ai des préférences','gmc.admin.titre':'Inscriptions — Ligue GM Connected','gmc.besoinDispo':'Choisis au moins une journée de disponibilité.','gmc.lotBadgeOui':'Accepte l\'équipe de la loterie','gmc.lotBadgeNon':'A des préférences d\'équipe','jour.lun':'Lundi','jour.mar':'Mardi','jour.mer':'Mercredi','jour.jeu':'Jeudi','jour.ven':'Vendredi','jour.sam':'Samedi','jour.dim':'Dimanche','insc.dgPeut':'DG — peut-être',
+    'insc.nom':'Nom / Gamertag','insc.nom.ph':'Ton gamertag en jeu','insc.plateforme':'Plateforme','insc.position':'Positions','insc.discord':'Discord','insc.discord.ph':'ton_pseudo','insc.dg':'Veux-tu être directeur général (DG)?','insc.dg.non':'Non, juste jouer','insc.dg.oui':'Oui, j\'aimerais gérer une équipe','insc.dg.peutetre':'Peut-être / ouvert à en discuter','insc.dgBadge':'Intéressé à être DG','gmc.titre':'Inscription — Ligue GM Connected','gmc.texte':'Inscris-toi pour la ligue GM Connected. Indique tes disponibilités dans la semaine.','gmc.dispo':'Tes disponibilités','gmc.loterie':'Acceptes-tu de jouer avec l\'équipe que tu obtiendras à la loterie?','gmc.lot.oui':'Oui, j\'accepte n\'importe quelle équipe','gmc.lot.non':'Non, j\'ai des préférences','gmc.admin.titre':'Inscriptions — Ligue GM Connected','gmc.besoinDispo':'Choisis au moins une journée de disponibilité.','gmc.lotBadgeOui':'Accepte l\'équipe de la loterie','gmc.lotBadgeNon':'A des préférences d\'équipe','jour.lun':'Lundi','jour.mar':'Mardi','jour.mer':'Mercredi','jour.jeu':'Jeudi','jour.ven':'Vendredi','jour.sam':'Samedi','jour.dim':'Dimanche','insc.dgPeut':'DG — peut-être',
     'insc.envoyer':"M'inscrire",'insc.merci':'Merci! Ton inscription est envoyée. Un admin va te contacter.','insc.besoinNom':'Mets au moins ton nom / gamertag.',
     'insc.admin.titre':'Inscriptions — Ligue 4S','insc.compteur':'inscrit(s)','insc.doublons':'doublon(s) détecté(s)','insc.aucunDoublon':'Aucun doublon','insc.dblBadge':'Double inscription','insc.vide':'Aucune inscription pour le moment.','insc.nouveau':'Nouveau','insc.traite':'Traité',
     'insc.marquerTraite':'Marquer traité','insc.marquerNouveau':'Remettre nouveau','insc.confirmSuppr':'Supprimer cette inscription ?',
@@ -2052,7 +2050,7 @@ const DICT = {
     'resultats.titre':'Résultats','resultats.sous':'Les résultats des matchs.','resultats.construction':'On bâtit les résultats à la prochaine étape.',
     'commun.construction':'Section en construction',
     'equipes.titre':'Équipes','equipes.sous':'Les équipes de la ligue DYNASTY.','equipes.ajouter':'+ Ajouter une équipe',
-    'equipes.vide.t':'🛡️ En préparation','equipes.vide.s':'Les équipes de la Saison 1 seront dévoilées bientôt.',
+    'equipes.vide.t':'En préparation','equipes.vide.s':'Les équipes de la Saison 1 seront dévoilées bientôt.',
     'footer.ligne':'Ligue CHEL · NHL 27 · © 2026','footer.tag':'Hockey compétitif · NHL 27 · World of Chel','prop.titre':'Propriétaires','prop.ajouter':'+ Ajouter un propriétaire','prop.modal.nouveau':'Nouveau propriétaire','prop.modal.modifier':'Modifier le propriétaire','prop.lbl.nom':'Nom','prop.lbl.role':'Rôle','prop.lbl.photo':'Photo — lien d\'image (optionnel)','prop.ph.nom':'Nom','prop.ph.role':'Rôle (ex. Commissaire)','prop.ph.photo':'Photo — lien d\'image (optionnel)','prop.besoin':'Entre au moins un nom.','prop.confirmSuppr':'Retirer ce propriétaire ?','prop.vide':'Aucun propriétaire affiché pour l\'instant.',
     'admin.titre':'Mode admin','admin.sous':'Entre le mot de passe admin ou ton code DG.','admin.ph':'Mot de passe / code DG',
     'admin.connexion':'Se connecter','admin.incorrect':'Mot de passe incorrect.',
@@ -2063,20 +2061,20 @@ const DICT = {
     'err.connexion':'Erreur de connexion','commun.erreur':'Erreur : ',
     'btn.supprimer':'Supprimer','btn.modifier':'Modifier','an.sansTitre':'(sans titre)','eq.sansNom':'(sans nom)',
     'an.besoin':'Écris au moins un titre ou un texte.','an.confirmSuppr':'Supprimer cette annonce ?',
-    'discord.lbl':'Admin · Webhook Discord (annonces auto)','discord.ph':'https://discord.com/api/webhooks/…','discord.actif':'Poster les annonces sur Discord automatiquement','discord.save':'Enregistrer','discord.test':'Test','discord.enregistre':'✓ Webhook enregistré.','discord.besoinUrl':"Colle le lien du webhook d'abord.",'discord.testMsg':'🏒 Test DYNASTY — le webhook fonctionne!','discord.testOk':'✓ Message test envoyé sur Discord!','discord.testErr':'Échec. Vérifie le lien du webhook.',
-    'transactions.titre':'Transactions','transactions.sous':'Signatures, échanges, libérations et rappels.','transactions.admlbl':'Admin · Nouvelle transaction','transactions.ph.texte':'Détails (optionnel si image)…','transactions.ping':'Notifier @everyone sur Discord','transactions.publier':'Publier la transaction','transactions.dclbl':'Admin · Webhook Discord des transactions','transactions.dcactif':'Poster les transactions sur Discord automatiquement','transactions.vide.t':'🔁 Le marché est calme… pour l\'instant','transactions.vide.s':'Signatures, échanges et rappels apparaîtront ici dès l\'ouverture du marché.','transactions.besoin':'Ajoute un détail ou une image.','transactions.confirmSuppr':'Supprimer cette transaction ?','transactions.footer':'Transactions DYNASTY','transactions.testMsg':'🔁 Test transactions DYNASTY — le webhook fonctionne!','tx.type.signature':'Signature','tx.type.echange':'Échange','tx.type.liberation':'Libération','tx.type.rappel':'Rappel','tx.type.autre':'Autre',
-    'eq.eaclub':'ID du club EA (pour l\'import auto)','eq.eaclub.ph':'Ex. 13494  (ou 13494, 51234 si un autre club sert de dépannage)','joueur.eanom':'Gamertag EA (si différent du nom)','joueur.eanom.ph':'Ex. Dj_lavabo','import.btn':'📥 Importer depuis EA','import.titre':'📥 Importer depuis EA','import.intro':'Choisis une équipe (qui a un ID club EA) pour aller chercher ses 5 derniers matchs.','import.equipe':'Équipe à importer','import.chercher':'Chercher les matchs','import.confirmer':'Importer les matchs cochés','import.aucuneEquipe':'Aucune équipe n\'a d\'ID club EA. Ajoute-le dans la fiche de l\'équipe.','import.chargement':'Connexion à EA… (ça peut prendre 10-20 sec)','import.erreur':'Erreur de connexion à EA.','import.vide':'Aucun match trouvé pour ce club.','import.horsLigue':'adversaire hors-ligue','import.deja':'déjà importé','import.nul':'égalité (ignoré)','import.pret':'prêt','import.joueursManq':'{n} joueur(s) non reliés','import.trouve':'{n} matchs trouvés · {ok} prêts à importer','import.rienCoche':'Coche au moins un match.','import.enCours':'Import en cours…','import.fini':'{n}/{t} matchs importés! Les stats sont à jour.',
+    'discord.lbl':'Admin · Webhook Discord (annonces auto)','discord.ph':'https://discord.com/api/webhooks/…','discord.actif':'Poster les annonces sur Discord automatiquement','discord.save':'Enregistrer','discord.test':'Test','discord.enregistre':'Webhook enregistré.','discord.besoinUrl':"Colle le lien du webhook d'abord.",'discord.testMsg':'🏒 Test DYNASTY — le webhook fonctionne!','discord.testOk':'Message test envoyé sur Discord!','discord.testErr':'Échec. Vérifie le lien du webhook.',
+    'transactions.titre':'Transactions','transactions.sous':'Signatures, échanges, libérations et rappels.','transactions.admlbl':'Admin · Nouvelle transaction','transactions.ph.texte':'Détails (optionnel si image)…','transactions.ping':'Notifier @everyone sur Discord','transactions.publier':'Publier la transaction','transactions.dclbl':'Admin · Webhook Discord des transactions','transactions.dcactif':'Poster les transactions sur Discord automatiquement','transactions.vide.t':'Le marché est calme… pour l\'instant','transactions.vide.s':'Signatures, échanges et rappels apparaîtront ici dès l\'ouverture du marché.','transactions.besoin':'Ajoute un détail ou une image.','transactions.confirmSuppr':'Supprimer cette transaction ?','transactions.footer':'Transactions DYNASTY','transactions.testMsg':'🔁 Test transactions DYNASTY — le webhook fonctionne!','tx.type.signature':'Signature','tx.type.echange':'Échange','tx.type.liberation':'Libération','tx.type.rappel':'Rappel','tx.type.autre':'Autre',
+    'eq.eaclub':'ID du club EA (pour l\'import auto)','eq.eaclub.ph':'Ex. 13494  (ou 13494, 51234 si un autre club sert de dépannage)','joueur.eanom':'Gamertag EA (si différent du nom)','joueur.eanom.ph':'Ex. Dj_lavabo','import.btn':'Importer depuis EA','import.titre':'Importer depuis EA','import.intro':'Choisis une équipe (qui a un ID club EA) pour aller chercher ses 5 derniers matchs.','import.equipe':'Équipe à importer','import.chercher':'Chercher les matchs','import.confirmer':'Importer les matchs cochés','import.aucuneEquipe':'Aucune équipe n\'a d\'ID club EA. Ajoute-le dans la fiche de l\'équipe.','import.chargement':'Connexion à EA… (ça peut prendre 10-20 sec)','import.erreur':'Erreur de connexion à EA.','import.vide':'Aucun match trouvé pour ce club.','import.horsLigue':'adversaire hors-ligue','import.deja':'déjà importé','import.nul':'égalité (ignoré)','import.pret':'prêt','import.joueursManq':'{n} joueur(s) non reliés','import.trouve':'{n} matchs trouvés · {ok} prêts à importer','import.rienCoche':'Coche au moins un match.','import.enCours':'Import en cours…','import.fini':'{n}/{t} matchs importés! Les stats sont à jour.',
     'nav.palmares':'Palmarès','commun.fermer':'Fermer',
-    'live.derniers':'Derniers résultats','live.prochains':'Prochains matchs','live.meneurs':'Meneurs','live.aucunResultat':'Premiers matchs ce soir! 🏒','live.aucunMatch':'Horaire à venir 📅','live.aucunMeneur':'La course aux points commence ce soir 🏆',
+    'live.derniers':'Derniers résultats','live.prochains':'Prochains matchs','live.meneurs':'Meneurs','live.aucunResultat':'Premiers matchs ce soir!','live.aucunMatch':'Horaire à venir','live.aucunMeneur':'La course aux points commence ce soir',
     'meneurs.pointeurs':'Meilleurs pointeurs','meneurs.gardiens':'Meilleurs gardiens','gd.arrpct':'Arr%',
     'profil.historique':'Match par match','profil.aucunMatch':'Aucun match joué.',
     'ep.derniers':'5 derniers matchs','ep.alignement':'Alignement',
     'detail.titre':'Feuille de match','detail.aucunJoueur':'Aucune stat de joueur pour ce match.',
-    'palmares.titre':'Palmarès','palmares.sous':'Les trophées et honneurs de la ligue.','palmares.admlbl':'Admin · Remettre un trophée','palmares.ph.titre':'Ex. Champion Saison 1','palmares.ph.gagnant':'Équipe ou joueur gagnant','palmares.ph.desc':'Description (optionnel)','palmares.remettre':'Remettre le trophée','palmares.vide.t':'La chasse aux trophées est ouverte','palmares.vide.s':'Les honneurs seront remis à la fin de la saison. 👑','palmares.besoin':'Écris le titre et le gagnant.','palmares.confirmSuppr':'Retirer ce trophée ?',
-    'ea.profil':'Profil EA','ea.titre':'Profil EA','ea.rafraichir':'🔄 Rafraîchir depuis EA','ea.chargement':'Connexion à EA… (10-20 sec)','ea.trouve':'Profil trouvé sur EA! (mis en mémoire)','ea.introuvable':'Aucun joueur trouvé avec ce gamertag sur EA.','ea.erreur':'Erreur de connexion à EA. Réessaie.','ea.sansNom':'Cette inscription n\'a pas de gamertag.','ea.fiche':'Fiche','ea.vpct':'% Vict.','ea.ptspg':'Pts/match','ea.tricks':'Tours du chapeau','ea.gardien':'Comme gardien','insc.creerJoueur':'Créer le joueur',
-    'eq.besoinNom':"Donne un nom à l'équipe.",'equipes.nettoyer':'🧹 Nettoyer les données orphelines','equipes.comp':'🔄 Appliquer les compensations','eq.cascade':'⚠️ Ça va aussi effacer : {m} match(s), {c} match(s) au calendrier et {j} joueur(s) de cette équipe.','eq.rienANettoyer':'Rien à nettoyer — toutes les données sont rattachées à une équipe existante. ✅','eq.confirmNettoyer':'Effacer {m} match(s), {c} match(s) au calendrier et {j} joueur(s) dont l\'équipe n\'existe plus ?','eq.nettoye':'✅ Nettoyage terminé!','eq.confirmSuppr':'Supprimer cette équipe ?',
-    'joueurs.ajouter':'+ Ajouter un joueur','joueurs.vide.t':'🏒 Les alignements se construisent','joueurs.vide.s':'Les joueurs seront affichés ici dès la formation des équipes.',
-    'joueurs.pasdequipe.t':'🏒 Les alignements se construisent','joueurs.pasdequipe.s':'Les joueurs seront affichés ici dès la formation des équipes.',
+    'palmares.titre':'Palmarès','palmares.sous':'Les trophées et honneurs de la ligue.','palmares.admlbl':'Admin · Remettre un trophée','palmares.ph.titre':'Ex. Champion Saison 1','palmares.ph.gagnant':'Équipe ou joueur gagnant','palmares.ph.desc':'Description (optionnel)','palmares.remettre':'Remettre le trophée','palmares.vide.t':'La chasse aux trophées est ouverte','palmares.vide.s':'Les honneurs seront remis à la fin de la saison.','palmares.besoin':'Écris le titre et le gagnant.','palmares.confirmSuppr':'Retirer ce trophée ?',
+    'ea.profil':'Profil EA','ea.titre':'Profil EA','ea.rafraichir':'Rafraîchir depuis EA','ea.chargement':'Connexion à EA… (10-20 sec)','ea.trouve':'Profil trouvé sur EA! (mis en mémoire)','ea.introuvable':'Aucun joueur trouvé avec ce gamertag sur EA.','ea.erreur':'Erreur de connexion à EA. Réessaie.','ea.sansNom':'Cette inscription n\'a pas de gamertag.','ea.fiche':'Fiche','ea.vpct':'% Vict.','ea.ptspg':'Pts/match','ea.tricks':'Tours du chapeau','ea.gardien':'Comme gardien','insc.creerJoueur':'Créer le joueur',
+    'eq.besoinNom':"Donne un nom à l'équipe.",'equipes.nettoyer':'Nettoyer les données orphelines','equipes.comp':'Appliquer les compensations','eq.cascade':'Ça va aussi effacer : {m} match(s), {c} match(s) au calendrier et {j} joueur(s) de cette équipe.','eq.rienANettoyer':'Rien à nettoyer — toutes les données sont rattachées à une équipe existante.','eq.confirmNettoyer':'Effacer {m} match(s), {c} match(s) au calendrier et {j} joueur(s) dont l\'équipe n\'existe plus ?','eq.nettoye':'Nettoyage terminé!','eq.confirmSuppr':'Supprimer cette équipe ?',
+    'joueurs.ajouter':'+ Ajouter un joueur','joueurs.vide.t':'Les alignements se construisent','joueurs.vide.s':'Les joueurs seront affichés ici dès la formation des équipes.',
+    'joueurs.pasdequipe.t':'Les alignements se construisent','joueurs.pasdequipe.s':'Les joueurs seront affichés ici dès la formation des équipes.',
     'joueurs.equipevide':'Aucun joueur dans cette équipe.',
     'joueur.nom':'Nom / gamertag','joueur.nom.ph':'Ex. Kain97','joueur.equipe':'Équipe','joueur.position':'Position (facultatif — interne, non affichée)',
     'joueur.modal.nouveau':'Nouveau joueur','joueur.modal.modifier':'Modifier le joueur',
@@ -2097,20 +2095,20 @@ const DICT = {
     'echanges.confirmRefus':'Refuser cet échange ?','echanges.confirmAnnul':'Retirer cette proposition ?','echanges.confirmSuppr':'Supprimer cet échange définitivement ?',
     'echanges.confirmApprouve':"Approuver — les joueurs vont changer d'équipe. Continuer ?",
     'btn.accepter':'Accepter','btn.refuser':'Refuser','btn.contre':'Contre-offre','btn.approuver':'Approuver',
-    'statut.propose':'Proposé','statut.accepte_dg':'Accepté — attente admin','statut.approuve':'Approuvé ✅','statut.refuse':'Refusé','statut.contre':'Contre-offre faite',
-    'classements.vide.t':'🏆 En préparation','classements.vide.s':'Le classement s\'activera automatiquement dès les premiers matchs de la Saison 1.',
+    'statut.propose':'Proposé','statut.accepte_dg':'Accepté — attente admin','statut.approuve':'Approuvé','statut.refuse':'Refusé','statut.contre':'Contre-offre faite',
+    'classements.vide.t':'En préparation','classements.vide.s':'Le classement s\'activera automatiquement dès les premiers matchs de la Saison 1.',
     'cl.equipe':'Équipe','cl.pj':'PJ','cl.v':'V','cl.d':'D','cl.dp':'DP','cl.bp':'BP','cl.bc':'BC','cl.diff':'+/-','cl.pts':'PTS','cl.proAbbr':'PROL',
-    'resultats.ajouter':'+ Ajouter un résultat','resultats.vide.t':'📊 La saison s\'en vient','resultats.vide.s':'Les résultats apparaîtront ici après les premières games.',
+    'resultats.ajouter':'+ Ajouter un résultat','resultats.vide.t':'La saison s\'en vient','resultats.vide.s':'Les résultats apparaîtront ici après les premières games.',
     'match.modal.nouveau':'Feuille de match','match.modal.modifier':'Modifier le match',
     'match.dom':'Équipe à domicile','match.ext':'Équipe visiteur','match.pro':'Prolongation / fusillade',
     'match.memeEquipe':'Choisis deux équipes différentes.','match.besoinScore':'Entre les deux scores.',
     'match.egalite':'Un match a toujours un gagnant (utilise la prolongation).','match.confirmSuppr':'Supprimer ce résultat ?',
-    'calendrier.ajouter':'+ Ajouter au calendrier','calendrier.vide.t':'📅 Horaire en préparation','calendrier.vide.s':'L\'horaire de la Saison 1 sera publié bientôt.',
+    'calendrier.ajouter':'+ Ajouter au calendrier','calendrier.vide.t':'Horaire en préparation','calendrier.vide.s':'L\'horaire de la Saison 1 sera publié bientôt.',
     'calendrier.date':'Date','calendrier.heure':'Heure (optionnel)','calendrier.modal.nouveau':'Nouveau match','calendrier.modal.modifier':'Modifier le match',
     'calendrier.besoinDate':'Choisis une date.','calendrier.confirmSuppr':'Supprimer ce match du calendrier ?','calendrier.vs':'vs','calendrier.jouer':'Jouer',
-    'box.joue':'Joué','match.forfait':'Forfait','match.forfaitAucun':'— Aucun forfait —','match.forfaitVictoire':'Victoire par forfait','match.forfaitAppliquer':'Appliquer le forfait','match.forfaitAide':'1) Coche « Joué » pour les joueurs qui auraient joué (le site te demandera qui est le gardien). 2) Choisis l\'équipe gagnante. 3) Appliquer : score 6-0, chaque joueur gagnant 2 buts + 2 passes, gardien gagnant .800 (sans jeu blanc), équipe perdante retirée du match (aucune game jouée).','match.forfaitChoix':'Choisis d\'abord l\'équipe gagnante par forfait.','match.forfaitJoueurs':'Coche d\'abord « Joué » pour les joueurs de l\'équipe GAGNANTE .','cl.forfaitAbbr':'FORFAIT','jo.remp':'🔁 Remplaçants','jo.remp.vide':'Aucun remplaçant pour l\'instant.','cal.code':'Code','cal.codeTitre':'Code de la game privée (équipe à domicile)','gardiens.ajouter':'+ Ajouter un gardien','jo.equipe.remp':'🔁 Remplaçant (sans équipe)','box.remp.choisir':'— Ajouter un remplaçant —','box.remp.btn':'+ Ajouter','box.remp.deja':'Ce joueur est déjà dans la feuille de match.','box.remp.retirer':'Retirer ce remplaçant de la game','box.remp.retirerCourt':'Retirer de la game','box.remp.retirerConfirm':'Retirer {n} de la game ? Ses buts et passes saisis seront perdus.','pm.btn':'🔄 Recalculer les +/- de tous les matchs','pm.titre':'Recalcul des +/-','pm.remplis':'+/- manquants remplis','pm.lignes':'ligne(s)','pm.rafraichis':'+/- automatiques mis à jour','pm.pasTouche':'Jamais touchés : les forfaits, les gardiens, et les +/- que tu as tapés à la main.','pm.confirm1':'Appliquer ?','pm.rien':'Rien à faire : tous les +/- sont déjà à jour. ✅','pm.ecarts':'ligne(s) d\'EA ont un +/- différent de la différence de buts de l\'équipe.','pm.confirm2':'Les REMPLACER aussi par la différence de buts ? (Annuler = garder les chiffres d\'EA.)','pm.fait':'match(s) mis à jour.','cl.forme':'5 derniers','cl.serie':'Série','cl.formeTitre':'5 dernières games (V = victoire, D = défaite, DP = défaite en prolongation)','et.titre':'⭐ Étoiles de la soirée','et.dern':'Étoiles de la dernière soirée','et.vide':'Les étoiles apparaîtront après la première soirée.','et.arrets':'arrêts','et.blanchi':'blanchissage','et.aide':"Calcul automatique pour chaque soirée : meilleur buteur, passeur et pointeur, et meilleur gardien (meilleur % d'efficacité). Il faut avoir joué au moins 2 matchs dans la soirée. En cas d'égalité, tous les joueurs sont affichés. Les forfaits ne comptent pas.",'et.buteur':'Meilleur buteur','et.passeur':'Meilleur passeur','et.pointeur':'Meilleur pointeur','et.gardien':'Meilleur gardien','et.buts':'buts','et.passes':'passes','et.pts':'pts','et.moy':'moy.','et.aucun':'Personne (2 matchs minimum)','duel.titre':'⚔️ Duel entre deux équipes','duel.choisir':'Choisis deux équipes pour voir leur bilan.','duel.aucun':'Ces deux équipes ne se sont pas encore affrontées.','duel.egal':'{a} et {b} : égalité {n}-{n}','duel.mene':'{x} mène {n} contre {y}','duel.buts':'Buts','ep.masse':'Masse salariale','ep.masseNon':'Salaires pas encore inscrits.','ep.dispo':'{n} M$ de marge','ep.depasse':'{n} M$ au-dessus du plafond','ep.gardien':'Gardien partant','ep.gardienNon':'Aucun gardien.','ep.prochain':'Prochain match','ep.prochainNon':'Aucun match prévu.','ep.vs':'reçoit','ep.chez':'visite','ep.duels':'Bilan contre chaque équipe','ech.introuvable':"Cet échange n'existe plus (il a peut-être été retiré).",'ech.dejaTraite':"Cet échange a déjà été traité par quelqu'un d'autre. La liste va se mettre à jour.",'ech.joueurBouge':"{n} n'est plus dans la même équipe qu'au départ : l'échange n'est plus valide. Refuse-le et refais-en un nouveau.",'ech.autreEchange':"Déjà dans un autre échange en attente : {n}. Envoyer quand même ?",'ech.plafond':'Plafond salarial dépassé après cet échange :','eq.codeDoublon':"Ce code est déjà utilisé (une autre équipe ou le code admin). Choisis-en un autre.",'dg.joueurAvecStats':"Ce joueur a déjà joué des matchs : seul l'admin peut le supprimer (sinon ses stats seraient perdues). Pour le retirer de ton équipe, passe par un échange ou demande à l'admin.",'joueur.supprStats':"⚠ Ce joueur a des stats dans des matchs. Le supprimer va faire apparaître « ? » à sa place dans ces matchs. Continuer quand même ?",'match.date':'Date du match','nav.monequipe':'⭐ Mon équipe','me.eyebrow':'Espace DG','me.titre':'Mon équipe','me.sous':'Tout sur ton équipe au même endroit.','me.choix':"Voir l'équipe (admin)",'me.connecte':'Connecte-toi avec ton code DG (la couronne ♛ en haut) pour voir ton équipe.','me.rang':'{r}e sur {n}','me.prochains':'Prochains matchs','me.echanges':'Échanges en cours','me.aRepondre':'{n} à répondre','me.attenteAutre':"En attente de l'autre DG",'me.aToi':'À toi de répondre','me.aucunEch':'Aucun échange en cours.','me.voirEch':'Voir les échanges →','me.sal':'M$','me.derniers':'Derniers résultats','me.donne':'Tu donnes :','me.recoit':'Tu reçois :','me.leaders':"Leaders de l'équipe",'me.lPts':'Points','me.lButs':'Buts','me.lPasses':'Passes','me.lPm':'+/-','me.compare':'Comparé à la ligue','me.moyLigue':'Moyenne ligue :','me.attaque':'Attaque (buts pour / match)','me.defense':'Défense (buts contre / match)','me.diffMatch':'Différentiel / match','nav.etoiles':'⭐ Étoiles','et.page':'Étoiles','et.pageSous':'Les meilleurs de chaque soirée, calculés automatiquement.','et.saison':'🏆 Étoiles de la saison','et.saisonAide':"Nombre de fois où chaque joueur a été l'étoile d'une soirée : 🎯 buteur · 🅰️ passeur · 🏒 pointeur · 🥅 gardien.",'insc.dejaJoueur':'{n} est déjà dans la ligue. Le créer quand même ?','et.colJoueur':'Joueur','et.colGardien':'Gardien','et.colBut':'Buteur','et.colPasse':'Passeur','et.colPoint':'Pointeur','et.colTotal':'Total','et.colEff':'Eff. %','et.patineurs':'Patineurs','et.patineursSous':"Nombre de soirées où le joueur a été le meilleur buteur, le meilleur passeur ou le meilleur pointeur.",'et.gardiens':'Gardiens','et.gardiensSous':"Nombre de soirées où le gardien a eu le meilleur % d'efficacité (efficacité de la saison à côté).",'jo.filtreTout':'Toutes les équipes','jo.filtreRemp':'Remplaçants','jo.rechercher':'Rechercher un joueur…','jo.aucunResultat':'Aucun joueur ne correspond.','jo.aideTri':'Choisis une catégorie ou clique sur une colonne pour trier. Les remplaçants sont marqués REMP.','gd.nonQualif':'Moins de {n} matchs (pas encore classés)','gd.aideTri':"Clique sur une colonne pour trier. Pour le classement au % d'efficacité et à la moyenne, il faut au moins {n} matchs.",'cat.pts':'Points','cat.b':'Buts','cat.a':'Passes','cat.pm':'+/-','cat.tirs':'Tirs','cat.pctTirs':'% de tirs','cat.hits':'Mises en échec','cat.bloques':'Tirs bloqués','cat.maj':'Mises en jeu %','cat.passPct':'Passes réussies %','cat.pim':'Pénalités','cat.tg':'Temps de glace','cat.minTirs':'Moins de 10 tirs (pas classés)','cat.minMaj':'Moins de 20 mises en jeu (pas classés)','cat.minPasses':'Moins de 20 passes tentées (pas classés)','cat.gPct':"% d'efficacité",'cat.gMoy':'Moyenne','cat.gV':'Victoires','cat.gBl':'Blanchissages','cat.gPj':'Matchs joués','sb.resultats':'Résultats','sb.avenir':'À venir','sb.final':'Final','sb.finalProl':'Prol.','btn.classement':'Voir le classement','nav.series':'🏆 Séries','se.titre':'Séries éliminatoires','se.sous':'Le tableau se remplit tout seul et se met à jour après chaque game.','se.pasAssez':'Il faut 8 équipes au classement pour former le tableau.','se.aDeterminer':'À déterminer','se.attente':'En attente des gagnants','se.aVenir':'Série à venir','se.egal':'Égalité {n}','se.mene':'{x} mène {n}','se.gagne':'{x} gagne {n}','se.r1':'Quarts de finale','se.r2':'Demi-finales','se.r3':'Finale','se.projection':'Si les séries commençaient aujourd’hui (selon le classement actuel)','se.enCours':'Séries en cours','se.champion':'{x} — champion de la Saison 1 !','se.aide':'Les 8 équipes sont classées selon la saison régulière (jusqu’au {d}). 1re contre 8e, 2e contre 7e, 3e contre 6e, 4e contre 5e. Chaque série se joue au meilleur de {t} : la première équipe à {v} victoires passe. Toute game jouée après la saison régulière compte pour les séries.','pr.titre':'⚡ Power ranking','pr.vide':'Le power ranking apparaîtra après les premières games.','pr.forme':'5 dernières','pr.diff5':'+/- (5)','pr.fiche':'Fiche','pr.aide':'Classement de forme : surtout les 5 dernières games (résultats et différentiel), un peu la saison complète. ▲▼ = mouvement depuis la soirée précédente.','am.titre':'Avant-match','am.domicile':'Domicile','am.visiteur':'Visiteur','am.comparaison':'Comparaison de la saison','am.pts':'Points au classement','am.bpm':'Buts pour / match','am.bcm':'Buts contre / match','am.diff':'Différentiel','am.confr':'Confrontations cette saison','am.top':'Joueurs à surveiller','ph.saison':'Saison régulière','ph.series':'Séries','ph.pasCommence':"Les séries n'ont pas encore commencé.",'dt.etoiles':'⭐ Les 3 étoiles du match','pg.titreJ':'📈 Points match par match','pg.titreG':"📈 % d'efficacité match par match",'pg.moy':'moy.','pg.aide':'Une barre par match (plus pâle = défaite). Touche ou survole une barre pour le détail.','cp.btn':'⚖️ Comparer deux joueurs','cp.titre':'Comparer deux joueurs','cp.choisir':'Tape le nom de deux joueurs pour les comparer.','cp.ptsMatch':'Points / match','dt.e1':'1re','dt.e2':'2e','dt.e3':'3e','pg.titre':'📈 Évolution match par match','pg.sousJ':'Points par match (buts + passes)','pg.sousG':"% d'efficacité par match",'pg.patineur':'Patineur','pg.gardien':'Gardien','pg.moyPts':'Pts / match','pg.moyEff':'Eff. moyenne','pg.meilleur':'Meilleur match','pg.vd':'V-D','pg.victoire':'Victoire','pg.defaite':'Défaite','pg.moyenne':'Moyenne','cp.chercher':'Chercher un joueur…','rg.ph':'Joueur, équipe ou page…','rg.aide':'Tape le nom d’un joueur, d’une équipe ou d’une page. Astuce : la touche « / » ouvre la recherche.','rg.joueurs':'Joueurs','rg.equipes':'Équipes','rg.pages':'Pages','rg.rien':'Aucun résultat.','rg.autres':'autres — précise ta recherche','joueur.salaire':'Salaire (M$)','joueur.salaire.ph':'Ex. 3','joueur.salaireInvalide':'Salaire invalide : mets un nombre entre 0 et 34 (en M$).','sal.lbl':'Salaire','st.sal':'SAL','st.sal.l':'Salaire (M$)','cat.sal':'💰 Salaire','ret.titreModal':'💰 Rétention de salaire (optionnel)','ret.aide':'Chaque équipe peut retenir du salaire une seule fois dans la saison, sur un joueur qu’elle échange. Maximum 2 M$.','ret.aucune':'— Pas de rétention —','ret.retient':'{e} retient','ret.sur':'sur','ret.deja':'{e} : rétention déjà utilisée ({n}, {m})','ret.carte':'💰 {e} retient {m} sur {n}','ret.titre':'Salaire {s} — {m} retenus par {e}','ret.masse':'Salaire retenu','ret.erreurMax':'Rétention invalide : entre 0,5 et 2 M$, et pas plus que le salaire du joueur.','ret.erreurUtilisee':'{e} a déjà utilisé sa rétention de salaire cette saison.','ret.erreurJoueur':'{n} a déjà du salaire retenu.','ret.dispo':'Rétention de salaire : encore disponible (1 fois, max 2 M$)','ret.utilisee':'Rétention de salaire : utilisée — {n} ({m})','ret.ailleurs':'joue maintenant à {e}','ret.formLbl':'Salaire retenu (pour un échange déjà fait)','ret.formAide':'L’équipe choisie garde ce montant sur sa masse salariale ; l’équipe du joueur paie le reste. Max 2 M$.','ret.formAucune':'— Personne ne retient —','ret.formMemeEq':'L’équipe qui retient doit être l’ancienne équipe du joueur, pas son équipe actuelle.','ret.formDeja':'{e} a déjà une rétention sur {n} ({m}). Chaque équipe a droit à une seule rétention.\n\nEnregistrer quand même ?','note.lbl':'Note','note.col':'NOTE','note.colL':'Note générale de 60 à 99 (76 = moyen, 90+ = élite), comparée aux joueurs de la même position','cat.ovr':'⭐ Note','note.min':'Moins de 3 matchs (pas encore de note)','note.minG':'Note (min. 3 PJ)','note.att':'Note · attaquant','note.def':'Note · défenseur','note.hyb':'Note · hybride ({a} % att. / {d} % déf.)','note.forces':'Forces','note.travailler':'À améliorer','note.aide':'⭐ Note de 60 à 99 : attaquants, défenseurs et gardiens comparés à leur groupe (A/D = joue aux deux, chaque partie notée à sa position) · 76 = moyen, 83 = très bon, 90+ = élite · se précise avec les matchs (min. 3).','crit.pts':'points','crit.b':'buts','crit.pm':'+/-','crit.tirs':'tirs','crit.pctTirs':'% de tirs','crit.passPct':'passes réussies','crit.majPct':'mises en jeu','crit.voles':'revirements provoqués','crit.inter':'interceptions','crit.perdus':'peu de pertes de rondelle','crit.hits':'mises en échec','crit.bloques':'tirs bloqués','crit.pim':'discipline','crit.penObt':'punitions provoquées','crit.sv':'efficacité','crit.gaa':'moyenne de buts','crit.v':'victoires','crit.bl':'blanchissages','tl.propose':'📨 Proposé par {e}','tl.accepte':'🤝 Accepté par {e}','tl.approuve':'✅ Approuvé par la ligue','tl.refuse':'❌ Refusé par {e}','tl.refuseLigue':'la ligue','tl.contre':'↩️ Contre-offre envoyée','tl.instant':'à l’instant','tl.a':'à','ok.envoye':'📨 Proposition envoyée !','ok.accepte':'🤝 Échange accepté — en attente de l’approbation de la ligue.','ok.approuve':'✅ Échange approuvé — les joueurs ont changé d’équipe.','ok.refuse':'❌ Échange refusé.','ok.retire':'Proposition retirée.','dt.comp':'Comparatif des équipes','dt.poss':'Possession','dt.voles':'Revirements provoqués','dt.inter':'Interceptions','dt.perdus':'Pertes de rondelle','dt.gardiens':'Gardiens','dt.patineurs':'Patineurs','dt.sansEA':'Match entré à la main : seulement les buts et les passes sont connus.','bx.int':'INT','bx.rev':'REV','bx.pr':'PR','bx.poss':'POSS','bx.ba':'BA','bx.intL':'Interceptions','bx.revL':'Revirements provoqués','bx.prL':'Pertes de rondelle','bx.possL':'Temps de possession','sn.att':'Attaque','sn.def':'Défense','sn.jeu':'Jeu d’équipe','sn.aide':'Sous-notes comparées aux joueurs de la même position (60 à 99)','jr.date':'Date','jr.adv':'Adv.','jr.res':'Rés.','nav.nouvelles':'📰 Nouvelles','nv.titre':'Nouvelles','nv.sous':'Les faits saillants de chaque semaine, écrits automatiquement à partir des matchs.','nv.home':'📰 Nouvelles de la semaine','nv.tout':'Toutes les nouvelles','nv.semaineLbl':'Semaine','hb.recherche':'Rechercher un joueur, une équipe, une page…','tk.avis':'📢 Avis','tk.echange':'Échange','tk.echangeTxt':'{a} envoie {ja} à {b} contre {jb}','es.titre':'Étoiles de la semaine','es.lien':'Nouvelles et analyses →','es.off':'Les 3 étoiles offensives','es.offSous':'Buts, passes, tirs et +/-','es.def':'Les 3 étoiles défensives','es.defSous':'Gardien, interceptions, tirs bloqués et % de passes','es.gardien':'Gardien','es.defenseur':'Défenseur','es.attaquant':'Attaquant','t5.titre':'Top 5 — Meneurs de la ligue','t5.lien':'Toutes les statistiques →','t5.def':'Défenseurs · PTS','t5.gar':'Gardiens · %ARR','mc.titre':'Classement','match.scoreDom':'Score domicile (facultatif)','match.scoreExt':'Score visiteur (facultatif)','match.scoreAide':'Les stats avancées d\'EA sont conservées quand tu modifies un match. Remplis les DEUX cases de score seulement pour forcer un score précis. Le +/- de chaque joueur se calcule tout seul (différence de buts de son équipe), sauf si tu le tapes dans 📊.','box.note':'Le score se calcule à partir des buts. Coche les joueurs qui ont joué.',
-    'gardiens.vide.t':'🥅 En préparation','gardiens.vide.s':'Les stats des gardiens s\'afficheront dès les premiers matchs.',
-    'gd.pj':'PJ','gd.v':'V','gd.d':'D','gd.bl':'BL','gd.bc':'BC','gd.moy':'MOY','st.tirs':'T','st.tirs.l':'Tirs au but','st.pctTirs':'%T','st.pctTirs.l':'% de tirs','st.hits':'MÉ','st.hits.l':'Mises en échec','st.bloques':'TB','st.bloques.l':'Tirs bloqués','st.maj':'%MAJ','st.maj.l':'% mises en jeu','st.passes':'%P','st.passes.l':'% de passes','st.pim':'PUN','st.pim.l':'Minutes de pénalité','st.tg':'TG','st.tg.l':'Temps de glace moyen','st.arr':'ARR','st.arr.l':'Arrêts','st.tirsRecus':'TIRS','st.tirsRecus.l':'Tirs reçus','st.eff':'EFF','st.eff.l':'Efficacité (909 = .909)','st.echap':'ÉCH','st.echap.l':'Arrêts sur échappée','st.pen':'PÉN','st.pen.l':'Arrêts sur tir de pénalité','st.desesp':'AD','st.desesp.l':'Arrêts désespérés','st.poke':'CB','st.poke.l':'Coups de bâton','st.avancees':'📊 Stats avancées','st.avancees.vide':'Les stats avancées apparaîtront après le premier import EA.','st.tirsL':'Plus de tirs','st.hitsL':'Plus de mises en échec','st.bloquesL':'Plus de tirs bloqués','st.pmL':'Meilleur +/-','st.majL':'% mises en jeu (min. 10)','st.passL':'% de passes (min. 20)','st.volesL':'Plus de revirements provoqués','st.tgL':'Temps de glace / match','gardien.modal.titre':'Stats du gardien',
+    'box.joue':'Joué','match.forfait':'Forfait','match.forfaitAucun':'— Aucun forfait —','match.forfaitVictoire':'Victoire par forfait','match.forfaitAppliquer':'Appliquer le forfait','match.forfaitAide':'1) Coche « Joué » pour les joueurs qui auraient joué (le site te demandera qui est le gardien). 2) Choisis l\'équipe gagnante. 3) Appliquer : score 6-0, chaque joueur gagnant 2 buts + 2 passes, gardien gagnant .800 (sans jeu blanc), équipe perdante retirée du match (aucune game jouée).','match.forfaitChoix':'Choisis d\'abord l\'équipe gagnante par forfait.','match.forfaitJoueurs':'Coche d\'abord « Joué » pour les joueurs de l\'équipe GAGNANTE .','cl.forfaitAbbr':'FORFAIT','jo.remp':'Remplaçants','jo.remp.vide':'Aucun remplaçant pour l\'instant.','cal.code':'Code','cal.codeTitre':'Code de la game privée (équipe à domicile)','gardiens.ajouter':'+ Ajouter un gardien','jo.equipe.remp':'Remplaçant (sans équipe)','box.remp.choisir':'— Ajouter un remplaçant —','box.remp.btn':'+ Ajouter','box.remp.deja':'Ce joueur est déjà dans la feuille de match.','box.remp.retirer':'Retirer ce remplaçant de la game','box.remp.retirerCourt':'Retirer de la game','box.remp.retirerConfirm':'Retirer {n} de la game ? Ses buts et passes saisis seront perdus.','pm.btn':'Recalculer les +/- de tous les matchs','pm.titre':'Recalcul des +/-','pm.remplis':'+/- manquants remplis','pm.lignes':'ligne(s)','pm.rafraichis':'+/- automatiques mis à jour','pm.pasTouche':'Jamais touchés : les forfaits, les gardiens, et les +/- que tu as tapés à la main.','pm.confirm1':'Appliquer ?','pm.rien':'Rien à faire : tous les +/- sont déjà à jour.','pm.ecarts':'ligne(s) d\'EA ont un +/- différent de la différence de buts de l\'équipe.','pm.confirm2':'Les REMPLACER aussi par la différence de buts ? (Annuler = garder les chiffres d\'EA.)','pm.fait':'match(s) mis à jour.','cl.forme':'5 derniers','cl.serie':'Série','cl.formeTitre':'5 dernières games (V = victoire, D = défaite, DP = défaite en prolongation)','et.titre':'Étoiles de la soirée','et.dern':'Étoiles de la dernière soirée','et.vide':'Les étoiles apparaîtront après la première soirée.','et.arrets':'arrêts','et.blanchi':'blanchissage','et.aide':"Calcul automatique pour chaque soirée : meilleur buteur, passeur et pointeur, et meilleur gardien (meilleur % d'efficacité). Il faut avoir joué au moins 2 matchs dans la soirée. En cas d'égalité, tous les joueurs sont affichés. Les forfaits ne comptent pas.",'et.buteur':'Meilleur buteur','et.passeur':'Meilleur passeur','et.pointeur':'Meilleur pointeur','et.gardien':'Meilleur gardien','et.buts':'buts','et.passes':'passes','et.pts':'pts','et.moy':'moy.','et.aucun':'Personne (2 matchs minimum)','duel.titre':'Duel entre deux équipes','duel.choisir':'Choisis deux équipes pour voir leur bilan.','duel.aucun':'Ces deux équipes ne se sont pas encore affrontées.','duel.egal':'{a} et {b} : égalité {n}-{n}','duel.mene':'{x} mène {n} contre {y}','duel.buts':'Buts','ep.masse':'Masse salariale','ep.masseNon':'Salaires pas encore inscrits.','ep.dispo':'{n} M$ de marge','ep.depasse':'{n} M$ au-dessus du plafond','ep.gardien':'Gardien partant','ep.gardienNon':'Aucun gardien.','ep.prochain':'Prochain match','ep.prochainNon':'Aucun match prévu.','ep.vs':'reçoit','ep.chez':'visite','ep.duels':'Bilan contre chaque équipe','ech.introuvable':"Cet échange n'existe plus (il a peut-être été retiré).",'ech.dejaTraite':"Cet échange a déjà été traité par quelqu'un d'autre. La liste va se mettre à jour.",'ech.joueurBouge':"{n} n'est plus dans la même équipe qu'au départ : l'échange n'est plus valide. Refuse-le et refais-en un nouveau.",'ech.autreEchange':"Déjà dans un autre échange en attente : {n}. Envoyer quand même ?",'ech.plafond':'Plafond salarial dépassé après cet échange :','eq.codeDoublon':"Ce code est déjà utilisé (une autre équipe ou le code admin). Choisis-en un autre.",'dg.joueurAvecStats':"Ce joueur a déjà joué des matchs : seul l'admin peut le supprimer (sinon ses stats seraient perdues). Pour le retirer de ton équipe, passe par un échange ou demande à l'admin.",'joueur.supprStats':"⚠ Ce joueur a des stats dans des matchs. Le supprimer va faire apparaître « ? » à sa place dans ces matchs. Continuer quand même ?",'match.date':'Date du match','nav.monequipe':'Mon équipe','me.eyebrow':'Espace DG','me.titre':'Mon équipe','me.sous':'Tout sur ton équipe au même endroit.','me.choix':"Voir l'équipe (admin)",'me.connecte':'Connecte-toi avec ton code DG (la couronne ♛ en haut) pour voir ton équipe.','me.rang':'{r}e sur {n}','me.prochains':'Prochains matchs','me.echanges':'Échanges en cours','me.aRepondre':'{n} à répondre','me.attenteAutre':"En attente de l'autre DG",'me.aToi':'À toi de répondre','me.aucunEch':'Aucun échange en cours.','me.voirEch':'Voir les échanges →','me.sal':'M$','me.derniers':'Derniers résultats','me.donne':'Tu donnes :','me.recoit':'Tu reçois :','me.leaders':"Leaders de l'équipe",'me.lPts':'Points','me.lButs':'Buts','me.lPasses':'Passes','me.lPm':'+/-','me.compare':'Comparé à la ligue','me.moyLigue':'Moyenne ligue :','me.attaque':'Attaque (buts pour / match)','me.defense':'Défense (buts contre / match)','me.diffMatch':'Différentiel / match','nav.etoiles':'Étoiles','et.page':'Étoiles','et.pageSous':'Les meilleurs de chaque soirée, calculés automatiquement.','et.saison':'Étoiles de la saison','et.saisonAide':"Nombre de fois où chaque joueur a été l'étoile d'une soirée : 🎯 buteur · 🅰️ passeur · 🏒 pointeur · 🥅 gardien.",'insc.dejaJoueur':'{n} est déjà dans la ligue. Le créer quand même ?','et.colJoueur':'Joueur','et.colGardien':'Gardien','et.colBut':'Buteur','et.colPasse':'Passeur','et.colPoint':'Pointeur','et.colTotal':'Total','et.colEff':'Eff. %','et.patineurs':'Patineurs','et.patineursSous':"Nombre de soirées où le joueur a été le meilleur buteur, le meilleur passeur ou le meilleur pointeur.",'et.gardiens':'Gardiens','et.gardiensSous':"Nombre de soirées où le gardien a eu le meilleur % d'efficacité (efficacité de la saison à côté).",'jo.filtreTout':'Toutes les équipes','jo.filtreRemp':'Remplaçants','jo.rechercher':'Rechercher un joueur…','jo.aucunResultat':'Aucun joueur ne correspond.','jo.aideTri':'Choisis une catégorie ou clique sur une colonne pour trier. Les remplaçants sont marqués REMP.','gd.nonQualif':'Moins de {n} matchs (pas encore classés)','gd.aideTri':"Clique sur une colonne pour trier. Pour le classement au % d'efficacité et à la moyenne, il faut au moins {n} matchs.",'cat.pts':'Points','cat.b':'Buts','cat.a':'Passes','cat.pm':'+/-','cat.tirs':'Tirs','cat.pctTirs':'% de tirs','cat.hits':'Mises en échec','cat.bloques':'Tirs bloqués','cat.maj':'Mises en jeu %','cat.passPct':'Passes réussies %','cat.pim':'Pénalités','cat.tg':'Temps de glace','cat.minTirs':'Moins de 10 tirs (pas classés)','cat.minMaj':'Moins de 20 mises en jeu (pas classés)','cat.minPasses':'Moins de 20 passes tentées (pas classés)','cat.gPct':"% d'efficacité",'cat.gMoy':'Moyenne','cat.gV':'Victoires','cat.gBl':'Blanchissages','cat.gPj':'Matchs joués','sb.resultats':'Résultats','sb.avenir':'À venir','sb.final':'Final','sb.finalProl':'Prol.','btn.classement':'Voir le classement','nav.series':'Séries','se.titre':'Séries éliminatoires','se.sous':'Le tableau se remplit tout seul et se met à jour après chaque game.','se.pasAssez':'Il faut 8 équipes au classement pour former le tableau.','se.aDeterminer':'À déterminer','se.attente':'En attente des gagnants','se.aVenir':'Série à venir','se.egal':'Égalité {n}','se.mene':'{x} mène {n}','se.gagne':'{x} gagne {n}','se.r1':'Quarts de finale','se.r2':'Demi-finales','se.r3':'Finale','se.projection':'Si les séries commençaient aujourd’hui (selon le classement actuel)','se.enCours':'Séries en cours','se.champion':'{x} — champion de la Saison 1 !','se.aide':'Les 8 équipes sont classées selon la saison régulière (jusqu’au {d}). 1re contre 8e, 2e contre 7e, 3e contre 6e, 4e contre 5e. Chaque série se joue au meilleur de {t} : la première équipe à {v} victoires passe. Toute game jouée après la saison régulière compte pour les séries.','pr.titre':'Power ranking','pr.vide':'Le power ranking apparaîtra après les premières games.','pr.forme':'5 dernières','pr.diff5':'+/- (5)','pr.fiche':'Fiche','pr.aide':'Classement de forme : surtout les 5 dernières games (résultats et différentiel), un peu la saison complète. ▲▼ = mouvement depuis la soirée précédente.','am.titre':'Avant-match','am.domicile':'Domicile','am.visiteur':'Visiteur','am.comparaison':'Comparaison de la saison','am.pts':'Points au classement','am.bpm':'Buts pour / match','am.bcm':'Buts contre / match','am.diff':'Différentiel','am.confr':'Confrontations cette saison','am.top':'Joueurs à surveiller','ph.saison':'Saison régulière','ph.series':'Séries','ph.pasCommence':"Les séries n'ont pas encore commencé.",'dt.etoiles':'Les 3 étoiles du match','pg.titreJ':'Points match par match','pg.titreG':"📈 % d'efficacité match par match",'pg.moy':'moy.','pg.aide':'Une barre par match (plus pâle = défaite). Touche ou survole une barre pour le détail.','cp.btn':'Comparer deux joueurs','cp.titre':'Comparer deux joueurs','cp.choisir':'Tape le nom de deux joueurs pour les comparer.','cp.ptsMatch':'Points / match','dt.e1':'1re','dt.e2':'2e','dt.e3':'3e','pg.titre':'Évolution match par match','pg.sousJ':'Points par match (buts + passes)','pg.sousG':"% d'efficacité par match",'pg.patineur':'Patineur','pg.gardien':'Gardien','pg.moyPts':'Pts / match','pg.moyEff':'Eff. moyenne','pg.meilleur':'Meilleur match','pg.vd':'V-D','pg.victoire':'Victoire','pg.defaite':'Défaite','pg.moyenne':'Moyenne','cp.chercher':'Chercher un joueur…','rg.ph':'Joueur, équipe ou page…','rg.aide':'Tape le nom d’un joueur, d’une équipe ou d’une page. Astuce : la touche « / » ouvre la recherche.','rg.joueurs':'Joueurs','rg.equipes':'Équipes','rg.pages':'Pages','rg.rien':'Aucun résultat.','rg.autres':'autres — précise ta recherche','joueur.salaire':'Salaire (M$)','joueur.salaire.ph':'Ex. 3','joueur.salaireInvalide':'Salaire invalide : mets un nombre entre 0 et 34 (en M$).','sal.lbl':'Salaire','st.sal':'SAL','st.sal.l':'Salaire (M$)','cat.sal':'Salaire','ret.titreModal':'Rétention de salaire (optionnel)','ret.aide':'Chaque équipe peut retenir du salaire une seule fois dans la saison, sur un joueur qu’elle échange. Maximum 2 M$.','ret.aucune':'— Pas de rétention —','ret.retient':'{e} retient','ret.sur':'sur','ret.deja':'{e} : rétention déjà utilisée ({n}, {m})','ret.carte':'{e} retient {m} sur {n}','ret.titre':'Salaire {s} — {m} retenus par {e}','ret.masse':'Salaire retenu','ret.erreurMax':'Rétention invalide : entre 0,5 et 2 M$, et pas plus que le salaire du joueur.','ret.erreurUtilisee':'{e} a déjà utilisé sa rétention de salaire cette saison.','ret.erreurJoueur':'{n} a déjà du salaire retenu.','ret.dispo':'Rétention de salaire : encore disponible (1 fois, max 2 M$)','ret.utilisee':'Rétention de salaire : utilisée — {n} ({m})','ret.ailleurs':'joue maintenant à {e}','ret.formLbl':'Salaire retenu (pour un échange déjà fait)','ret.formAide':'L’équipe choisie garde ce montant sur sa masse salariale ; l’équipe du joueur paie le reste. Max 2 M$.','ret.formAucune':'— Personne ne retient —','ret.formMemeEq':'L’équipe qui retient doit être l’ancienne équipe du joueur, pas son équipe actuelle.','ret.formDeja':'{e} a déjà une rétention sur {n} ({m}). Chaque équipe a droit à une seule rétention.\n\nEnregistrer quand même ?','note.lbl':'Note','note.col':'NOTE','note.colL':'Note générale de 60 à 99 (76 = moyen, 90+ = élite), comparée aux joueurs de la même position','cat.ovr':'Note','note.min':'Moins de 3 matchs (pas encore de note)','note.minG':'Note (min. 3 PJ)','note.att':'Note · attaquant','note.def':'Note · défenseur','note.hyb':'Note · hybride ({a} % att. / {d} % déf.)','note.forces':'Forces','note.travailler':'À améliorer','note.aide':'Note de 60 à 99 : attaquants, défenseurs et gardiens comparés à leur groupe (A/D = joue aux deux, chaque partie notée à sa position) · 76 = moyen, 83 = très bon, 90+ = élite · se précise avec les matchs (min. 3).','crit.pts':'points','crit.b':'buts','crit.pm':'+/-','crit.tirs':'tirs','crit.pctTirs':'% de tirs','crit.passPct':'passes réussies','crit.majPct':'mises en jeu','crit.voles':'revirements provoqués','crit.inter':'interceptions','crit.perdus':'peu de pertes de rondelle','crit.hits':'mises en échec','crit.bloques':'tirs bloqués','crit.pim':'discipline','crit.penObt':'punitions provoquées','crit.sv':'efficacité','crit.gaa':'moyenne de buts','crit.v':'victoires','crit.bl':'blanchissages','tl.propose':'Proposé par {e}','tl.accepte':'Accepté par {e}','tl.approuve':'Approuvé par la ligue','tl.refuse':'Refusé par {e}','tl.refuseLigue':'la ligue','tl.contre':'↩️ Contre-offre envoyée','tl.instant':'à l’instant','tl.a':'à','ok.envoye':'Proposition envoyée !','ok.accepte':'Échange accepté — en attente de l’approbation de la ligue.','ok.approuve':'Échange approuvé — les joueurs ont changé d’équipe.','ok.refuse':'Échange refusé.','ok.retire':'Proposition retirée.','dt.comp':'Comparatif des équipes','dt.poss':'Possession','dt.voles':'Revirements provoqués','dt.inter':'Interceptions','dt.perdus':'Pertes de rondelle','dt.gardiens':'Gardiens','dt.patineurs':'Patineurs','dt.sansEA':'Match entré à la main : seulement les buts et les passes sont connus.','bx.int':'INT','bx.rev':'REV','bx.pr':'PR','bx.poss':'POSS','bx.ba':'BA','bx.intL':'Interceptions','bx.revL':'Revirements provoqués','bx.prL':'Pertes de rondelle','bx.possL':'Temps de possession','sn.att':'Attaque','sn.def':'Défense','sn.jeu':'Jeu d’équipe','sn.aide':'Sous-notes comparées aux joueurs de la même position (60 à 99)','jr.date':'Date','jr.adv':'Adv.','jr.res':'Rés.','nav.nouvelles':'Nouvelles','nv.titre':'Nouvelles','nv.sous':'Les faits saillants de chaque semaine, écrits automatiquement à partir des matchs.','nv.home':'Nouvelles de la semaine','nv.tout':'Toutes les nouvelles','nv.semaineLbl':'Semaine','hb.recherche':'Rechercher un joueur, une équipe, une page…','tk.avis':'Avis','tk.echange':'Échange','tk.echangeTxt':'{a} envoie {ja} à {b} contre {jb}','es.titre':'Étoiles de la semaine','es.lien':'Nouvelles et analyses →','es.off':'Les 3 étoiles offensives','es.offSous':'Buts, passes, tirs et +/-','es.def':'Les 3 étoiles défensives','es.defSous':'Gardien, interceptions, tirs bloqués et % de passes','es.gardien':'Gardien','es.defenseur':'Défenseur','es.attaquant':'Attaquant','t5.titre':'Top 5 — Meneurs de la ligue','t5.lien':'Toutes les statistiques →','t5.def':'Défenseurs · PTS','t5.gar':'Gardiens · %ARR','mc.titre':'Classement','match.scoreDom':'Score domicile (facultatif)','match.scoreExt':'Score visiteur (facultatif)','match.scoreAide':'Les stats avancées d\'EA sont conservées quand tu modifies un match. Remplis les DEUX cases de score seulement pour forcer un score précis. Le +/- de chaque joueur se calcule tout seul (différence de buts de son équipe), sauf si tu le tapes dans 📊.','box.note':'Le score se calcule à partir des buts. Coche les joueurs qui ont joué.',
+    'gardiens.vide.t':'En préparation','gardiens.vide.s':'Les stats des gardiens s\'afficheront dès les premiers matchs.',
+    'gd.pj':'PJ','gd.v':'V','gd.d':'D','gd.bl':'BL','gd.bc':'BC','gd.moy':'MOY','st.tirs':'T','st.tirs.l':'Tirs au but','st.pctTirs':'%T','st.pctTirs.l':'% de tirs','st.hits':'MÉ','st.hits.l':'Mises en échec','st.bloques':'TB','st.bloques.l':'Tirs bloqués','st.maj':'%MAJ','st.maj.l':'% mises en jeu','st.passes':'%P','st.passes.l':'% de passes','st.pim':'PUN','st.pim.l':'Minutes de pénalité','st.tg':'TG','st.tg.l':'Temps de glace moyen','st.arr':'ARR','st.arr.l':'Arrêts','st.tirsRecus':'TIRS','st.tirsRecus.l':'Tirs reçus','st.eff':'EFF','st.eff.l':'Efficacité (909 = .909)','st.echap':'ÉCH','st.echap.l':'Arrêts sur échappée','st.pen':'PÉN','st.pen.l':'Arrêts sur tir de pénalité','st.desesp':'AD','st.desesp.l':'Arrêts désespérés','st.poke':'CB','st.poke.l':'Coups de bâton','st.avancees':'Stats avancées','st.avancees.vide':'Les stats avancées apparaîtront après le premier import EA.','st.tirsL':'Plus de tirs','st.hitsL':'Plus de mises en échec','st.bloquesL':'Plus de tirs bloqués','st.pmL':'Meilleur +/-','st.majL':'% mises en jeu (min. 10)','st.passL':'% de passes (min. 20)','st.volesL':'Plus de revirements provoqués','st.tgL':'Temps de glace / match','gardien.modal.titre':'Stats du gardien',
     'jo.pos':'POS','jo.joueur':'Joueur','jo.b':'B','jo.a':'A','joueur.stats':'Statistiques'
   },
   en: {
@@ -2122,7 +2120,7 @@ const DICT = {
     'badge.mode':'4s Mode','badge.lang':'Bilingual FR / EN','badge.saison':'Season 1 — live','btn.horaire':'See the schedule','horaire.jours':'Sunday · Monday · Tuesday','horaire.periode':'October 4 → November 24, 2026',
     'btn.inscrire':'Sign up','btn.voirstats':'View stats',
     'intro.eyebrow':'The league',
-    'intro.text':'DYNASTY is a competitive video hockey league on NHL 27 in World of Chel (4S). Built for the French and English community, we mix real team hockey, live-tracked stats and a tournament vibe every match. Welcome to the dynasty. 👑',
+    'intro.text':'DYNASTY is a competitive video hockey league on NHL 27 in World of Chel (4S). Built for the French and English community, we mix real team hockey, live-tracked stats and a tournament vibe every match. Welcome to the dynasty.',
     'stat.mode':'Mode','stat.equipes':'Teams','stat.saison':'Season',
     'feat1.titre':'Live stats','feat1.desc':'Standings, players and goalies updated after every match, in real time.',
     'feat2.titre':'100% competitive','feat2.desc':'4s format, real team hockey where every goal counts toward the title.',
@@ -2132,14 +2130,14 @@ const DICT = {
     'eyebrow.portail':'Portal','eyebrow.stats':'Stats',
     'annonces.titre':'News','annonces.sous':'Official league news.',
     'annonces.admlbl':'Admin · New post','annonces.ph.titre':'Post title','annonces.ph.image':'Image link (optional)','annonces.ping':'Notify @everyone on Discord','annonces.ph.texte':'Content…',
-    'annonces.publier':'Publish','annonces.vide.t':'📣 Coming soon','annonces.vide.s':'The league\'s first official announcements are on the way. Stay tuned!',
+    'annonces.publier':'Publish','annonces.vide.t':'Coming soon','annonces.vide.s':'The league\'s first official announcements are on the way. Stay tuned!',
     'reglements.titre':'Rules','reglements.sous':'The rules to follow in the league.',
     'reglements.admlbl':'Admin · Edit the rules','reglements.ph':'Write the rules here…','reglements.vide':'No rules yet.',
-    'reglements.enregistres':'Rules saved ✅',
+    'reglements.enregistres':'Rules saved',
     'inscriptions.titre':'Sign-up','inscriptions.sous':'Join the DYNASTY league.',
     'inscriptions.commenttitre':'How to sign up','inscriptions.commenttexte':'Fill out the form to sign up as a player (free agent). An admin will reach out on Discord.',
     'inscriptions.bouton':'Sign-up form',
-    'insc.nom':'Name / Gamertag','insc.nom.ph':'Your in-game gamertag','insc.plateforme':'Platform','insc.position':'Positions','insc.discord':'Discord','insc.discord.ph':'your_handle','insc.dg':'Do you want to be a general manager (GM)?','insc.dg.non':'No, just play','insc.dg.oui':'Yes, I\'d like to manage a team','insc.dg.peutetre':'Maybe / open to it','insc.dgBadge':'Interested in being GM','gmc.titre':'🎮 Registration — GM Connected League','gmc.texte':'Sign up for the GM Connected league. Tell us your weekly availability.','gmc.dispo':'Your availability','gmc.loterie':'Do you accept to play with the team you get in the lottery?','gmc.lot.oui':'Yes, any team works','gmc.lot.non':'No, I have preferences','gmc.admin.titre':'Registrations — GM Connected League','gmc.besoinDispo':'Pick at least one day.','gmc.lotBadgeOui':'Accepts lottery team','gmc.lotBadgeNon':'Has team preferences','jour.lun':'Monday','jour.mar':'Tuesday','jour.mer':'Wednesday','jour.jeu':'Thursday','jour.ven':'Friday','jour.sam':'Saturday','jour.dim':'Sunday','insc.dgPeut':'GM — maybe',
+    'insc.nom':'Name / Gamertag','insc.nom.ph':'Your in-game gamertag','insc.plateforme':'Platform','insc.position':'Positions','insc.discord':'Discord','insc.discord.ph':'your_handle','insc.dg':'Do you want to be a general manager (GM)?','insc.dg.non':'No, just play','insc.dg.oui':'Yes, I\'d like to manage a team','insc.dg.peutetre':'Maybe / open to it','insc.dgBadge':'Interested in being GM','gmc.titre':'Registration — GM Connected League','gmc.texte':'Sign up for the GM Connected league. Tell us your weekly availability.','gmc.dispo':'Your availability','gmc.loterie':'Do you accept to play with the team you get in the lottery?','gmc.lot.oui':'Yes, any team works','gmc.lot.non':'No, I have preferences','gmc.admin.titre':'Registrations — GM Connected League','gmc.besoinDispo':'Pick at least one day.','gmc.lotBadgeOui':'Accepts lottery team','gmc.lotBadgeNon':'Has team preferences','jour.lun':'Monday','jour.mar':'Tuesday','jour.mer':'Wednesday','jour.jeu':'Thursday','jour.ven':'Friday','jour.sam':'Saturday','jour.dim':'Sunday','insc.dgPeut':'GM — maybe',
     'insc.envoyer':'Sign me up','insc.merci':'Thanks! Your registration is in. An admin will reach out.','insc.besoinNom':'Enter at least your name / gamertag.',
     'insc.admin.titre':'Registrations — 4S League','insc.compteur':'registered','insc.doublons':'duplicate(s) found','insc.aucunDoublon':'No duplicates','insc.dblBadge':'Duplicate entry','insc.vide':'No registrations yet.','insc.nouveau':'New','insc.traite':'Processed',
     'insc.marquerTraite':'Mark processed','insc.marquerNouveau':'Mark as new','insc.confirmSuppr':'Delete this registration?',
@@ -2151,7 +2149,7 @@ const DICT = {
     'resultats.titre':'Results','resultats.sous':'Match results.','resultats.construction':"We're building the results in the next step.",
     'commun.construction':'Section under construction',
     'equipes.titre':'Teams','equipes.sous':'The teams of the DYNASTY league.','equipes.ajouter':'+ Add a team',
-    'equipes.vide.t':'🛡️ In the works','equipes.vide.s':'Season 1 teams will be revealed soon.',
+    'equipes.vide.t':'In the works','equipes.vide.s':'Season 1 teams will be revealed soon.',
     'footer.ligne':'CHEL League · NHL 27 · © 2026','footer.tag':'Competitive hockey · NHL 27 · World of Chel','prop.titre':'Owners','prop.ajouter':'+ Add an owner','prop.modal.nouveau':'New owner','prop.modal.modifier':'Edit owner','prop.lbl.nom':'Name','prop.lbl.role':'Role','prop.lbl.photo':'Photo — image link (optional)','prop.ph.nom':'Name','prop.ph.role':'Role (e.g. Commissioner)','prop.ph.photo':'Photo — image link (optional)','prop.besoin':'Enter at least a name.','prop.confirmSuppr':'Remove this owner?','prop.vide':'No owners listed yet.',
     'admin.titre':'Admin mode','admin.sous':'Enter the admin password or your GM code.','admin.ph':'Password / GM code',
     'admin.connexion':'Log in','admin.incorrect':'Incorrect password.',
@@ -2162,20 +2160,20 @@ const DICT = {
     'err.connexion':'Connection error','commun.erreur':'Error: ',
     'btn.supprimer':'Delete','btn.modifier':'Edit','an.sansTitre':'(no title)','eq.sansNom':'(no name)',
     'an.besoin':'Write at least a title or some text.','an.confirmSuppr':'Delete this post?',
-    'discord.lbl':'Admin · Discord webhook (auto announcements)','discord.ph':'https://discord.com/api/webhooks/…','discord.actif':'Auto-post announcements to Discord','discord.save':'Save','discord.test':'Test','discord.enregistre':'✓ Webhook saved.','discord.besoinUrl':'Paste the webhook link first.','discord.testMsg':'🏒 DYNASTY test — the webhook works!','discord.testOk':'✓ Test message sent to Discord!','discord.testErr':'Failed. Check the webhook link.',
-    'transactions.titre':'Transactions','transactions.sous':'Signings, trades, releases and call-ups.','transactions.admlbl':'Admin · New transaction','transactions.ph.texte':'Details (optional if image)…','transactions.ping':'Notify @everyone on Discord','transactions.publier':'Post transaction','transactions.dclbl':'Admin · Transactions Discord webhook','transactions.dcactif':'Auto-post transactions to Discord','transactions.vide.t':'🔁 The market is quiet… for now','transactions.vide.s':'Signings, trades and call-ups will appear here once the market opens.','transactions.besoin':'Add details or an image.','transactions.confirmSuppr':'Delete this transaction?','transactions.footer':'DYNASTY Transactions','transactions.testMsg':'🔁 DYNASTY transactions test — the webhook works!','tx.type.signature':'Signing','tx.type.echange':'Trade','tx.type.liberation':'Release','tx.type.rappel':'Call-up','tx.type.autre':'Other',
-    'eq.eaclub':'EA club ID (for auto-import)','eq.eaclub.ph':'Ex. 13494','joueur.eanom':'EA gamertag (if different from name)','joueur.eanom.ph':'Ex. Dj_lavabo','import.btn':'📥 Import from EA','import.titre':'📥 Import from EA','import.intro':'Pick a team (with an EA club ID) to fetch its last 5 matches.','import.equipe':'Team to import','import.chercher':'Fetch matches','import.confirmer':'Import checked matches','import.aucuneEquipe':'No team has an EA club ID. Add it in the team form.','import.chargement':'Connecting to EA… (may take 10-20 sec)','import.erreur':'EA connection error.','import.vide':'No match found for this club.','import.horsLigue':'opponent outside league','import.deja':'already imported','import.nul':'tie (skipped)','import.pret':'ready','import.joueursManq':'{n} player(s) not linked','import.trouve':'{n} matches found · {ok} ready to import','import.rienCoche':'Check at least one match.','import.enCours':'Importing…','import.fini':'{n}/{t} matches imported! Stats are up to date.',
+    'discord.lbl':'Admin · Discord webhook (auto announcements)','discord.ph':'https://discord.com/api/webhooks/…','discord.actif':'Auto-post announcements to Discord','discord.save':'Save','discord.test':'Test','discord.enregistre':'Webhook saved.','discord.besoinUrl':'Paste the webhook link first.','discord.testMsg':'🏒 DYNASTY test — the webhook works!','discord.testOk':'Test message sent to Discord!','discord.testErr':'Failed. Check the webhook link.',
+    'transactions.titre':'Transactions','transactions.sous':'Signings, trades, releases and call-ups.','transactions.admlbl':'Admin · New transaction','transactions.ph.texte':'Details (optional if image)…','transactions.ping':'Notify @everyone on Discord','transactions.publier':'Post transaction','transactions.dclbl':'Admin · Transactions Discord webhook','transactions.dcactif':'Auto-post transactions to Discord','transactions.vide.t':'The market is quiet… for now','transactions.vide.s':'Signings, trades and call-ups will appear here once the market opens.','transactions.besoin':'Add details or an image.','transactions.confirmSuppr':'Delete this transaction?','transactions.footer':'DYNASTY Transactions','transactions.testMsg':'🔁 DYNASTY transactions test — the webhook works!','tx.type.signature':'Signing','tx.type.echange':'Trade','tx.type.liberation':'Release','tx.type.rappel':'Call-up','tx.type.autre':'Other',
+    'eq.eaclub':'EA club ID (for auto-import)','eq.eaclub.ph':'Ex. 13494','joueur.eanom':'EA gamertag (if different from name)','joueur.eanom.ph':'Ex. Dj_lavabo','import.btn':'Import from EA','import.titre':'Import from EA','import.intro':'Pick a team (with an EA club ID) to fetch its last 5 matches.','import.equipe':'Team to import','import.chercher':'Fetch matches','import.confirmer':'Import checked matches','import.aucuneEquipe':'No team has an EA club ID. Add it in the team form.','import.chargement':'Connecting to EA… (may take 10-20 sec)','import.erreur':'EA connection error.','import.vide':'No match found for this club.','import.horsLigue':'opponent outside league','import.deja':'already imported','import.nul':'tie (skipped)','import.pret':'ready','import.joueursManq':'{n} player(s) not linked','import.trouve':'{n} matches found · {ok} ready to import','import.rienCoche':'Check at least one match.','import.enCours':'Importing…','import.fini':'{n}/{t} matches imported! Stats are up to date.',
     'nav.palmares':'Honours','commun.fermer':'Close',
-    'live.derniers':'Latest results','live.prochains':'Upcoming games','live.meneurs':'Leaders','live.aucunResultat':'First games tonight! 🏒','live.aucunMatch':'Schedule coming soon 📅','live.aucunMeneur':'The points race starts tonight 🏆',
+    'live.derniers':'Latest results','live.prochains':'Upcoming games','live.meneurs':'Leaders','live.aucunResultat':'First games tonight!','live.aucunMatch':'Schedule coming soon','live.aucunMeneur':'The points race starts tonight',
     'meneurs.pointeurs':'Top scorers','meneurs.gardiens':'Top goalies','gd.arrpct':'SV%',
     'profil.historique':'Game by game','profil.aucunMatch':'No game played.',
     'ep.derniers':'Last 5 games','ep.alignement':'Roster',
     'detail.titre':'Game sheet','detail.aucunJoueur':'No player stats for this game.',
-    'palmares.titre':'Honours','palmares.sous':'League trophies and honours.','palmares.admlbl':'Admin · Award a trophy','palmares.ph.titre':'Ex. Season 1 Champion','palmares.ph.gagnant':'Winning team or player','palmares.ph.desc':'Description (optional)','palmares.remettre':'Award trophy','palmares.vide.t':'The trophy hunt is on','palmares.vide.s':'Honours will be awarded at the end of the season. 👑','palmares.besoin':'Write the title and the winner.','palmares.confirmSuppr':'Remove this trophy?',
-    'ea.profil':'EA Profile','ea.titre':'EA Profile','ea.rafraichir':'🔄 Refresh from EA','ea.chargement':'Connecting to EA… (10-20 sec)','ea.trouve':'Profile found on EA! (cached)','ea.introuvable':'No player found with this gamertag on EA.','ea.erreur':'EA connection error. Try again.','ea.sansNom':'This registration has no gamertag.','ea.fiche':'Record','ea.vpct':'Win %','ea.ptspg':'Pts/game','ea.tricks':'Hat tricks','ea.gardien':'As goalie','insc.creerJoueur':'Create player',
-    'eq.besoinNom':'Give the team a name.','equipes.nettoyer':'🧹 Clean orphaned data','equipes.comp':'🔄 Apply compensations','eq.cascade':'⚠️ This will also delete: {m} game(s), {c} scheduled game(s) and {j} player(s) of this team.','eq.rienANettoyer':'Nothing to clean — all data belongs to an existing team. ✅','eq.confirmNettoyer':'Delete {m} game(s), {c} scheduled game(s) and {j} player(s) whose team no longer exists?','eq.nettoye':'✅ Cleanup done!','eq.confirmSuppr':'Delete this team?',
-    'joueurs.ajouter':'+ Add a player','joueurs.vide.t':'🏒 Rosters in the making','joueurs.vide.s':'Players will show up here as teams are formed.',
-    'joueurs.pasdequipe.t':'🏒 Rosters in the making','joueurs.pasdequipe.s':'Players will show up here as teams are formed.',
+    'palmares.titre':'Honours','palmares.sous':'League trophies and honours.','palmares.admlbl':'Admin · Award a trophy','palmares.ph.titre':'Ex. Season 1 Champion','palmares.ph.gagnant':'Winning team or player','palmares.ph.desc':'Description (optional)','palmares.remettre':'Award trophy','palmares.vide.t':'The trophy hunt is on','palmares.vide.s':'Honours will be awarded at the end of the season.','palmares.besoin':'Write the title and the winner.','palmares.confirmSuppr':'Remove this trophy?',
+    'ea.profil':'EA Profile','ea.titre':'EA Profile','ea.rafraichir':'Refresh from EA','ea.chargement':'Connecting to EA… (10-20 sec)','ea.trouve':'Profile found on EA! (cached)','ea.introuvable':'No player found with this gamertag on EA.','ea.erreur':'EA connection error. Try again.','ea.sansNom':'This registration has no gamertag.','ea.fiche':'Record','ea.vpct':'Win %','ea.ptspg':'Pts/game','ea.tricks':'Hat tricks','ea.gardien':'As goalie','insc.creerJoueur':'Create player',
+    'eq.besoinNom':'Give the team a name.','equipes.nettoyer':'Clean orphaned data','equipes.comp':'Apply compensations','eq.cascade':'This will also delete: {m} game(s), {c} scheduled game(s) and {j} player(s) of this team.','eq.rienANettoyer':'Nothing to clean — all data belongs to an existing team.','eq.confirmNettoyer':'Delete {m} game(s), {c} scheduled game(s) and {j} player(s) whose team no longer exists?','eq.nettoye':'Cleanup done!','eq.confirmSuppr':'Delete this team?',
+    'joueurs.ajouter':'+ Add a player','joueurs.vide.t':'Rosters in the making','joueurs.vide.s':'Players will show up here as teams are formed.',
+    'joueurs.pasdequipe.t':'Rosters in the making','joueurs.pasdequipe.s':'Players will show up here as teams are formed.',
     'joueurs.equipevide':'No players on this team.',
     'joueur.nom':'Name / gamertag','joueur.nom.ph':'e.g. Kain97','joueur.equipe':'Team','joueur.position':'Position (optional — internal, not shown)',
     'joueur.modal.nouveau':'New player','joueur.modal.modifier':'Edit player',
@@ -2196,20 +2194,20 @@ const DICT = {
     'echanges.confirmRefus':'Decline this trade?','echanges.confirmAnnul':'Withdraw this proposal?','echanges.confirmSuppr':'Delete this trade permanently?',
     'echanges.confirmApprouve':'Approve — players will switch teams. Continue?',
     'btn.accepter':'Accept','btn.refuser':'Decline','btn.contre':'Counter','btn.approuver':'Approve',
-    'statut.propose':'Proposed','statut.accepte_dg':'Accepted — awaiting admin','statut.approuve':'Approved ✅','statut.refuse':'Declined','statut.contre':'Countered',
-    'classements.vide.t':'🏆 In the works','classements.vide.s':'Standings will activate automatically after the first Season 1 games.',
+    'statut.propose':'Proposed','statut.accepte_dg':'Accepted — awaiting admin','statut.approuve':'Approved','statut.refuse':'Declined','statut.contre':'Countered',
+    'classements.vide.t':'In the works','classements.vide.s':'Standings will activate automatically after the first Season 1 games.',
     'cl.equipe':'Team','cl.pj':'GP','cl.v':'W','cl.d':'L','cl.dp':'OTL','cl.bp':'GF','cl.bc':'GA','cl.diff':'+/-','cl.pts':'PTS','cl.proAbbr':'OT',
-    'resultats.ajouter':'+ Add a result','resultats.vide.t':'📊 The season is coming','resultats.vide.s':'Results will appear here after the first games.',
+    'resultats.ajouter':'+ Add a result','resultats.vide.t':'The season is coming','resultats.vide.s':'Results will appear here after the first games.',
     'match.modal.nouveau':'Game sheet','match.modal.modifier':'Edit game',
     'match.dom':'Home team','match.ext':'Away team','match.pro':'Overtime / shootout',
     'match.memeEquipe':'Pick two different teams.','match.besoinScore':'Enter both scores.',
     'match.egalite':'A match always has a winner (use overtime).','match.confirmSuppr':'Delete this result?',
-    'calendrier.ajouter':'+ Add to schedule','calendrier.vide.t':'📅 Schedule in the works','calendrier.vide.s':'The Season 1 schedule will be posted soon.',
+    'calendrier.ajouter':'+ Add to schedule','calendrier.vide.t':'Schedule in the works','calendrier.vide.s':'The Season 1 schedule will be posted soon.',
     'calendrier.date':'Date','calendrier.heure':'Time (optional)','calendrier.modal.nouveau':'New match','calendrier.modal.modifier':'Edit match',
     'calendrier.besoinDate':'Pick a date.','calendrier.confirmSuppr':'Remove this match from the schedule?','calendrier.vs':'vs','calendrier.jouer':'Play',
-    'box.joue':'Played','match.forfait':'Forfeit','match.forfaitAucun':'— No forfeit —','match.forfaitVictoire':'Forfeit win','match.forfaitAppliquer':'Apply forfeit','match.forfaitAide':'1) Tick "Played" for the players who would have played (the site will ask who the goalie is). 2) Pick the winning team. 3) Apply: 6-0 score, each winning player 2 goals + 2 assists, winning goalie .800, losing team removed from the game (no game played).','match.forfaitChoix':'Pick the winning team by forfeit first.','match.forfaitJoueurs':'First tick "Played" for the WINNING team players .','cl.forfaitAbbr':'FORFEIT','jo.remp':'🔁 Substitutes','jo.remp.vide':'No substitutes yet.','cal.code':'Code','cal.codeTitre':'Private game code (home team)','gardiens.ajouter':'+ Add a goalie','jo.equipe.remp':'🔁 Substitute (no team)','box.remp.choisir':'— Add a substitute —','box.remp.btn':'+ Add','box.remp.deja':'This player is already in the match sheet.','box.remp.retirer':'Remove this substitute from the game','box.remp.retirerCourt':'Remove from game','box.remp.retirerConfirm':'Remove {n} from the game? The goals and assists entered will be lost.','pm.btn':'🔄 Recalculate +/- for all games','pm.titre':'+/- recalculation','pm.remplis':'Missing +/- filled','pm.lignes':'line(s)','pm.rafraichis':'Automatic +/- refreshed','pm.pasTouche':'Never touched: forfeits, goalies, and +/- you typed by hand.','pm.confirm1':'Apply?','pm.rien':'Nothing to do: every +/- is already up to date. ✅','pm.ecarts':'EA line(s) have a +/- different from the team goal difference.','pm.confirm2':'Replace them too with the goal difference? (Cancel = keep EA numbers.)','pm.fait':'game(s) updated.','cl.forme':'Last 5','cl.serie':'Streak','cl.formeTitre':'Last 5 games (W = win, L = loss, OT = overtime loss)','et.titre':'⭐ Stars of the night','et.dern':'Stars of the last night','et.vide':'Stars will appear after the first night.','et.arrets':'saves','et.blanchi':'shutout','et.aide':'Automatic for each night: top goal scorer, top passer, top point getter, and best goalie (best save percentage). Must have played at least 2 games that night. Ties: all players are shown. Forfeits do not count.','et.buteur':'Top goal scorer','et.passeur':'Top passer','et.pointeur':'Top point getter','et.gardien':'Best goalie','et.buts':'goals','et.passes':'assists','et.pts':'pts','et.moy':'GAA','et.aucun':'Nobody (2 games minimum)','duel.titre':'⚔️ Head-to-head','duel.choisir':'Pick two teams to see their record.','duel.aucun':'These two teams have not met yet.','duel.egal':'{a} and {b}: tied {n}-{n}','duel.mene':'{x} leads {n} against {y}','duel.buts':'Goals','ep.masse':'Payroll','ep.masseNon':'Salaries not entered yet.','ep.dispo':'{n} M$ of room','ep.depasse':'{n} M$ over the cap','ep.gardien':'Starting goalie','ep.gardienNon':'No goalie.','ep.prochain':'Next game','ep.prochainNon':'No game scheduled.','ep.vs':'hosts','ep.chez':'visits','ep.duels':'Record vs each team','ech.introuvable':'This trade no longer exists (it may have been withdrawn).','ech.dejaTraite':'This trade was already handled by someone else. The list will refresh.','ech.joueurBouge':'{n} is no longer on the same team as before: the trade is no longer valid. Refuse it and make a new one.','ech.autreEchange':'Already in another pending trade: {n}. Send anyway?','ech.plafond':'Salary cap exceeded after this trade:','eq.codeDoublon':'This code is already used (another team or the admin code). Pick another one.','dg.joueurAvecStats':'This player has already played games: only the admin can delete him (otherwise his stats would be lost). Use a trade or ask the admin.','joueur.supprStats':'⚠ This player has stats in games. Deleting him will show « ? » in those games. Continue anyway?','match.date':'Game date','nav.monequipe':'⭐ My team','me.eyebrow':'GM area','me.titre':'My team','me.sous':'Everything about your team in one place.','me.choix':'View team (admin)','me.connecte':'Log in with your GM code (the ♛ crown at the top) to see your team.','me.rang':'{r} of {n}','me.prochains':'Next games','me.echanges':'Trades in progress','me.aRepondre':'{n} to answer','me.attenteAutre':'Waiting for the other GM','me.aToi':'Your turn to answer','me.aucunEch':'No trade in progress.','me.voirEch':'See trades →','me.sal':'M$','me.derniers':'Latest results','me.donne':'Give:','me.recoit':'Get:','me.leaders':'Team leaders','me.lPts':'Points','me.lButs':'Goals','me.lPasses':'Assists','me.lPm':'+/-','me.compare':'Compared to the league','me.moyLigue':'League avg:','me.attaque':'Offense (goals for / game)','me.defense':'Defense (goals against / game)','me.diffMatch':'Differential / game','nav.etoiles':'⭐ Stars','et.page':'Stars','et.pageSous':'The best of each night, calculated automatically.','et.saison':'🏆 Season stars','et.saisonAide':'Number of times each player was a star of the night: 🎯 scorer · 🅰️ passer · 🏒 points · 🥅 goalie.','insc.dejaJoueur':'{n} is already in the league. Create him again anyway?','et.colJoueur':'Player','et.colGardien':'Goalie','et.colBut':'Scorer','et.colPasse':'Passer','et.colPoint':'Points','et.colTotal':'Total','et.colEff':'SV%','et.patineurs':'Skaters','et.patineursSous':'Number of nights the player was the top scorer, top passer or top point getter.','et.gardiens':'Goalies','et.gardiensSous':'Number of nights the goalie had the best save percentage (season SV% shown).','jo.filtreTout':'All teams','jo.filtreRemp':'Substitutes','jo.rechercher':'Search a player…','jo.aucunResultat':'No player matches.','jo.aideTri':'Pick a category or click a column to sort. Substitutes are marked REMP.','gd.nonQualif':'Fewer than {n} games (not ranked yet)','gd.aideTri':'Click a column to sort. To be ranked by save % and GAA, a goalie needs at least {n} games.','cat.pts':'Points','cat.b':'Goals','cat.a':'Assists','cat.pm':'+/-','cat.tirs':'Shots','cat.pctTirs':'Shooting %','cat.hits':'Hits','cat.bloques':'Blocked shots','cat.maj':'Faceoff %','cat.passPct':'Pass %','cat.pim':'Penalty min.','cat.tg':'Time on ice','cat.minTirs':'Fewer than 10 shots (not ranked)','cat.minMaj':'Fewer than 20 faceoffs (not ranked)','cat.minPasses':'Fewer than 20 pass attempts (not ranked)','cat.gPct':'Save %','cat.gMoy':'GAA','cat.gV':'Wins','cat.gBl':'Shutouts','cat.gPj':'Games played','sb.resultats':'Results','sb.avenir':'Upcoming','sb.final':'Final','sb.finalProl':'OT','btn.classement':'See standings','nav.series':'🏆 Playoffs','se.titre':'Playoffs','se.sous':'The bracket fills itself and updates after every game.','se.pasAssez':'8 teams are needed in the standings to build the bracket.','se.aDeterminer':'To be determined','se.attente':'Waiting for winners','se.aVenir':'Series to come','se.egal':'Tied {n}','se.mene':'{x} leads {n}','se.gagne':'{x} wins {n}','se.r1':'Quarterfinals','se.r2':'Semifinals','se.r3':'Final','se.projection':'If the playoffs started today (based on current standings)','se.enCours':'Playoffs in progress','se.champion':'{x} — Season 1 champion!','se.aide':'The 8 teams are seeded by the regular season (until {d}). 1st vs 8th, 2nd vs 7th, 3rd vs 6th, 4th vs 5th. Each series is best-of-{t}: first team to {v} wins advances. Any game played after the regular season counts for the playoffs.','pr.titre':'⚡ Power ranking','pr.vide':'The power ranking will appear after the first games.','pr.forme':'Last 5','pr.diff5':'+/- (5)','pr.fiche':'Record','pr.aide':'Form ranking: mostly the last 5 games (results and goal differential), a bit of the full season. ▲▼ = movement since the previous night.','am.titre':'Game preview','am.domicile':'Home','am.visiteur':'Away','am.comparaison':'Season comparison','am.pts':'Standings points','am.bpm':'Goals for / game','am.bcm':'Goals against / game','am.diff':'Goal differential','am.confr':'Head-to-head this season','am.top':'Players to watch','ph.saison':'Regular season','ph.series':'Playoffs','ph.pasCommence':'The playoffs have not started yet.','dt.etoiles':'⭐ Three stars of the game','pg.titreJ':'📈 Points game by game','pg.titreG':'📈 Save % game by game','pg.moy':'avg','pg.aide':'One bar per game (lighter = loss). Tap or hover a bar for details.','cp.btn':'⚖️ Compare two players','cp.titre':'Compare two players','cp.choisir':'Type two player names to compare them.','cp.ptsMatch':'Points / game','dt.e1':'1st','dt.e2':'2nd','dt.e3':'3rd','pg.titre':'📈 Game-by-game trend','pg.sousJ':'Points per game (goals + assists)','pg.sousG':'Save % per game','pg.patineur':'Skater','pg.gardien':'Goalie','pg.moyPts':'Pts / game','pg.moyEff':'Avg SV%','pg.meilleur':'Best game','pg.vd':'W-L','pg.victoire':'Win','pg.defaite':'Loss','pg.moyenne':'Average','cp.chercher':'Search a player…','rg.ph':'Player, team or page…','rg.aide':'Type a player, team or page name. Tip: the “/” key opens search.','rg.joueurs':'Players','rg.equipes':'Teams','rg.pages':'Pages','rg.rien':'No results.','rg.autres':'more — refine your search','joueur.salaire':'Salary (M$)','joueur.salaire.ph':'e.g. 3','joueur.salaireInvalide':'Invalid salary: enter a number between 0 and 34 (in M$).','sal.lbl':'Salary','st.sal':'SAL','st.sal.l':'Salary (M$)','cat.sal':'💰 Salary','ret.titreModal':'💰 Salary retention (optional)','ret.aide':'Each team can retain salary only once per season, on a player it trades away. Maximum 2 M$.','ret.aucune':'— No retention —','ret.retient':'{e} retains','ret.sur':'on','ret.deja':'{e}: retention already used ({n}, {m})','ret.carte':'💰 {e} retains {m} on {n}','ret.titre':'Salary {s} — {m} retained by {e}','ret.masse':'Retained salary','ret.erreurMax':'Invalid retention: between 0.5 and 2 M$, and not more than the player’s salary.','ret.erreurUtilisee':'{e} already used its salary retention this season.','ret.erreurJoueur':'{n} already has retained salary.','ret.dispo':'Salary retention: still available (once, max 2 M$)','ret.utilisee':'Salary retention: used — {n} ({m})','ret.ailleurs':'now plays for {e}','ret.formLbl':'Retained salary (for a trade already made)','ret.formAide':'The chosen team keeps this amount on its cap; the player’s team pays the rest. Max 2 M$.','ret.formAucune':'— Nobody retains —','ret.formMemeEq':'The retaining team must be the player’s former team, not his current team.','ret.formDeja':'{e} already has a retention on {n} ({m}). Each team gets only one retention.\n\nSave anyway?','note.lbl':'Rating','note.col':'OVR','note.colL':'Overall rating from 60 to 99 (76 = average, 90+ = elite), compared to players at the same position','cat.ovr':'⭐ Rating','note.min':'Fewer than 3 games (no rating yet)','note.minG':'Rating (min. 3 GP)','note.att':'Rating · forward','note.def':'Rating · defense','note.hyb':'Rating · hybrid ({a}% fwd / {d}% def)','note.forces':'Strengths','note.travailler':'To improve','note.aide':'⭐ Rating from 60 to 99: forwards, defensemen and goalies compared to their own group (A/D = plays both, each part rated at its position) · 76 = average, 83 = very good, 90+ = elite · gets more precise with games (min. 3).','crit.pts':'points','crit.b':'goals','crit.pm':'+/-','crit.tirs':'shots','crit.pctTirs':'shooting %','crit.passPct':'pass completion','crit.majPct':'faceoffs','crit.voles':'takeaways','crit.inter':'interceptions','crit.perdus':'few giveaways','crit.hits':'hits','crit.bloques':'blocked shots','crit.pim':'discipline','crit.penObt':'penalties drawn','crit.sv':'save %','crit.gaa':'goals against avg','crit.v':'wins','crit.bl':'shutouts','tl.propose':'📨 Proposed by {e}','tl.accepte':'🤝 Accepted by {e}','tl.approuve':'✅ Approved by the league','tl.refuse':'❌ Declined by {e}','tl.refuseLigue':'the league','tl.contre':'↩️ Counter-offer sent','tl.instant':'just now','tl.a':'at','ok.envoye':'📨 Proposal sent!','ok.accepte':'🤝 Trade accepted — waiting for league approval.','ok.approuve':'✅ Trade approved — players have changed teams.','ok.refuse':'❌ Trade declined.','ok.retire':'Proposal withdrawn.','dt.comp':'Team comparison','dt.poss':'Possession','dt.voles':'Takeaways','dt.inter':'Interceptions','dt.perdus':'Giveaways','dt.gardiens':'Goalies','dt.patineurs':'Skaters','dt.sansEA':'Game entered by hand: only goals and assists are known.','bx.int':'INT','bx.rev':'TK','bx.pr':'GV','bx.poss':'POSS','bx.ba':'GA','bx.intL':'Interceptions','bx.revL':'Takeaways','bx.prL':'Giveaways','bx.possL':'Time of possession','sn.att':'Offense','sn.def':'Defense','sn.jeu':'Teamplay','sn.aide':'Sub-ratings compared to players at the same position (60 to 99)','jr.date':'Date','jr.adv':'Opp.','jr.res':'Res.','nav.nouvelles':'📰 News','nv.titre':'News','nv.sous':'The highlights of each week, written automatically from the games.','nv.home':'📰 This week’s news','nv.tout':'All the news','nv.semaineLbl':'Week','hb.recherche':'Search for a player, a team, a page…','tk.avis':'📢 Notice','tk.echange':'Trade','tk.echangeTxt':'{a} sends {ja} to {b} for {jb}','es.titre':'Stars of the week','es.lien':'News and analysis →','es.off':'The 3 offensive stars','es.offSous':'Goals, assists, shots and +/-','es.def':'The 3 defensive stars','es.defSous':'Goalie, interceptions, blocked shots and pass %','es.gardien':'Goalie','es.defenseur':'Defenseman','es.attaquant':'Forward','t5.titre':'Top 5 — League leaders','t5.lien':'All statistics →','t5.def':'Defensemen · PTS','t5.gar':'Goalies · SV%','mc.titre':'Standings','match.scoreDom':'Home score (optional)','match.scoreExt':'Away score (optional)','match.scoreAide':'EA advanced stats are kept when you edit a match. Fill BOTH score boxes only to force an exact score. Each player\'s +/- is calculated automatically (his team\'s goal difference), unless you type it in 📊.','box.note':'The score is calculated from goals. Check the players who played.',
-    'gardiens.vide.t':'🥅 In the works','gardiens.vide.s':'Goalie stats will show up after the first games.',
-    'gd.pj':'GP','gd.v':'W','gd.d':'L','gd.bl':'SO','gd.bc':'GA','gd.moy':'GAA','st.tirs':'S','st.tirs.l':'Shots','st.pctTirs':'S%','st.pctTirs.l':'Shooting %','st.hits':'HIT','st.hits.l':'Hits','st.bloques':'BLK','st.bloques.l':'Blocked shots','st.maj':'FO%','st.maj.l':'Faceoff %','st.passes':'P%','st.passes.l':'Pass %','st.pim':'PIM','st.pim.l':'Penalty minutes','st.tg':'TOI','st.tg.l':'Avg time on ice','st.arr':'SV','st.arr.l':'Saves','st.tirsRecus':'SA','st.tirsRecus.l':'Shots against','st.eff':'SV%','st.eff.l':'Save % (909 = .909)','st.echap':'BRK','st.echap.l':'Breakaway saves','st.pen':'PS','st.pen.l':'Penalty shot saves','st.desesp':'DSV','st.desesp.l':'Desperation saves','st.poke':'PK','st.poke.l':'Poke checks','st.avancees':'📊 Advanced stats','st.avancees.vide':'Advanced stats will appear after the first EA import.','st.tirsL':'Most shots','st.hitsL':'Most hits','st.bloquesL':'Most blocked shots','st.pmL':'Best +/-','st.majL':'Faceoff % (min. 10)','st.passL':'Pass % (min. 20)','st.volesL':'Most takeaways','st.tgL':'Time on ice / game','gardien.modal.titre':'Goalie stats',
+    'box.joue':'Played','match.forfait':'Forfeit','match.forfaitAucun':'— No forfeit —','match.forfaitVictoire':'Forfeit win','match.forfaitAppliquer':'Apply forfeit','match.forfaitAide':'1) Tick "Played" for the players who would have played (the site will ask who the goalie is). 2) Pick the winning team. 3) Apply: 6-0 score, each winning player 2 goals + 2 assists, winning goalie .800, losing team removed from the game (no game played).','match.forfaitChoix':'Pick the winning team by forfeit first.','match.forfaitJoueurs':'First tick "Played" for the WINNING team players .','cl.forfaitAbbr':'FORFEIT','jo.remp':'Substitutes','jo.remp.vide':'No substitutes yet.','cal.code':'Code','cal.codeTitre':'Private game code (home team)','gardiens.ajouter':'+ Add a goalie','jo.equipe.remp':'Substitute (no team)','box.remp.choisir':'— Add a substitute —','box.remp.btn':'+ Add','box.remp.deja':'This player is already in the match sheet.','box.remp.retirer':'Remove this substitute from the game','box.remp.retirerCourt':'Remove from game','box.remp.retirerConfirm':'Remove {n} from the game? The goals and assists entered will be lost.','pm.btn':'Recalculate +/- for all games','pm.titre':'+/- recalculation','pm.remplis':'Missing +/- filled','pm.lignes':'line(s)','pm.rafraichis':'Automatic +/- refreshed','pm.pasTouche':'Never touched: forfeits, goalies, and +/- you typed by hand.','pm.confirm1':'Apply?','pm.rien':'Nothing to do: every +/- is already up to date.','pm.ecarts':'EA line(s) have a +/- different from the team goal difference.','pm.confirm2':'Replace them too with the goal difference? (Cancel = keep EA numbers.)','pm.fait':'game(s) updated.','cl.forme':'Last 5','cl.serie':'Streak','cl.formeTitre':'Last 5 games (W = win, L = loss, OT = overtime loss)','et.titre':'Stars of the night','et.dern':'Stars of the last night','et.vide':'Stars will appear after the first night.','et.arrets':'saves','et.blanchi':'shutout','et.aide':'Automatic for each night: top goal scorer, top passer, top point getter, and best goalie (best save percentage). Must have played at least 2 games that night. Ties: all players are shown. Forfeits do not count.','et.buteur':'Top goal scorer','et.passeur':'Top passer','et.pointeur':'Top point getter','et.gardien':'Best goalie','et.buts':'goals','et.passes':'assists','et.pts':'pts','et.moy':'GAA','et.aucun':'Nobody (2 games minimum)','duel.titre':'Head-to-head','duel.choisir':'Pick two teams to see their record.','duel.aucun':'These two teams have not met yet.','duel.egal':'{a} and {b}: tied {n}-{n}','duel.mene':'{x} leads {n} against {y}','duel.buts':'Goals','ep.masse':'Payroll','ep.masseNon':'Salaries not entered yet.','ep.dispo':'{n} M$ of room','ep.depasse':'{n} M$ over the cap','ep.gardien':'Starting goalie','ep.gardienNon':'No goalie.','ep.prochain':'Next game','ep.prochainNon':'No game scheduled.','ep.vs':'hosts','ep.chez':'visits','ep.duels':'Record vs each team','ech.introuvable':'This trade no longer exists (it may have been withdrawn).','ech.dejaTraite':'This trade was already handled by someone else. The list will refresh.','ech.joueurBouge':'{n} is no longer on the same team as before: the trade is no longer valid. Refuse it and make a new one.','ech.autreEchange':'Already in another pending trade: {n}. Send anyway?','ech.plafond':'Salary cap exceeded after this trade:','eq.codeDoublon':'This code is already used (another team or the admin code). Pick another one.','dg.joueurAvecStats':'This player has already played games: only the admin can delete him (otherwise his stats would be lost). Use a trade or ask the admin.','joueur.supprStats':'This player has stats in games. Deleting him will show « ? » in those games. Continue anyway?','match.date':'Game date','nav.monequipe':'My team','me.eyebrow':'GM area','me.titre':'My team','me.sous':'Everything about your team in one place.','me.choix':'View team (admin)','me.connecte':'Log in with your GM code (the ♛ crown at the top) to see your team.','me.rang':'{r} of {n}','me.prochains':'Next games','me.echanges':'Trades in progress','me.aRepondre':'{n} to answer','me.attenteAutre':'Waiting for the other GM','me.aToi':'Your turn to answer','me.aucunEch':'No trade in progress.','me.voirEch':'See trades →','me.sal':'M$','me.derniers':'Latest results','me.donne':'Give:','me.recoit':'Get:','me.leaders':'Team leaders','me.lPts':'Points','me.lButs':'Goals','me.lPasses':'Assists','me.lPm':'+/-','me.compare':'Compared to the league','me.moyLigue':'League avg:','me.attaque':'Offense (goals for / game)','me.defense':'Defense (goals against / game)','me.diffMatch':'Differential / game','nav.etoiles':'Stars','et.page':'Stars','et.pageSous':'The best of each night, calculated automatically.','et.saison':'Season stars','et.saisonAide':'Number of times each player was a star of the night: 🎯 scorer · 🅰️ passer · 🏒 points · 🥅 goalie.','insc.dejaJoueur':'{n} is already in the league. Create him again anyway?','et.colJoueur':'Player','et.colGardien':'Goalie','et.colBut':'Scorer','et.colPasse':'Passer','et.colPoint':'Points','et.colTotal':'Total','et.colEff':'SV%','et.patineurs':'Skaters','et.patineursSous':'Number of nights the player was the top scorer, top passer or top point getter.','et.gardiens':'Goalies','et.gardiensSous':'Number of nights the goalie had the best save percentage (season SV% shown).','jo.filtreTout':'All teams','jo.filtreRemp':'Substitutes','jo.rechercher':'Search a player…','jo.aucunResultat':'No player matches.','jo.aideTri':'Pick a category or click a column to sort. Substitutes are marked REMP.','gd.nonQualif':'Fewer than {n} games (not ranked yet)','gd.aideTri':'Click a column to sort. To be ranked by save % and GAA, a goalie needs at least {n} games.','cat.pts':'Points','cat.b':'Goals','cat.a':'Assists','cat.pm':'+/-','cat.tirs':'Shots','cat.pctTirs':'Shooting %','cat.hits':'Hits','cat.bloques':'Blocked shots','cat.maj':'Faceoff %','cat.passPct':'Pass %','cat.pim':'Penalty min.','cat.tg':'Time on ice','cat.minTirs':'Fewer than 10 shots (not ranked)','cat.minMaj':'Fewer than 20 faceoffs (not ranked)','cat.minPasses':'Fewer than 20 pass attempts (not ranked)','cat.gPct':'Save %','cat.gMoy':'GAA','cat.gV':'Wins','cat.gBl':'Shutouts','cat.gPj':'Games played','sb.resultats':'Results','sb.avenir':'Upcoming','sb.final':'Final','sb.finalProl':'OT','btn.classement':'See standings','nav.series':'Playoffs','se.titre':'Playoffs','se.sous':'The bracket fills itself and updates after every game.','se.pasAssez':'8 teams are needed in the standings to build the bracket.','se.aDeterminer':'To be determined','se.attente':'Waiting for winners','se.aVenir':'Series to come','se.egal':'Tied {n}','se.mene':'{x} leads {n}','se.gagne':'{x} wins {n}','se.r1':'Quarterfinals','se.r2':'Semifinals','se.r3':'Final','se.projection':'If the playoffs started today (based on current standings)','se.enCours':'Playoffs in progress','se.champion':'{x} — Season 1 champion!','se.aide':'The 8 teams are seeded by the regular season (until {d}). 1st vs 8th, 2nd vs 7th, 3rd vs 6th, 4th vs 5th. Each series is best-of-{t}: first team to {v} wins advances. Any game played after the regular season counts for the playoffs.','pr.titre':'Power ranking','pr.vide':'The power ranking will appear after the first games.','pr.forme':'Last 5','pr.diff5':'+/- (5)','pr.fiche':'Record','pr.aide':'Form ranking: mostly the last 5 games (results and goal differential), a bit of the full season. ▲▼ = movement since the previous night.','am.titre':'Game preview','am.domicile':'Home','am.visiteur':'Away','am.comparaison':'Season comparison','am.pts':'Standings points','am.bpm':'Goals for / game','am.bcm':'Goals against / game','am.diff':'Goal differential','am.confr':'Head-to-head this season','am.top':'Players to watch','ph.saison':'Regular season','ph.series':'Playoffs','ph.pasCommence':'The playoffs have not started yet.','dt.etoiles':'Three stars of the game','pg.titreJ':'Points game by game','pg.titreG':'Save % game by game','pg.moy':'avg','pg.aide':'One bar per game (lighter = loss). Tap or hover a bar for details.','cp.btn':'Compare two players','cp.titre':'Compare two players','cp.choisir':'Type two player names to compare them.','cp.ptsMatch':'Points / game','dt.e1':'1st','dt.e2':'2nd','dt.e3':'3rd','pg.titre':'Game-by-game trend','pg.sousJ':'Points per game (goals + assists)','pg.sousG':'Save % per game','pg.patineur':'Skater','pg.gardien':'Goalie','pg.moyPts':'Pts / game','pg.moyEff':'Avg SV%','pg.meilleur':'Best game','pg.vd':'W-L','pg.victoire':'Win','pg.defaite':'Loss','pg.moyenne':'Average','cp.chercher':'Search a player…','rg.ph':'Player, team or page…','rg.aide':'Type a player, team or page name. Tip: the “/” key opens search.','rg.joueurs':'Players','rg.equipes':'Teams','rg.pages':'Pages','rg.rien':'No results.','rg.autres':'more — refine your search','joueur.salaire':'Salary (M$)','joueur.salaire.ph':'e.g. 3','joueur.salaireInvalide':'Invalid salary: enter a number between 0 and 34 (in M$).','sal.lbl':'Salary','st.sal':'SAL','st.sal.l':'Salary (M$)','cat.sal':'Salary','ret.titreModal':'Salary retention (optional)','ret.aide':'Each team can retain salary only once per season, on a player it trades away. Maximum 2 M$.','ret.aucune':'— No retention —','ret.retient':'{e} retains','ret.sur':'on','ret.deja':'{e}: retention already used ({n}, {m})','ret.carte':'{e} retains {m} on {n}','ret.titre':'Salary {s} — {m} retained by {e}','ret.masse':'Retained salary','ret.erreurMax':'Invalid retention: between 0.5 and 2 M$, and not more than the player’s salary.','ret.erreurUtilisee':'{e} already used its salary retention this season.','ret.erreurJoueur':'{n} already has retained salary.','ret.dispo':'Salary retention: still available (once, max 2 M$)','ret.utilisee':'Salary retention: used — {n} ({m})','ret.ailleurs':'now plays for {e}','ret.formLbl':'Retained salary (for a trade already made)','ret.formAide':'The chosen team keeps this amount on its cap; the player’s team pays the rest. Max 2 M$.','ret.formAucune':'— Nobody retains —','ret.formMemeEq':'The retaining team must be the player’s former team, not his current team.','ret.formDeja':'{e} already has a retention on {n} ({m}). Each team gets only one retention.\n\nSave anyway?','note.lbl':'Rating','note.col':'OVR','note.colL':'Overall rating from 60 to 99 (76 = average, 90+ = elite), compared to players at the same position','cat.ovr':'Rating','note.min':'Fewer than 3 games (no rating yet)','note.minG':'Rating (min. 3 GP)','note.att':'Rating · forward','note.def':'Rating · defense','note.hyb':'Rating · hybrid ({a}% fwd / {d}% def)','note.forces':'Strengths','note.travailler':'To improve','note.aide':'Rating from 60 to 99: forwards, defensemen and goalies compared to their own group (A/D = plays both, each part rated at its position) · 76 = average, 83 = very good, 90+ = elite · gets more precise with games (min. 3).','crit.pts':'points','crit.b':'goals','crit.pm':'+/-','crit.tirs':'shots','crit.pctTirs':'shooting %','crit.passPct':'pass completion','crit.majPct':'faceoffs','crit.voles':'takeaways','crit.inter':'interceptions','crit.perdus':'few giveaways','crit.hits':'hits','crit.bloques':'blocked shots','crit.pim':'discipline','crit.penObt':'penalties drawn','crit.sv':'save %','crit.gaa':'goals against avg','crit.v':'wins','crit.bl':'shutouts','tl.propose':'Proposed by {e}','tl.accepte':'Accepted by {e}','tl.approuve':'Approved by the league','tl.refuse':'Declined by {e}','tl.refuseLigue':'the league','tl.contre':'↩️ Counter-offer sent','tl.instant':'just now','tl.a':'at','ok.envoye':'Proposal sent!','ok.accepte':'Trade accepted — waiting for league approval.','ok.approuve':'Trade approved — players have changed teams.','ok.refuse':'Trade declined.','ok.retire':'Proposal withdrawn.','dt.comp':'Team comparison','dt.poss':'Possession','dt.voles':'Takeaways','dt.inter':'Interceptions','dt.perdus':'Giveaways','dt.gardiens':'Goalies','dt.patineurs':'Skaters','dt.sansEA':'Game entered by hand: only goals and assists are known.','bx.int':'INT','bx.rev':'TK','bx.pr':'GV','bx.poss':'POSS','bx.ba':'GA','bx.intL':'Interceptions','bx.revL':'Takeaways','bx.prL':'Giveaways','bx.possL':'Time of possession','sn.att':'Offense','sn.def':'Defense','sn.jeu':'Teamplay','sn.aide':'Sub-ratings compared to players at the same position (60 to 99)','jr.date':'Date','jr.adv':'Opp.','jr.res':'Res.','nav.nouvelles':'News','nv.titre':'News','nv.sous':'The highlights of each week, written automatically from the games.','nv.home':'This week’s news','nv.tout':'All the news','nv.semaineLbl':'Week','hb.recherche':'Search for a player, a team, a page…','tk.avis':'Notice','tk.echange':'Trade','tk.echangeTxt':'{a} sends {ja} to {b} for {jb}','es.titre':'Stars of the week','es.lien':'News and analysis →','es.off':'The 3 offensive stars','es.offSous':'Goals, assists, shots and +/-','es.def':'The 3 defensive stars','es.defSous':'Goalie, interceptions, blocked shots and pass %','es.gardien':'Goalie','es.defenseur':'Defenseman','es.attaquant':'Forward','t5.titre':'Top 5 — League leaders','t5.lien':'All statistics →','t5.def':'Defensemen · PTS','t5.gar':'Goalies · SV%','mc.titre':'Standings','match.scoreDom':'Home score (optional)','match.scoreExt':'Away score (optional)','match.scoreAide':'EA advanced stats are kept when you edit a match. Fill BOTH score boxes only to force an exact score. Each player\'s +/- is calculated automatically (his team\'s goal difference), unless you type it in 📊.','box.note':'The score is calculated from goals. Check the players who played.',
+    'gardiens.vide.t':'In the works','gardiens.vide.s':'Goalie stats will show up after the first games.',
+    'gd.pj':'GP','gd.v':'W','gd.d':'L','gd.bl':'SO','gd.bc':'GA','gd.moy':'GAA','st.tirs':'S','st.tirs.l':'Shots','st.pctTirs':'S%','st.pctTirs.l':'Shooting %','st.hits':'HIT','st.hits.l':'Hits','st.bloques':'BLK','st.bloques.l':'Blocked shots','st.maj':'FO%','st.maj.l':'Faceoff %','st.passes':'P%','st.passes.l':'Pass %','st.pim':'PIM','st.pim.l':'Penalty minutes','st.tg':'TOI','st.tg.l':'Avg time on ice','st.arr':'SV','st.arr.l':'Saves','st.tirsRecus':'SA','st.tirsRecus.l':'Shots against','st.eff':'SV%','st.eff.l':'Save % (909 = .909)','st.echap':'BRK','st.echap.l':'Breakaway saves','st.pen':'PS','st.pen.l':'Penalty shot saves','st.desesp':'DSV','st.desesp.l':'Desperation saves','st.poke':'PK','st.poke.l':'Poke checks','st.avancees':'Advanced stats','st.avancees.vide':'Advanced stats will appear after the first EA import.','st.tirsL':'Most shots','st.hitsL':'Most hits','st.bloquesL':'Most blocked shots','st.pmL':'Best +/-','st.majL':'Faceoff % (min. 10)','st.passL':'Pass % (min. 20)','st.volesL':'Most takeaways','st.tgL':'Time on ice / game','gardien.modal.titre':'Goalie stats',
     'jo.pos':'POS','jo.joueur':'Player','jo.b':'G','jo.a':'A','joueur.stats':'Statistics'
   }
 };
@@ -2252,8 +2250,31 @@ const ICO = {
   doc:'<path d="M6 3h8l5 5v13H6V3Z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',
   warning:'<path d="M12 4 3 19h18L12 4Z"/><path d="M12 10v4M12 17h.01"/>',
   sticks:'<path d="M5 19 15 5M9 19 19 5"/><circle cx="5.5" cy="19" r="1.3"/>',
+  target:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/>',
+  pass:'<path d="M4 12h12M12 6l6 6-6 6"/>',
+  plusminus:'<path d="M8 4v8M4 8h8M14 18h6"/>',
+  home:'<path d="M4 11l8-7 8 7v9H4z"/><path d="M10 20v-6h4v6"/>',
+  plane:'<path d="M3 12h12M11 6l6 6-6 6M19 5v14"/>',
+  medal:'<circle cx="12" cy="15" r="5"/><path d="M8 3l4 7 4-7"/>',
+  money:'<rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 9v.01M18 15v.01"/>',
+  flame:'<path d="M12 21c-4 0-7-3-7-7 0-4 4-6 4-10 3 2 4 4 4 6 1-1 2-2 2-4 2 2 4 5 4 8 0 4-3 7-7 7z"/>',
+  up:'<path d="M4 17l6-6 4 4 6-7M14 8h6v6"/>',
+  down:'<path d="M4 7l6 6 4-4 6 7M14 16h6v-6"/>',
+  zap:'<path d="M13 3L5 14h6l-1 7 8-11h-6l1-7z"/>',
+  faceoff:'<circle cx="12" cy="12" r="8"/><path d="M12 4v16M4 12h16"/><circle cx="12" cy="12" r="2"/>',
+  clock:'<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>',
+  star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
+  crown:'<path d="M4 18h16M4 18l-1-10 5 4 4-7 4 7 5-4-1 10"/>',
+  check:'<path d="M5 12l5 5 9-10"/>',
+  x:'<path d="M6 6l12 12M18 6L6 18"/>',
+  snow:'<path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9"/>',
+  news:'<rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 9h8M8 13h8M8 16h5"/>',
+  megaphone:'<path d="M4 10v4h3l7 4V6L7 10H4z"/><path d="M17 9a4 4 0 0 1 0 6"/>',
+  hat:'<path d="M3 18h18M6 18V9a6 6 0 0 1 12 0v9"/><path d="M6 13h12"/>',
   users:'<circle cx="9" cy="9" r="3"/><path d="M3.5 20c0-3 2.7-5 5.5-5s5.5 2 5.5 5"/><path d="M16 6.2a3 3 0 0 1 0 5.6M20.5 20c0-2-1.2-3.6-3.5-4.4"/>'
 };
+/* Icône en ligne (même style partout) — remplace les emojis dans l'interface */
+function icn(name){ return '<svg class="icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICO[name] || '') + '</svg>'; }
 function ico(name){
   return '<svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICO[name] || '') + '</svg>';
 }
@@ -2403,6 +2424,9 @@ function afficherRoute(){
     g.classList.remove('open');
   });
   window.scrollTo({top:0});
+  // téléphone : ramène l'onglet de la page active au centre de la barre défilante
+  const nm = document.querySelector('nav.nav-mob'), cur = nm && nm.querySelector('.nav-link.current');
+  if(nm && cur) nm.scrollLeft = Math.max(0, cur.offsetLeft - nm.clientWidth / 2 + cur.offsetWidth / 2);
 }
 window.addEventListener('hashchange', afficherRoute);
 
@@ -3138,10 +3162,11 @@ function dateHeureTs(v){
 function ligneTemps(tr){
   const etape = (txt, ts, classe) => {
     const quand = (ts === null) ? t('tl.instant') : dateHeureTs(ts);   // null = vient d'être écrit (le serveur confirme l'heure)
-    return '<div class="tl-etape ' + (classe || '') + '"><span>' + txt + '</span>' + (quand ? '<em>' + escapeHtml(quand) + '</em>' : '') + '</div>';
+    const ic = {'tl-prop': 'pass', 'tl-acc': 'users', 'tl-ok': 'check', 'tl-non': 'x'}[classe] || 'clock';
+    return '<div class="tl-etape ' + (classe || '') + '"><span>' + icn(ic) + ' ' + txt + '</span>' + (quand ? '<em>' + escapeHtml(quand) + '</em>' : '') + '</div>';
   };
-  let html = etape(t('tl.propose').replace('{e}', escapeHtml(tr.deNom || '')), tr.createdAt);
-  if(tr.accepteAt !== undefined) html += etape(t('tl.accepte').replace('{e}', escapeHtml(tr.versNom || '')), tr.accepteAt);
+  let html = etape(t('tl.propose').replace('{e}', escapeHtml(tr.deNom || '')), tr.createdAt, 'tl-prop');
+  if(tr.accepteAt !== undefined) html += etape(t('tl.accepte').replace('{e}', escapeHtml(tr.versNom || '')), tr.accepteAt, 'tl-acc');
   if(tr.statut === 'approuve') html += etape(t('tl.approuve'), tr.approuveAt === undefined ? false : tr.approuveAt, 'tl-ok');
   if(tr.statut === 'refuse') html += etape(t('tl.refuse').replace('{e}', escapeHtml(tr.refusePar === '__ligue__' ? t('tl.refuseLigue') : (tr.refusePar || '—'))), tr.refuseAt === undefined ? false : tr.refuseAt, 'tl-non');
   if(tr.statut === 'contre') html += etape(t('tl.contre'), tr.contreAt === undefined ? false : tr.contreAt, 'tl-non');
@@ -3151,12 +3176,12 @@ function ligneTemps(tr){
 function afficherToast(msg){
   let el = document.getElementById('toast-dhl');
   if(!el){ el = document.createElement('div'); el.id = 'toast-dhl'; el.className = 'toast-dhl'; document.body.appendChild(el); }
-  el.textContent = msg; el.classList.add('on');
+  el.innerHTML = icn(/refus|declin|retir|withdraw/i.test(msg) ? 'x' : 'check') + ' ' + escapeHtml(msg); el.classList.add('on');
   clearTimeout(afficherToast._t); afficherToast._t = setTimeout(() => el.classList.remove('on'), 3800);
 }
 function ligneRetention(ret, eqNom){
   if(!ret || !ret.pid || !(+ret.montant > 0)) return '';
-  return '<div class="tc-ret">' + t('ret.carte').replace('{e}', escapeHtml(eqNom || '')).replace('{m}', fmtSal(+ret.montant)).replace('{n}', escapeHtml(ret.nom || '')) + '</div>';
+  return '<div class="tc-ret">' + icn('money') + ' ' + t('ret.carte').replace('{e}', escapeHtml(eqNom || '')).replace('{m}', fmtSal(+ret.montant)).replace('{n}', escapeHtml(ret.nom || '')) + '</div>';
 }
 function rendreTrades(){
   const cont = document.getElementById('echanges-list');
@@ -3622,14 +3647,14 @@ function rendreStatsAvancees(){
   const parVol  = tous.filter(p=>p.voles>0).sort((a,b)=>b.voles-a.voles);
   const parTG   = tous.filter(p=>p.tgSec>0).sort((a,b)=>(b.tgSec/b.pj)-(a.tgSec/a.pj));
   cont.innerHTML = '<div class="sa-grille">'
-    + carte(t('st.tirsL'),'🎯',parTirs,p=>p.tirs)
-    + carte(t('st.hitsL'),'💥',parHits,p=>p.hits)
-    + carte(t('st.bloquesL'),'🛡️',parBloq,p=>p.bloques)
-    + carte(t('st.pmL'),'➕',parPM,p=>(p.plusMin>0?'+':'')+p.plusMin)
-    + carte(t('st.majL'),'⚔️',parMaj,p=>p.majPct.toFixed(0)+'%')
-    + carte(t('st.passL'),'🎽',parPass,p=>p.passPct.toFixed(0)+'%')
-    + carte(t('st.volesL'),'🧤',parVol,p=>p.voles)
-    + carte(t('st.tgL'),'⏱️',parTG,p=>formatTG(p.tgSec,p.pj))
+    + carte(t('st.tirsL'),'' + icn('target') + '',parTirs,p=>p.tirs)
+    + carte(t('st.hitsL'),'' + icn('zap') + '',parHits,p=>p.hits)
+    + carte(t('st.bloquesL'),icn('shield'),parBloq,p=>p.bloques)
+    + carte(t('st.pmL'),'' + icn('plusminus') + '',parPM,p=>(p.plusMin>0?'+':'')+p.plusMin)
+    + carte(t('st.majL'),'' + icn('faceoff') + '',parMaj,p=>p.majPct.toFixed(0)+'%')
+    + carte(t('st.passL'),'' + icn('pass') + '',parPass,p=>p.passPct.toFixed(0)+'%')
+    + carte(t('st.volesL'),'' + icn('shield') + '',parVol,p=>p.voles)
+    + carte(t('st.tgL'),'' + icn('clock') + '',parTG,p=>formatTG(p.tgSec,p.pj))
     + '</div>';
 }
 
@@ -3816,8 +3841,8 @@ function htmlSousNotes(s){
 function htmlForces(f){
   if(!f || (!f.plus.length && !f.moins.length)) return '';
   const nom = k => t('crit.' + k);
-  return '<div class="pf-forces">' + (f.plus.length ? '<span>💪 ' + t('note.forces') + ' : <b>' + f.plus.map(nom).join(', ') + '</b></span>' : '')
-    + (f.moins.length ? '<span>📉 ' + t('note.travailler') + ' : <b>' + f.moins.map(nom).join(', ') + '</b></span>' : '') + '</div>';
+  return '<div class="pf-forces">' + (f.plus.length ? '<span>' + icn('up') + ' ' + t('note.forces') + ' : <b>' + f.plus.map(nom).join(', ') + '</b></span>' : '')
+    + (f.moins.length ? '<span>' + icn('down') + ' ' + t('note.travailler') + ' : <b>' + f.moins.map(nom).join(', ') + '</b></span>' : '') + '</div>';
 }
 function noteJ(pid){ const n = notesLigue().p[pid]; return n === undefined ? null : n; }
 function noteG(pid){ const n = notesLigue().g[pid]; return n === undefined ? null : n; }
@@ -4252,82 +4277,82 @@ function ouvrirDetail(id){
    ========================================================= */
 const NV_TPL = {
   fr: {
-    resumeT: ['📊 La semaine en chiffres', '📊 Le bilan de la semaine', '📊 La semaine en un coup d’œil'],
+    resumeT: ['La semaine en chiffres', 'Le bilan de la semaine', 'La semaine en un coup d’œil'],
     resume: '{n} matchs joués et {buts} buts marqués ({moy} par match).',
     resumeGros: ' Plus gros pointage : {e} {s} contre {adv}.',
     resumePro: ' {p} match(s) décidé(s) en prolongation.',
-    joueurT: ['⭐ Joueur de la semaine : {j}', '⭐ {j}, joueur de la semaine', '⭐ La semaine de {j}'],
+    joueurT: ['Joueur de la semaine : {j}', '{j}, joueur de la semaine', 'La semaine de {j}'],
     joueur: ['{j} ({e}) a récolté {pts} points ({b} B, {a} A) en {pj} matchs.', 'Personne n’a fait mieux que {j} : {pts} points en {pj} matchs pour {e} ({b} buts, {a} passes).', '{pts} points en {pj} matchs : {j} a porté {e} cette semaine ({b} B, {a} A).'],
-    gardienT: ['🥅 Gardien de la semaine : {g}', '🥅 {g} se dresse devant le filet', '🥅 Un mur nommé {g}'],
+    gardienT: ['Gardien de la semaine : {g}', '{g} se dresse devant le filet', 'Un mur nommé {g}'],
     gardien: 'Efficacité de {pct} ({arr} arrêts sur {tirs}) en {pj} matchs pour {e}, avec une fiche de {f}.',
-    chapeauT: ['🎩 Tour du chapeau de {j}!', '🎩 Les casquettes pleuvent pour {j}', '🎩 Trois buts et plus pour {j}'],
+    chapeauT: ['Tour du chapeau de {j}!', 'Les casquettes pleuvent pour {j}', 'Trois buts et plus pour {j}'],
     chapeau: '{j} ({e}) a marqué {b} buts contre {adv} le {d}, dans une {res} de {s}.',
-    gros5T: ['🔥 Soirée de {p} points pour {j}', '🔥 {j} explose avec {p} points', '🔥 {j} impossible à arrêter'],
+    gros5T: ['Soirée de {p} points pour {j}', '{j} explose avec {p} points', '{j} impossible à arrêter'],
     gros5: '{b} buts et {a} passes contre {adv} le {d} ({res} de {s}).',
-    listeT: ['🎩 Tous les tours du chapeau de la semaine', '🎩 La pluie de casquettes de la semaine'],
+    listeT: ['Tous les tours du chapeau de la semaine', 'La pluie de casquettes de la semaine'],
     liste: '{n} tours du chapeau cette semaine : {l}.',
-    blancT: ['🧱 Blanchissage de {g}', '🧱 {g} ferme la porte', '🧱 Zéro but pour {adv} face à {g}'],
+    blancT: ['Blanchissage de {g}', '{g} ferme la porte', 'Zéro but pour {adv} face à {g}'],
     blanc: '{g} ({e}) a stoppé les {arr} tirs de {adv} le {d}, victoire de {s}.',
-    ecraseT: ['💥 {e} écrase {adv} {s}', '💥 Démonstration de {e} contre {adv}', '💥 {e} ne fait qu’une bouchée de {adv}'],
+    ecraseT: ['{e} écrase {adv} {s}', 'Démonstration de {e} contre {adv}', '{e} ne fait qu’une bouchée de {adv}'],
     ecrase: 'Victoire de {m} buts d’écart pour {e}, le {d}.',
-    parfaitT: ['✅ Semaine parfaite pour {e}', '✅ {e} gagne tout', '✅ Rien ne résiste à {e}'],
+    parfaitT: ['Semaine parfaite pour {e}', '{e} gagne tout', 'Rien ne résiste à {e}'],
     parfait: ['{e} termine la semaine avec une fiche de {f} et un différentiel de {diff}.', 'Fiche de {f} et différentiel de {diff} : {e} n’a rien laissé à ses adversaires.', '{e} a gagné chacun de ses matchs ({f}, différentiel de {diff}).'],
-    oublierT: ['❌ Semaine à oublier pour {e}', '❌ {e} cherche des réponses', '❌ Rien ne va pour {e}'],
+    oublierT: ['Semaine à oublier pour {e}', '{e} cherche des réponses', 'Rien ne va pour {e}'],
     oublier: ['{e} encaisse une fiche de {f} et un différentiel de {diff}.', 'Aucune victoire cette semaine pour {e} ({f}, différentiel de {diff}).', '{e} devra se relever après une fiche de {f}.'],
-    feuT: ['🔥 {e} est en feu', '🔥 {e} enchaîne les victoires', '🔥 La série se poursuit pour {e}'],
+    feuT: ['{e} est en feu', '{e} enchaîne les victoires', 'La série se poursuit pour {e}'],
     feu: '{e} a gagné ses {n} derniers matchs.',
-    froidT: ['🧊 {e} en panne', '🧊 La glace est mince pour {e}', '🧊 {e} dans le creux de la vague'],
+    froidT: ['{e} en panne', 'La glace est mince pour {e}', '{e} dans le creux de la vague'],
     froid: '{e} a perdu ses {n} derniers matchs.',
-    sommetT: ['👑 {e} au sommet du classement', '👑 {e} trône en première place', '👑 {e} mène la ligue'],
+    sommetT: ['{e} au sommet du classement', '{e} trône en première place', '{e} mène la ligue'],
     sommet: '{e} termine la semaine en tête avec {pts} points ({f}).',
     nouveauSommet: ' C’est un changement en tête : {ex} était premier au début de la semaine.',
-    monteT: ['📈 {e} grimpe au {r}e rang', '📈 Belle remontée de {e}'],
+    monteT: ['{e} grimpe au {r}e rang', 'Belle remontée de {e}'],
     monte: '{e} gagne {k} place(s) au classement cette semaine et se retrouve {r}e.',
-    descendT: ['📉 {e} glisse au {r}e rang', '📉 {e} recule au classement'],
+    descendT: ['{e} glisse au {r}e rang', '{e} recule au classement'],
     descend: '{e} perd {k} place(s) au classement cette semaine et se retrouve {r}e.',
-    echangeT: ['🔄 Échange entre {a} et {b}', '🔄 Transaction : {a} et {b} s’entendent'],
+    echangeT: ['Échange entre {a} et {b}', 'Transaction : {a} et {b} s’entendent'],
     echange: '{a} envoie {ja} à {b} en retour de {jb}.',
-    proT: ['⏱️ Victoire en prolongation pour {e}', '⏱️ {e} l’emporte en prolongation'],
+    proT: ['Victoire en prolongation pour {e}', '{e} l’emporte en prolongation'],
     pro: '{e} a battu {adv} {s} en prolongation le {d}.',
     victoire: 'victoire', defaite: 'défaite', semaine: 'Du {a} au {b}', cette: 'Cette semaine', aucune: 'Aucun match cette semaine.'
   },
   en: {
-    resumeT: ['📊 The week in numbers', '📊 Week in review', '📊 The week at a glance'],
+    resumeT: ['The week in numbers', 'Week in review', 'The week at a glance'],
     resume: '{n} games played and {buts} goals scored ({moy} per game).',
     resumeGros: ' Biggest score: {e} {s} against {adv}.',
     resumePro: ' {p} game(s) decided in overtime.',
-    joueurT: ['⭐ Player of the week: {j}', '⭐ {j}, player of the week', '⭐ {j}’s week'],
+    joueurT: ['Player of the week: {j}', '{j}, player of the week', '{j}’s week'],
     joueur: ['{j} ({e}) put up {pts} points ({b} G, {a} A) in {pj} games.', 'Nobody did better than {j}: {pts} points in {pj} games for {e} ({b} goals, {a} assists).', '{pts} points in {pj} games: {j} carried {e} this week ({b} G, {a} A).'],
-    gardienT: ['🥅 Goalie of the week: {g}', '🥅 {g} stands tall', '🥅 A wall named {g}'],
+    gardienT: ['Goalie of the week: {g}', '{g} stands tall', 'A wall named {g}'],
     gardien: '{pct} save percentage ({arr} saves on {tirs} shots) in {pj} games for {e}, with a {f} record.',
-    chapeauT: ['🎩 Hat trick for {j}!', '🎩 Hats are raining for {j}', '🎩 Three goals or more for {j}'],
+    chapeauT: ['Hat trick for {j}!', 'Hats are raining for {j}', 'Three goals or more for {j}'],
     chapeau: '{j} ({e}) scored {b} goals against {adv} on {d}, in a {s} {res}.',
-    gros5T: ['🔥 {p}-point night for {j}', '🔥 {j} explodes for {p} points', '🔥 {j} was unstoppable'],
+    gros5T: ['{p}-point night for {j}', '{j} explodes for {p} points', '{j} was unstoppable'],
     gros5: '{b} goals and {a} assists against {adv} on {d} ({s} {res}).',
-    listeT: ['🎩 All of this week’s hat tricks', '🎩 This week’s hat trick parade'],
+    listeT: ['All of this week’s hat tricks', 'This week’s hat trick parade'],
     liste: '{n} hat tricks this week: {l}.',
-    blancT: ['🧱 Shutout for {g}', '🧱 {g} slams the door', '🧱 Zero goals for {adv} against {g}'],
+    blancT: ['Shutout for {g}', '{g} slams the door', 'Zero goals for {adv} against {g}'],
     blanc: '{g} ({e}) stopped all {arr} shots from {adv} on {d}, a {s} win.',
-    ecraseT: ['💥 {e} crushes {adv} {s}', '💥 {e} puts on a show against {adv}', '💥 {e} makes short work of {adv}'],
+    ecraseT: ['{e} crushes {adv} {s}', '{e} puts on a show against {adv}', '{e} makes short work of {adv}'],
     ecrase: '{m}-goal win for {e} on {d}.',
-    parfaitT: ['✅ Perfect week for {e}', '✅ {e} wins them all', '✅ Nothing stops {e}'],
+    parfaitT: ['Perfect week for {e}', '{e} wins them all', 'Nothing stops {e}'],
     parfait: ['{e} ends the week {f} with a {diff} goal differential.', 'A {f} record and a {diff} differential: {e} gave nothing away.', '{e} won every game ({f}, {diff} differential).'],
-    oublierT: ['❌ A week to forget for {e}', '❌ {e} looking for answers', '❌ Nothing goes right for {e}'],
+    oublierT: ['A week to forget for {e}', '{e} looking for answers', 'Nothing goes right for {e}'],
     oublier: ['{e} goes {f} with a {diff} goal differential.', 'No wins this week for {e} ({f}, {diff} differential).', '{e} needs to bounce back after a {f} week.'],
-    feuT: ['🔥 {e} is on fire', '🔥 {e} keeps winning', '🔥 The streak goes on for {e}'],
+    feuT: ['{e} is on fire', '{e} keeps winning', 'The streak goes on for {e}'],
     feu: '{e} has won its last {n} games.',
-    froidT: ['🧊 {e} stalls', '🧊 Thin ice for {e}', '🧊 {e} in a slump'],
+    froidT: ['{e} stalls', 'Thin ice for {e}', '{e} in a slump'],
     froid: '{e} has lost its last {n} games.',
-    sommetT: ['👑 {e} on top of the standings', '👑 {e} sits in first place', '👑 {e} leads the league'],
+    sommetT: ['{e} on top of the standings', '{e} sits in first place', '{e} leads the league'],
     sommet: '{e} ends the week in first place with {pts} points ({f}).',
     nouveauSommet: ' A change at the top: {ex} was first at the start of the week.',
-    monteT: ['📈 {e} climbs to #{r}', '📈 Nice climb for {e}'],
+    monteT: ['{e} climbs to #{r}', 'Nice climb for {e}'],
     monte: '{e} gains {k} spot(s) in the standings this week and now sits #{r}.',
-    descendT: ['📉 {e} slips to #{r}', '📉 {e} drops in the standings'],
+    descendT: ['{e} slips to #{r}', '{e} drops in the standings'],
     descend: '{e} loses {k} spot(s) in the standings this week and now sits #{r}.',
-    echangeT: ['🔄 Trade between {a} and {b}', '🔄 {a} and {b} make a deal'],
+    echangeT: ['Trade between {a} and {b}', '{a} and {b} make a deal'],
     echange: '{a} sends {ja} to {b} in exchange for {jb}.',
-    proT: ['⏱️ Overtime win for {e}', '⏱️ {e} wins it in overtime'],
+    proT: ['Overtime win for {e}', '{e} wins it in overtime'],
     pro: '{e} beat {adv} {s} in overtime on {d}.',
     victoire: 'win', defaite: 'loss', semaine: '{a} to {b}', cette: 'This week', aucune: 'No games this week.'
   }
@@ -4474,9 +4499,12 @@ let _nvLiens = [];
 function _nvCarte(a, petite){
   _nvLiens.push(a.lien); const k = _nvLiens.length - 1;
   const eq = a.eqId ? trouverEquipeParId(a.eqId) : null;
+  const ICN_NV = {resume:'bars', joueur:'star', gardien:'net', chapeau:'hat', liste:'hat', gros5:'flame', blanc:'shield', ecrase:'zap', parfait:'check', oublier:'x',
+    feu:'flame', froid:'snow', sommet:'crown', monte:'up', descend:'down', echange:'swap', pro:'clock'};
+  const neg = ['oublier', 'froid', 'descend'].indexOf(a.type) !== -1;
   return '<a class="nv-carte' + (petite ? ' nv-petite' : '') + (a.prio >= 90 ? ' nv-une' : '') + '" onclick="_nvOuvrir(_nvLiens[' + k + '])">'
     + (eq && !petite ? '<span class="nv-logo">' + eqVisuel(eq, 34) + '</span>' : '')
-    + '<span class="nv-corps"><b class="nv-titre">' + escapeHtml(a.titre) + '</b>' + (petite ? '' : '<span class="nv-texte">' + escapeHtml(a.texte) + '</span>') + '</span></a>';
+    + '<span class="nv-corps"><b class="nv-titre"><span class="nv-ic' + (neg ? ' nv-ic-neg' : '') + '">' + icn(ICN_NV[a.type] || 'news') + '</span>' + escapeHtml(a.titre) + '</b>' + (petite ? '' : '<span class="nv-texte">' + escapeHtml(a.texte) + '</span>') + '</span></a>';
 }
 function libelleSemaine(lundi){
   const T = NV_TPL[langue === 'en' ? 'en' : 'fr'], fin = _plusJours(lundi, 6);
@@ -4638,7 +4666,7 @@ function htmlComparatifMatch(m){
     [t('cat.pim'), D.pim, E.pim, String, -1]
   ];
   const eD = trouverEquipeParId(m.domId) || {nom: m.domNom}, eE = trouverEquipeParId(m.extId) || {nom: m.extNom};
-  let html = '<div class="sous-head" style="margin-top:12px"><h3>📊 ' + t('dt.comp') + '</h3></div><div class="cmp-box">'
+  let html = '<div class="sous-head" style="margin-top:12px"><h3>' + icn('bars') + ' ' + t('dt.comp') + '</h3></div><div class="cmp-box">'
     + '<div class="cmp-row cmp-tete"><span class="cmp-v">' + eqVisuel(eD, 22) + '<small>' + escapeHtml(abrevEquipe(eD)) + '</small></span><div></div>'
     + '<span class="cmp-v">' + eqVisuel(eE, 22) + '<small>' + escapeHtml(abrevEquipe(eE)) + '</small></span></div>';
   lignes.forEach(([lbl, a, b, f, sens, estPct]) => {
@@ -4677,7 +4705,7 @@ function boxEquipe(m, eqId, eq, buts){
     html += '</tbody></table></div>';
   }
   if(gars.length){
-    html += '<div class="bx-wrap"><table class="bx-table bx-g"><thead><tr><th class="bx-nom">🥅 ' + t('dt.gardiens') + '</th><th>' + t('st.arr') + '</th><th>' + t('st.tirsRecus') + '</th><th>%</th><th>' + t('bx.ba') + '</th></tr></thead><tbody>';
+    html += '<div class="bx-wrap"><table class="bx-table bx-g"><thead><tr><th class="bx-nom">' + icn('net') + ' ' + t('dt.gardiens') + '</th><th>' + t('st.arr') + '</th><th>' + t('st.tirsRecus') + '</th><th>%</th><th>' + t('bx.ba') + '</th></tr></thead><tbody>';
     gars.forEach(l => { const ar = +l.arr || 0, ti = +l.tirs || 0;
       html += '<tr>' + nomCel(l) + '<td>' + ar + '</td><td>' + ti + '</td><td class="cl-pts">' + (ti ? (ar / ti).toFixed(3).replace(/^0/, '') : '—') + '</td><td>' + Math.max(0, ti - ar) + '</td></tr>'; });
     html += '</tbody></table></div>';
@@ -4755,7 +4783,7 @@ function htmlMasseEquipe(eqId, avecRetention){
   });
   if(avecRetention){
     const u = retenueUtilisee(eqId);
-    html += '<div class="masse-ret-etat">💰 ' + (u ? t('ret.utilisee').replace('{n}', escapeHtml(u.nom)).replace('{m}', fmtSal(u.montant)) : t('ret.dispo')) + '</div>';
+    html += '<div class="masse-ret-etat">' + icn('money') + ' ' + (u ? t('ret.utilisee').replace('{n}', escapeHtml(u.nom)).replace('{m}', fmtSal(u.montant)) : t('ret.dispo')) + '</div>';
   }
   return html;
 }
@@ -4793,8 +4821,8 @@ function ouvrirProfilJoueur(pid){
   const nP = noteJ(pid), nG = noteG(pid);
   if(montrerPatineur) cartes += carteNote(nP, s.pj >= NOTE_MIN_PJ ? libelleNote(pid) : t('note.minG'));
   if(montrerPatineur) cartes += carteStat(t('cl.pj'), s.pj) + carteStat(t('jo.b'), s.b) + carteStat(t('jo.a'), s.a) + carteStat(t('cl.pts'), s.pts, true);
-  if(montrerGardien) cartes += carteNote(nG, g.pj >= GARDIEN_MIN_PJ ? '🥅 ' + t('note.lbl') : '🥅 ' + t('note.minG'));
-  if(montrerGardien) cartes += carteStat('🥅 ' + t('gd.pj'), g.pj) + carteStat(t('gd.v'), g.v) + carteStat(t('gd.bl'), g.bl) + carteStat(t('gd.moy'), g.moy) + carteStat(t('gd.arrpct'), g.arrPct || '—');
+  if(montrerGardien) cartes += carteNote(nG, g.pj >= GARDIEN_MIN_PJ ? '' + icn('net') + ' ' + t('note.lbl') : '' + icn('net') + ' ' + t('note.minG'));
+  if(montrerGardien) cartes += carteStat('' + icn('net') + ' ' + t('gd.pj'), g.pj) + carteStat(t('gd.v'), g.v) + carteStat(t('gd.bl'), g.bl) + carteStat(t('gd.moy'), g.moy) + carteStat(t('gd.arrpct'), g.arrPct || '—');
   document.getElementById('pf-stats').innerHTML = cartes;
   { const NL = notesLigue(); const fz = document.getElementById('pf-forces');
     if(fz) fz.innerHTML = (montrerPatineur ? htmlSousNotes(NL.sub[pid]) + htmlForces(NL.forces[pid]) : '') + (montrerGardien ? htmlForces(NL.forcesG[pid]) : ''); }
@@ -4814,7 +4842,7 @@ function ouvrirProfilJoueur(pid){
       let cels;
       if(estLigneGardien(l)){
         const ar = +l.arr || 0, ti = +l.tirs || 0;
-        cels = '<td colspan="10" class="jr-g">🥅 ' + ar + '/' + ti + (ti ? ' · ' + (ar / ti).toFixed(3).replace(/^0/, '') : '') + ' · ' + Math.max(0, ti - ar) + ' ' + t('bx.ba') + '</td>';
+        cels = '<td colspan="10" class="jr-g">' + icn('net') + ' ' + ar + '/' + ti + (ti ? ' · ' + (ar / ti).toFixed(3).replace(/^0/, '') : '') + ' · ' + Math.max(0, ti - ar) + ' ' + t('bx.ba') + '</td>';
       } else {
         cels = '<td>' + b + '</td><td>' + a + '</td><td class="cl-pts">' + (b + a) + '</td>'
           + (s ? '<td>' + (pm > 0 ? '+' : '') + pm + '</td><td>' + _sL(l, 'skshots') + '</td><td>' + _sL(l, 'skhits') + '</td><td>' + _sL(l, 'skinterceptions') + '</td><td>' + _sL(l, 'sktakeaways') + '</td><td>' + _sL(l, 'skbs') + '</td><td>' + (pt ? Math.round(_sL(l, 'skpasses') / pt * 100) + '%' : '—') + '</td>'
@@ -4887,7 +4915,7 @@ function ouvrirProfilEquipe(eqId){
   }
   roster.sort((a,b) => b.pts - a.pts || (a.nom||'').localeCompare(b.nom||''));
   document.getElementById('ep-roster').innerHTML = roster.length
-    ? roster.map(r => '<div class="dt-row"><span class="jr-pos2">' + (r.gardien ? '🥅' : '') + '</span>'
+    ? roster.map(r => '<div class="dt-row"><span class="jr-pos2">' + (r.gardien ? '' + icn('net') + '' : '') + '</span>'
         + '<a class="lien-eq" onclick="fermerProfilEquipe();ouvrirProfilJoueur(\'' + r.id + '\')">' + escapeHtml(r.nom) + salHTML(r.id) + '</a>'
         + '<span class="dt-stat"><b>' + r.b + 'B</b> · ' + r.a + 'A · ' + r.pts + ' ' + t('cl.pts').toLowerCase() + '</span></div>').join('')
     : '<div class="je-vide">' + t('joueurs.equipevide') + '</div>';
@@ -4970,10 +4998,10 @@ function htmlEtoilesSoiree(s){
       : '<div class="et-aucun">' + t('et.aucun') + '</div>') + '</div>';
   const c = s.cats;
   return '<div class="et-soiree"><div class="et-date">' + escapeHtml(formaterDateCal(s.date)) + '</div><div class="et-grille">'
-    + section('🎯', t('et.buteur'), c.buteur, x => x.b + ' ' + t('et.buts') + ' <em>(' + x.pjP + ' ' + t('cl.pj') + ')</em>')
-    + section('🅰️', t('et.passeur'), c.passeur, x => x.a + ' ' + t('et.passes') + ' <em>(' + x.pjP + ' ' + t('cl.pj') + ')</em>')
-    + section('🏒', t('et.pointeur'), c.pointeur, x => x.pts + ' ' + t('et.pts') + ' <em>(' + x.b + ' ' + t('jo.b') + ' · ' + x.a + ' ' + t('jo.a') + ')</em>')
-    + section('🥅', t('et.gardien'), c.gardien, x => (x.arr / x.tirs).toFixed(3).replace(/^0/, '') + ' <em>(' + x.arr + '/' + x.tirs + ' · ' + x.pjG + ' ' + t('cl.pj') + ' · ' + fmtMoy(x.moy) + ' ' + t('et.moy') + ')</em>', true)
+    + section('' + icn('target') + '', t('et.buteur'), c.buteur, x => x.b + ' ' + t('et.buts') + ' <em>(' + x.pjP + ' ' + t('cl.pj') + ')</em>')
+    + section('' + icn('pass') + '', t('et.passeur'), c.passeur, x => x.a + ' ' + t('et.passes') + ' <em>(' + x.pjP + ' ' + t('cl.pj') + ')</em>')
+    + section('' + icn('sticks') + '', t('et.pointeur'), c.pointeur, x => x.pts + ' ' + t('et.pts') + ' <em>(' + x.b + ' ' + t('jo.b') + ' · ' + x.a + ' ' + t('jo.a') + ')</em>')
+    + section('' + icn('net') + '', t('et.gardien'), c.gardien, x => (x.arr / x.tirs).toFixed(3).replace(/^0/, '') + ' <em>(' + x.arr + '/' + x.tirs + ' · ' + x.pjG + ' ' + t('cl.pj') + ' · ' + fmtMoy(x.moy) + ' ' + t('et.moy') + ')</em>', true)
     + '</div></div>';
 }
 function rendreEtoiles(){
@@ -4981,7 +5009,7 @@ function rendreEtoiles(){
   const vide = '<div class="je-vide">' + t('et.vide') + '</div>';
   const L = document.getElementById('etoiles-list');
   if(L){
-    const resume = s => { const p = s.cats.pointeur[0] || s.cats.buteur[0] || s.cats.gardien[0]; return p ? ' · ' + escapeHtml(p.nom) + salHTML(p.pid) + ' ⭐' : ''; };
+    const resume = s => { const p = s.cats.pointeur[0] || s.cats.buteur[0] || s.cats.gardien[0]; return p ? ' · ' + escapeHtml(p.nom) + salHTML(p.pid) + ' ' + icn('star') : ''; };
     L.innerHTML = soirees.length
       ? htmlEtoilesSoiree(soirees[0]) + soirees.slice(1).map(s => '<details class="et-plus"><summary>' + escapeHtml(formaterDateCal(s.date)) + resume(s) + '</summary>' + htmlEtoilesSoiree(s) + '</details>').join('')
         + '<div class="et-aide">' + t('et.aide') + '</div>'
@@ -5068,7 +5096,7 @@ function completerProfilEquipe(eqId, roster){
     if(!gs.length) G.innerHTML = '<div class="je-vide">' + t('ep.gardienNon') + '</div>';
     else {
       const g = gs[0], pct = g.g.tirs ? ' · ' + (g.g.arr / g.g.tirs).toFixed(3).replace(/^0/, '') : '';
-      G.innerHTML = '<div class="dt-row"><span class="jr-pos2">🥅</span><a class="lien-eq" onclick="fermerProfilEquipe();ouvrirProfilJoueur(\'' + g.id + '\')">' + escapeHtml(g.nom) + salHTML(g.id) + '</a><span class="dt-stat">' + g.g.pj + ' ' + t('cl.pj') + pct + '</span></div>';
+      G.innerHTML = '<div class="dt-row"><span class="jr-pos2">' + icn('net') + '</span><a class="lien-eq" onclick="fermerProfilEquipe();ouvrirProfilJoueur(\'' + g.id + '\')">' + escapeHtml(g.nom) + salHTML(g.id) + '</a><span class="dt-stat">' + g.g.pj + ' ' + t('cl.pj') + pct + '</span></div>';
     }
   }
   // Prochain match
@@ -5078,7 +5106,7 @@ function completerProfilEquipe(eqId, roster){
     if(!m) P.innerHTML = '<div class="je-vide">' + t('ep.prochainNon') + '</div>';
     else {
       const dom = (m.domId === eqId), adv = dom ? m.extNom : m.domNom, code = codeGameDe(m.domId);
-      P.innerHTML = '<div class="dt-row"><span class="jr-pos2">📅</span><span>' + escapeHtml(formaterDateCal(m.date)) + (m.heure ? ' · ' + escapeHtml(m.heure) : '') + ' — ' + (dom ? '🏠 ' + t('ep.vs') : '✈️ ' + t('ep.chez')) + ' <b>' + escapeHtml(adv || '') + '</b></span>'
+      P.innerHTML = '<div class="dt-row"><span class="jr-pos2">' + icn('calendar') + '</span><span>' + escapeHtml(formaterDateCal(m.date)) + (m.heure ? ' · ' + escapeHtml(m.heure) : '') + ' — ' + (dom ? '' + icn('home') + ' ' + t('ep.vs') : '' + icn('plane') + ' ' + t('ep.chez')) + ' <b>' + escapeHtml(adv || '') + '</b></span>'
         + '<span class="dt-stat">' + (code ? t('cal.code') + ' <b>' + code + '</b>' : '') + '</span></div>';
     }
   }
@@ -5179,8 +5207,8 @@ function rendreMonEquipe(){
     if(snapJoueurs) snapJoueurs.forEach(d => { const j = d.data(); if(j.equipeId !== eqId || estRemplacant(j)) return; const s2 = statsJoueur(d.id); if(s2.pj > 0) joueursEq.push({id:d.id, nom:j.nom || '', s:s2}); });
     const meilleur = (cle) => joueursEq.slice().sort((a, b) => b.s[cle] - a.s[cle] || b.s.pts - a.s.pts)[0];
     const carte = (ico2, lbl, x, cle, signe) => x ? '<a class="me-lead" onclick="ouvrirProfilJoueur(\'' + x.id + '\')"><span class="me-lead-lbl">' + ico2 + ' ' + lbl + '</span><b class="me-lead-val">' + (signe && x.s[cle] > 0 ? '+' : '') + x.s[cle] + '</b><span class="me-lead-nom">' + escapeHtml(x.nom) + salHTML(x.id) + '</span></a>' : '';
-    html += bloc('🏅 ' + t('me.leaders'), joueursEq.length
-      ? '<div class="me-leads">' + carte('🏒', t('me.lPts'), meilleur('pts'), 'pts') + carte('🎯', t('me.lButs'), meilleur('b'), 'b') + carte('🅰️', t('me.lPasses'), meilleur('a'), 'a') + carte('➕', t('me.lPm'), meilleur('plusMin'), 'plusMin', true) + '</div>'
+    html += bloc('' + icn('medal') + ' ' + t('me.leaders'), joueursEq.length
+      ? '<div class="me-leads">' + carte('' + icn('sticks') + '', t('me.lPts'), meilleur('pts'), 'pts') + carte('' + icn('target') + '', t('me.lButs'), meilleur('b'), 'b') + carte('' + icn('pass') + '', t('me.lPasses'), meilleur('a'), 'a') + carte('' + icn('plusminus') + '', t('me.lPm'), meilleur('plusMin'), 'plusMin', true) + '</div>'
       : '<div class="je-vide">' + t('profil.aucunMatch') + '</div>');
   }
   // --- Comparaison avec la ligue
@@ -5204,7 +5232,7 @@ function rendreMonEquipe(){
   const prochains = calAVenir().filter(m => m.domId === eqId || m.extId === eqId).slice(0, 3);
   html += bloc('📅 ' + t('me.prochains'), prochains.length ? prochains.map(m => { const dom = m.domId === eqId, code = codeGameDe(m.domId);
       return '<div class="dt-row me-res" onclick="ouvrirAvantMatch(\'' + m.domId + '\',\'' + m.extId + '\',\'' + (m.date || '') + '\',\'' + (m.heure || '') + '\')"><span class="me-date">' + escapeHtml(formaterDateCal(m.date)) + (m.heure ? ' · ' + escapeHtml(m.heure) : '') + '</span>'
-        + '<span>' + (dom ? '🏠 ' + t('ep.vs') : '✈️ ' + t('ep.chez')) + ' <b>' + escapeHtml((dom ? m.extNom : m.domNom) || '') + '</b></span>'
+        + '<span>' + (dom ? '' + icn('home') + ' ' + t('ep.vs') : '' + icn('plane') + ' ' + t('ep.chez')) + ' <b>' + escapeHtml((dom ? m.extNom : m.domNom) || '') + '</b></span>'
         + '<span class="dt-stat">' + (code ? t('cal.code') + ' <b class="me-code">' + code + '</b>' : '') + '</span></div>'; }).join('')
     : '<div class="je-vide">' + t('ep.prochainNon') + '</div>');
 
@@ -5226,18 +5254,18 @@ function rendreMonEquipe(){
     const s = statsJoueur(d.id), g = statsGardien(d.id);
     roster.push({id:d.id, nom:j.nom || '', sal: chargeJ(j), s, g, gardien: g.pj > 0 || estGardienPur(j)}); });
   roster.sort((a, b) => b.s.pts - a.s.pts || (b.sal||0) - (a.sal||0) || a.nom.localeCompare(b.nom));
-  html += bloc('💰 ' + t('ep.masse'), htmlMasseEquipe(eqId, true));
-  html += bloc('👥 ' + t('ep.alignement') + ' (' + roster.length + ')', roster.length
+  html += bloc('' + icn('money') + ' ' + t('ep.masse'), htmlMasseEquipe(eqId, true));
+  html += bloc('' + icn('users') + ' ' + t('ep.alignement') + ' (' + roster.length + ')', roster.length
     ? '<div class="cl-wrap"><table class="cl-table me-table"><thead><tr><th class="cl-eq">' + t('jo.joueur') + '</th><th>' + t('cl.pj') + '</th><th>' + t('jo.b') + '</th><th>' + t('jo.a') + '</th><th>' + t('cl.pts') + '</th></tr></thead><tbody>'
       + roster.map(r => '<tr><td class="cl-eq"><a class="lien-eq" onclick="ouvrirProfilJoueur(\'' + r.id + '\')">' + escapeHtml(r.nom) + salHTML(r.id) + '</a>'
-        + (r.g.pj ? '<div class="me-g">🥅 ' + r.g.pj + ' ' + t('cl.pj') + ' · ' + (r.g.tirs ? (r.g.arr / r.g.tirs).toFixed(3).replace(/^0/, '') : '—') + '</div>' : '') + '</td>'
+        + (r.g.pj ? '<div class="me-g">' + icn('net') + ' ' + r.g.pj + ' ' + t('cl.pj') + ' · ' + (r.g.tirs ? (r.g.arr / r.g.tirs).toFixed(3).replace(/^0/, '') : '—') + '</div>' : '') + '</td>'
         + '<td>' + r.s.pj + '</td><td>' + r.s.b + '</td><td>' + r.s.a + '</td><td class="cl-pts">' + r.s.pts + '</td></tr>').join('')
       + '</tbody></table></div>'
     : '<div class="je-vide">' + t('joueurs.equipevide') + '</div>');
 
   // --- Derniers résultats
   const derniers = res.slice(-5).reverse();
-  html += bloc('📊 ' + t('me.derniers'), derniers.length ? derniers.map(x => '<a class="dt-row me-res" onclick="ouvrirDetail(\'' + x.id + '\')"><span class="pf-res pf-' + x.r.toLowerCase() + '">' + x.r + '</span>'
+  html += bloc('' + icn('bars') + ' ' + t('me.derniers'), derniers.length ? derniers.map(x => '<a class="dt-row me-res" onclick="ouvrirDetail(\'' + x.id + '\')"><span class="pf-res pf-' + x.r.toLowerCase() + '">' + x.r + '</span>'
       + '<span>' + (langue === 'en' ? 'vs ' : 'c. ') + escapeHtml(x.adv || '') + ' <em>' + x.pour + '-' + x.contre + '</em>' + (x.m.forfait ? ' <em class="ff-tag">' + t('cl.forfaitAbbr') + '</em>' : '') + '</span>'
       + '<span class="dt-stat">' + escapeHtml(dateMatchTexte(x.m, false)) + '</span></a>').join('')
     : '<div class="je-vide">' + t('profil.aucunMatch') + '</div>');
@@ -5347,7 +5375,7 @@ function rendreJoueursPhase(){
     const s = j.s, q = qualifJ(j);
     if(!q && !sepJ){ sepJ = true; html += '<tr class="st-sep"><td colspan="' + (estAdmin ? 17 : 16) + '">' + t(catJ.minTxt) + '</td></tr>'; }
     rangJ++;
-    html += '<tr' + (s.pj === 0 ? ' class="st-zero"' : '') + '><td class="cl-rang">' + (q ? rangJ : '–') + '</td>' + celluleJoueur(j, eq, j.gard ? ' <span class="badge-g" title="Gardien">🥅</span>' : '')
+    html += '<tr' + (s.pj === 0 ? ' class="st-zero"' : '') + '><td class="cl-rang">' + (q ? rangJ : '–') + '</td>' + celluleJoueur(j, eq, j.gard ? ' <span class="badge-g" title="Gardien">' + icn('net') + '</span>' : '')
       + '<td>' + htmlNote(j.ovr) + (j.ovr !== null && roleNote(j.id) !== 'F' ? '<small class="ovr-role">' + (roleNote(j.id) === 'D' ? 'D' : 'A/D') + '</small>' : '') + '</td><td>' + s.pj + '</td><td>' + s.b + '</td><td>' + s.a + '</td><td class="cl-pts">' + s.pts + '</td>'
       + '<td>' + (s.plusMin > 0 ? '+' : '') + s.plusMin + '</td><td>' + s.tirs + '</td><td>' + (s.pctTirs != null ? s.pctTirs.toFixed(1) + '%' : '—') + '</td>'
       + '<td>' + s.hits + '</td><td>' + s.bloques + '</td>'
@@ -5445,7 +5473,7 @@ function rendreScorebar(){
       const D = trouverEquipeParId(m.domId) || {nom:m.domNom}, E = trouverEquipeParId(m.extId) || {nom:m.extNom}, code = codeGameDe(m.domId);
       return '<div class="sb-carte sb-avenir" onclick="ouvrirAvantMatch(\'' + m.domId + '\',\'' + m.extId + '\',\'' + (m.date || '') + '\',\'' + (m.heure || '') + '\')"><div class="sb-haut"><span class="sb-etat sb-heure">' + escapeHtml(m.heure || '') + '</span><span>' + escapeHtml(dateCourte(m.date)) + '</span></div>'
         + ligneEq(E, null, false, false) + ligneEq(D, null, false, false)
-        + (code ? '<div class="sb-code">🏠 ' + code + '</div>' : '') + '</div>';
+        + (code ? '<div class="sb-code">' + icn('home') + ' ' + code + '</div>' : '') + '</div>';
     }).join('');
   }
   const piste = B.querySelector('.sb-piste');
@@ -5532,7 +5560,7 @@ function rendreSeries(){
       + ligne(s.b, s.wb, s.gagnant && s.gagnant === s.b, s.gagnant && s.gagnant !== s.b) + '<div class="se-etat">' + etat + '</div></div>';
   };
   const noms = [t('se.r1'), t('se.r2'), t('se.r3')];
-  let html = '<div class="se-bandeau' + (projection ? '' : ' se-live') + '">' + (projection ? '📊 ' + t('se.projection') : (S.champion ? '🏆 ' + t('se.champion').replace('{x}', escapeHtml((trouverEquipeParId(S.champion) || {}).nom || '')) : '🔴 ' + t('se.enCours'))) + '</div>';
+  let html = '<div class="se-bandeau' + (projection ? '' : ' se-live') + '">' + (projection ? '' + icn('bars') + ' ' + t('se.projection') : (S.champion ? '' + icn('trophy') + ' ' + t('se.champion').replace('{x}', escapeHtml((trouverEquipeParId(S.champion) || {}).nom || '')) : '' + icn('flame') + ' ' + t('se.enCours'))) + '</div>';
   html += '<div class="se-arbre">' + S.rondes.map((r, k) => '<div class="se-ronde se-r' + (k + 1) + '"><div class="se-ronde-titre">' + noms[k] + '</div><div class="se-ronde-corps">' + r.map(carte).join('') + '</div></div>').join('') + '</div>';
   html += '<div class="st-aide">' + t('se.aide').replace('{d}', formaterDateCal(FIN_SAISON)).replace('{v}', SERIES_VICTOIRES).replace('{t}', SERIES_VICTOIRES * 2 - 1) + '</div>';
   C.innerHTML = html;
@@ -5591,7 +5619,7 @@ function ouvrirAvantMatch(domId, extId, date, heure){
   const f2 = x => x.toFixed(2).replace('.', langue === 'en' ? '.' : ',');
   const forme = s => s.cinq.map(r => '<span class="fm fm-' + r.toLowerCase() + '">' + r + '</span>').join('') || '—';
   const tete = (eq, s, dom) => '<div class="am-eq">' + eqVisuel(eq, 54) + '<b>' + escapeHtml(eq.nom || '') + '</b><span>' + s.v + '-' + s.dd + '-' + s.dp + ' · ' + s.pts + ' ' + t('cl.pts').toLowerCase() + '</span>'
-    + '<span class="am-rang">' + t('me.rang').replace('{r}', rang(eq.id)).replace('{n}', cl.length) + '</span><span class="am-role">' + (dom ? '🏠 ' + t('am.domicile') : '✈️ ' + t('am.visiteur')) + '</span><div>' + forme(s) + '</div></div>';
+    + '<span class="am-rang">' + t('me.rang').replace('{r}', rang(eq.id)).replace('{n}', cl.length) + '</span><span class="am-role">' + (dom ? '' + icn('home') + ' ' + t('am.domicile') : '' + icn('plane') + ' ' + t('am.visiteur')) + '</span><div>' + forme(s) + '</div></div>';
   // barres de comparaison (plus haut = mieux, sauf buts contre)
   const barre = (lbl, a, b, fmt, basMieux) => { const tot = (a + b) || 1, pa = Math.round(a / tot * 100), mieuxA = basMieux ? a < b : a > b, mieuxB = basMieux ? b < a : b > a;
     return '<div class="am-cmp"><span class="' + (mieuxA ? 'am-mieux' : '') + '">' + fmt(a) + '</span><div class="am-lbl">' + lbl + '<div class="am-barre"><i style="width:' + pa + '%"></i></div></div><span class="' + (mieuxB ? 'am-mieux' : '') + '">' + fmt(b) + '</span></div>'; };
@@ -5606,16 +5634,16 @@ function ouvrirAvantMatch(domId, extId, date, heure){
     return l.sort((a, b) => b.s.pts - a.s.pts || b.s.b - a.s.b).slice(0, 3); };
   const gardienEq = id => { let best = null; if(snapJoueurs) snapJoueurs.forEach(d => { const j = d.data(); if(j.equipeId !== id || estRemplacant(j)) return; const g = statsGardien(d.id); if(g.pj && (!best || g.pj > best.g.pj)) best = {id:d.id, nom:j.nom || '', g}; }); return best; };
   const colTop = id => topEq(id).map(x => '<div class="am-joueur"><a class="lien-eq" onclick="fermerAvantMatch();ouvrirProfilJoueur(\'' + x.id + '\')">' + escapeHtml(x.nom) + salHTML(x.id) + '</a><span>' + x.s.pts + ' ' + t('cl.pts').toLowerCase() + ' <em>(' + x.s.b + ' ' + t('jo.b') + ' · ' + x.s.a + ' ' + t('jo.a') + ')</em></span></div>').join('') || '<div class="je-vide">—</div>';
-  const colG = id => { const g = gardienEq(id); return g ? '<div class="am-joueur"><a class="lien-eq" onclick="fermerAvantMatch();ouvrirProfilJoueur(\'' + g.id + '\')">🥅 ' + escapeHtml(g.nom) + salHTML(g.id) + '</a><span>' + (g.g.tirs ? (g.g.arr / g.g.tirs).toFixed(3).replace(/^0/, '') : '—') + ' · ' + g.g.moy + ' <em>(' + g.g.pj + ' ' + t('cl.pj') + ')</em></span></div>' : '<div class="je-vide">—</div>'; };
+  const colG = id => { const g = gardienEq(id); return g ? '<div class="am-joueur"><a class="lien-eq" onclick="fermerAvantMatch();ouvrirProfilJoueur(\'' + g.id + '\')">' + icn('net') + ' ' + escapeHtml(g.nom) + salHTML(g.id) + '</a><span>' + (g.g.tirs ? (g.g.arr / g.g.tirs).toFixed(3).replace(/^0/, '') : '—') + ' · ' + g.g.moy + ' <em>(' + g.g.pj + ' ' + t('cl.pj') + ')</em></span></div>' : '<div class="je-vide">—</div>'; };
   const code = codeGameDe(domId);
   document.getElementById('am-contenu').innerHTML =
     '<div class="am-quand">' + (date ? escapeHtml(formaterDateCal(date)) : '') + (heure ? ' · ' + escapeHtml(heure) : '') + (code ? ' · ' + t('cal.code') + ' <b>' + code + '</b>' : '') + '</div>'
     + '<div class="am-tetes">' + tete(E, sE, false) + '<div class="am-vs">VS</div>' + tete(D, sD, true) + '</div>'
-    + '<div class="am-bloc"><div class="am-titre">📊 ' + t('am.comparaison') + '</div>'
+    + '<div class="am-bloc"><div class="am-titre">' + icn('bars') + ' ' + t('am.comparaison') + '</div>'
       + barre(t('am.pts'), sE.pts, sD.pts, x => x) + barre(t('am.bpm'), sE.bpm, sD.bpm, f2) + barre(t('am.bcm'), sE.bcm, sD.bcm, f2, true)
       + barre(t('am.diff'), Math.max(0, sE.bp - sE.bc + 50), Math.max(0, sD.bp - sD.bc + 50), x => { const v = x - 50; return (v > 0 ? '+' : '') + v; }) + '</div>'
     + '<div class="am-bloc"><div class="am-titre">⚔️ ' + t('am.confr') + '</div>' + confr + '</div>'
-    + '<div class="am-bloc"><div class="am-titre">🔥 ' + t('am.top') + '</div><div class="am-cols"><div><div class="am-sous">' + escapeHtml(E.nom) + '</div>' + colTop(extId) + colG(extId) + '</div><div><div class="am-sous">' + escapeHtml(D.nom) + '</div>' + colTop(domId) + colG(domId) + '</div></div></div>';
+    + '<div class="am-bloc"><div class="am-titre">' + icn('flame') + ' ' + t('am.top') + '</div><div class="am-cols"><div><div class="am-sous">' + escapeHtml(E.nom) + '</div>' + colTop(extId) + colG(extId) + '</div><div><div class="am-sous">' + escapeHtml(D.nom) + '</div>' + colTop(domId) + colG(domId) + '</div></div></div>';
   document.getElementById('modale-avant').classList.add('open');
 }
 function fermerAvantMatch(){ document.getElementById('modale-avant').classList.remove('open'); }
@@ -5631,7 +5659,7 @@ function choisirPhase(p){ phaseListes = p; rendreJoueurs(); rendreGardiens(); }
 function seriesCommencees(){ let c = false; if(snapMatchs) snapMatchs.forEach(d => { if(estMatchSeries(d.data())) c = true; }); return c; }
 function htmlPhase(){
   return '<div class="st-phase"><button type="button" class="' + (phaseListes === 'saison' ? 'on' : '') + '" onclick="choisirPhase(\'saison\')">' + t('ph.saison') + '</button>'
-    + '<button type="button" class="' + (phaseListes === 'series' ? 'on' : '') + '" onclick="choisirPhase(\'series\')">🏆 ' + t('ph.series') + '</button></div>';
+    + '<button type="button" class="' + (phaseListes === 'series' ? 'on' : '') + '" onclick="choisirPhase(\'series\')">' + icn('trophy') + ' ' + t('ph.series') + '</button></div>';
 }
 
 /* ---------- 3 étoiles d'un match ---------- */
@@ -5655,7 +5683,7 @@ function htmlEtoilesMatch(m){
   const l = etoilesDuMatch(m); if(!l.length) return '';
   return '<div class="dt-etoiles"><div class="dt-etoiles-titre">' + t('dt.etoiles') + '</div>' + l.map((e, i) => {
     const j = docJoueurParId(e.x.pid) || {}, eq = trouverEquipeParId(e.x.eqId) || {};
-    const stat = estLigneGardien(e.x) ? '🥅 ' + (+e.x.arr || 0) + '/' + (+e.x.tirs || 0) : (+e.x.b || 0) + ' ' + t('jo.b') + ' · ' + (+e.x.a || 0) + ' ' + t('jo.a');
+    const stat = estLigneGardien(e.x) ? '' + icn('net') + ' ' + (+e.x.arr || 0) + '/' + (+e.x.tirs || 0) : (+e.x.b || 0) + ' ' + t('jo.b') + ' · ' + (+e.x.a || 0) + ' ' + t('jo.a');
     return '<a class="dt-etoile" onclick="fermerDetail();ouvrirProfilJoueur(\'' + e.x.pid + '\')"><span class="dt-etoile-n">★ ' + t('dt.e' + (i + 1)) + '</span>' + eqVisuel(eq, 20)
       + '<b>' + escapeHtml(j.nom || '') + salHTML(e.x.pid) + '</b><span class="dt-etoile-s">' + stat + '</span></a>';
   }).join('') + '</div>';
@@ -5673,8 +5701,8 @@ function graphiqueJoueur(pid, modeForce){
   const mode = modeForce || (gar.length > pat.length ? 'g' : 'p');
   const gardien = mode === 'g', serie = gardien ? gar : pat;
   // onglets si le joueur a joué aux deux positions
-  const onglets = (pat.length && gar.length) ? '<div class="st-phase pg-onglets"><button type="button" class="' + (!gardien ? 'on' : '') + '" onclick="changerGraph(\'' + pid + '\',\'p\')">🏒 ' + t('pg.patineur') + ' (' + pat.length + ')</button>'
-    + '<button type="button" class="' + (gardien ? 'on' : '') + '" onclick="changerGraph(\'' + pid + '\',\'g\')">🥅 ' + t('pg.gardien') + ' (' + gar.length + ')</button></div>' : '';
+  const onglets = (pat.length && gar.length) ? '<div class="st-phase pg-onglets"><button type="button" class="' + (!gardien ? 'on' : '') + '" onclick="changerGraph(\'' + pid + '\',\'p\')">' + icn('sticks') + ' ' + t('pg.patineur') + ' (' + pat.length + ')</button>'
+    + '<button type="button" class="' + (gardien ? 'on' : '') + '" onclick="changerGraph(\'' + pid + '\',\'g\')">' + icn('net') + ' ' + t('pg.gardien') + ' (' + gar.length + ')</button></div>' : '';
   if(!serie.length) return '';
   const val = p => gardien ? ((+p.l.tirs || 0) > 0 ? (+p.l.arr || 0) / (+p.l.tirs) : null) : (+p.l.b || 0) + (+p.l.a || 0);
   const fmt = v => v === null ? '—' : (gardien ? v.toFixed(3).replace(/^0/, '') : String(v));
@@ -5820,7 +5848,7 @@ function rendreRecherche(){
     js.slice(0, 8).forEach(x => {
       const remp = estRemplacant(x.j), eq = remp ? {} : (trouverEquipeParId(x.j.equipeId) || {});
       const s = statsJoueur(x.id), g = statsGardien(x.id);
-      const stat = (g.pj > s.pj) ? '🥅 ' + g.pj + ' ' + t('cl.pj') + (g.tirs ? ' · ' + (g.arr / g.tirs).toFixed(3).replace(/^0/, '') : '') : s.pj + ' ' + t('cl.pj') + ' · ' + s.pts + ' ' + t('cl.pts').toLowerCase();
+      const stat = (g.pj > s.pj) ? '' + icn('net') + ' ' + g.pj + ' ' + t('cl.pj') + (g.tirs ? ' · ' + (g.arr / g.tirs).toFixed(3).replace(/^0/, '') : '') : s.pj + ' ' + t('cl.pj') + ' · ' + s.pts + ' ' + t('cl.pts').toLowerCase();
       html += ligne((eq.id ? eqVisuel(eq, 22) : '<span class="st-remp">REMP</span>') + '<span class="rg-txt"><b>' + escapeHtml(x.j.nom || '') + salHTML(x.j) + '</b><small>' + escapeHtml(eq.nom || t('jo.filtreRemp')) + '</small></span><span class="rg-stat">' + stat + '</span>',
         () => ouvrirProfilJoueur(x.id));
     });
@@ -5923,7 +5951,7 @@ function rendrePalmares(){
   snapPalmares.forEach(d => {
     const p = d.data();
     html += '<div class="pal-carte">'
-      + '<div class="pal-ico">🏆</div>'
+      + '<div class="pal-ico">' + icn('trophy') + '</div>'
       + '<h3>' + escapeHtml(p.titre||'') + '</h3>'
       + '<div class="pal-gagnant">' + escapeHtml(p.gagnant||'') + '</div>'
       + (p.desc ? '<p>' + escapeHtml(p.desc) + '</p>' : '')
@@ -6368,8 +6396,8 @@ function rendreCalendrier(){
     html += '<div class="cal-row">'
       + '<div class="cal-date">' + escapeHtml(formaterDateCal(m.date)) + (m.heure ? '<span>' + escapeHtml(m.heure) + '</span>' : '') + '</div>'
       + '<div class="cal-match"><b>' + escapeHtml(m.domNom || '') + '</b> <em>' + t('calendrier.vs') + '</em> <b>' + escapeHtml(m.extNom || '') + '</b>'
-      + (codeGameDe(m.domId) ? '<span class="code-game" title="' + t('cal.codeTitre') + '">🏠 ' + t('cal.code') + ' <b>' + codeGameDe(m.domId) + '</b></span>' : '')
-      + '<a class="cal-avant" onclick="ouvrirAvantMatch(\'' + m.domId + '\',\'' + m.extId + '\',\'' + (m.date || '') + '\',\'' + (m.heure || '') + '\')">📊 ' + t('am.titre') + '</a></div>';
+      + (codeGameDe(m.domId) ? '<span class="code-game" title="' + t('cal.codeTitre') + '">' + icn('home') + ' ' + t('cal.code') + ' <b>' + codeGameDe(m.domId) + '</b></span>' : '')
+      + '<a class="cal-avant" onclick="ouvrirAvantMatch(\'' + m.domId + '\',\'' + m.extId + '\',\'' + (m.date || '') + '\',\'' + (m.heure || '') + '\')">' + icn('bars') + ' ' + t('am.titre') + '</a></div>';
     if(estAdmin){
       html += '<div class="cal-actions">'
             + '<button class="btn-mini ok" onclick="jouerMatch(\'' + m.id + '\')">' + t('calendrier.jouer') + '</button>'
@@ -6783,7 +6811,7 @@ function afficherProfilEA(p){
     + carteStat(t('ea.tricks'), p.tricks)
     + '</div>';
   if(p.gPj > 0){
-    html += '<div class="sous-head"><h3>🥅 ' + t('ea.gardien') + '</h3></div>'
+    html += '<div class="sous-head"><h3>' + icn('net') + ' ' + t('ea.gardien') + '</h3></div>'
       + '<div class="pf-stats">'
       + carteStat(t('gd.pj'), p.gPj)
       + carteStat(t('ea.fiche'), p.gFiche || '—')
