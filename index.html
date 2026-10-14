@@ -1880,7 +1880,8 @@ nav.tabs.nav-pc{display:flex;flex-wrap:nowrap;justify-content:center;gap:2px;pad
     <h3 class="cinzel" id="modale-titre" data-i18n="admin.titre">Mode admin</h3>
     <p id="modale-sous" data-i18n="admin.sous">Entre le mot de passe pour gérer la ligue.</p>
     <div class="err" id="modale-err"></div>
-    <input type="password" id="modale-pass" placeholder="Mot de passe" data-i18n-ph="admin.ph" onkeydown="if(event.key==='Enter')connexionAdmin()">
+    <input type="email" id="modale-email" autocomplete="username" placeholder="Courriel admin" data-i18n-ph="admin.courriel.ph" style="margin-bottom:8px" onkeydown="if(event.key==='Enter')connexionAdmin()">
+    <input type="password" id="modale-pass" autocomplete="current-password" placeholder="Mot de passe / code DG" data-i18n-ph="admin.ph" onkeydown="if(event.key==='Enter')connexionAdmin()">
     <div class="cta-row" style="margin-top:6px">
       <button class="btn btn-or" id="modale-action" onclick="connexionAdmin()" data-i18n="admin.connexion">Se connecter</button>
       <button class="btn btn-ghost" onclick="fermerModale()" data-i18n="commun.fermer">Fermer</button>
@@ -2172,6 +2173,7 @@ nav.tabs.nav-pc{display:flex;flex-wrap:nowrap;justify-content:center;gap:2px;pad
 <!-- ============================ FIREBASE (SDK compat) ============================ -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
 <script>
 /* =========================================================
@@ -2187,6 +2189,15 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+/* Connexion admin par compte Firebase (le mot de passe n'est plus écrit dans la page).
+   onAuthStateChanged est la seule source de vérité pour « est admin » : connecté = admin. */
+try {
+  firebase.auth().onAuthStateChanged(function(user){
+    estAdmin = !!user;
+    if(user){ dgTeamId = null; sessionStorage.removeItem('dynasty_dg'); sessionStorage.removeItem('dynasty_dg_code'); }
+    if(typeof appliquerRoles === 'function') appliquerRoles();
+  });
+} catch(e){ console.error('[DYNASTY] Auth indisponible :', e); }
 /* Cache local (IndexedDB) : quelqu'un qui revient sur le site ne relit que ce qui a changé → beaucoup moins de lectures Firebase */
 try { db.enablePersistence({synchronizeTabs:true}).catch(() => {}); } catch(e){}
 
@@ -2236,7 +2247,7 @@ const DICT = {
     'equipes.titre':'Équipes','equipes.sous':'Les équipes de la ligue DYNASTY.','equipes.ajouter':'+ Ajouter une équipe',
     'equipes.vide.t':'En préparation','equipes.vide.s':'Les équipes de la Saison 1 seront dévoilées bientôt.',
     'footer.ligne':'Ligue CHEL · NHL 27 · © 2026','footer.tag':'Hockey compétitif · NHL 27 · World of Chel','prop.titre':'Propriétaires','prop.ajouter':'+ Ajouter un propriétaire','prop.modal.nouveau':'Nouveau propriétaire','prop.modal.modifier':'Modifier le propriétaire','prop.lbl.nom':'Nom','prop.lbl.role':'Rôle','prop.lbl.photo':'Photo — lien d\'image (optionnel)','prop.ph.nom':'Nom','prop.ph.role':'Rôle (ex. Commissaire)','prop.ph.photo':'Photo — lien d\'image (optionnel)','prop.besoin':'Entre au moins un nom.','prop.confirmSuppr':'Retirer ce propriétaire ?','prop.vide':'Aucun propriétaire affiché pour l\'instant.',
-    'admin.titre':'Mode admin','admin.sous':'Entre le mot de passe admin ou ton code DG.','admin.ph':'Mot de passe / code DG',
+    'admin.titre':'Mode admin','admin.sous':'Admin : courriel et mot de passe. DG : laisse le courriel vide et entre ton code.','admin.courriel.ph':'Courriel admin (vide si DG)','admin.ph':'Mot de passe / code DG',
     'admin.connexion':'Se connecter','admin.incorrect':'Mot de passe incorrect.',
     'commun.fermer':'Fermer','commun.annuler':'Annuler','btn.enregistrer':'Enregistrer','commun.chargement':'Chargement…',
     'eq.nom':"Nom de l'équipe",'eq.nom.ph':'Ex. Les Rois de Montréal','eq.couleur':"Couleur de l'équipe",
@@ -2335,7 +2346,7 @@ const DICT = {
     'equipes.titre':'Teams','equipes.sous':'The teams of the DYNASTY league.','equipes.ajouter':'+ Add a team',
     'equipes.vide.t':'In the works','equipes.vide.s':'Season 1 teams will be revealed soon.',
     'footer.ligne':'CHEL League · NHL 27 · © 2026','footer.tag':'Competitive hockey · NHL 27 · World of Chel','prop.titre':'Owners','prop.ajouter':'+ Add an owner','prop.modal.nouveau':'New owner','prop.modal.modifier':'Edit owner','prop.lbl.nom':'Name','prop.lbl.role':'Role','prop.lbl.photo':'Photo — image link (optional)','prop.ph.nom':'Name','prop.ph.role':'Role (e.g. Commissioner)','prop.ph.photo':'Photo — image link (optional)','prop.besoin':'Enter at least a name.','prop.confirmSuppr':'Remove this owner?','prop.vide':'No owners listed yet.',
-    'admin.titre':'Admin mode','admin.sous':'Enter the admin password or your GM code.','admin.ph':'Password / GM code',
+    'admin.titre':'Admin mode','admin.sous':'Admin: email and password. GM: leave email empty and enter your code.','admin.courriel.ph':'Admin email (empty if GM)','admin.ph':'Password / GM code',
     'admin.connexion':'Log in','admin.incorrect':'Incorrect password.',
     'commun.fermer':'Close','commun.annuler':'Cancel','btn.enregistrer':'Save','commun.chargement':'Loading…',
     'eq.nom':'Team name','eq.nom.ph':'e.g. Montreal Kings','eq.couleur':'Team color',
@@ -2485,9 +2496,10 @@ function setPositions(containerId, str){
 
 /* =========================================================
    2) RÔLES : ADMIN (toi) + DG (par équipe)
-   ⚠️ Change le mot de passe admin ici pour le tien :
+   L'admin se connecte avec un compte Firebase (courriel + mot de passe).
+   Les DG gardent un code d'équipe simple.
    ========================================================= */
-const ADMIN_PASS = "dynasty2026";
+/* Le mot de passe admin n'est plus dans la page : la connexion passe par un compte Firebase. */
 let estAdmin = false;
 let dgTeamId = null;   // ID de l'équipe que le DG connecté dirige (null si pas DG)
 
@@ -2559,9 +2571,12 @@ function appliquerRoles(){
 }
 
 function deconnexion(){
-  estAdmin = false; dgTeamId = null;
+  dgTeamId = null;
   sessionStorage.removeItem('dynasty_admin'); sessionStorage.removeItem('dynasty_dg'); sessionStorage.removeItem('dynasty_dg_code');
-  appliquerRoles();
+  try{
+    if(firebase.auth().currentUser){ firebase.auth().signOut(); return; }   // onAuthStateChanged fera le reste
+  }catch(e){}
+  estAdmin = false; appliquerRoles();
 }
 function deconnexionDG(){ deconnexion(); }
 
@@ -2574,22 +2589,34 @@ function ouvrirModale(){
 }
 function fermerModale(){ document.getElementById('modale').classList.remove('open'); }
 
-function connexionAdmin(){
+async function connexionAdmin(){
+  const courriel = (document.getElementById('modale-email').value || '').trim();
   const val = document.getElementById('modale-pass').value.trim();   // espaces ajoutés par le clavier du téléphone
-  // 1) Mot de passe admin ?
-  if(val === ADMIN_PASS){
-    estAdmin = true; dgTeamId = null;
-    sessionStorage.setItem('dynasty_admin','1'); sessionStorage.removeItem('dynasty_dg');
-    appliquerRoles(); fermerModale(); return;
+  const err = document.getElementById('modale-err');
+  err.textContent = '';
+  // 1) Admin : un courriel est entré → connexion par compte Firebase
+  if(courriel){
+    const btn = document.getElementById('modale-action');
+    if(btn){ btn.disabled = true; }
+    try{
+      await firebase.auth().signInWithEmailAndPassword(courriel, val);
+      // onAuthStateChanged met estAdmin à jour et rafraîchit l'affichage
+      fermerModale();
+    }catch(e){
+      err.textContent = t('admin.incorrect');
+    }finally{
+      if(btn){ btn.disabled = false; }
+    }
+    return;
   }
-  // 2) Sinon, code DG d'une équipe ?
+  // 2) DG : pas de courriel → le champ mot de passe est un code d'équipe
   const equipe = trouverEquipeParCodeDG(val);
   if(equipe){
     dgTeamId = equipe.id; estAdmin = false;
     sessionStorage.setItem('dynasty_dg', equipe.id); sessionStorage.setItem('dynasty_dg_code', val); sessionStorage.removeItem('dynasty_admin');
     appliquerRoles(); fermerModale(); location.hash = 'monequipe'; return;
   }
-  document.getElementById('modale-err').textContent = t('admin.incorrect');
+  err.textContent = t('admin.incorrect');
 }
 
 /* =========================================================
@@ -3014,7 +3041,6 @@ function sauverEquipe(){
   if(!nom){ alert(t('eq.besoinNom')); return; }
   if(codedg){
     let doublon = false;
-    if(codedg === ADMIN_PASS) doublon = true;
     if(snapEquipes) snapEquipes.forEach(d => { if(d.id !== equipeEnEdition && (d.data().codedg || '') === codedg) doublon = true; });
     if(doublon){ alert(t('eq.codeDoublon')); return; }
   }
@@ -7197,7 +7223,6 @@ function rafraichirDynamique(){ try{ rendreMonEquipe(); }catch(e){} try{ rendreN
    6) DÉMARRAGE
    ========================================================= */
 function demarrer(){
-  if(sessionStorage.getItem('dynasty_admin') === '1'){ estAdmin = true; }
   const dgSauve = sessionStorage.getItem('dynasty_dg');
   if(dgSauve){ dgTeamId = dgSauve; }
   appliquerLangue();
