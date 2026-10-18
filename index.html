@@ -4559,12 +4559,8 @@ function sauverMatch(){
     origLignes.forEach(o => { if(!affichables.has(o.pid) && !deja.has(o.pid) && !pidsRetires.has(o.pid)) lignes.push(o); });
   }
   const somme = (ls, eid) => ls.filter(l => l.eqId === eid).reduce((s,l) => s + (+l.b||0), 0);
+  /* Le score = la somme des buts des joueurs cochés. (Les cases du bas forcent un score précis si besoin.) */
   let butsDom = somme(lignes, domId), butsExt = somme(lignes, extId);
-  if(memeEquipes && orig.butsDom != null && orig.butsExt != null){
-    /* Score enregistré (ex. celui d'EA) ajusté seulement de ce que tu as changé dans les buts */
-    butsDom = (+orig.butsDom||0) + (butsDom - somme(origLignes, domId));
-    butsExt = (+orig.butsExt||0) + (butsExt - somme(origLignes, extId));
-  }
   const sd = document.getElementById('m-score-dom').value, se = document.getElementById('m-score-ext').value;
   if(sd !== '' && se !== ''){ butsDom = Math.max(0, parseInt(sd,10) || 0); butsExt = Math.max(0, parseInt(se,10) || 0); }
   else if(sd !== '' || se !== ''){ alert('Remplis les DEUX cases de score (ou aucune).'); return; }
