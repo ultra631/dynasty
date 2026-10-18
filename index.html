@@ -3087,14 +3087,39 @@ const COMP_LOTS = [
     /* lignes ajoutées au fil DYNASTY / page Transactions */
     fil: [['Toronto reçoit XxCrosbyQcxX (3 M$) en compensation de I-GXGNON-I (3 M$, pas actif)'],
           ['Calgary reçoit Dangles x 91 (3 M$) en compensation de FireStar QC (3 M$)'],
-          ['Calgary reçoit Louby x 4 (5 M$) en compensation de vuftr (5 M$)']] }
+          ['Calgary reçoit Louby x 4 (5 M$) en compensation de vuftr (5 M$)']] },
+  { nom: '16 octobre 2026', quand: '2026-10-16T11:12:00-04:00',
+    sorties: [['Calgary','NolanBoud10'], ['Calgary','Elbarbu420']],
+    arrivees: [['Calgary','Lucifer7961','',1,false], ['Calgary','Elxpogo','',1,false]],
+    fil: [['Calgary reçoit Lucifer7961 (1 M$) en compensation de Nolan (1 M$)'],
+          ['Calgary reçoit Elxpogo (1 M$) en compensation de ELBARBU420 (1 M$)']] },
+  { nom: '17 octobre 2026 — Washington', quand: '2026-10-17T13:03:00-04:00',
+    sorties: [['Washington','Wunnar']],
+    arrivees: [['Washington','l POULIN l','',5,false]],
+    fil: [['Washington reçoit l POULIN l (5 M$) en compensation de Wunnar_ (5 M$)']] },
+  { nom: '17 octobre 2026 — Boston', quand: '2026-10-17T21:39:00-04:00',
+    sorties: [['Boston','Orgenote7940427']],
+    arrivees: [['Boston','Xmen87','',3,false]],
+    fil: [['Boston reçoit Xmen87 (3 M$) en compensation de Orgenote7940427 (3 M$)']] },
+  { nom: '17 octobre 2026 — Toronto', quand: '2026-10-17T22:02:00-04:00',
+    sorties: [['Toronto','XxCrosbyQcxX']],
+    arrivees: [['Toronto','Darkjoe78','',3,false]],
+    fil: [['Toronto reçoit darkjoe78 (3 M$) en compensation de XxCrosbyQcxX (3 M$, demande de libération)']] },
+  { nom: '18 octobre 2026', quand: '2026-10-18T13:48:00-04:00',
+    sorties: [['Calgary','Lucifer7961']],
+    arrivees: [['Calgary','CedtheToken','',1,false]],
+    fil: [['Calgary reçoit CedtheToken (1 M$) en compensation de Lucifer7961 (1 M$)']] }
 ];
 const _nrm = s => String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,'');
 
-function planCompensations(lot){
+function rosterCompensations(){
+  const r = []; if(snapJoueurs) snapJoueurs.forEach(d => { const j=d.data(); r.push({id:d.id, nom:j.nom||'', eaNom:j.eaNom||'', equipeId:j.equipeId||'', position:j.position||'', remp: !!(j.remplacant || j.reserviste)}); });
+  return r;
+}
+function planCompensations(lot, roster){
   lot = lot || COMP_LOTS[COMP_LOTS.length - 1];
   const equipes = []; if(snapEquipes) snapEquipes.forEach(d => equipes.push({id:d.id, nom:(d.data().nom||'')}));
-  const joueurs = []; if(snapJoueurs) snapJoueurs.forEach(d => { const j=d.data(); joueurs.push({id:d.id, nom:j.nom||'', eaNom:j.eaNom||'', equipeId:j.equipeId||'', position:j.position||'', remp: !!(j.remplacant || j.reserviste)}); });
+  const joueurs = roster || rosterCompensations();
   const eqIds = new Set(equipes.map(e => e.id));
   const eqParNom = n => equipes.find(e => _nrm(e.nom) === _nrm(n));
   const memeNom = (j, nom) => _nrm(j.nom) === _nrm(nom) || (j.eaNom && _nrm(j.eaNom) === _nrm(nom));
@@ -3134,40 +3159,78 @@ function ecrireFilCompensations(b, lot){
   (lot.fil || []).forEach(([texte], i) => b.set(db.collection('transactions').doc('comp-' + _nrm(lot.nom) + '-' + i),
     { type: 'Compensation', texte, image: '', ts: base ? new Date(base.getTime() + (n - i) * 1000) : firebase.firestore.FieldValue.serverTimestamp() }));
 }
-function appliquerCompensations(){
+async function appliquerCompensations(){
   if(!estAdmin){ alert(t('err.adminSeul')); return; }
-  const lot = COMP_LOTS[COMP_LOTS.length - 1];
-  const p = planCompensations(lot);
-  const total = p.liberer.length + p.creer.length + p.reassigner.length;
-  let msg = 'COMPENSATIONS — ' + lot.nom + '\n\n';
-  if(p.liberer.length){ msg += 'Retirés des équipes (' + p.liberer.length + ') :\n' + p.liberer.map(x => '   ' + x.nom + ' ← ' + x.equipe).join('\n') + '\n\n'; }
-  const arr = p.creer.concat(p.reassigner);
-  const norm = arr.filter(x => !x.tc), tc = arr.filter(x => x.tc);
-  if(norm.length){ msg += 'Joueurs ajoutés (' + norm.length + ') :\n' + norm.map(x => '   ' + x.nom + ' → ' + x.equipe + ' (' + x.salaire + ' M$)').join('\n') + '\n\n'; }
-  if(tc.length){ msg += 'Remplaçants (' + tc.length + ') :\n' + tc.map(x => '   ' + x.nom + ' → ' + x.equipe).join('\n') + '\n\n'; }
-  if(p.deja.length) msg += 'Déjà fait (' + p.deja.length + ') — ignorés :\n' + p.deja.map(x => '   ' + x).join('\n') + '\n\n';
-  if(p.problemes.length) msg += '⚠ À vérifier :\n' + p.problemes.map(x => '   ' + x).join('\n') + '\n\n';
-  if(!total){
-    // tout est déjà appliqué : on remet quand même le fil DYNASTY à jour (date exacte de la compensation)
-    if((lot.fil || []).length){ const b0 = db.batch(); ecrireFilCompensations(b0, lot); b0.commit().catch(e => console.error(e)); }
-    alert(msg + (p.deja.length ? 'Tout est déjà appliqué. (Le fil DYNASTY est à jour.)' : 'Rien à faire.')); return;
-  }
-  if(!confirm(msg + 'Appliquer ces changements ?')) return;
+  const roster = rosterCompensations();   // copie locale : on la met à jour au fur et à mesure pour que les chaînes (ex. un joueur qui arrive puis repart) se résolvent dans l'ordre
+  const idxRoster = nom => { const n = _nrm(nom); return roster.find(x => _nrm(x.nom) === n || (x.eaNom && _nrm(x.eaNom) === n)); };
 
-  const b = db.batch();
-  p.liberer.forEach(x => b.update(db.collection('joueurs').doc(x.id), { equipeId:'', libre:true, ancienneEquipe:x.equipeId, remplacant:false, reserviste:false }));
-  p.reassigner.forEach(x => {
-    const maj = { equipeId:x.eqId, libre:false, remplacant:x.tc, reserviste:false, salaire:x.salaire };
-    if(!x.positionExistante && x.position) maj.position = x.position;
-    b.update(db.collection('joueurs').doc(x.id), maj);
+  // 1) Calcule le plan de chaque lot, dans l'ordre, en simulant l'effet des lots précédents sur le roster
+  const etapes = [];
+  let totalGlobal = 0; const problemes = [];
+  COMP_LOTS.forEach(lot => {
+    const p = planCompensations(lot, roster);
+    const total = p.liberer.length + p.creer.length + p.reassigner.length;
+    totalGlobal += total;
+    p.problemes.forEach(x => problemes.push(lot.nom + ' : ' + x));
+    // simule l'effet sur le roster pour le lot suivant
+    p.liberer.forEach(x => { const r = roster.find(y => y.id === x.id); if(r){ r.equipeId = ''; r.remp = false; } });
+    p.reassigner.forEach(x => { const r = roster.find(y => y.id === x.id); if(r){ r.equipeId = x.eqId; r.remp = !!x.tc; if(!r.position && x.position) r.position = x.position; } });
+    p.creer.forEach(x => roster.push({ id:'_new_'+_nrm(x.nom), nom:x.nom, eaNom:x.nom, equipeId:x.eqId, position:x.position, remp:!!x.tc }));
+    etapes.push({ lot, p, total });
   });
-  p.creer.forEach(x => b.set(db.collection('joueurs').doc(), { nom:x.nom, equipeId:x.eqId, position:x.position, eaNom:x.nom, salaire:x.salaire, remplacant:x.tc, reserviste:false, createdAt: firebase.firestore.FieldValue.serverTimestamp() }));
-  ecrireFilCompensations(b, lot);
-  b.commit()
-    .then(() => { alert('Terminé : ' + p.liberer.length + ' retiré(s), ' + (p.creer.length + p.reassigner.length) + ' ajouté(s).' + (arr.some(x => !x.position && !x.positionExistante) ? '\n\nComplète les positions manquantes dans Joueurs → Modifier.' : '')); })
-    .catch(e => alert(t('commun.erreur') + e.message));
-}
 
+  // 2) Message résumé
+  let msg = '';
+  etapes.forEach(({lot, p, total}) => {
+    if(!total) return;
+    msg += '— ' + lot.nom + ' —\n';
+    if(p.liberer.length) msg += '  Retirés : ' + p.liberer.map(x => x.nom + ' (' + x.equipe + ')').join(', ') + '\n';
+    const arr = p.creer.concat(p.reassigner);
+    if(arr.length) msg += '  Ajoutés : ' + arr.map(x => x.nom + ' -> ' + x.equipe + ' (' + x.salaire + ' M$)').join(', ') + '\n';
+    msg += '\n';
+  });
+  if(problemes.length) msg += '⚠ À vérifier (pas appliqué automatiquement — à faire à la main) :\n' + problemes.map(x => '   ' + x).join('\n') + '\n\n';
+
+  // 3) Rien de neuf : on remet quand même le fil DYNASTY à jour (dates exactes)
+  if(!totalGlobal){
+    const b0 = db.batch(); COMP_LOTS.forEach(lot => { if((lot.fil||[]).length) ecrireFilCompensations(b0, lot); });
+    try{ await b0.commit(); }catch(e){ console.error(e); }
+    alert((msg || '') + 'Tout est déjà appliqué. (Le fil DYNASTY est à jour.)'); return;
+  }
+  if(!confirm('COMPENSATIONS\n\n' + msg + 'Appliquer ces changements ?')) return;
+
+  // 4) Applique lot par lot, du plus vieux au plus récent. On RE-planifie sur un roster à jour
+  //    (avec les vrais identifiants) pour que les chaînes se résolvent correctement.
+  const roster2 = rosterCompensations();
+  let retires = 0, ajoutes = 0, manquePos = false;
+  for(const lot of COMP_LOTS){
+    const p = planCompensations(lot, roster2);
+    const total = p.liberer.length + p.creer.length + p.reassigner.length;
+    if(!total && !(lot.fil||[]).length) continue;
+    const b = db.batch();
+    p.liberer.forEach(x => {
+      b.update(db.collection('joueurs').doc(x.id), { equipeId:'', libre:true, ancienneEquipe:x.equipeId, remplacant:false, reserviste:false });
+      const r = roster2.find(y => y.id === x.id); if(r){ r.equipeId = ''; r.remp = false; }
+    });
+    p.reassigner.forEach(x => {
+      const maj = { equipeId:x.eqId, libre:false, remplacant:x.tc, reserviste:false, salaire:x.salaire };
+      if(!x.positionExistante && x.position) maj.position = x.position;
+      if(!x.positionExistante && !x.position) manquePos = true;
+      b.update(db.collection('joueurs').doc(x.id), maj);
+      const r = roster2.find(y => y.id === x.id); if(r){ r.equipeId = x.eqId; r.remp = !!x.tc; if(!r.position && x.position) r.position = x.position; }
+    });
+    p.creer.forEach(x => {
+      if(!x.position) manquePos = true;
+      const ref = db.collection('joueurs').doc();
+      b.set(ref, { nom:x.nom, equipeId:x.eqId, position:x.position, eaNom:x.nom, salaire:x.salaire, remplacant:x.tc, reserviste:false, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+      roster2.push({ id:ref.id, nom:x.nom, eaNom:x.nom, equipeId:x.eqId, position:x.position, remp:!!x.tc });
+    });
+    if((lot.fil||[]).length) ecrireFilCompensations(b, lot);
+    try{ await b.commit(); }catch(e){ alert(t('commun.erreur') + e.message); return; }
+    retires += p.liberer.length; ajoutes += p.creer.length + p.reassigner.length;
+  }
+  alert('Terminé : ' + retires + ' retiré(s), ' + ajoutes + ' ajouté(s).' + (manquePos ? '\n\nComplète les positions manquantes dans Joueurs → Modifier.' : '') + (problemes.length ? '\n\n⚠ ' + problemes.length + ' à vérifier (voir la liste ci-dessus).' : ''));
+}
 /* Une équipe existe-t-elle encore ? (sert à ignorer les données orphelines) */
 function equipeExiste(id){ return !!(id && trouverEquipeParId(id)); }
 
