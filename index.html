@@ -2790,7 +2790,7 @@ function testerWebhook(){
    ========================================================= */
 let snapTransactions = null;
 function initTransactions(){
-  db.collection('transactions').orderBy('ts','desc').onSnapshot(snap => {
+  db.collection('transactions').orderBy('ts','desc').limit(80).onSnapshot(snap => {   // fil récent seulement → moins de lectures
     snapTransactions = snap; rendreTransactions(); try{ rendreTicker(); }catch(e){ console.error(e); }
   }, err => {
     const c = document.getElementById('transactions-list');
@@ -6731,7 +6731,8 @@ function initCalendrier(){
   if(_desabCal){ _desabCal(); _desabCal = null; }
   _modeCal = complet;
   const hier = new Intl.DateTimeFormat('en-CA', {timeZone:'America/Toronto', year:'numeric', month:'2-digit', day:'2-digit'}).format(new Date(Date.now() - 86400000));
-  const q = complet ? db.collection('calendrier').orderBy('date','asc') : db.collection('calendrier').where('date', '>=', hier).orderBy('date','asc');
+  /* Les visiteurs ne chargent que les ~50 prochains matchs (pas les 288 de l'horaire) → beaucoup moins de lectures Firebase. L'admin charge tout. */
+  const q = complet ? db.collection('calendrier').orderBy('date','asc') : db.collection('calendrier').where('date', '>=', hier).orderBy('date','asc').limit(50);
   _desabCal = q.onSnapshot(snap => {
     snapCal = snap; rendreCalendrier(); try{ rendreEtoiles(); rendreMonEquipe(); }catch(e){ console.error(e); }
   }, err => {
