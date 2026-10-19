@@ -1335,6 +1335,15 @@ nav.tabs.nav-pc{display:flex;flex-wrap:nowrap;justify-content:center;gap:2px;pad
   .teams-grid{grid-template-columns:1fr}
   .rs-tete b{font-size:18px}
 }
+.imp-row{flex-direction:column;align-items:stretch;gap:4px;cursor:default}
+.imp-main{display:flex;align-items:center;gap:8px;cursor:pointer;min-width:0}
+.imp-detail{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding-left:25px}
+.imp-ot-lbl{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;color:var(--texte-doux);cursor:pointer;white-space:nowrap}
+.imp-ot-lbl input{accent-color:var(--or);cursor:pointer;width:15px;height:15px}
+.imp-ecart{background:rgba(224,85,85,.15);color:#ffb3ab;padding:1px 8px;border-radius:99px;font-size:11px}
+.imp-detail .imp-warn{font-size:11px}
+.imp-lier-wrap{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:#e5c074;background:rgba(214,170,77,.12);padding:2px 7px;border-radius:7px}
+.imp-lier{font:inherit;font-size:11px;background:#15151b;color:var(--texte);border:1px solid var(--bordure);border-radius:6px;padding:2px 4px;max-width:150px}
 </style>
 </head>
 <body>
@@ -2258,7 +2267,7 @@ const DICT = {
     'an.besoin':'Écris au moins un titre ou un texte.','an.confirmSuppr':'Supprimer cette annonce ?',
     'discord.lbl':'Admin · Webhook Discord (annonces auto)','discord.ph':'https://discord.com/api/webhooks/…','discord.actif':'Poster les annonces sur Discord automatiquement','discord.save':'Enregistrer','discord.test':'Test','discord.enregistre':'Webhook enregistré.','discord.besoinUrl':"Colle le lien du webhook d'abord.",'discord.testMsg':'🏒 Test DYNASTY — le webhook fonctionne!','discord.testOk':'Message test envoyé sur Discord!','discord.testErr':'Échec. Vérifie le lien du webhook.',
     'transactions.titre':'Transactions','transactions.sous':'Signatures, échanges, libérations et rappels.','transactions.admlbl':'Admin · Nouvelle transaction','transactions.ph.texte':'Détails (optionnel si image)…','transactions.ping':'Notifier @everyone sur Discord','transactions.publier':'Publier la transaction','transactions.dclbl':'Admin · Webhook Discord des transactions','transactions.dcactif':'Poster les transactions sur Discord automatiquement','transactions.vide.t':'Le marché est calme… pour l\'instant','transactions.vide.s':'Signatures, échanges et rappels apparaîtront ici dès l\'ouverture du marché.','transactions.besoin':'Ajoute un détail ou une image.','transactions.confirmSuppr':'Supprimer cette transaction ?','transactions.footer':'Transactions DYNASTY','transactions.testMsg':'🔁 Test transactions DYNASTY — le webhook fonctionne!','tx.type.signature':'Signature','tx.type.echange':'Échange','tx.type.liberation':'Libération','tx.type.rappel':'Rappel','tx.type.autre':'Autre',
-    'eq.eaclub':'ID du club EA (pour l\'import auto)','eq.eaclub.ph':'Ex. 13494  (ou 13494, 51234 si un autre club sert de dépannage)','joueur.eanom':'Gamertag EA (si différent du nom)','joueur.eanom.ph':'Ex. Dj_lavabo','import.btn':'Importer depuis EA','import.titre':'Importer depuis EA','import.intro':'Choisis une équipe (qui a un ID club EA) pour aller chercher ses 5 derniers matchs.','import.equipe':'Équipe à importer','import.chercher':'Chercher les matchs','import.confirmer':'Importer les matchs cochés','import.aucuneEquipe':'Aucune équipe n\'a d\'ID club EA. Ajoute-le dans la fiche de l\'équipe.','import.chargement':'Connexion à EA… (ça peut prendre 10-20 sec)','import.erreur':'Erreur de connexion à EA.','import.vide':'Aucun match trouvé pour ce club.','import.horsLigue':'adversaire hors-ligue','import.deja':'déjà importé','import.nul':'égalité (ignoré)','import.pret':'prêt','import.joueursManq':'{n} joueur(s) non reliés','import.trouve':'{n} matchs trouvés · {ok} prêts à importer','import.rienCoche':'Coche au moins un match.','import.enCours':'Import en cours…','import.fini':'{n}/{t} matchs importés! Les stats sont à jour.',
+    'eq.eaclub':'ID du club EA (pour l\'import auto)','eq.eaclub.ph':'Ex. 13494  (ou 13494, 51234 si un autre club sert de dépannage)','joueur.eanom':'Gamertag EA (si différent du nom)','joueur.eanom.ph':'Ex. Dj_lavabo','import.btn':'Importer depuis EA','import.titre':'Importer depuis EA','import.intro':'Choisis une équipe (qui a un ID club EA) pour aller chercher ses 5 derniers matchs.','import.equipe':'Équipe à importer','import.chercher':'Chercher les matchs','import.confirmer':'Importer les matchs cochés','import.aucuneEquipe':'Aucune équipe n\'a d\'ID club EA. Ajoute-le dans la fiche de l\'équipe.','import.chargement':'Connexion à EA… (ça peut prendre 10-20 sec)','import.erreur':'Erreur de connexion à EA.','import.vide':'Aucun match trouvé pour ce club.','import.horsLigue':'adversaire hors-ligue','import.deja':'déjà importé','import.nul':'égalité (ignoré)','import.pret':'prêt','import.joueursManq':'{n} joueur(s) non reliés','import.prol':'Prolongation','import.lierA':'Lier à…','import.creerJoueur':'+ Créer le joueur','import.nonLies':'Non liés : {noms}','import.ecartScore':'⚠ EA {ea}, joueurs {j} — buteur non lié','import.trouve':'{n} matchs trouvés · {ok} prêts à importer','import.rienCoche':'Coche au moins un match.','import.enCours':'Import en cours…','import.fini':'{n}/{t} matchs importés! Les stats sont à jour.',
     'nav.palmares':'Palmarès','commun.fermer':'Fermer',
     'live.derniers':'Derniers résultats','live.prochains':'Prochains matchs','live.meneurs':'Meneurs','live.aucunResultat':'Premiers matchs ce soir!','live.aucunMatch':'Horaire à venir','live.aucunMeneur':'La course aux points commence ce soir',
     'meneurs.pointeurs':'Meilleurs pointeurs','meneurs.gardiens':'Meilleurs gardiens','gd.arrpct':'Arr%',
@@ -2357,7 +2366,7 @@ const DICT = {
     'an.besoin':'Write at least a title or some text.','an.confirmSuppr':'Delete this post?',
     'discord.lbl':'Admin · Discord webhook (auto announcements)','discord.ph':'https://discord.com/api/webhooks/…','discord.actif':'Auto-post announcements to Discord','discord.save':'Save','discord.test':'Test','discord.enregistre':'Webhook saved.','discord.besoinUrl':'Paste the webhook link first.','discord.testMsg':'🏒 DYNASTY test — the webhook works!','discord.testOk':'Test message sent to Discord!','discord.testErr':'Failed. Check the webhook link.',
     'transactions.titre':'Transactions','transactions.sous':'Signings, trades, releases and call-ups.','transactions.admlbl':'Admin · New transaction','transactions.ph.texte':'Details (optional if image)…','transactions.ping':'Notify @everyone on Discord','transactions.publier':'Post transaction','transactions.dclbl':'Admin · Transactions Discord webhook','transactions.dcactif':'Auto-post transactions to Discord','transactions.vide.t':'The market is quiet… for now','transactions.vide.s':'Signings, trades and call-ups will appear here once the market opens.','transactions.besoin':'Add details or an image.','transactions.confirmSuppr':'Delete this transaction?','transactions.footer':'DYNASTY Transactions','transactions.testMsg':'🔁 DYNASTY transactions test — the webhook works!','tx.type.signature':'Signing','tx.type.echange':'Trade','tx.type.liberation':'Release','tx.type.rappel':'Call-up','tx.type.autre':'Other',
-    'eq.eaclub':'EA club ID (for auto-import)','eq.eaclub.ph':'Ex. 13494','joueur.eanom':'EA gamertag (if different from name)','joueur.eanom.ph':'Ex. Dj_lavabo','import.btn':'Import from EA','import.titre':'Import from EA','import.intro':'Pick a team (with an EA club ID) to fetch its last 5 matches.','import.equipe':'Team to import','import.chercher':'Fetch matches','import.confirmer':'Import checked matches','import.aucuneEquipe':'No team has an EA club ID. Add it in the team form.','import.chargement':'Connecting to EA… (may take 10-20 sec)','import.erreur':'EA connection error.','import.vide':'No match found for this club.','import.horsLigue':'opponent outside league','import.deja':'already imported','import.nul':'tie (skipped)','import.pret':'ready','import.joueursManq':'{n} player(s) not linked','import.trouve':'{n} matches found · {ok} ready to import','import.rienCoche':'Check at least one match.','import.enCours':'Importing…','import.fini':'{n}/{t} matches imported! Stats are up to date.',
+    'eq.eaclub':'EA club ID (for auto-import)','eq.eaclub.ph':'Ex. 13494','joueur.eanom':'EA gamertag (if different from name)','joueur.eanom.ph':'Ex. Dj_lavabo','import.btn':'Import from EA','import.titre':'Import from EA','import.intro':'Pick a team (with an EA club ID) to fetch its last 5 matches.','import.equipe':'Team to import','import.chercher':'Fetch matches','import.confirmer':'Import checked matches','import.aucuneEquipe':'No team has an EA club ID. Add it in the team form.','import.chargement':'Connecting to EA… (may take 10-20 sec)','import.erreur':'EA connection error.','import.vide':'No match found for this club.','import.horsLigue':'opponent outside league','import.deja':'already imported','import.nul':'tie (skipped)','import.pret':'ready','import.joueursManq':'{n} player(s) not linked','import.prol':'OT','import.lierA':'Link to…','import.creerJoueur':'+ Create player','import.nonLies':'Not linked: {noms}','import.ecartScore':'⚠ EA {ea}, players {j} — scorer not linked','import.trouve':'{n} matches found · {ok} ready to import','import.rienCoche':'Check at least one match.','import.enCours':'Importing…','import.fini':'{n}/{t} matches imported! Stats are up to date.',
     'nav.palmares':'Honours','commun.fermer':'Close',
     'live.derniers':'Latest results','live.prochains':'Upcoming games','live.meneurs':'Leaders','live.aucunResultat':'First games tonight!','live.aucunMatch':'Schedule coming soon','live.aucunMeneur':'The points race starts tonight',
     'meneurs.pointeurs':'Top scorers','meneurs.gardiens':'Top goalies','gd.arrpct':'SV%',
@@ -6495,6 +6504,7 @@ function supprimerProprietaire(id){
 const EA_WORKER  = 'https://dynasty-ea.dompierrekevin70.workers.dev';
 const EA_PLATFORM = 'common-gen5';
 let impMatchs = [];   // matchs analysés, prêts à importer
+let _eaBrut = null;   // dernière réponse EA brute (pour ré-analyser après avoir lié un joueur)
 
 // Trouve l'équipe DYNASTY reliée à un club EA
 function equipeParEaClub(eaClubId){
@@ -6588,6 +6598,8 @@ function lancerImportEA(){
 
 function analyserMatchsEA(matchs){
   impMatchs = [];
+  _eaBrut = matchs;
+  const reg = dureeReglementaireSite();
   matchs.forEach(m => {
     const clubIds = Object.keys(m.clubs || {});
     if(clubIds.length < 2) return;
@@ -6606,7 +6618,7 @@ function analyserMatchsEA(matchs){
 
     // Construit les lignes (joueurs) pour les 2 clubs reliés
     const lignes = [];
-    let manquants = 0;
+    let manquants = 0; const manquantsNoms = [];
     [[cA,eqA],[cB,eqB]].forEach(pair => {
       const cid = pair[0], eq = pair[1];
       if(!eq) return;
@@ -6623,17 +6635,23 @@ function analyserMatchsEA(matchs){
           }
           lignes.push(ligne);
         }
-        else { manquants++; }
+        else { manquants++; manquantsNoms.push({ nom: p.playername || '?', eqId: eq.id }); }
       });
     });
 
+    const sommeDom = lignes.filter(l => eqA && l.eqId === eqA.id).reduce((s,l) => s + (+l.b||0), 0);
+    const sommeExt = lignes.filter(l => eqB && l.eqId === eqB.id).reduce((s,l) => s + (+l.b||0), 0);
+    let mxToi = 0; lignes.forEach(l => { mxToi = Math.max(mxToi, +((l.stats || {}).toiseconds) || 0); });
+    const prolongationAuto = !!(reg && mxToi > reg + 45);
     impMatchs.push({
       eaMatchId: m.matchId,
       timestamp: m.timestamp,
       domId: eqA ? eqA.id : null, domNom: eqA ? eqA.nom : nomEaA,
       extId: eqB ? eqB.id : null, extNom: eqB ? eqB.nom : nomEaB,
       butsDom: butsA, butsExt: butsB,
-      lignes: lignes, importable: importable, raison: raison, manquants: manquants
+      lignes: lignes, importable: importable, raison: raison,
+      manquants: manquants, manquantsNoms: manquantsNoms,
+      sommeDom: sommeDom, sommeExt: sommeExt, prolongationAuto: prolongationAuto
     });
   });
   rendrePreviewImport();
@@ -6651,18 +6669,46 @@ function rendrePreviewImport(){
     const badge = x.importable
       ? '<span class="imp-ok" data-i18n="import.pret">prêt</span>'
       : '<span class="imp-no">' + escapeHtml(x.raison) + '</span>';
-    const manq = (x.importable && x.manquants>0) ? '<span class="imp-warn">' + t('import.joueursManq').replace('{n}', x.manquants) + '</span>' : '';
-    html += '<label class="imp-row">'
-      + '<input type="checkbox" class="imp-chk" data-i="' + i + '" ' + (x.importable ? 'checked' : 'disabled') + '>'
-      + '<span class="imp-match">' + escapeHtml(x.domNom) + ' <b>' + x.butsDom + ' - ' + x.butsExt + '</b> ' + escapeHtml(x.extNom) + '</span>'
-      + '<span class="imp-meta">' + date + ' ' + badge + ' ' + manq + '</span>'
+    html += '<div class="imp-row">'
+      + '<label class="imp-main">'
+        + '<input type="checkbox" class="imp-chk" data-i="' + i + '" ' + (x.importable ? 'checked' : 'disabled') + '>'
+        + '<span class="imp-match">' + escapeHtml(x.domNom) + ' <b>' + x.butsDom + ' - ' + x.butsExt + '</b> ' + escapeHtml(x.extNom) + '</span>'
+        + '<span class="imp-meta">' + date + ' ' + badge + '</span>'
       + '</label>';
+    if(x.importable){
+      let det = '<label class="imp-ot-lbl"><input type="checkbox" class="imp-ot" data-i="' + i + '"' + (x.prolongationAuto ? ' checked' : '') + '> ' + t('import.prol') + '</label>';
+      (x.manquantsNoms || []).forEach(mq => {
+        const opts = joueursDeEquipe(mq.eqId).map(j => '<option value="' + j.id + '">' + escapeHtml(j.nom) + (j.eaNom ? ' (' + escapeHtml(j.eaNom) + ')' : '') + '</option>').join('');
+        det += '<span class="imp-lier-wrap">' + escapeHtml(mq.nom) + ' <select class="imp-lier" data-eq="' + escapeHtml(mq.eqId) + '" data-gt="' + escapeHtml(mq.nom) + '" onchange="lierGamertagImport(this)">'
+          + '<option value="">' + t('import.lierA') + '</option>' + opts + '<option value="__new__">' + t('import.creerJoueur') + '</option></select></span>';
+      });
+      if(x.butsDom !== x.sommeDom || x.butsExt !== x.sommeExt) det += '<span class="imp-ecart">' + t('import.ecartScore').replace('{ea}', x.butsDom + '-' + x.butsExt).replace('{j}', x.sommeDom + '-' + x.sommeExt) + '</span>';
+      html += '<div class="imp-detail">' + det + '</div>';
+    }
+    html += '</div>';
   });
   html += '</div>';
   cont.innerHTML = html;
   document.getElementById('imp-confirm-row').style.display = nbOk > 0 ? 'flex' : 'none';
 }
 
+/* Les joueurs d'une équipe (pour le menu de liaison dans l'aperçu d'import) */
+function joueursDeEquipe(eqId){
+  const r = []; if(snapJoueurs) snapJoueurs.forEach(d => { const j = d.data(); if(j.equipeId === eqId) r.push({ id:d.id, nom:j.nom || '', eaNom:j.eaNom || '' }); });
+  r.sort((a,b) => a.nom.localeCompare(b.nom)); return r;
+}
+/* Lie un gamertag EA à un joueur du site (ou crée le joueur), puis ré-analyse l'aperçu */
+function lierGamertagImport(sel){
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }
+  const eqId = sel.getAttribute('data-eq'), gt = sel.getAttribute('data-gt'), val = sel.value;
+  if(!val) return;
+  sel.disabled = true;
+  const pr = (val === '__new__')
+    ? db.collection('joueurs').add({ nom:gt, eaNom:gt, equipeId:eqId, position:'', remplacant:false, reserviste:false, createdAt: firebase.firestore.FieldValue.serverTimestamp() })
+    : db.collection('joueurs').doc(val).update({ eaNom: gt });
+  pr.then(() => { setTimeout(() => { if(_eaBrut) analyserMatchsEA(_eaBrut); }, 300); })
+    .catch(e => { sel.disabled = false; alert(t('commun.erreur') + e.message); });
+}
 /* Toutes les stats chiffrées d'EA pour un joueur (mêmes champs ignorés que le script d'import du PC) */
 const EA_IGNORES = new Set(['playername','clientplatform','playerlevel','player_level','position','possorted','teamid','teamside','opponentclubid','opponentteamid','opponentscore','score','isguest','pnhlonlinegametype','class','removedreason','player_dnf']);
 function statsEAJoueur(p){
@@ -6706,9 +6752,9 @@ function confirmerImport(){
         if((c.domId === x.domId && c.extId === x.extId) || (c.domId === x.extId && c.extId === x.domId)) cal = Object.assign({id: d.id}, c); });
       if(cal){ donnees.calId = cal.id;
         if(cal.domId === x.extId){ donnees.domId = x.extId; donnees.domNom = x.extNom; donnees.extId = x.domId; donnees.extNom = x.domNom; donnees.butsDom = x.butsExt; donnees.butsExt = x.butsDom; } } }
-    // prolongation : game nettement plus longue que la durée normale (même règle que le script du PC)
-    const reg = dureeReglementaireSite(); let mx = 0; (x.lignes || []).forEach(l => { mx = Math.max(mx, +((l.stats || {}).toiseconds) || 0); });
-    if(reg && mx > reg + 45) donnees.prolongation = true;
+    // prolongation : la case cochée dans l'aperçu fait foi (pré-cochée par l'auto-détection, modifiable à la main)
+    const otBox = document.querySelector('.imp-ot[data-i="' + cb.getAttribute('data-i') + '"]');
+    donnees.prolongation = otBox ? otBox.checked : !!x.prolongationAuto;
     return db.collection('matchs').add(donnees).then(() => { faits++; });
   });
 
