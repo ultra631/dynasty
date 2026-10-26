@@ -3119,7 +3119,33 @@ const COMP_LOTS = [
   { nom: '18 octobre 2026', quand: '2026-10-18T13:48:00-04:00',
     sorties: [['Calgary','Lucifer7961']],
     arrivees: [['Calgary','CedtheToken','',1,false]],
-    fil: [['Calgary reçoit CedtheToken (1 M$) en compensation de Lucifer7961 (1 M$)']] }
+    fil: [['Calgary reçoit CedtheToken (1 M$) en compensation de Lucifer7961 (1 M$)']] },
+  { nom: '19 octobre 2026', quand: '2026-10-19T14:35:00-04:00',
+    sorties: [['NY Rangers','Boost Greecy']],
+    arrivees: [['NY Rangers','Azgod_02','',3,false]],
+    fil: [['New York Rangers reçoit Azgod_02 (affiché 3 M$ — 5 M$ avec 2 M$ retenus) en compensation de Boost Greecy (5 M$), parti sans avertir']] },
+  { nom: '22 octobre 2026', quand: '2026-10-22T12:00:00-04:00',
+    sorties: [['Detroit','begnoche']],
+    arrivees: [['Detroit','EXD Falcon ty','',1,false]],
+    fil: [['Detroit reçoit EXD Falcon ty (1 M$) en compensation de begnoche (1 M$)']] },
+  { nom: '23 octobre 2026 (1)', quand: '2026-10-23T12:18:00-04:00',
+    sorties: [['Toronto','Pat-alias-poulin'], ['Toronto','Darkjoe78']],
+    arrivees: [['Toronto','qcvroum98','',3,false], ['Toronto','N4sTy_BrZ','',3,false]],
+    fil: [['Toronto reçoit qcvroum98 (3 M$) en compensation de Pat-alias-poulin (3 M$)'],
+          ['Toronto reçoit N4sTy_BrZ (3 M$) en compensation de darkjoe78 (3 M$)']] },
+  { nom: '23 octobre 2026 (2)', quand: '2026-10-23T12:51:00-04:00',
+    sorties: [['Toronto','LtJoXxZy']],
+    arrivees: [['Toronto','GrincheuXx','',1,false]],
+    fil: [['Toronto reçoit GrincheuXx (1 M$) en compensation de LtJoXxZy (1 M$)']] },
+  { nom: '25 octobre 2026 — NY', quand: '2026-10-25T15:32:00-04:00',
+    sorties: [['NY Rangers','Alexi Morin']],
+    arrivees: [['NY Rangers','CedtheToken','',1,false]],
+    fil: [['New York Rangers reçoit CedtheToken (1 M$) en compensation de Alexi Morin (1 M$)']] },
+  { nom: '25 octobre 2026 — Washington', quand: '2026-10-25T18:07:00-04:00',
+    sorties: [['Washington','Demidxv x 93'], ['Washington','xPrivalov']],
+    arrivees: [['Washington','The_Chad_is_gr8','',3,false], ['Washington','JT TREMBLAY07','',1,false]],
+    fil: [['Washington reçoit The_Chad_is_gr8 (3 M$) en compensation de Demidxv x 93 (3 M$)'],
+          ['Washington reçoit JT TREMBLAY07 (1 M$) en compensation de xPrivalov (1 M$)']] }
 ];
 const _nrm = s => String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,'');
 
@@ -3139,6 +3165,7 @@ function planCompensations(lot, roster){
   lot.sorties.forEach(([eqNom, nom]) => {
     const eq = eqParNom(eqNom);
     if(!eq){ plan.problemes.push('Équipe introuvable : ' + eqNom); return; }
+    if(estEquipeInactive(eq.id)) return;   // équipe retirée de la saison : on ne touche plus à ses joueurs
     const j = joueurs.find(x => x.equipeId === eq.id && memeNom(x, nom));
     if(j) plan.liberer.push({ id:j.id, nom:j.nom, equipe:eq.nom, equipeId:eq.id });
     else if(!joueurs.some(x => memeNom(x, nom))) plan.problemes.push(nom + ' : joueur introuvable dans le site');
@@ -3148,6 +3175,7 @@ function planCompensations(lot, roster){
   lot.arrivees.forEach(([eqNom, nom, pos, sal, tc]) => {
     const eq = eqParNom(eqNom);
     if(!eq){ plan.problemes.push('Équipe introuvable : ' + eqNom); return; }
+    if(estEquipeInactive(eq.id)){ plan.deja.push(nom + ' (équipe retirée)'); return; }   // ne pas ajouter à une équipe retirée
     const dansEquipe = joueurs.find(x => x.equipeId === eq.id && memeNom(x, nom) && x.remp === !!tc);
     if(dansEquipe){ plan.deja.push(nom + ' (déjà chez ' + eq.nom + ')'); return; }
     // un remplaçant / réserviste peut être déplacé ; un joueur régulier d'une autre équipe, non
