@@ -5973,11 +5973,11 @@ function calculerSeries(){
   };
   const id = k => cl[k - 1] ? cl[k - 1].id : null;
   // 1er tour : #3 contre #6, #4 contre #5 (les #1 et #2 ont un bye)
-  const r1 = cl.length >= 6 ? [mk(id(3), id(6)), mk(id(4), id(5))] : [];
+  const r1 = cl.length >= 6 ? [mk(id(4), id(5)), mk(id(3), id(6))] : [];
   // Demi-finales (bracket fixe) : #1 affronte le gagnant du 4 vs 5, #2 affronte le gagnant du 3 vs 6
   let r2 = [];
   if(r1.length){
-    r2 = [mk(id(1), r1[1].gagnant), mk(id(2), r1[0].gagnant)];
+    r2 = [mk(id(1), r1[0].gagnant), mk(id(2), r1[1].gagnant)];
     r2[0].attente = t('se.gagnantDe').replace('{m}', '4 vs 5');
     r2[1].attente = t('se.gagnantDe').replace('{m}', '3 vs 6');
   }
