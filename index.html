@@ -1777,6 +1777,7 @@ nav.tabs.nav-pc{display:flex;flex-wrap:nowrap;justify-content:center;gap:2px;pad
     <div class="admin-only" style="margin-bottom:16px">
       <button class="btn btn-or" onclick="ouvrirCal()" data-i18n="calendrier.ajouter">+ Ajouter au calendrier</button>
       <button class="btn btn-ghost" onclick="chargerNouvelHoraire()">Mettre le nouvel horaire (6 équipes)</button>
+      <button class="btn btn-ghost" onclick="chargerHoraireSeries()">Charger les games des séries (1er tour)</button>
     </div>
 
     <div id="calendrier-list">
@@ -3983,7 +3984,8 @@ function listeGardiens(){
   arr.sort((a,b) => b.v - a.v || (parseFloat(a.moy)||99) - (parseFloat(b.moy)||99));
   return arr;
 }
-function rendreMeneurs(){
+function rendreMeneurs(){ return avecPhase(seriesCommencees() ? 'series' : 'tout', _rendreMeneurs); }  // page d'accueil : meneurs des séries en priorité pendant les playoffs
+function _rendreMeneurs(){
   const cont = document.getElementById('meneurs-list');
   const contG = document.getElementById('meneurs-gardiens');
   if(!cont || !contG) return;
@@ -5770,7 +5772,7 @@ function boutonsEdition(j){
   return '<td>' + (peut ? '<span class="jr-actions"><button class="btn-mini" onclick="ouvrirJoueur(\'' + j.id + '\')">' + t('btn.modifier') + '</button>'
     + (estAdmin ? '<button class="del-btn" onclick="supprimerJoueur(\'' + j.id + '\')">' + t('btn.supprimer') + '</button>' : '') + '</span>' : '') + '</td>';
 }
-function rendreJoueurs(){ return avecPhase(phaseListes, rendreJoueursPhase); }
+function rendreJoueurs(){ phaseAuto(); return avecPhase(phaseListes, rendreJoueursPhase); }
 function rendreJoueursPhase(){
   const cont = document.getElementById('joueurs-list');
   if(!cont) return;
@@ -5826,7 +5828,7 @@ function rendreJoueursPhase(){
   if(typeof rendreAccueilLive === 'function') rendreAccueilLive();
   if(typeof rendreMeneurs === 'function') rendreMeneurs();
 }
-function rendreGardiens(){ return avecPhase(phaseListes, rendreGardiensPhase); }
+function rendreGardiens(){ phaseAuto(); return avecPhase(phaseListes, rendreGardiensPhase); }
 function rendreGardiensPhase(){
   const cont = document.getElementById('gardiens-list');
   if(!cont) return;
@@ -6113,9 +6115,11 @@ function fermerAvantMatch(){ document.getElementById('modale-avant').classList.r
    ========================================================= */
 let PHASE_STATS = 'tout';          // utilisé par statsJoueur / statsGardien : 'tout' | 'saison' | 'series'
 let phaseListes = 'saison';        // choix affiché sur les pages Joueurs et Gardiens
+let phaseChoisie = false;          // devient vrai dès que l'utilisateur clique un onglet (on respecte alors son choix)
+function phaseAuto(){ if(!phaseChoisie) phaseListes = seriesCommencees() ? 'series' : 'saison'; }  // pendant les séries, l'onglet Séries est prioritaire par défaut (la saison reste accessible)
 function matchPhaseOk(m){ if(PHASE_STATS === 'tout') return true; const s = estMatchSeries(m); return PHASE_STATS === 'series' ? s : !s; }
 function avecPhase(phase, f){ const avant = PHASE_STATS; PHASE_STATS = phase; try { return f(); } finally { PHASE_STATS = avant; } }
-function choisirPhase(p){ phaseListes = p; rendreJoueurs(); rendreGardiens(); }
+function choisirPhase(p){ phaseChoisie = true; phaseListes = p; rendreJoueurs(); rendreGardiens(); }
 function seriesCommencees(){ let c = false; if(snapMatchs) snapMatchs.forEach(d => { if(estMatchSeries(d.data())) c = true; }); return c; }
 function htmlPhase(){
   return '<div class="st-phase"><button type="button" class="' + (phaseListes === 'saison' ? 'on' : '') + '" onclick="choisirPhase(\'saison\')">' + t('ph.saison') + '</button>'
@@ -6883,6 +6887,34 @@ function chargerHoraireSaison(){
 }
 
 /* ===== RESTRUCTURATION : nouvel horaire 6 équipes + retrait de Montréal/Calgary ===== */
+// Horaire du 1er tour des séries (ajouté au calendrier, rien n'est effacé). Domicile passe au moins bien classé à partir de la game 3.
+const HORAIRE_SERIES = [
+  // Dim 8 nov — Game 1 (19:30) et Game 2 (20:00) · domicile = mieux classé
+  ["2026-11-08","19:30","Toronto","Buffalo"],   ["2026-11-08","19:30","NY Rangers","Boston"],
+  ["2026-11-08","20:00","Toronto","Buffalo"],   ["2026-11-08","20:00","NY Rangers","Boston"],
+  // Lun 9 nov — Game 3 (19:30) et Game 4 (20:00) · domicile passe au moins bien classé
+  ["2026-11-09","19:30","Buffalo","Toronto"],   ["2026-11-09","19:30","Boston","NY Rangers"],
+  ["2026-11-09","20:00","Buffalo","Toronto"],   ["2026-11-09","20:00","Boston","NY Rangers"],
+  // Mar 10 nov (si nécessaire) — Game 5 (19:15), Game 6 (19:45), Game 7 (20:15)
+  ["2026-11-10","19:15","Toronto","Buffalo"],   ["2026-11-10","19:15","NY Rangers","Boston"],
+  ["2026-11-10","19:45","Buffalo","Toronto"],   ["2026-11-10","19:45","Boston","NY Rangers"],
+  ["2026-11-10","20:15","Toronto","Buffalo"],   ["2026-11-10","20:15","NY Rangers","Boston"]
+];
+function chargerHoraireSeries(){
+  if(!estAdmin){ alert(t('err.adminSeul')); return; }
+  const noms = Array.from(new Set(HORAIRE_SERIES.map(x => x[2]).concat(HORAIRE_SERIES.map(x => x[3]))));
+  const {resolue, manquantes} = _resoudreEquipesHoraire(noms);
+  if(manquantes.length){ alert('❌ Équipes introuvables : ' + manquantes.join(', ') + '\nVérifie les noms dans Équipes.'); return; }
+  let deja = 0; if(snapCal) snapCal.forEach(d => { const dt = d.data().date || ''; if(dt >= '2026-11-08') deja++; });
+  const msg = deja
+    ? 'Il y a déjà ' + deja + ' game(s) datée(s) du 8 nov ou après dans le calendrier.\n\nAjouter quand même les ' + HORAIRE_SERIES.length + ' games du 1er tour des séries ? (Attention aux doublons — tu peux supprimer les anciennes avant.)'
+    : 'Ajouter les ' + HORAIRE_SERIES.length + ' games du 1er tour des séries au calendrier ?\n\nRien n\'est effacé, les games sont juste ajoutées.';
+  if(!confirm(msg)) return;
+  const aAjouter = HORAIRE_SERIES.map(([date, heure, dom, ext]) => ({date, heure, domId:resolue[dom].id, domNom:resolue[dom].nom, extId:resolue[ext].id, extNom:resolue[ext].nom}));
+  const b = db.batch();
+  aAjouter.forEach(m => b.set(db.collection('calendrier').doc(), Object.assign({}, m, { createdAt: firebase.firestore.FieldValue.serverTimestamp() })));
+  b.commit().then(() => alert('✅ ' + aAjouter.length + ' games de séries ajoutées au calendrier.')).catch(e => alert(t('commun.erreur') + e.message));
+}
 const HORAIRE_RESTE = [["2026-10-25","19:15","NY Rangers","Detroit"],["2026-10-25","19:15","Toronto","Boston"],["2026-10-25","19:15","Washington","Buffalo"],["2026-10-25","19:45","Boston","Detroit"],["2026-10-25","19:45","Buffalo","NY Rangers"],["2026-10-25","19:45","Washington","Toronto"],["2026-10-25","20:15","Toronto","Detroit"],["2026-10-25","20:15","Washington","NY Rangers"],["2026-10-25","20:15","Buffalo","Boston"],["2026-10-26","19:15","Buffalo","Detroit"],["2026-10-26","19:15","Toronto","NY Rangers"],["2026-10-26","19:15","Washington","Boston"],["2026-10-26","19:45","Washington","Detroit"],["2026-10-26","19:45","Boston","NY Rangers"],["2026-10-26","19:45","Buffalo","Toronto"],["2026-10-26","20:15","NY Rangers","Detroit"],["2026-10-26","20:15","Toronto","Boston"],["2026-10-26","20:15","Washington","Buffalo"],["2026-10-27","19:15","Boston","Detroit"],["2026-10-27","19:15","Buffalo","NY Rangers"],["2026-10-27","19:15","Washington","Toronto"],["2026-10-27","19:45","Toronto","Detroit"],["2026-10-27","19:45","Washington","NY Rangers"],["2026-10-27","19:45","Buffalo","Boston"],["2026-10-27","20:15","Buffalo","Detroit"],["2026-10-27","20:15","Toronto","NY Rangers"],["2026-10-27","20:15","Washington","Boston"],["2026-11-01","19:15","NY Rangers","Detroit"],["2026-11-01","19:15","Toronto","Boston"],["2026-11-01","19:15","Washington","Buffalo"],["2026-11-01","19:45","Boston","Detroit"],["2026-11-01","19:45","Buffalo","NY Rangers"],["2026-11-01","19:45","Washington","Toronto"],["2026-11-01","20:15","Toronto","Detroit"],["2026-11-01","20:15","Washington","NY Rangers"],["2026-11-01","20:15","Buffalo","Boston"],["2026-11-02","19:15","Buffalo","Detroit"],["2026-11-02","19:15","Toronto","NY Rangers"],["2026-11-02","19:15","Washington","Boston"],["2026-11-02","19:45","Washington","Detroit"],["2026-11-02","19:45","Boston","NY Rangers"],["2026-11-02","19:45","Buffalo","Toronto"],["2026-11-02","20:15","NY Rangers","Detroit"],["2026-11-02","20:15","Toronto","Boston"],["2026-11-02","20:15","Washington","Buffalo"],["2026-11-03","19:15","Boston","Detroit"],["2026-11-03","19:15","Buffalo","NY Rangers"],["2026-11-03","19:15","Washington","Toronto"],["2026-11-03","19:45","Toronto","Detroit"],["2026-11-03","19:45","Washington","NY Rangers"],["2026-11-03","19:45","Buffalo","Boston"],["2026-11-03","20:15","Buffalo","Detroit"],["2026-11-03","20:15","Toronto","NY Rangers"],["2026-11-03","20:15","Washington","Boston"]];
 function _resoudreEquipesHoraire(noms){
   const equipes = []; if(snapEquipes) snapEquipes.forEach(d => { const e = d.data(); equipes.push({id:d.id, nom:e.nom||'', eas:String(e.eaClubId||'').split(/[\s,;]+/).map(x => x.trim()).filter(Boolean)}); });
